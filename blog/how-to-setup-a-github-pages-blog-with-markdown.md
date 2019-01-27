@@ -179,7 +179,7 @@ I replaced the content in the `<body>` tags with:
       <h1 class="project-name">Areg Sarkissian</h1>
 </header>
 <main id="content" class="main-content" role="main">
-      {{ content }}
+      { content }
       <footer class="site-footer">
         &copy; 2019 Areg Sarkissian
       </footer>
@@ -215,8 +215,8 @@ Initially for this blog the title in the browser tab was the name of the repo ar
 
 ### Adding a heading to our index.md using markdown
 
-The Jekyll engin substitutes the content of the index.md file for the `{{ content }}` parameter in the _layouts/default.html page
-All subsequent markddown pages you add to the repo will similarly be substituted for the `{{ content }}` parameter when published
+The Jekyll engin substitutes the content of the index.md file for the `{ content }` parameter in the _layouts/default.html page
+All subsequent markddown pages you add to the repo will similarly be substituted for the `{ content }` parameter when published
 
 Now I opened  index.md and added the h1 tag markdown line below
 
@@ -429,16 +429,16 @@ To referenence the source markdown files that are converted to html use:
 
 ### creating a link for the index.md and about.md files in the site layout html file
 
-I added the html anchor tags for the index and about pages right above the `{{ content }}` parameter in the _layouts/default.html file.
+I added the html anchor tags for the index and about pages right above the `{ content }` parameter in the _layouts/default.html file.
 
 Markdown can not be used in the layout.html file since the layout is a html file and will not be converted by jekyll.
 
-Here is a sippet from default.html that shows the anchor tags pasted above the `{{ content }}` parameter
+Here is a sippet from default.html that shows the anchor tags pasted above the `{ content }` parameter
 
 ```html
  <main id="content" class="main-content" role="main">
       <a href="https://aregsar.com">Posts</a> | <a href="https://aregsar.com/about">About</a>
-      {{ content }}
+      { content }
 ```
 
 ### Adding a link to the blog post in the index.md page
@@ -450,7 +450,7 @@ Open index.md and repace the content with
 
 Jan 30, 2019
 
-[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown)`
+[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown)
 ```
 
 And thats all there is to it!
