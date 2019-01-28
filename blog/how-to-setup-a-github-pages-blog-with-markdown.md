@@ -179,7 +179,7 @@ I replaced the content in the `<body>` tags with:
       <h1 class="project-name">Areg Sarkissian</h1>
 </header>
 <main id="content" class="main-content" role="main">
-      { content }
+      {{ "{{" }} content }}
       <footer class="site-footer">
         &copy; 2019 Areg Sarkissian
       </footer>
