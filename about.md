@@ -1,14 +1,10 @@
 # About Me
 
-I'm a software developer that helps development teams rapidly build and deploy robust and maintainable web app features.
+I'm a software developer that helps small development teams rapidly build and deploy robust and maintainable web app features.
 
 In the past I have developed software for organizations as diverse as America Online, Autobytel and Walt Disney.
 
-I specialize in development of html rendered web app monoliths with small doses of javascript interactivity.
-
-I also build development and deployment automation tools.
-
-I use functional programming and domain driven design principles while coding in PHP, Javascript and C# to build reliable software.
+I use functional programming, object oriented programming and domain driven design principles while coding in PHP, Javascript and C# to build reliable software.
 
 ## My current web development stack
 
@@ -16,13 +12,13 @@ I use functional programming and domain driven design principles while coding in
 + [Laravel](https://laravel.com) - Rapid web application development framework
 + [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) - High performance asynchronous web API framework
 + [Stimulus](https://stimulusjs.org/handbook/origin) - Controllers for organizing client side javascript
-+ [React](https://reactjs.org/docs/hooks-intro.html) - Pure function based javascript widgets
-+ [Bootstrap](https://getbootstrap.com/) Because CSS design is not my forte!
++ [React](https://reactjs.org/docs/hooks-intro.html) - Javascript UI widgets embedded in HTML pages
++ [Bootstrap](https://getbootstrap.com/) UI design framework for web developers
 
 ## My lean development process
 
 + [Endpoint Driven Development](index.md) - feature development guarded by feature tests
 + [Always Deployed](index.md) - continuous delivery guarded by feature flags
-+ [Trunk Based Development](https://trunkbaseddevelopment.com/) - continuous integration into master delivery branch that avoids merge hell
-+ [Kanban](https://www.atlassian.com/agile/kanban/wip-limits) with WIP limit 1 using the [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) technique with [KanbanFlow](https://kanbanflow.com)
++ [Trunk Based Development](https://trunkbaseddevelopment.com/) - continuous integration into master delivery branch
 + [No Estimates](http://ronjeffries.com/xprog/articles/the-noestimates-movement/) - because software estimation is not reliable
++ [Kanban](https://www.atlassian.com/agile/kanban/wip-limits) with WIP limit of one and the [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) technique using [KanbanFlow](https://kanbanflow.com) for feature task managemnt
