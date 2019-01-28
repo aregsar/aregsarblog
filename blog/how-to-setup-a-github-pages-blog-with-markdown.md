@@ -191,7 +191,7 @@ I pushed the changes to the repo to create the stripped down layout of this site
 Some times it takes a minute or so for the changes to display on the site so be patient.
 At this point all the default content and buttons that github added to layout content is removed
 
-The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pages uses to add the buttons and content to our layout. 
+The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pages uses to add the buttons and content to our layout.
 
 The REPO_SETTINGS are specified by default repository settings such as repo name  or we can specify settings in the _config.yml file that will override the default settings.
 
@@ -215,9 +215,9 @@ Initially for this blog the title in the browser tab was the name of the repo ar
 
 ### Adding a heading to our index.md using markdown
 
-The Jekyll engine substitutes the content of the index.md file for the `content` parameter in the _layouts/default.html page
+The Jekyll engine substitutes the content of the index.md file for the `{{ "{{" }} content }}` parameter in the _layouts/default.html page
 
-All subsequent markddown pages you add to the repo will similarly be substituted for the `content` parameter when published
+All subsequent markddown pages you add to the repo will similarly be substituted for the `{{ "{{" }} content }}` parameter when published
 
 Now I opened  index.md and added the h1 tag markdown line below
 
@@ -430,11 +430,11 @@ To referenence the source markdown files that are converted to html use:
 
 ### creating a link for the index.md and about.md files in the site layout html file
 
-I added the html anchor tags for the index and about pages right above the `content` parameter in the _layouts/default.html file.
+I added the html anchor tags for the index and about pages right above the `{{ "{{" }} content }}` parameter in the _layouts/default.html file.
 
 Markdown can not be used in the layout.html file since the layout is a html file and will not be converted by jekyll.
 
-Here is a sippet from default.html that shows the anchor tags pasted right above the `content` parameter
+Here is a sippet from default.html that shows the anchor tags pasted right above the `{{ "{{" }} content }}` parameter
 
 ```html
  <main id="content" class="main-content" role="main">
@@ -442,9 +442,9 @@ Here is a sippet from default.html that shows the anchor tags pasted right above
       { content }
 ```
 
-{{ "{{" }} content }}
 
-{{ content }}
+
+
 
 ### Adding a link to the blog post in the index.md page
 
