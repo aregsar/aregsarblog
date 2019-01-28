@@ -439,7 +439,7 @@ Here is a sippet from default.html that shows the anchor tags pasted right above
 ```html
  <main id="content" class="main-content" role="main">
       <a href="https://aregsar.com">Posts</a> | <a href="https://aregsar.com/about">About</a>
-      { content }
+      {{ "{{" }} content }}
 ```
 
 
