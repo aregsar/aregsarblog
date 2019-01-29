@@ -194,14 +194,14 @@ Refer to this StackOverflow post to see how to escape Liquid template parameters
 
 [How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
 
-I pushed the changes to the repo to create the stripped down layout of this site.
+OK so finally I pushed the changes to the repo to create the stripped down layout of this site.
 
-Some times it takes a minute or so for the changes to display on the site so be patient.
+By the way, there will be a slight delay, usually under a minute, every time you push a change for the changes to display on the site so be patient.
 At this point all the default content and buttons that github added to layout content is removed
 
 The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pages uses to add the buttons and content to our layout.
 
-The REPO_SETTINGS are specified by default repository settings such as repo name  or we can specify settings in the _config.yml file that will override the default settings.
+The REPO_SETTINGS parameters are specified by the default repository settings such as repo name. However next, we will specify the settings in the _config.yml file that will override the default settings.
 
 ### The SEO markup tag and changing your site title
 
@@ -217,7 +217,7 @@ description: Areg Sarkissians Blog
 
 Save and push to see the title text change.
 
-As always give Github pages a few minute to process the change you just pushed to the repo.
+As always give Github pages a little time to process the change you just pushed to the repo.
 
 Initially for this blog the title in the browser tab was the name of the repo aregsarblog. But after I added the title to _config.yml the title changed to the current title of aregsar.
 
