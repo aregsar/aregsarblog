@@ -466,17 +466,17 @@ And thats all there is to it!
 
 ## linking to headers within a page
 
-The GFM syntax for linking to header sections within a page is to use the text of the heading inside the parenthesis portion of a markdown link tag and prepended with a # symbol:
+The GFM syntax for linking to header sections within a page is to use the text of the heading inside the parenthesis portion of a markdown link tag and prepended with a # symbol. Note that all characters will be lower cased and dashes replace any spaces in the header text.
 
 So for example if have a heading text, `<h2>MyPosts</h2>`, then the link portion of markup is:
 
-[My Postings](#MyPosts)
+[My Postings](#myposts)
 
 For heading with spaces in the heading text, we need to use a dash in the link portion of the tag.
 
 So if the heading is `<h2>My Posts</h2>` then the link portion should have dashes instead of spaces like so:
 
-[My Postings](#My-Posts)
+[My Postings](#my-posts)
 
 Note that the link text inside the brackets can be any text we wish just like a standard markdown anchor tag.
 
@@ -487,7 +487,7 @@ Since the header text is `How to setup a github pages blog with markdown`
 The relative link is specified as:
 
 ```markdown
-[Top](#How-to-setup-a-github-pages-blog-with-markdown)
+[Top](#how-to-setup-a-github-pages-blog-with-markdown)
 ```
 
 ## Notes on using GFM relative URLs to link between pages
@@ -516,4 +516,4 @@ This style of linking has issues that I wont go into detail of, but the primary 
 
 That is why I chose using absolute URL linking for this site
 
-[Top](#How-to-setup-a-github-pages-blog-with-markdown)
+[Top](#how-to-setup-a-github-pages-blog-with-markdown)
