@@ -12,8 +12,9 @@ I use functional programming, object oriented programming and domain driven desi
 + [Laravel](https://laravel.com) - Rapid web application development framework
 + [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) - High performance asynchronous web API framework
 + [Stimulus](https://stimulusjs.org/handbook/origin) - Controllers for organizing client side javascript
-+ [React](https://reactjs.org/docs/hooks-intro.html) - Javascript UI widgets embedded in HTML pages
++ [React](https://reactjs.org/docs/hooks-intro.html) and [Vue](https://vuejs.org) - Javascript UI widgets embedded in HTML rendered pages
 + [Bootstrap](https://getbootstrap.com/) UI design framework for web developers
++ [Ngrok](https://ngrok.com) Secure third party webhook testing
 
 ## My lean development process
 
