@@ -450,18 +450,14 @@ Here is a sippet from default.html that shows the anchor tags pasted right above
       {{ "{{" }} content }}
 ```
 
-
-
-
-
 ### Adding a link to the blog post in the index.md page
 
-Open index.md and repace the content with
+I opened index.md file and replaced the content with:
 
 ```markdown
 # Posts
 
-Jan 30, 2019
+Jan 30, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 [How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown)
 ```
@@ -470,23 +466,29 @@ And thats all there is to it!
 
 ## linking to headers within a page
 
-The GFM syntax for linking to header sections within a page is to use the text of the heading indside the parenthesis prepended with a # symbol, like so:
+The GFM syntax for linking to header sections within a page is to use the text of the heading inside the parenthesis portion of a markdown link tag and prepended with a # symbol:
 
-[headingtext](#<headingtext>)
+So for example if have a heading text, `<h2>MyPosts</h2>`, then the link portion of markup is:
 
-So if have heading text, MyPosts, then the link markup is:
+[My Postings](#MyPosts)
 
-[MyPosts](#MyPosts)
+For heading with spaces in the heading text, we need to use a dash in the link portion of the tag.
 
-For heading with spaces in the heading text, use a dash in the link.
+So if the heading is `<h2>My Posts</h2>` then the link portion should have dashes instead of spaces like so:
 
-So if the heading is My Posts then the link markup will replace the space with a dash like so:
+[My Postings](#My-Posts)
 
-[My Posts](#My-Posts)
+Note that the link text inside the brackets can be any text we wish just like a standard markdown anchor tag.
 
-note that the link text inside the brackets can be anything so we could have:
+So in the bottom of this post I added the following markdown to link to the title h1 header of this post.
 
-[MyPosts](#My-Posts) or [Cool Posts](#My-Posts) etc.
+Since the header text is `How to setup a github pages blog with markdown`
+
+The relative link is specified as:
+
+```markdown
+[Top](#How-to-setup-a-github-pages-blog-with-markdown)
+```
 
 ## Notes on using GFM relative URLs to link between pages
 
@@ -513,3 +515,5 @@ where ../ parent directory traversal is used to navigate to the root from the bl
 This style of linking has issues that I wont go into detail of, but the primary one being that the generated URLs for the anchor tags will contain the .html extension and I wanted my links to use extensionless URLS.
 
 That is why I chose using absolute URL linking for this site
+
+[Top](#How-to-setup-a-github-pages-blog-with-markdown)
