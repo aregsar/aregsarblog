@@ -1,4 +1,4 @@
-# Posts
+# All Posts
 
 Jan 30, 2019
 
