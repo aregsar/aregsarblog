@@ -186,6 +186,14 @@ I replaced the content in the `<body>` tags with:
 </main>
 ```
 
+Note that there exists a `{{ "{{" }} content }}` parameter in the html. This is a Liquid templating parameter that Jekyll uses by including the html content of a processed markdown page into the layout html file. In fact anywhere Jekyll sees Liquid template parameters, even in markdown page content or html code snippets in a markdown page, it will try to substitute content of another page inside.
+
+So the way I was able to display the `{{ "{{" }} content }}` parameter right here in the markdown text of this blog post, was to escape it. Otherwise Jekyll will substitute another page content instead of just allowing the `{{ "{{" }} content }}` text to be displayed. So be aware of that if you want to print Liquid template parameters into your own markdown posts.
+
+Refer to this StackOverflow post to see how to escape Liquid template parameters in your Github pages:
+
+[How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
+
 I pushed the changes to the repo to create the stripped down layout of this site.
 
 Some times it takes a minute or so for the changes to display on the site so be patient.
