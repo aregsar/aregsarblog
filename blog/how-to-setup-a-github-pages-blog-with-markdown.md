@@ -6,7 +6,19 @@ Welcome to the first post on my new blog.
 
 In this post I will show you how I set up this blog with [GitHub Pages](https://pages.github.com/) and [Markdown](https://commonmark.org/help/) and how you can easily do the same.
 
-GitHub Pages uses [Github Flavored Markdown](https://github.github.com/gfm/) or GFM. GFM is a flavor of Markdown that adds a few syntax extensions for code blocks and syntax highlighting.
+## Github pages technology
+
+Before we begin I want to mention the components that Github pages uses so that you can have a better understanding of the content of this post.
+
+Github pages uses standard Github repositories to host Github pages content. The URL structure of the content follows the repository structure. The repository content is written in markdown and converted to Html markup using Jekyll.
+
+Jekyll is the name of the engine that Github pages uses to process the markdown pages in the repository to convert them to standard Html pages while applying CSS theme styling to the Html content.
+
+Every time we push a change to our Github pages repository, Jekyll reprocesses and republishes the new markup after a brief delay.
+
+Jekyll also uses a templating system called Liquid that contains Liquid tags to plug in html content from various sources. Jekyll uses Liquid tags  to plug in individual page content into layout templates and also to substitute text and metadata defined in settings files and other sources into the layout and pages.
+
+Also GitHub Pages uses its own flavor of markdown called [Github Flavored Markdown](https://github.github.com/gfm/) or GFM. GFM is a flavor of Markdown that adds a few syntax extensions the allow for code blocks and syntax highlighting based on programming language.
 
 You will not need to know GFM to understand this post.
 
@@ -490,6 +502,10 @@ The relative link is specified as:
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
 ```
 
+## Adding image tags to our posts using GFM
+
+To GFM image tag syntax is as below: 
+
 ## Notes on using GFM relative URLs to link between pages
 
 GFM has a Markdown extension that allows us to use relative page references instead of absolute URLs in our Markdown links.
@@ -515,5 +531,11 @@ where ../ parent directory traversal is used to navigate to the root from the bl
 This style of linking has issues that I wont go into detail of, but the primary one being that the generated URLs for the anchor tags will contain the .html extension and I wanted my links to use extensionless URLS.
 
 That is why I chose using absolute URL linking for this site
+
+## Conclusion
+
+In this post I showed you how to setup a new Github pages site from scratch. We started by creating a brand new Github repository for our site. We converted the repository into a Github pages site. We added a site theme and setup a custom domain name to point to the site. We also created the files and directories needed to define our own layout and override the default theme styling. Finally we learned how to create markdown links to navigate to pages on our site.
+
+This is a great starting point for you to start adding your own markdown content and expand the directory structure for your own blog site.
 
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
