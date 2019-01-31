@@ -58,6 +58,8 @@ To turn your newly created repository into a Github pages site, Go to the settin
 
 On the settings page, scroll down to the Github pages section and activate Github pages by selecting the master branch using the select source dropdown and then click save.
 
+![Image](https://aregsar.com/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
+
 At this point for me I see the message below at the top of the
 github pages section
 
@@ -504,7 +506,29 @@ The relative link is specified as:
 
 ## Adding image tags to our posts using GFM
 
-To GFM image tag syntax is as below: 
+
+
+To have a directory for images used in my blog posts, I added a directory named "images" in my blog root directory.
+
+Then for each blog post I create a directory under the images directory using the blog post title as the directory name. So for images for this post I created the subdirectory `images/how-to-setup-a-github-pages-blog-with-markdown/` in the root.
+
+This is where any images for this blog post are added.
+
+In order to show an image of the Github pages settings area on the Github pages repository settings page, I added the image file github-pages-repo-settings-area.jpg to the directory.
+
+Then I added the following markdown image tag in this blog post to reference the image.
+
+```markdown
+![Image](https://aregsar.com/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
+```
+
+## Adding third party comments for your posts
+
+Although I have not added a commenting service for my blog posts, I still wanted to mention that you can embed third party commenting service to your markdown pages.
+
+Here is a Stack Overflow link that describes how to add Disqus comments to your markdown pages:
+
+[How do I use disqus comments in github pages blog markdown](https://stackoverflow.com/questions/21446165/how-do-i-use-disqus-comments-in-github-pages-blog-markdown)
 
 ## Notes on using GFM relative URLs to link between pages
 
