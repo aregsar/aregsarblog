@@ -24,6 +24,14 @@ You will not need to know GFM to understand this post.
 
 You will need a Github account and a git client installed on your development machine.
 
+## Outline of this blog post
+
+Below are jump links to each section of setting of the blog:
+
+[Creating a repository to host your static Markdown pages on Github](#creating-a-repository-to-host-your-static-markdown-pages-on-github)
+
+[Adding the main page for your blog](#adding-the-main-page-for-your-blog)
+
 ## Creating a repository to host your static Markdown pages on Github
 
 The first step to setup a GitHub Pages blog is to create an empty GitHub repository to host your blog.
@@ -178,7 +186,7 @@ touch default.html
 ```
 
 next I navigated to the default layout repo page  
-https://github.com/pages-themes/cayman/blob/master/_layouts/default.html
+`https://github.com/pages-themes/cayman/blob/master/_layouts/default.html`
 
 clicked on the raw button and copied the raw text into your the `_layouts/default.html` file
 
