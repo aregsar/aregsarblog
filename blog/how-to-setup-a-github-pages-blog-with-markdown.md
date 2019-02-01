@@ -99,21 +99,51 @@ In the following sections I will show you how to customize the default theme to 
 
 But before we do that lets associate a custom domain name to our blog.
 
-## Setting up a custom domain name for our site
+## Pointing a custom domain name to your github pages site
 
-To setup a custom domain for your page at anytime, go to the github pages section of the settings page for your repository and enter in the custom domain name that you registered with your domain registrar.
+In order for the site to actually be published at the custom domain we specified, we need to add DNS records to point to the Github pages server.
 
-For this site I regitsted the domain name aregsar.com
+So go to the domain name administration panel of your domain registrar and create the neccessary records to point your domain to your GitHub pages site.
 
-then I entered the name in the custom domain name text box in the github pages section and  and clicked save.
+The process of pointing your custom domain to your Guthub pages repository URL is detailed in the following links 
 
-After clicking save check the Enforce HTTPS checkbox if it not already checked to enable HTTPS access.
+https://help.github.com/articles/using-a-custom-domain-with-github-pages/
+
+https://help.github.com/articles/setting-up-an-apex-domain/
+
+https://help.github.com/articles/setting-up-a-www-subdomain/
+
+This blog has the domain https://aregsar.com set as the Github Pages domain.
+
+To set that up I logging into my domain registrar and added the following two records:
+
+ALIAS   aregsar.com -> aregsar.github.io
+
+CNAME   www.aregsar.com -> aregsar.github.io
+
+As you can see I added a ALIAS record for root domain argesar.com mapped to the github pages publishing domain aregsar.github.io
+
+I also added a CNAME record for the www subdomain www.aregsar.com also mapped to aregsar.github.io.
+
+Github pages recomends adding a www subdomain and will redirect it to the root domain.
+
+Note if your registrar may not support ALIAS records and you are forced to create A records instead. In that case follow the instructions at https://help.github.com/articles/setting-up-an-apex-domain/ to add four A records instead that point to the IP address of the Github pages servers. The CNAME record should still map to aregsar.github.io in this case.
+
+## Connecting the custom domain to our Github pages repository
+
+We now need to go to the github pages section of the settings page for our repository and enter in the custom root domain name that we registered with your domain registrar.
+
+For this site that would be the domain name aregsar.com that I registered in the previous section.
+
+So in the Github pages section I entered the name in the custom domain name text box in the github pages section and and clicked save.
 
 At this point a file named `CNAME` was added to the root of your repository that contains a single line with the domain name we just added in the Github settings custom domain section.
 
 For this blog it contains the line `aregsar.com`
 
-Adding the custom domain name also changes the publish URL for the site as indicated by the message at the top of the github pages section:
+Finally I made sure to check the  Enforce HTTPS checkbox to enable HTTPS access.
+
+Adding the custom domain name changes the publish URL for the site as indicated by the message at the top of the github pages section:
 
 Your site is ready to be published at `https://aregsar.com/`
 
@@ -133,35 +163,6 @@ index.md
 _config.yml
 
 CNAME
-
-## Pointing a custom domain name to your site
-
-In order for the site to actually be published at the custom domain we specified, we need to add DNS records to point to the Github pages server.
-
-So go to the domain name administration panel of your domain registrar and create the neccessary records to point your domain to your GitHub pages site.
-
-The process of pointing your custom domain to your Guthub pages repository URL is detailed in the following links 
-
-https://help.github.com/articles/using-a-custom-domain-with-github-pages/
-
-https://help.github.com/articles/setting-up-an-apex-domain/
-
-https://help.github.com/articles/setting-up-a-www-subdomain/
-
-This blog has the domain https://aregsar.com set as the Github Pages domain. 
-So after logging into my domain registrar I added the following two records
-
-ALIAS   aregsar.com -> aregsar.github.io
-
-CNAME   www.aregsar.com -> aregsar.github.io
-
-As you can see I added a ALIAS record for root domain argesar.com mapped to the github pages publishing domain aregsar.github.io
-
-I also added a CNAME record for the www subdomain www.aregsar.com also mapped to aregsar.github.io.
-
-Github pages recomends adding a www subdomain and will redirect it to the root domain.
-
-Note if your registrar may not support ALIAS records and you are forced to create A records instead. In that case follow the instructions at https://help.github.com/articles/setting-up-an-apex-domain/ to add four A records instead that point to the IP address of the Github pages servers. The CNAME record should still map to aregsar.github.io in this case.
 
 ## The Github pages default theme repo
 
