@@ -6,6 +6,16 @@ Welcome to the first post on my new blog.
 
 In this post I will show you how I set up this blog with [GitHub Pages](https://pages.github.com/) and [Markdown](https://commonmark.org/help/) and how you can easily do the same.
 
+## Outline of this blog post
+
+Below are jump links to each section of setting of the blog:
+
+[Github pages technology](#github-pages-technology)
+
+[Creating a repository to host your static Markdown pages on Github](#creating-a-repository-to-host-your-static-markdown-pages-on-github)
+
+[Adding the main page for your blog](#adding-the-main-page-for-your-blog)
+
 ## Github pages technology
 
 Before we begin I want to mention the components that Github pages uses so that you can have a better understanding of the content of this post.
@@ -23,14 +33,6 @@ Also GitHub Pages uses its own flavor of markdown called [Github Flavored Markdo
 You will not need to know GFM to understand this post.
 
 You will need a Github account and a git client installed on your development machine.
-
-## Outline of this blog post
-
-Below are jump links to each section of setting of the blog:
-
-[Creating a repository to host your static Markdown pages on Github](#creating-a-repository-to-host-your-static-markdown-pages-on-github)
-
-[Adding the main page for your blog](#adding-the-main-page-for-your-blog)
 
 ## Creating a repository to host your static Markdown pages on Github
 
@@ -99,11 +101,13 @@ In the following sections I will show you how to customize the default theme to 
 
 But before we do that lets associate a custom domain name to our blog.
 
-## Pointing a custom domain name to your github pages site
+## Setting up a custom domain for your blog
 
-In order for the site to actually be published at the custom domain we specified, we need to add DNS records to point to the Github pages server.
+### Pointing a custom domain name to your github pages site
 
-So go to the domain name administration panel of your domain registrar and create the neccessary records to point your domain to your GitHub pages site.
+To publish our pages at a custom domain name we need to add DNS records to point the custom domain to our Github pages server.
+
+So once we register a custom domain at our favorite domain registrar, we need to go to the domain name administration panel of the registrar and create the neccessary records to point the custom domain to our GitHub pages site.
 
 The process of pointing your custom domain to your Guthub pages repository URL is detailed in the following links 
 
@@ -129,7 +133,7 @@ Github pages recomends adding a www subdomain and will redirect it to the root d
 
 Note if your registrar may not support ALIAS records and you are forced to create A records instead. In that case follow the instructions at https://help.github.com/articles/setting-up-an-apex-domain/ to add four A records instead that point to the IP address of the Github pages servers. The CNAME record should still map to aregsar.github.io in this case.
 
-## Connecting the custom domain to our Github pages repository
+### Connecting the custom domain to our Github pages repository
 
 We now need to go to the github pages section of the settings page for our repository and enter in the custom root domain name that we registered with your domain registrar.
 
@@ -168,15 +172,15 @@ _config.yml
 
 CNAME
 
-## The Github pages default theme repo
+## Overriding the default theme for your site
+
+### The Github pages default theme repo
 
 All the Github pages default themes files that Jekyll uses to apply the themes during its markdown file transformation process are located in the jekyll themes repo located at https://github.com/pages-themes
 
 Each individual theme is at located in a sub directory https://github.com/pages-themes/THEME_NAME
 
 Since I chose the cayman theme, the theme repo that Jekyll uses by default for this site is at https://github.com/pages-themes/cayman
-
-## Overriding the default theme for your site
 
 ### Overriding the default Jekyll layout to get rid of the github repo default layout boilerplate
 
