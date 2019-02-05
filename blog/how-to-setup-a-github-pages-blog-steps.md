@@ -84,6 +84,8 @@ next I navigated to the default layout repo page
 
 clicked on the raw button and copied the raw text into the `_layouts/default.html` file
 
+> If you chose a different theme then replace `cayman` in the above link with your theme name. All the themes for GitHub pages are located at `https://github.com/pages-themes`
+
 Next, in the `_layouts/default.html` file, I replaced the content inside the `<body>` tags with:
 
 ```html
