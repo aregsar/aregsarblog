@@ -257,8 +257,8 @@ description: Areg Sarkissians Blog
 using the bash script:
 
 ```bash
-echo 'title: aregsar' >> index.md
-echo 'description: Areg Sarkissians Blog' >> index.md
+echo 'title: aregsar' >> _config.yml
+echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
 
 Save and push to see the title text change.

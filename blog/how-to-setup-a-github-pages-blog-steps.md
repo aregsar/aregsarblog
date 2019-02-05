@@ -108,8 +108,8 @@ To override that default title and description meta tag values I added the two l
 using the bash script:
 
 ```bash
-echo 'title: aregsar' >> index.md
-echo 'description: Areg Sarkissians Blog' >> index.md
+echo 'title: aregsar' >> _config.yml
+echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
 
 ## Adding a heading to our index.md using markdown
