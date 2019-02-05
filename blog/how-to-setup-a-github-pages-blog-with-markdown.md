@@ -10,11 +10,19 @@ In this post I will show you how I set up this blog with [GitHub Pages](https://
 
 Below are jump links to each section of setting of the blog:
 
+[Abbreviated Companion Blog Post](#abbreviated-companion-blog-post)
+
 [Github pages technology](#github-pages-technology)
 
 [Creating a repository to host your static Markdown pages on Github](#creating-a-repository-to-host-your-static-markdown-pages-on-github)
 
 [Adding the main page for your blog](#adding-the-main-page-for-your-blog)
+
+## Abbreviated Companion Blog Post
+
+If you just want to see the steps involved without the detailed explanations, you can take look at the abbreviated version of this post.
+
+[How to setup a github pages blog steps](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-steps)
 
 ## Github pages technology
 
@@ -83,9 +91,9 @@ In the Github pages section, click on the change theme button and select a defau
 
 I chose the Caymen theme for this site.
 
-To select the theme click on the choose a theme buttom then select your theme and click the select theme buttom.
+To select the theme click on the change theme buttom then select your theme and click the select theme buttom.
 
-Clicking the select theme buttom will return you to the settings page and will add a _config.yml file to the root of your repo
+Clicking the select theme buttom will return you to the settings page and will add a `_config.yml` file to the root of your repo
 
 This file will contain a single line that shows the selected theme.
 
@@ -141,9 +149,9 @@ For this site that would be the domain name aregsar.com that I registered in the
 
 Note you have to register and point the domain before being able to successfully complete the instuctions is this section.
 
-So in the Github pages section I entered the name in the custom domain name text box in the github pages section and and clicked save.
+So I entered the domain name, that I pointed to my github pages in the previous step, into the the custom domain name text box in the github pages section and clicked save.
 
-At this point a file named `CNAME` was added to the root of your repository that contains a single line with the domain name we just added in the Github settings custom domain section.
+At this point Github pages adds a file named `CNAME` to the root of your repository that contains a single line with the domain name we just added in the Github settings custom domain section.
 
 For this blog it contains the line `aregsar.com`
 
@@ -197,7 +205,7 @@ touch default.html
 next I navigated to the default layout repo page  
 `https://github.com/pages-themes/cayman/blob/master/_layouts/default.html`
 
-clicked on the raw button and copied the raw text into your the `_layouts/default.html` file
+clicked on the raw button and copied the raw text into the `_layouts/default.html` file
 
 Now we can make changes to the our local default.html file to remove the boilerplate that github pages adds for standard repository pages.
 
@@ -246,6 +254,13 @@ title: aregsar
 
 description: Areg Sarkissians Blog
 
+using the bash script:
+
+```bash
+echo 'title: aregsar' >> index.md
+echo 'description: Areg Sarkissians Blog' >> index.md
+```
+
 Save and push to see the title text change.
 
 As always give Github pages a little time to process the change you just pushed to the repo.
@@ -258,9 +273,15 @@ The Jekyll engine substitutes the content of the index.md file for the `{{ "{{" 
 
 All subsequent markddown pages you add to the repo will similarly be substituted for the `{{ "{{" }} content }}` parameter when published
 
-Now I opened  index.md and added the h1 tag markdown line below
+Now in the index.md file I added the h1 tag markdown line:
 
 `# hello world`
+
+using the bash script:
+
+```bash
+echo '# hello world' >> index.md
+```
 
 I saved and pushed the changes.
 
@@ -523,9 +544,14 @@ The relative link is specified as:
 
 ## Adding image tags to our posts using GFM
 
-
-
 To have a directory for images used in my blog posts, I added a directory named "images" inside the blog directory.
+
+using the bash script:
+
+```bash
+cd blog
+mkdir images
+```
 
 Then for each blog post I create a directory in the images directory using the blog post title as the directory name. So for images for this post I created the subdirectory `images/how-to-setup-a-github-pages-blog-with-markdown/` in the root.
 
