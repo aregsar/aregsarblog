@@ -34,7 +34,7 @@ Below are jump links to each section of this blog:
 
 [Changing your site title](#changing-your-site-title)
 
-[Adding a heading to our index page](#adding-a-heading-to-our-index-page)
+[Adding a heading to our index.md page](#adding-a-heading-to-our-indexmd-page)
 
 [Github pages default theme styles](#github-pages-default-theme-styles)
 
@@ -48,7 +48,7 @@ Below are jump links to each section of this blog:
 
 [Adding links to the site layout](#adding-links-to-the-site-layout)
 
-[Linking to the blog post from index file](#linking-to-the-blog-post-from-index-file)
+[Linking to the blog post from index.md file](#linking-to-the-blog-post-from-indexmd-file)
 
 [Linking to headers within a page](#linking-to-headers-within-a-page)
 
