@@ -18,7 +18,7 @@ Below are jump links to each section of this blog:
 
 [Adding the main page for your blog](#adding-the-main-page-for-your-blog)
 
-[Turning the repository into a GitHub Pages site](#turning-the-repository-into-a-gitHub-pages-site)
+[Turning the repository into a GitHub Pages site](#turning-the-repository-into-a-github-pages-site)
 
 [Setting up the default theme for your site](#setting-up-the-default-theme-for-your-site)
 
