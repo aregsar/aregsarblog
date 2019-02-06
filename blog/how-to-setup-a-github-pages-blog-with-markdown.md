@@ -18,6 +18,46 @@ Below are jump links to each section of setting of the blog:
 
 [Adding the main page for your blog](#adding-the-main-page-for-your-blog)
 
+[Turning the repository into a GitHub Pages site](#turning-the-repository-into-a-GitHub-Pages-site)
+
+[Setting up the default theme for your site](#setting-up-the-default-theme-for-your-site)
+
+[Pointing a custom domain name to your github pages site](#pointing-a-custom-domain-name-to-your-github-pages-site)
+
+[Connecting the custom domain to our Github pages repository](#connecting-the-custom-domain-to-our-Github-pages-repository)
+
+[Pulling down changes made to our remote repo](#pulling-down-changes-made-to-our-remote-repo)
+
+[The Github pages default theme repo](#the-github-pages-default-theme-repo)
+
+[Overriding the default Jekyll layout](#overriding-the-default-jekyll-layout)
+
+[Changing your site title](#changing-your-site-title)
+
+[Adding a heading to our index.md page](#adding-a-heading-to-our-index.md-page)
+
+[Github pages default theme styles](#github-pages-default-theme-styles)
+
+[Overriding the default theme styles](#overriding-the-default-theme-styles)
+
+[Customizing the theme styles](#customizing-the-theme-styles)
+
+[Adding a file structure to our blog](#adding-a-file-structure-to-our-blog)
+
+[The URL structure of our blog](#the-url-structure-of-our-blog)
+
+[Adding links to the site layout](#adding-links-to-the-site-layout)
+
+[Linking to the blog post from index.md file](#linking-to-the-blog-post-from-index.md-file)
+
+[Linking to headers within a page](#linking-to-headers-within-a-page)
+
+[Adding image tags to our posts](#adding-image-tags-to-our-posts)
+
+[Adding third party comments for your posts](#adding-third-party-comments-for-your-posts)
+
+[Notes on using relative URLs](#notes-on-using-relative-urls)
+
 ## Abbreviated Companion Blog Post
 
 If you just want to see the steps involved without the detailed explanations, you can take look at the abbreviated version of this post.
@@ -167,7 +207,7 @@ the publish URL for the site will change as indicated by the message at the top 
 
 Your site is ready to be published at `https://aregsar.com/`
 
-## Pulling down changes made to our remote repo by github pages
+## Pulling down changes made to our remote repo
 
 Since Github pages settings changes added the _config.yml and CNAME files to our remote repo we need to pull it down to our local repo so we will be in sync.
 
@@ -190,12 +230,14 @@ Each individual theme is at located in a sub directory https://github.com/pages-
 
 Since I chose the cayman theme, the theme repo that Jekyll uses by default for this site is at https://github.com/pages-themes/cayman
 
-### Overriding the default Jekyll layout to get rid of the github repo default layout boilerplate
+### Overriding the default Jekyll layout
 
 the default layout for our cayman theme is at:
 https://github.com/pages-themes/cayman/blob/master/_layouts/default.html
 
-to override the layout I created a file _layouts/default.html at the root of the repo
+To get rid of the github repo default layout boilerplate I had to override the layout.
+
+So I created a file _layouts/default.html at the root of the repo
 
 ```bash
 mkdir _layouts && cd _layouts
@@ -242,9 +284,9 @@ The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pa
 
 The REPO_SETTINGS parameters are specified by the default repository settings such as repo name. However next, we will specify the settings in the _config.yml file that will override the default settings.
 
-### The SEO markup tag and changing your site title
+### Changing your site title
 
-The <head> tag of default.html file contains a {% seo %} parameter that when processed by Jekyll will generate title and description meta tags used for SEO.
+The `<head>` tag of default.html file contains a {% seo %} parameter that when processed by Jekyll will generate title and description meta tags used for SEO.
 
 The genrated title meta tag uses the repo name for title value that displays the site title in the web browser bar. Similarly the genrated description meta tag uses the Github repo description you specified when you created the repo.
 
@@ -267,7 +309,7 @@ As always give Github pages a little time to process the change you just pushed 
 
 Initially for this blog the title in the browser tab was the name of the repo aregsarblog. But after I added the title to _config.yml the title changed to the current title of aregsar.
 
-### Adding a heading to our index.md using markdown
+### Adding a heading to our index.md page
 
 The Jekyll engine substitutes the content of the index.md file for the `{{ "{{" }} content }}` parameter in the _layouts/default.html page
 
@@ -291,7 +333,7 @@ After some delay you can refresh the page and do a view source in the browser to
 
 note that the text of the h1 tag markdown is used a the id of the h1 html tag with a dash used for the space character
 
-### The default theme styles
+### Github pages default theme styles
 
 The default style that Github pages applies for the cayman theme is located at 
 https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss
@@ -307,7 +349,7 @@ By default Jekyll compiles this style.scss file to style.css that used to style 
 
 `<link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">`
 
-### overriding default theme styles
+### Overriding the default theme styles
 
 In order to override the default style.scss we need to first create a file assets/css/style.scss at the root of your repo
 and add the following four lines at the top the file
@@ -343,7 +385,7 @@ You can verify this after a brief delay by doing a view source on the refreshed 
 
 `<link rel="stylesheet" href="/assets/css/style.css?v=c9149429e7d8df2dde257387400cef49363fb589">`
 
-### customizing the theme styles
+### Customizing the theme styles
 
 Now that we have overriden the default styles.scss file with our local styles.scss file, we can customize our local styles.scss file to customize the styles for our pages.
 
@@ -428,7 +470,7 @@ which can be seen by doing view source and navigating to the generated css file 
 <link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">
 ```
 
-## Setting up links between markdown pages in your repo using absolute URL markdown
+## Adding a file structure to our blog
 
 To explain how to setup navigation links between your pages, I will use the structure of my blog as an example.
 
@@ -452,7 +494,7 @@ mkdir blog && cd blog
 echo "# How to setup a github pages blog with markdown" >> how-to-setup-a-github-pages-blog-with-markdown.md
 ```
 
-### linking to markdown files from other markdown files using absolute URLs
+### The URL structure of our blog
 
 The url for the index.md file. Note we dont need to specify the file name since Github pages uses index.md as the default website root file.
 
@@ -488,7 +530,7 @@ To referenence the source markdown files that are converted to html use:
 
 `[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown.md)`
 
-### creating a link for the index.md and about.md files in the site layout html file
+### Adding links to the site layout
 
 I added the html anchor tags for the index and about pages right above the `{{ "{{" }} content }}` parameter in the _layouts/default.html file.
 
@@ -502,7 +544,7 @@ Here is a sippet from default.html that shows the anchor tags pasted right above
       {{ "{{" }} content }}
 ```
 
-### Adding a link to the blog post in the index.md page
+### Linking to the blog post from index.md file
 
 I opened index.md file and replaced the content with:
 
@@ -516,7 +558,7 @@ Jan 30, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 And thats all there is to it!
 
-## linking to headers within a page
+## Linking to headers within a page
 
 The GFM syntax for linking to header sections within a page is to use the text of the heading inside the parenthesis portion of a markdown link tag and prepended with a # symbol. Note that all characters will be lower cased and dashes replace any spaces in the header text.
 
@@ -542,7 +584,7 @@ The relative link is specified as:
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
 ```
 
-## Adding image tags to our posts using GFM
+## Adding image tags to our posts
 
 To have a directory for images used in my blog posts, I added a directory named "images" inside the blog directory.
 
@@ -573,7 +615,7 @@ Here is a Stack Overflow link that describes how to add Disqus comments to your 
 
 [How do I use disqus comments in github pages blog markdown](https://stackoverflow.com/questions/21446165/how-do-i-use-disqus-comments-in-github-pages-blog-markdown)
 
-## Notes on using GFM relative URLs to link between pages
+## Notes on using relative URLs
 
 GFM has a Markdown extension that allows us to use relative page references instead of absolute URLs in our Markdown links.
 
