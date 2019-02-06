@@ -18,13 +18,13 @@ Below are jump links to each section of this blog:
 
 [Adding the main page for your blog](#adding-the-main-page-for-your-blog)
 
-[Turning the repository into a GitHub Pages site](#turning-the-repository-into-a-github-pages-site)
+[Turning the repository into a Github Pages site](#turning-the-repository-into-a-github-pages-site)
 
 [Setting up the default theme for your site](#setting-up-the-default-theme-for-your-site)
 
-[Pointing a custom domain name to your github pages site](#pointing-a-custom-domain-name-to-your-github-pages-site)
+[Pointing a custom domain name to your Github pages site](#pointing-a-custom-domain-name-to-your-github-pages-site)
 
-[Connecting the custom domain to our Github pages repository](#connecting-the-custom-domain-to-our-Github-pages-repository)
+[Connecting the custom domain to our Github pages repository](#connecting-the-custom-domain-to-our-github-pages-repository)
 
 [Pulling down changes made to our remote repo](#pulling-down-changes-made-to-our-remote-repo)
 
@@ -110,7 +110,7 @@ git push -u origin master
 
 At this point the index.md file should apear in the master branch.
 
-## Turning the repository into a GitHub Pages site
+## Turning the repository into a Github Pages site
 
 To turn your newly created repository into a Github pages site, Go to the settings page for the repository by clicking on the settings button at the top of your repository page.
 
@@ -151,7 +151,7 @@ But before we do that lets associate a custom domain name to our blog.
 
 ## Setting up a custom domain for your blog
 
-### Pointing a custom domain name to your github pages site
+### Pointing a custom domain name to your Github pages site
 
 To publish our pages at a custom domain name we need to add DNS records to point the custom domain to our Github pages server.
 
