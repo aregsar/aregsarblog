@@ -8,7 +8,7 @@ In this post I will show you how I set up this blog with [GitHub Pages](https://
 
 ## Outline of this blog post
 
-Below are jump links to each section of setting of the blog:
+Below are jump links to each section of this blog:
 
 [Abbreviated Companion Blog Post](#abbreviated-companion-blog-post)
 
@@ -18,7 +18,7 @@ Below are jump links to each section of setting of the blog:
 
 [Adding the main page for your blog](#adding-the-main-page-for-your-blog)
 
-[Turning the repository into a GitHub Pages site](#turning-the-repository-into-a-GitHub-Pages-site)
+[Turning the repository into a GitHub Pages site](#turning-the-repository-into-a-gitHub-pages-site)
 
 [Setting up the default theme for your site](#setting-up-the-default-theme-for-your-site)
 
