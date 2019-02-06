@@ -18,8 +18,8 @@ I use functional programming, object oriented programming and domain driven desi
 
 ## My lean development process
 
-+ [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - feature development guarded by feature tests
 + [Always Deployed](https://alwaysdeployed.com/) - continuous delivery guarded by feature flags
++ [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - feature development guarded by feature tests
 + [Trunk Based Development](https://trunkbaseddevelopment.com/) - continuous integration into master delivery branch
 + [No Estimates](http://ronjeffries.com/xprog/articles/the-noestimates-movement/) - because software estimation is not reliable
 + [Kanban](https://www.atlassian.com/agile/kanban/wip-limits) with WIP limit of one and the [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) technique using [KanbanFlow](https://kanbanflow.com) for feature task managemnt
