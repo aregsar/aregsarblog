@@ -23,4 +23,4 @@ I use functional programming, object oriented programming and domain driven desi
 + [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - incremental feature development guarded by feature tests
 + [Trunk Based Development](https://trunkbaseddevelopment.com) - continuous integration into master delivery branch
 + [No Estimates](http://ronjeffries.com/xprog/articles/the-noestimates-movement) - because working software is the primary measure of progress
-+ [Kanban](https://www.atlassian.com/agile/kanban) using [KanbanFlow](https://kanbanflow.com) for feature task managemnt
++ [Kanban](https://www.atlassian.com/agile/kanban) using [KanbanFlow](https://kanbanflow.com) for feature task management
