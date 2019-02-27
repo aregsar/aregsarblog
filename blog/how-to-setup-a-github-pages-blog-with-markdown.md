@@ -116,7 +116,7 @@ To turn your newly created repository into a Github pages site, Go to the settin
 
 On the settings page, scroll down to the Github pages section and activate Github pages by selecting the master branch using the select source dropdown and then clicking save.
 
-Shown here is the Github pages section after I completed all the configuration for this site that will be covered in the following steps:
+Shown here is the Github pages section after I completed all the configuration for this site that will be covered in the following sections:
 
 ![Image](https://aregsar.com/blog/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
 
