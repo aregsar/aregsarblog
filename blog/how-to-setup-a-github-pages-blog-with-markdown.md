@@ -114,7 +114,9 @@ At this point the index.md file should apear in the master branch.
 
 To turn your newly created repository into a Github pages site, Go to the settings page for the repository by clicking on the settings button at the top of your repository page.
 
-On the settings page, scroll down to the Github pages section and activate Github pages by selecting the master branch using the select source dropdown and then click save.
+On the settings page, scroll down to the Github pages section and activate Github pages by selecting the master branch using the select source dropdown and then clicking save.
+
+Shown here is the Github pages section after I completed all the configuration for this site that will be covered in the following steps:
 
 ![Image](https://aregsar.com/blog/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
 
@@ -560,25 +562,41 @@ And thats all there is to it!
 
 ## Linking to headers within a page
 
-The GFM syntax for linking to header sections within a page is to use the text of the heading inside the parenthesis portion of a markdown link tag and prepended with a # symbol. Note that all characters will be lower cased and dashes replace any spaces in the header text.
+The GFM syntax for linking to heading tags within a page uses the text of the heading.
 
-So for example if have a heading text, `<h2>MyPosts</h2>`, then the link portion of markup is:
+Jekyll first converts the markdown heading text to all ower case characters. Also dashes replace any spaces in the text and any periods in the text are removed.
 
+Then it sets the text to the id attribute of the header.
+
+So to link to the heading we can use the same converted text placed inside the parenthesis portion of a markdown link tag and prepended with a # symbol.
+
+So for example if have markdown heading `# MyPosts` then Jekyll will convert the markdown text to the following heading tag: `<h2 id='myposts'>MyPosts</h2>`
+
+So the markdown link to the heading tag will use the converted name as shown:
+
+```markdown
 [My Postings](#myposts)
+```
 
-For heading with spaces in the heading text, we need to use a dash in the link portion of the tag.
+Here is another example where the heading text has spaces between words. In this case the markdown heading is `# My Posts` which is converted to `<h2 id='my-posts'>My Posts</h2>` then the markdown link will again use the converted text like so:
 
-So if the heading is `<h2>My Posts</h2>` then the link portion should have dashes instead of spaces like so:
-
+```markdown
 [My Postings](#my-posts)
+```
 
 Note that the link text inside the brackets can be any text we wish just like a standard markdown anchor tag.
 
-So in the bottom of this post I added the following markdown to link to the title h1 header of this post.
+Here is an example that uses a period in the heading text
+where the text is `How to create an index.md page`
+In this case  the link text would be:
 
-Since the header text is `How to setup a github pages blog with markdown`
+```markdown
+[Top](#how-to-create-an-indexmd-page)
+```
 
-The relative link is specified as:
+Note that the period in `index.md` part was removed.
+
+In the bottom of this blog post I added the following markdown anchor tag to link to the title h1 heading of this post with that has heading text `How to setup a github pages blog with markdown`
 
 ```markdown
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
