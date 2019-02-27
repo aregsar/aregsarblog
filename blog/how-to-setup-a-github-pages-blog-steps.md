@@ -1,6 +1,6 @@
 # How to setup a github pages blog steps
 
-Jan 29, 2019 by [Areg Sarkissian](https://aregsar.com/about)
+Feb 27, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Full version of this Blog Post
 

@@ -1,6 +1,6 @@
 # How to setup a github pages blog with markdown
 
-Jan 29, 2019 by [Areg Sarkissian](https://aregsar.com/about)
+Feb 27, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 Welcome to the first post on my new blog.
 
