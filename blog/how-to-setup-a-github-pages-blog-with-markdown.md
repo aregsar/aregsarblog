@@ -309,6 +309,7 @@ description: Areg Sarkissians Blog
 using the bash script:
 
 ```bash
+echo ''
 echo 'title: aregsar' >> _config.yml
 echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
