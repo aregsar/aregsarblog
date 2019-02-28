@@ -64,7 +64,7 @@ I entered the custom domain `aregsar.com` that I pointed to github pages in prev
 
 At this point Github pages adds a file named `CNAME` to the root of your repository that contains a single line with the domain name we just added in the Github settings custom domain section.
 
-## enable the Enforce HTTPS checkbox
+## Enable the Enforce HTTPS checkbox
 
 click the checkbox to enable https
 

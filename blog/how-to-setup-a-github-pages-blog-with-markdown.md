@@ -26,6 +26,8 @@ Below are jump links to each section of this blog:
 
 [Connecting the custom domain to our Github pages repository](#connecting-the-custom-domain-to-our-github-pages-repository)
 
+[Enable the Enforce HTTPS checkbox](#enable-the-enforce-https-checkbox)
+
 [Pulling down changes made to our remote repo](#pulling-down-changes-made-to-our-remote-repo)
 
 [The Github pages default theme repo](#the-github-pages-default-theme-repo)
@@ -185,19 +187,25 @@ Note if your registrar may not support ALIAS records and you are forced to creat
 
 ### Connecting the custom domain to our Github pages repository
 
-We now need to go to the github pages section of the settings page for our repository and enter in the custom root domain name that we registered with your domain registrar.
+We now need to go to the github pages section of the settings page for our repository and enter in the custom root domain name that we registered with our domain registrar.
 
-For this site that would be the domain name aregsar.com that I registered in the previous section.
+> Note that you have to register and point the domain, as described in the previous section, before being able to successfully complete the instuctions is this section.
 
-Note you have to register and point the domain before being able to successfully complete the instuctions is this section.
+For this site that would be the domain name aregsar.com that I registered and pointed to my github pages site in the previous section.
 
-So I entered the domain name, that I pointed to my github pages in the previous step, into the the custom domain name text box in the github pages section and clicked save.
+So I entered that domain name into the the custom domain name text box in the github pages section and clicked save.
+
+> Wait for DNS record propagation to take effect if you see any github pages error messages. Any error should resolve automatically in a few minutes.
 
 At this point Github pages adds a file named `CNAME` to the root of your repository that contains a single line with the domain name we just added in the Github settings custom domain section.
 
 For this blog it contains the line `aregsar.com`
 
-Finally I made sure to check the  Enforce HTTPS checkbox to enable HTTPS access.
+### Enable the Enforce HTTPS checkbox
+
+click the checkbox to enable https
+
+> wait for github pages to generate tls certificates if you see any github pages error messages. Any error should resolve automatically in a few minutes.
 
 Note if you setup your domain records at your registrar just before adding the domain name to github pages, github pages may not allow you to check the https checkbox or it may complain that it can't enable https. 
 And also the site might still not be published at the https endpoint even after checking the http endpoint.
