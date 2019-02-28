@@ -88,7 +88,7 @@ After checking the Https checkbox the published URL endpoint for the blog will c
 
 `Your site is ready to be published at https://aregsar.com/`
 
-> Note: after checking the HTTPS box, wait for github pages to generate SSL certificates and publish at https endpoint, if you see any github pages error messages. Any error should resolve automatically in a few minutes.
+> Note: if you see any github pages error messages, after checking the HTTPS box, wait for github pages to generate SSL certificates and publish at the https endpoint. Any error should resolve automatically in a few minutes.
 
 ## Pulling down changes made to our remote repo by github pages
 
