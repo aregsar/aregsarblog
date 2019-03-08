@@ -1,4 +1,4 @@
-# how-to-setup-a-github-pages-blog-in-five-minutes
+# How to setup a Github pages blog in five minutes
 
 Mar 7, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
@@ -55,7 +55,7 @@ To activate Github pages I did the following:
 
 + Navigated to the settings page of my `aregsarblog` repository.
 + On the settings page, I scrolled down to the Github pages section.
-+ In the Github pages section, I seleted the master branch using the select source dropdown.
++ In the Github pages section, I seleted the `master` branch using the select source dropdown.
 
 Once I selected the source branch, the message below appeared at the top of the github pages section:
 
@@ -73,31 +73,29 @@ To select a theme for my Github pages site, I did the following:
 
 + I navigated to the settings page of my `aregsarblog` repository.
 + On the settings page, I scrolled down to the Github pages section.
-+ In the Github pages section, I Click on the change theme button.
-+ I Chose the cayman theme which was auto selected by default.
++ In the Github pages section, I clicked on the change theme button.
++ I chose the cayman theme which was auto selected by default.
 + Clicked the select theme button.
 
-Clicking the select theme buttom returned me to the settings page and while adding a `_config.yml` file to the root directory of my remote repository.
+Clicking the select theme buttom returned me to the settings page and added a `_config.yml` file to the root directory of my remote repository.
 
-To pull down the `_config.yml` file to my local repo did a `git pull`
+To pull down the `_config.yml` file from my remote repository to my local repo, I did a `git pull`
 
-The `_config.yml` file that was added contains the line:
+The added `_config.yml` file contains the line:
 
-theme: jekyll-theme-cayman
+`theme: jekyll-theme-cayman`
 
-This tells the Github pages processing engine what theme to select and apply to our proceessed markdown pages when publishing the site.
+This line tells Jekyll, the Github pages processing engine, what theme to select and apply to our processed markdown pages when publishing the site.
 
-The actual theme name is the last segment which in our case is cayman.
+The actual theme name is the last segment which in our case is `cayman`.
 
-You can navigate again to the URL published page at.
-
-`https://aregsar.github.io/aregsarblog/` to see the updated page.
+To see the updated page with the selected theme applied, you can navigate again to the URL of the published page.
 
 > Note: The Github pages processing engine takes some time to publish your pages after a change. So keep refreshing the page until the new content appears.
 
 ## Conclusion
 
-If you followed my steps, then congratulations, you just created your basic GitHub Pages blog site.
+If you followed my steps outlined in this post, then congratulations, you just created your basic GitHub Pages blog site.
 
 Be sure to check out part 2 of this post to see how I override the default theme to be able to customize it.
 
