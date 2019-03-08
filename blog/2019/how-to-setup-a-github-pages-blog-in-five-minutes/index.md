@@ -25,9 +25,10 @@ At this point my empty Github repository is created.
 
 In this step I created a local directory named `aregsarblog` and inside the directory I initialized a local git repository and associated it with the remote `aregsarblog` Github repository.
 
+I opened a bash terminal and typed the following:
+
 ```bash
-mkdir aregsarblog
-cd aregsarblog
+mkdir aregsarblog && cd aregsarblog
 git init
 git remote add origin git@github.com:aregsar/aregsarblog.git
 ```
@@ -39,6 +40,8 @@ At this point my local Github repository is created and is ready to track my rem
 In this step I added an empty `index.md` markdown file which will be the home page of our site.
 
 I committed and pushed the file to the remote repository with the local master branch set up to track the remote master branch.
+
+I opened a bash terminal and typed the following:
 
 ```bash
 touch index.md
@@ -65,7 +68,7 @@ You can navigate to the published URL for your own site to see the published pag
 
 The displayed content is part of the default layout of the page. I will have a post in the series that will cover how to customize the layout and content of the page.
 
-## Step 5 - Selecting a Github pages default theme
+## Step 5 - Selected a Github pages default theme
 
 In this step I added a theme from the default themes available from the Github pages section in the settings page.
 
@@ -79,7 +82,7 @@ To select a theme for my Github pages site, I did the following:
 
 Clicking the select theme buttom returned me to the settings page and added a `_config.yml` file to the root directory of my remote repository.
 
-To pull down the `_config.yml` file from my remote repository to my local repo, I did a `git pull`
+To pull down the `_config.yml` file from my remote repository to my local repo, I opened a bash terminal and typed: `git pull`.
 
 The added `_config.yml` file contains the line:
 
