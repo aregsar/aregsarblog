@@ -1,4 +1,4 @@
-# How to setup a github pages blog with markdown
+# how-to-setup-a-github-pages-blog-in-five-minutes
 
 Mar 7, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
@@ -36,9 +36,9 @@ At this point my local Github repository is created and is ready to track my rem
 
 ## Step 3 - Added a markdown index page
 
-In this step I added and empty `index.md` markdown file which will be the home page of our site.
+In this step I added an empty `index.md` markdown file which will be the home page of our site.
 
-I committed and pushed the file to the remote repository with the local master branch set up to track remote master branch.
+I committed and pushed the file to the remote repository with the local master branch set up to track the remote master branch.
 
 ```bash
 touch index.md
@@ -47,7 +47,7 @@ git commit -m "first commit"
 git push -u origin master
 ```
 
-At this point my Github pages home page `index.md` file exists in the Github repository.
+At this point my Github pages home page `index.md` file exists in the root directory of my Github repository.
 
 ## Step 4 - Turned the standard Github repository into Github pages repository
 
@@ -61,21 +61,20 @@ Once I selected the source branch, the message below appeared at the top of the 
 
 `your site is published https://aregsar.github.io/aregsarblog/`
 
-You can navigate to that URL to see the published page.
-Currently it only displays the name of the repository.
+You can navigate to the published URL for your own site to see the published page. At this point it only displays the name of the repository.
 
 The displayed content is part of the default layout of the page. I will have a post in the series that will cover how to customize the layout and content of the page.
 
-In the next step I added a theme from the default themes available.
-
 ## Step 5 - Selecting a Github pages default theme
 
-To give my Github pages default theme I did the following:
+In this step I added a theme from the default themes available from the Github pages section in the settings page.
+
+To select a theme for my Github pages site, I did the following:
 
 + I navigated to the settings page of my `aregsarblog` repository.
 + On the settings page, I scrolled down to the Github pages section.
 + In the Github pages section, I Click on the change theme button.
-+ Chose the cayman theme which was auto selected by default.
++ I Chose the cayman theme which was auto selected by default.
 + Clicked the select theme button.
 
 Clicking the select theme buttom returned me to the settings page and while adding a `_config.yml` file to the root directory of my remote repository.
