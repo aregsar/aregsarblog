@@ -55,7 +55,7 @@ To replace the boilerplate with my own layout page markup, I replaced the conten
       <h1 class="project-name">Areg Sarkissian</h1>
 </header>
 <main id="content" class="main-content" role="main">
-      {{ content }}
+       {{ "{{" }} content }}
       <footer class="site-footer">
         &copy; 2019 Areg Sarkissian
       </footer>
