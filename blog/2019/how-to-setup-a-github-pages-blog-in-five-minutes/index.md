@@ -43,7 +43,7 @@ In this step I added an empty `index.md` markdown file which is the home page of
 
 I committed and pushed the file to the remote repository with the local master branch set up to track the remote master branch.
 
-I opened a bash terminal, set the current directory to the root directory and typed the following:
+In the bash terminal I typed the following:
 
 ```bash
 touch index.md
@@ -66,7 +66,7 @@ Once I selected the source branch, the message below appeared at the top of the 
 
 `your site is published https://aregsar.github.io/aregsarblog/`
 
-You can navigate to the published URL for your own site to see the published page. At this point it only displays the name of the repository.
+You can navigate to the published URL for your own site to see the published page. At this point the page only displays the name of the repository.
 
 The displayed content is part of the default layout of the page. I will have a future post in the series that will cover how to customize the layout and content of the page.
 
@@ -84,7 +84,7 @@ To select a theme for my Github pages site, I did the following:
 
 Clicking the select theme buttom returned me to the settings page and added a `_config.yml` file to the root directory of my remote repository.
 
-To pull down the `_config.yml` file from my remote repository to my local repository, I opened a bash terminal and typed: `git pull`.
+To pull down the `_config.yml` file from my remote repository to my local repository, In the bash terminal I typed: `git pull`.
 
 Inspecting the added `_config.yml` file, you can see that it only contains the single line:
 
@@ -96,7 +96,7 @@ The actual theme name is the last segment which in my case is `cayman`.
 
 To see the updated page with the selected theme applied, you can navigate again to the URL of the published page.
 
-> Note: The Github pages processing engine takes some time to publish your pages after a change. So keep refreshing the page until the new content appears.
+> Note: The Github pages processing engine takes a little bit of time to publish your pages after a change to the repository. So keep refreshing the page until the new content appears.
 
 ## Conclusion
 
