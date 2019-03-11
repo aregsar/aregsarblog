@@ -72,16 +72,16 @@ Since we don't have any content in our home page yet, so nothing more then the l
 
 ## Step 4 - Ovrride the default layout title and description meta tags
 
-The `<head>` tag of `default.html` layout file content that we copied in step 2, contains a `{% seo %}` Liquid template tag
+The `<head>` tag of `default.html` layout file content that we copied in step 2, contains a __seo__ Liquid template tag
 parameter that when processed by Jekyll, will generate title and description meta tags used for SEO.
 
-The genrated title meta tag uses the Github repository name as the title text that gets displayed as the title for the blog in the web browser tab.
+The genrated title meta tag uses the Github repository name as the title text that gets displayed for the blog in the web browser tab.
 
-Similarly the genrated description meta tag uses the optional Github repository description that I enetered when I created the repo as the displayed description in the web browser tab.
+Similarly the genrated description meta tag uses the optional Github repository description text that I enetered when I created the repository.
 
-To override the repository name and repository description text that are used by default, I added title and description settings to the `_config.yml` that was added by Github pages when I selected the theme in the part 1 of the series.
+To override the repository name and repository description text that are used by default, I added title and description settings to the `_config.yml` that was added by Github pages when I selected the theme in part 1 of the series.
 
-In order to do so I typed the following in the bash terminal:
+I typed the following in the bash terminal to set the title text to `aregsar` and the description text to `Areg Sarkissians Blog`.:
 
 ```bash
 echo ''
@@ -89,16 +89,14 @@ echo 'title: aregsar' >> _config.yml
 echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
 
-This set the title text to `aregsar` and the description text to `Areg Sarkissians Blog`.
+Jekyll uses the settings in the `_config.yml` file to override the default values for the repository title and description.
 
-Jekyll uses the settings in the `_config.yml` file to override the default values for title and description.
-
-## Conclusion 
+## Conclusion
 
 In this post I showed you how I overrode the default theme layout file and its content. I also showed how I overrode the default theme file title and description meta tags displayed on the browser tab.
 
-You can further customize the content of the `default.html` layout file with your own Html content as I will detail when I show how I added global navigation links for this blog in another post in the series.
+You can further customize the content of the `default.html` layout file with your own html content as I will detail when I show how I added global navigation links for this blog in an upcoming post in the series.
 
-Checkout part 3 to see how I override the default theme style of Github pages.
+Checkout part 3 to see how I override the default theme style of my Github pages blog.
 
 Thanks for reading.
