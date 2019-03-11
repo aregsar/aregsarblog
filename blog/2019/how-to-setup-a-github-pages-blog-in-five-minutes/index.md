@@ -16,7 +16,7 @@ Below are the steps I used to create the repository:
 
 + Navigated to the "create a new repository" page on Github
 + Entered "aregsarblog" in the "repository name" field
-+ Enetered "aregs blog" in the optional "description" field
++ Entered "aregs blog" in the optional "description" field
 + Clicked on the "create repository" button
 
 At this point an empty Github repository is created.
@@ -35,7 +35,7 @@ git init
 git remote add origin git@github.com:aregsar/aregsarblog.git
 ```
 
-At this point the local Github repository is created and is ready to track my remote Github repository.
+At this point the local git repository is created and is ready to track my remote Github repository.
 
 ## Step 3 - Added a markdown index page
 
@@ -43,7 +43,7 @@ In this step I added an empty `index.md` markdown file which is the home page of
 
 I committed and pushed the file to the remote repository with the local master branch set up to track the remote master branch.
 
-I opened a bash terminal and typed the following:
+I opened a bash terminal, set the current directory to the root directory and typed the following:
 
 ```bash
 touch index.md
