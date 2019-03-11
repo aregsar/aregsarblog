@@ -2,7 +2,7 @@
 
 Mar 11, 2019
 
-[How to customize your github pages blog layout in five minutes](how-to-customize-your-github-pages-blog-layout-in-five-minutes)
+[How to customize your github pages blog layout in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-layout-in-five-minutes)
 
 Mar 7, 2019
 
