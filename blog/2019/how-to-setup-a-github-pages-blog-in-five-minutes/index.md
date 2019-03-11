@@ -37,7 +37,7 @@ git remote add origin git@github.com:aregsar/aregsarblog.git
 
 At this point the local git repository is created and is ready to track my remote Github repository.
 
-## Step 3 - Added a markdown index page
+## Step 3 - Added a home page
 
 In this step I added an empty `index.md` markdown file which is the home page of this blog.
 
@@ -90,7 +90,7 @@ Inspecting the added `_config.yml` file, you can see that it only contains the s
 
 `theme: jekyll-theme-cayman`
 
-This line tells Jekyll, the Github pages processing engine, what theme to select and apply to our processed markdown pages when publishing the site.
+This line tells Jekyll, the Github pages processing engine, the theme to select and apply to our processed markdown pages when publishing the site.
 
 The actual theme name is the last segment which in my case is `cayman`.
 
