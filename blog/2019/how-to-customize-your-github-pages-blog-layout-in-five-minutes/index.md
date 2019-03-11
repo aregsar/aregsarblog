@@ -8,13 +8,13 @@ In this blog post I will show you the steps I took to override the default layou
 
 I will also show how to replace the default content that was included in the default theme layout file.
 
-> Note: Jekyll, the engine behind github pages applies the selected theme during its markdown file transformation process. The default theme files are located in the jekyll themes repo located at https://github.com/pages-themes/cayman.
+> Note: Jekyll, the engine behind github pages applies the selected theme during its markdown file transformation process. For the cayment theme the default theme files are located in the jekyll themes repo located at https://github.com/pages-themes/cayman.
 
 Below I will detail the steps I took to override the default layout of my github pages blog in approximately 5 minutes.
 
 ## Step 1 - Creating a local layout file
 
-In this step I created a file named _layouts/default.html in the `aregsarblog` repository by typing the following bash statement in the root directory of the repository:
+In this step I created a file named `_layouts/default.html` in the `aregsarblog` repository by typing the following bash statements in the root directory of the repository:
 
 ```bash
 mkdir _layouts && cd _layouts
@@ -25,27 +25,31 @@ At this point we have an empty local layout file.
 
 ## Step 2 - Copying the default theme layout file content
 
-The default layout for our cayman theme is located at: https://github.com/pages-themes/cayman/blob/master/_layouts/default.html
+The default layout for our cayman theme is located at: `https://github.com/pages-themes/cayman/blob/master/_layouts/default.html`
 
 We need to copy the content of this file over into our local layout file in order to be able to override the layout.
 
-In order to do so, I did the following steps:
+In order to do so, I performed the following steps:
 
 + I navigated to the default layout repo page
-https://github.com/pages-themes/cayman/blob/master/_layouts/default.html
-+ clicked on the raw button
-+ copied the raw text into the local _layouts/default.html file that we created in step 1 using a text editor.
+[https://github.com/pages-themes/cayman/blob/master/_layouts/default.html](https://github.com/pages-themes/cayman/blob/master/_layouts/default.html)
++ Clicked on the `raw` button
++ Selected all the raw text content of the file and copied it
++ Using a text editor, I opened the empty local `_layouts/default.html` file that I created in step 1 and pasted the copied text content into it
 
-At this point the content of the default.html file in my local repo overrides the content in the https://github.com/pages-themes/cayman/blob/master/_layouts/default.html file.
+At this point the content of the `_layouts/default.html` file in my local repo overrides the content in the `https://github.com/pages-themes/cayman/blob/master/_layouts/default.html` layout file.
 
-However since we just copied over the exact same content that is in the default layout file, our blog home page will still look the same until we change the content of our local layout file `_layouts/default.html`.
+However since we just copied over the exact same content that is in the default layout file, our blog home page will still look the same. 
 
 You can verify this by pushing the changes we made so far to the Github repository and refresh the page to still see the same content displayed.
 
-## Step 3 - Replacing the default theme layout file boilerplate
+In order to change the content we need to change the content of our local layout file `_layouts/default.html`.
+
+## Step 3 - Replacing the default theme layout file content
 
 By default github pages themes add standard repository boilerplate markup
-to the `default.html` file that is a mix of html tags and Liquid template tags.
+to the `default.html` file. This content is a mix of html tags and Liquid template tags.
+Liquid is the templating engine used by Jekyll.
 
 To replace the boilerplate with my own layout page markup, I replaced the content inside the `<body>` tags in the `default.html` file with the following html snippet:
 
@@ -64,7 +68,7 @@ To replace the boilerplate with my own layout page markup, I replaced the conten
 
 After pushing this change to my Github repo, I saw the new content displayed in the page.
 
-> Note the __content__ tag in the body section of the layout file is a Liquid template placeholder where Jekyll places the, converted to html, content of your markdown pages into the layout file. Liquid is the templating engine used by Jekyll
+> Note the __content__ tag in the body section of the layout file is a Liquid template placeholder where Jekyll places the, converted to html, content of your markdown pages into the layout file.
 
 So at this point the content of our home page index.md file is converted to html by Jekyll and then injected into the layout where the placeholder tag is located.
 
