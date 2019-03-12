@@ -8,13 +8,14 @@ In this blog post I will show you the steps I took to override the default layou
 
 I will also show how to replace the default content that was included in the default theme layout file.
 
-> Note: Jekyll, the engine behind github pages applies the selected theme during its markdown file transformation process. For the cayment theme the default theme files are located in the jekyll themes repo located at https://github.com/pages-themes/cayman.
+> Note: Jekyll, the engine behind github pages applies the selected theme to the 
+markdown files after they are transformed to html during its markdown file transformation process. The applied theme layout files are stored in a page themes Github repository. For the cayment theme the default theme files are located in the jekyll themes repository located at https://github.com/pages-themes/cayman.
 
 Below I will detail the steps I took to override the default layout of my github pages blog in approximately 5 minutes.
 
 ## Step 1 - Creating a local layout file
 
-In this step I created a file named `_layouts/default.html` in the `aregsarblog` repository by typing the following bash statements in the root directory of the repository:
+In this step I created a empty file named `_layouts/default.html` in the `aregsarblog` repository by typing the following bash statements in the root directory of the repository:
 
 ```bash
 mkdir _layouts && cd _layouts
@@ -37,9 +38,9 @@ In order to do so, I performed the following steps:
 + Selected all the raw text content of the file and copied it
 + Using a text editor, I opened the empty local `_layouts/default.html` file that I created in step 1 and pasted the copied text content into it
 
-At this point the content of the `_layouts/default.html` file in my local repo overrides the content in the `https://github.com/pages-themes/cayman/blob/master/_layouts/default.html` layout file.
+At this point the content of the `_layouts/default.html` file in my local repository overrides the content in the `https://github.com/pages-themes/cayman/blob/master/_layouts/default.html` layout file.
 
-However since we just copied over the exact same content that is in the default layout file, our blog home page will still look the same. 
+However since we just copied over the exact same content that is in the default layout file, our blog home page will still look the same.
 
 You can verify this by pushing the changes we made so far to the Github repository and refresh the page to still see the same content displayed.
 
@@ -76,16 +77,17 @@ Since we don't have any content in our home page yet, nothing more then the layo
 
 ## Step 4 - Override the default layout title and description meta tags
 
-The `<head>` tag of `default.html` layout file content that we copied in step 2, contains a __seo__ Liquid template tag
-parameter that when processed by Jekyll, will generate title and description html meta tags used for SEO purposes.
+The `<head>` tag of `default.html` layout file content that we copied in step 2, contains a `seo` Liquid template tag that when processed by Jekyll, will generate title and description html meta tags used for SEO purposes.
 
-The generated title meta tag uses the Github repository name as the title text that gets displayed for the blog in the web browser tab.
+The generated `title` meta tag uses the Github repository name as the title text that gets displayed for the blog in the web browser tab.
 
-Similarly the genrated description meta tag uses the optional Github repository description text that I enetered when I created the repository.
+Similarly the genrated `description` meta tag uses the optional Github repository description text that I enetered when I created the repository.
 
-To override the repository name and repository description text that are used by default, I need to add title and description settings to the `_config.yml` file that was added by Github pages when I selected the theme in part 1 of the series.
+To override the repository name and repository description text that are used by default, I added title and description settings to the `_config.yml` file that was added by Github pages when I selected the theme in part 1 of the series.
 
-I typed the following in the bash terminal to add two lines to `_config.yml` file. The first line sets the title text to `aregsar` and the second line sets the description text to `Areg Sarkissians Blog`.
+Specifically, I typed the following bash statements in the terminal to add two additional lines to the `_config.yml` file.
+
+The first line set the title text to `aregsar` and the second line set the description text to `Areg Sarkissians Blog`.
 
 ```bash
 echo ''
@@ -93,13 +95,17 @@ echo 'title: aregsar' >> _config.yml
 echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
 
-Jekyll uses the settings in the `_config.yml` file to override the default values for the repository title and description.
+Jekyll uses these settings in the `_config.yml` file to override the default values for the repository title and description.
+
+> Note: the first bash echo statement with empty text argument just adds a newline to the end of the existing line that specifies the caymen theme in _config.yml.
 
 ## Conclusion
 
-In this post I showed you how I overrode the default theme layout file and its content. I also showed how I overrode the default theme file title and description meta tags.
+In this post I showed you how I overrode the default theme layout file and its content. I also showed how I overrode the default theme layout file title and description meta tags.
 
-You can further customize the content of the `default.html` layout file with your own html content. I will detail how I added global navigation links to the layout file for this blog in an upcoming post in the series.
+You can further customize the content of the `default.html` layout file with your own html content. 
+
+I will detail how I added global navigation links to the layout file for this blog in an upcoming post in the series.
 
 Check out part 3 to see how I override the default theme style of my Github pages blog.
 
