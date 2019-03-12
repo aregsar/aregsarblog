@@ -1,10 +1,4 @@
-# How to setup a github pages blog with markdown
 
-Feb 27, 2019 by [Areg Sarkissian](https://aregsar.com/about)
-
-Welcome to the first post on my new blog.
-
-In this post I will show you how I set up this blog with [GitHub Pages](https://pages.github.com/) and [Markdown](https://commonmark.org/help/) and how you can easily do the same.
 
 ## Outline of this blog post
 
@@ -14,57 +8,8 @@ Below are jump links to each section of this blog:
 
 [Github pages technology](#github-pages-technology)
 
-[Creating a repository to host your static Markdown pages on Github](#creating-a-repository-to-host-your-static-markdown-pages-on-github)
 
-[Adding the main page for your blog](#adding-the-main-page-for-your-blog)
 
-[Turning the repository into a Github Pages site](#turning-the-repository-into-a-github-pages-site)
-
-[Setting up the default theme for your site](#setting-up-the-default-theme-for-your-site)
-
-[Pointing a custom domain name to your Github pages site](#pointing-a-custom-domain-name-to-your-github-pages-site)
-
-[Connecting the custom domain to our Github pages repository](#connecting-the-custom-domain-to-our-github-pages-repository)
-
-[Enable the Enforce HTTPS checkbox](#enable-the-enforce-https-checkbox)
-
-[Pulling down changes made to our remote repo](#pulling-down-changes-made-to-our-remote-repo)
-
-[The Github pages default theme repo](#the-github-pages-default-theme-repo)
-
-[Overriding the default Jekyll layout](#overriding-the-default-jekyll-layout)
-
-[Changing your site title](#changing-your-site-title)
-
-[Adding a heading to our index.md page](#adding-a-heading-to-our-indexmd-page)
-
-[Github pages default theme styles](#github-pages-default-theme-styles)
-
-[Overriding the default theme styles](#overriding-the-default-theme-styles)
-
-[Customizing the theme styles](#customizing-the-theme-styles)
-
-[Adding a file structure to our blog](#adding-a-file-structure-to-our-blog)
-
-[The URL structure of our blog](#the-url-structure-of-our-blog)
-
-[Adding links to the site layout](#adding-links-to-the-site-layout)
-
-[Linking to the blog post from index.md file](#linking-to-the-blog-post-from-indexmd-file)
-
-[Linking to headers within a page](#linking-to-headers-within-a-page)
-
-[Adding image tags to our posts](#adding-image-tags-to-our-posts)
-
-[Adding third party comments for your posts](#adding-third-party-comments-for-your-posts)
-
-[Notes on using relative URLs](#notes-on-using-relative-urls)
-
-## Abbreviated Companion Blog Post
-
-If you just want to see the steps involved without the detailed explanations, you can take look at the abbreviated version of this post.
-
-[How to setup a github pages blog steps](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-steps)
 
 ## Github pages technology
 
@@ -83,75 +28,6 @@ Also GitHub Pages uses its own flavor of markdown called [Github Flavored Markdo
 You will not need to know GFM to understand this post.
 
 You will need a Github account and a git client installed on your development machine.
-
-## Creating a repository to host your static Markdown pages on Github
-
-The first step to setup a GitHub Pages blog is to create an empty GitHub repository to host your blog.
-
-So for this blog I created an empty repo named aregsarblog in my Github account.
-
-## Adding the main page for your blog
-
-Once the empty repository is created, we will add an index.md Markdown file at the root of the repository.
-
-This file will be converted to html by Jekyll, the Markdown transformation engine run by Github pages.
-
-The processed html file will then be served when you navigate to the root URL of your site.
-
-In order to setup the main page for this blog I used bash commands to create a new local repository named aregsarblog that contains an `index.md` file and pushed it up to the remote Github repo that I created in the previous step.
-
-```bash
-mkdir aregsarblog && cd aregsarblog
-touch index.md
-git init
-git add index.md
-git commit -m "first commit"
-git remote add origin git@github.com:aregsar/aregsarblog.git
-git push -u origin master
-```
-
-At this point the index.md file should apear in the master branch.
-
-## Turning the repository into a Github Pages site
-
-To turn your newly created repository into a Github pages site, Go to the settings page for the repository by clicking on the settings button at the top of your repository page.
-
-On the settings page, scroll down to the Github pages section and activate Github pages by selecting the master branch using the select source dropdown and then clicking save.
-
-Shown here is the Github pages section after I completed all the configuration for this site that will be covered in the following sections:
-
-![Image](https://aregsar.com/blog/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
-
-At this point for me I see the message below at the top of the
-github pages section
-
-your site is published `https://aregsar.github.io/aregsarblog/`
-
-So that's it. Congratulations, you just created your first GitHub Pages site.
-
-## Setting up the default theme for your site
-
-In the Github pages section, click on the change theme button and select a default theme for your site.
-
-I chose the Caymen theme for this site.
-
-To select the theme click on the change theme buttom then select your theme and click the select theme buttom.
-
-Clicking the select theme buttom will return you to the settings page and will add a `_config.yml` file to the root of your repo
-
-This file will contain a single line that shows the selected theme.
-
-For my blog it contains:
-
-`theme: jekyll-theme-cayman`
-
-The actual theme name is the last segment which in our case is cayman. This is the name we will use to locate the theme repository for the cayman theme in order to customize our default theme.
-
-If you navigate to where the site is published, which in my case is `https://aregsar.github.io/aregsarblog`, you will see that the default theme has added repository related elements such as the `view on Github` button to the page.
-
-In the following sections I will show you how to customize the default theme to remove the standard repository elements in the default theme and make the site look like this blog.
-
-But before we do that lets associate a custom domain name to our blog.
 
 ## Setting up a custom domain for your blog
 
@@ -217,49 +93,31 @@ After checking the Https checkbox the published URL endpoint for the blog will c
 
 > Note: if you see any github pages error messages, after checking the HTTPS box, wait for github pages to generate SSL certificates and publish at the https endpoint. Any error should resolve automatically in a few minutes.
 
-## Pulling down changes made to our remote repo
 
-Since Github pages settings changes added the _config.yml and CNAME files to our remote repo we need to pull it down to our local repo so we will be in sync.
 
-So I did a git pull from my local repo directory to pull down the two added files.
-Your local repo directory should now contain the following three files:
 
-index.md
 
-_config.yml
 
-CNAME
 
-## Overriding the default theme for your site
 
-### The Github pages default theme repo
 
-All the Github pages default themes files that Jekyll uses to apply the themes during its markdown file transformation process are located in the jekyll themes repo located at https://github.com/pages-themes
 
-Each individual theme is at located in a sub directory https://github.com/pages-themes/THEME_NAME
 
-Since I chose the cayman theme, the theme repo that Jekyll uses by default for this site is at https://github.com/pages-themes/cayman
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Overriding the default Jekyll layout
 
-the default layout for our cayman theme is at:
-https://github.com/pages-themes/cayman/blob/master/_layouts/default.html
-
-To get rid of the github repo default layout boilerplate I had to override the layout.
-
-So I created a file _layouts/default.html at the root of the repo
-
-```bash
-mkdir _layouts && cd _layouts
-touch default.html
-```
-
-next I navigated to the default layout repo page  
-`https://github.com/pages-themes/cayman/blob/master/_layouts/default.html`
-
-clicked on the raw button and copied the raw text into the `_layouts/default.html` file
-
-Now we can make changes to the our local default.html file to remove the boilerplate that github pages adds for standard repository pages.
 
 So after copying the default.html content,
 I replaced the content in the `<body>` tags with:
@@ -285,40 +143,13 @@ Refer to this StackOverflow post to see how to escape Liquid template parameters
 
 [How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
 
-OK so finally I pushed the changes to the repo to create the stripped down layout of this site.
 
-By the way, there will be a slight delay, usually under a minute, every time you push a change for the changes to display on the site so be patient.
-At this point all the default content and buttons that github added to layout content is removed
 
 The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pages uses to add the buttons and content to our layout.
 
 The REPO_SETTINGS parameters are specified by the default repository settings such as repo name. However next, we will specify the settings in the _config.yml file that will override the default settings.
 
-### Changing your site title
 
-The `<head>` tag of default.html file contains a {% seo %} parameter that when processed by Jekyll will generate title and description meta tags used for SEO.
-
-The genrated title meta tag uses the repo name for title value that displays the site title in the web browser bar. Similarly the genrated description meta tag uses the Github repo description you specified when you created the repo.
-
-To override that default title and description meta tag values I added the two lines below to the _config.yml at the root of the repo.
-
-title: aregsar
-
-description: Areg Sarkissians Blog
-
-using the bash script:
-
-```bash
-echo ''
-echo 'title: aregsar' >> _config.yml
-echo 'description: Areg Sarkissians Blog' >> _config.yml
-```
-
-Save and push to see the title text change.
-
-As always give Github pages a little time to process the change you just pushed to the repo.
-
-Initially for this blog the title in the browser tab was the name of the repo aregsarblog. But after I added the title to _config.yml the title changed to the current title of aregsar.
 
 ### Adding a heading to our index.md page
 
@@ -344,166 +175,14 @@ After some delay you can refresh the page and do a view source in the browser to
 
 note that the text of the h1 tag markdown is used a the id of the h1 html tag with a dash used for the space character
 
-### Github pages default theme styles
 
-The default style that Github pages applies for the cayman theme is located at 
-https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss
 
-inside this file there is import statement
-@import 'jekyll-theme-cayman';
 
-that imports the styles located at
 
-https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
 
-By default Jekyll compiles this style.scss file to style.css that used to style the page. The compiled style.css is referenced in the `<head>` tag of _layouts/default.html file using the `<link>` element shown below:
 
-`<link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">`
 
-### Overriding the default theme styles
 
-In order to override the default style.scss we need to first create a file assets/css/style.scss at the root of your repo
-and add the following four lines at the top the file
-
-```scss
----
----
-
-@import "{{ site.theme }}";
-```
-
-the `@import "{{ site.theme }}";` line is transformed to
-`@import "jekyll-theme-cayman";` by Jekyll because of the line `theme: jekyll-theme-cayman` specified in our _config.yml file.
-
-This is the same import statement used in the default https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss file.
-
-I added the assets/css/style.scss with the bash statements below at the root of this repo.
-
-```bash
-mkdir assets && cd assets
-mkdir css && cd css
-echo '---' >> style.scss
-echo '---' >> style.scss
-echo >> style.scss
-echo '@import "{{ site.theme }}";' >> style.scss
-```
-
-I pushed the changes for the site to use the local style.scss to override the default theme style.scss
-
-The local style.scss will be used to generate the style.css that is  applied to the page.
-
-You can verify this after a brief delay by doing a view source on the refreshed page to see the published style.css link
-
-`<link rel="stylesheet" href="/assets/css/style.css?v=c9149429e7d8df2dde257387400cef49363fb589">`
-
-### Customizing the theme styles
-
-Now that we have overriden the default styles.scss file with our local styles.scss file, we can customize our local styles.scss file to customize the styles for our pages.
-
-To customize we add any custom imports or css or scss styles immediately after the `'@import "{{ site.theme }}";'` line in our local styles.scss file.
-
-As an example if we open the imported default cayman theme scss file located at
-https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
-
-we will see the following style snipets inside:
-
-```scss
-@import "variables";
-body {
-  color: $body-text-color;
-}
-
-a {
-  color: $body-link-color;
-}
-
-.page-header {
-  color: $header-heading-color;
-  text-align: center;
-  background-color: $header-bg-color;
-
-.main-content {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: normal;
-    color: $section-headings-color;
-  }
-```
-
-So we can as an example override the color of the .main-content h1 tag setting it to red by placing the following style snippet right after the import statement in our local style.scss file
-
-```scss
-.main-content {
-  h1 {
-   color: #ff0000;
- }
-}
-```
-
-so the final file content would be
-
-```scss
----
----
-
-@import "{{ site.theme }}";
-.main-content {
-  h1 {
-   color: #ff0000;
- }
-}
-```
-
-Push the changes and see that the color of our h1 heading we added to index.md changes to red.
-
-The generated .main-content h1 style is
-
-```css
-.main-content h1{color:#ff0000}
-```
-
-for the h1 element in main element
-
-```html
-<main id="content" class="main-content" role="main">
-      <h1 id="hello-world">hello world</h1>
-```
-
-which can be seen by doing view source and navigating to the generated css file referenced in the header
-
-```html
-<link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">
-```
-
-## Adding a file structure to our blog
-
-To explain how to setup navigation links between your pages, I will use the structure of my blog as an example.
-
-For this blog I have an index.md page and an about.md page in the root of my repository.
-
-I also have a subdirectory named blog in the root of the repository that contains all the posts on this blog.
-
-Each post is a markdown file within the blog directory.
-
-To mimick this structure add a about.md page and a blog subdirectory to the root of the directory
-
-Then go to the blog subdirectory and add a markdown file for your first blog post.
-
-I use the title of this post as the file name.
-
-I used the bash script below at the root of the repo to add the files
-
-```bash
-echo "# About" >> about.md
-mkdir blog && cd blog
-echo "# How to setup a github pages blog with markdown" >> how-to-setup-a-github-pages-blog-with-markdown.md
-```
 
 ### The URL structure of our blog
 
@@ -670,8 +349,6 @@ That is why I chose using absolute URL linking for this site
 
 ## Conclusion
 
-In this post I showed you how to setup a new Github pages site from scratch. We started by creating a brand new Github repository for our site. We converted the repository into a Github pages site. We added a site theme and setup a custom domain name to point to the site. We also created the files and directories needed to define our own layout and override the default theme styling. Finally we learned how to create markdown links to navigate to pages on our site.
 
-This is a great starting point for you to start adding your own markdown content and expand the directory structure for your own blog site.
 
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
