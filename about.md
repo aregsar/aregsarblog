@@ -13,7 +13,6 @@ I use functional programming, object oriented programming and domain driven desi
 + [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) - High performance asynchronous web API framework
 + [Stimulus](https://stimulusjs.org) - Controllers for organizing client side javascript
 + [Vue](https://vuejs.org) - Javascript UI widgets embedded in HTML rendered pages
-+ [Flask](https://http://flask.pocoo.org/) - Micro web framework for utility APIs
 
 ## My lean development process
 
