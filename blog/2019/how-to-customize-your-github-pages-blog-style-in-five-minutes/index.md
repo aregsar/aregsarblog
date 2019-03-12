@@ -1,89 +1,138 @@
 # How to customize your github pages blog style in five minutes
 
-Github pages default theme styles
+Mar 11, 2019 by Areg Sarkissian
 
-The default style that Github pages applies for the cayman theme is located at https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss
+Welcome to part 3 of this series on setting up a blog with Github pages.
 
-inside this file there is import statement @import ‘jekyll-theme-cayman’;
+In this blog post I will show you the steps I took to override the default theme style of my Github pages blog after I selected the default theme in part 1.
 
-that imports the styles located at
+> Note: Jekyll, the engine behind github pages applies the selected theme during its markdown file transformation process. For the cayment theme the default theme files are located in the jekyll themes repository located at https://github.com/pages-themes/cayman.
 
-https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
+## How styles are applied by Github pages
 
-By default Jekyll compiles this style.scss file to style.css that used to style the page. The compiled style.css is referenced in the <head> tag of _layouts/default.html file using the <link> element shown below:
+Before showing the steps I took to override he default theme style of this blog, It would be helpful to describe how styles are applied by Github pages.
 
-<link rel="stylesheet" href="/assets/css/style.css?v=76e9344533f4785fd14d43d0d2033d97bf6636b5">
+The default style that Jekyll applies for the cayman theme is located at https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss.
 
+Inside this file there is an import statement:
 
-Step 1 Overriding the default theme styles
+`@import ‘jekyll-theme-cayman’;`
 
-In order to override the default style.scss we need to first create a file assets/css/style.scss at the root of your repo and add the following four lines at the top the file
+This statement imports the styles located at https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
 
----
----
+By default Jekyll compiles the `https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss` file to a `style.css` file that used to style this blog.
 
-@import "jekyll-theme-cayman";
-the @import "jekyll-theme-cayman"; line is transformed to @import "jekyll-theme-cayman"; by Jekyll because of the line theme: jekyll-theme-cayman specified in our _config.yml file.
+The compiled `style.css` is referenced using a `<link>` tag inside
+the `<head>` tag of `_layouts/default.html` layout file.
 
-This is the same import statement used in the default https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss file.
+Here is an example of the generated tag:
 
-I added the assets/css/style.scss with the bash statements below at the root of this repo.
+`<link rel="stylesheet" href="/assets/css/style.css?v=76e9344533f4785fd14d43d0d2033d97bf6636b5">`
 
+In the following sections I will detail the steps I took to override the default style of my github pages blog in approximately 5 minutes.
+
+## Step 1 - Added a heading to the empty home page file
+
+To test overriding the style I added a h1 tag to `index.md` file in the root of the repository by adding the markdown content below:
+
+```bash
+echo '# hello world' >> index.md
+```
+
+After I pushed this change to the remote repository,
+I refreshed the page and did a view source in the browser to verify that jekyll converted the markdown to the following html:
+
+`<h1 id="hello-world">hello world</h1>`
+
+> Aside: You can see that the text of the h1 tag markdown is used a the id of the h1 html tag with a dash used for the space character
+
+## Step 2 - Created a local style.css file
+
+To override the default theme style we need to add a local `assets/css/style.scss` file to our repository.
+
+So I added the `assets/css/style.scss` file by typing the following from root directory of the repository:
+
+```bash
 mkdir assets && cd assets
 mkdir css && cd css
 echo '---' >> style.scss
 echo '---' >> style.scss
 echo >> style.scss
-echo '@import "jekyll-theme-cayman";' >> style.scss
-I pushed the changes for the site to use the local style.scss to override the default theme style.scss
+echo '@import "{{ site.theme }}";' >> style.scss
+```
 
-The local style.scss will be used to generate the style.css that is applied to the page.
+At this point the `style.scss` will contain the following content:
 
-You can verify this after a brief delay by doing a view source on the refreshed page to see the published style.css link
+```scss
+---
+---
 
-<link rel="stylesheet" href="/assets/css/style.css?v=c9149429e7d8df2dde257387400cef49363fb589">
+@import "{{ site.theme }}";
+```
+
+Jekyll transforms the `@import "{{ site.theme }}";` line in the file is transformed to:
+`@import "jekyll-theme-cayman";`
+by using the setting `theme: jekyll-theme-cayman` specified in our `_config.yml` file.
+
+So the tranformed content will be:
+
+```scss
+---
+---
+
+@import "jekyll-theme-cayman";
+```
+
+This is the same import statement used in the default themes https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss file.
+
+
+
+
+
+## customizing the theme styles
 
 Customizing the theme styles
 Now that we have overriden the default styles.scss file with our local styles.scss file, we can customize our local styles.scss file to customize the styles for our pages.
 
-To customize we add any custom imports or css or scss styles immediately after the '@import "jekyll-theme-cayman";' line in our local styles.scss file.
+To customize we add any custom imports or css or scss styles immediately after the `@import "{{ site.theme }}";` line in our local styles.scss file.
+
+Styles added to this file override the defaut styles applied by Jekyll to our pages.
+
+================
 
 
+==================
 
+To test this out I added the `.main-content h1` style to the `assets/css/style.scss` file.
 
-Step 2 - Adding a heading to our index.md page
+After adding the content of style.scss will be:
 
-To test changing the styling by adding my own style I added markdown heading content to index.md to 
-generate an h1 tag that I could override the styling for
+```scss
+---
+---
 
+@import "{{ site.theme }}";
+.main-content {
+  h1 {
+   color: #ff0000;
+ }
+}
+```
 
-The Jekyll engine substitutes the content of the index.md file for the {{ content }} parameter in the _layouts/default.html page
+After pushing this change to the remote repository
+Jekyll will use the `assets/css/style.scss` file to generate the `style.css` that is applied to the page.
 
-All subsequent markddown pages you add to the repo will similarly be substituted for the {{ content }} parameter when published
+I verified this by refereshing the page and doing a view source on the refreshed page to see the published style.css link
 
-Now in the index.md file I added the h1 tag markdown line:
+<link rel="stylesheet" href="/assets/css/style.css?v=c9149429e7d8df2dde257387400cef49363fb589">
 
-# hello world
+## Details of overridinng styles
 
-using the bash script:
-
-echo '# hello world' >> index.md
-I saved and pushed the changes.
-
-After some delay you can refresh the page and do a view source in the browser to see that jekyll converted the markdown to the following html:
-
-<h1 id="hello-world">hello world</h1>
-
-> note that the text of the h1 tag markdown is used a the id of the h1 html tag with a dash used for the space character
-
-=================
-
-Step 3 - adding our own styles
-
-As an example if we open the imported default cayman theme scss file located at https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
+if we open the imported default cayman theme scss file located at https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
 
 we will see the following style snipets inside:
 
+```scss
 @import "variables";
 body {
   color: $body-text-color;
@@ -110,15 +159,20 @@ a {
     font-weight: normal;
     color: $section-headings-color;
   }
-So we can as an example override the color of the .main-content h1 tag setting it to red by placing the following style snippet right after the import statement in our local style.scss file
+```
+To test overring the color of the `.main-content h1` tag generated from content of `index.md` file, I changed its color to red by adding the following css style snippet right after the import statement in our local `style.scss` file:
 
+```scss
 .main-content {
   h1 {
    color: #ff0000;
  }
 }
-so the final file content would be
+```
 
+The file content, after I added the style, looked like:
+
+```scss
 ---
 ---
 
@@ -128,18 +182,16 @@ so the final file content would be
    color: #ff0000;
  }
 }
+```
 
-Push the changes and see that the color of our h1 heading we added to index.md changes to red.
+I then saved and pushed the change to my Github pages repo and refreshed the page to verify that the color of the h1 heading that I added to the `index.md` file changed to red.
 
-The generated .main-content h1 style is
+I also did a view source and navigated to the generated css file referenced in the header link tag: `<link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">`
+to see that the generated style `.main-content h1{color:#ff0000}` is applied to the h1 tag inside the main tag:
 
-.main-content h1{color:#ff0000}
-for the h1 element in main element
-
+```html
 <main id="content" class="main-content" role="main">
       <h1 id="hello-world">hello world</h1>
-which can be seen by doing view source and navigating to the generated css file referenced in the header
+```
 
-<link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">
-
-
+## Conclusion
