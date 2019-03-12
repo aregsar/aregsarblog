@@ -2,6 +2,14 @@
 
 Mar 7, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
+Articles in this series:
+
+[Part 1 - Setup a Github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-github-pages-blog-in-five-minutes)
+
+[Part 2 - Customize your github pages blog layout in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-layout-in-five-minutes)
+
+[Part 3 - Customize your github pages blog style in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-style-in-five-minutes)
+
 Welcome to the first post on my new blog.
 
 In this post I will show you how I set up this blog using [GitHub Pages](https://pages.github.com/) and [Markdown](https://commonmark.org/help/) and how you can easily do the same.

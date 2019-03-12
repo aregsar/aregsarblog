@@ -2,6 +2,14 @@
 
 Mar 11, 2019 by Areg Sarkissian
 
+Articles in this series:
+
+[Part 1 - Setup a Github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-github-pages-blog-in-five-minutes)
+
+[Part 2 - Customize your github pages blog layout in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-layout-in-five-minutes)
+
+[Part 3 - Customize your github pages blog style in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-style-in-five-minutes)
+
 Welcome to part 3 of this series on setting up a blog with Github pages.
 
 In this blog post I will show you the steps I took to override the default theme style of my Github pages blog after I selected the default theme in part 1.
