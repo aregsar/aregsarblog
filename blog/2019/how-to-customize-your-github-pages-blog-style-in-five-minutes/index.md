@@ -164,3 +164,11 @@ As you can see there already exists a `.main-content h1` style in the file.
 This is the style that gets overriden when we added the our own `.main-content h1` style to our local `style.scss` file.
 
 ## Conclusion
+
+In this post I showed you how I replaced the default theme style with a local style file that you can use to add custom styles that override the built in default theme styles.
+
+I also showed you the file where the default theme style declarations reside to see the available styles to override.
+
+Check out part 4 to see how I setup the file structure of this blog and how I added global elements to the layout.
+
+Thanks for reading.
