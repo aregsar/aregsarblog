@@ -70,9 +70,8 @@ At this point the `style.scss` will contain the following content:
 @import "{{ site.theme }}";
 ```
 
-Jekyll transforms the `@import "{{ site.theme }}";` line in the file is transformed to:
-`@import "jekyll-theme-cayman";`
-by using the setting `theme: jekyll-theme-cayman` specified in our `_config.yml` file.
+Jekyll transforms the `@import "{{ site.theme }}";` line in the file to 
+`@import "jekyll-theme-cayman";` by using the setting `theme: jekyll-theme-cayman` specified in our `_config.yml` file.
 
 So the tranformed content will be:
 
@@ -83,29 +82,19 @@ So the tranformed content will be:
 @import "jekyll-theme-cayman";
 ```
 
-This is the same import statement used in the default themes https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss file.
+This is the same import statement used in the default theme style https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss file.
 
+## step 3 - Customized the theme styles
 
-
-
-
-## customizing the theme styles
-
-Customizing the theme styles
-Now that we have overriden the default styles.scss file with our local styles.scss file, we can customize our local styles.scss file to customize the styles for our pages.
+Now that we have overriden the default `styles.scss` file with our local `styles.scss` file, we can add styles our local `styles.scss` file to customize the styles for our pages.
 
 To customize we add any custom imports or css or scss styles immediately after the `@import "{{ site.theme }}";` line in our local styles.scss file.
 
 Styles added to this file override the defaut styles applied by Jekyll to our pages.
 
-================
+To test this out, I added the `.main-content h1` style to the `assets/css/style.scss` right after the import statement.
 
-
-==================
-
-To test this out I added the `.main-content h1` style to the `assets/css/style.scss` file.
-
-After adding the content of style.scss will be:
+After I added the style, the `style.scss` file content looked like:
 
 ```scss
 ---
@@ -119,18 +108,28 @@ After adding the content of style.scss will be:
 }
 ```
 
-After pushing this change to the remote repository
-Jekyll will use the `assets/css/style.scss` file to generate the `style.css` that is applied to the page.
+I then saved and pushed the change to my Github pages repo and refreshed the page to verify that the color of the h1 heading that I added to the `index.md` file changed to red.
 
-I verified this by refereshing the page and doing a view source on the refreshed page to see the published style.css link
+The added style overrode the color of the `.main-content h1` tag, that was generated from content of `index.md` file and injected into the main tag of the layout file.
 
-<link rel="stylesheet" href="/assets/css/style.css?v=c9149429e7d8df2dde257387400cef49363fb589">
+After pushing the change to the remote repository
+Jekyll uses the `assets/css/style.scss` file to generate the `style.css` that is applied to the page.
 
-## Details of overridinng styles
+I verified this by doing a view source on the refreshed page to see the published style.css link tag: `<link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">`
 
-if we open the imported default cayman theme scss file located at https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
+To see the overide style I navigated to the generated css `style.css` reference in the `<link>` tag to see the style `.main-content h1{color:#ff0000}` which is applied to the h1 tag inside the main tag:
 
-we will see the following style snipets inside:
+```html
+<main id="content" class="main-content" role="main">
+      <h1 id="hello-world">hello world</h1>
+```
+
+## Details of overriding styles
+
+As discussed in the beginning of this article, the statement
+`@import ‘jekyll-theme-cayman’;` imports the default cayman theme scss file located at https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss
+
+If we open the file we will see the following style snipets inside:
 
 ```scss
 @import "variables";
@@ -160,38 +159,8 @@ a {
     color: $section-headings-color;
   }
 ```
-To test overring the color of the `.main-content h1` tag generated from content of `index.md` file, I changed its color to red by adding the following css style snippet right after the import statement in our local `style.scss` file:
 
-```scss
-.main-content {
-  h1 {
-   color: #ff0000;
- }
-}
-```
-
-The file content, after I added the style, looked like:
-
-```scss
----
----
-
-@import "jekyll-theme-cayman";
-.main-content {
-  h1 {
-   color: #ff0000;
- }
-}
-```
-
-I then saved and pushed the change to my Github pages repo and refreshed the page to verify that the color of the h1 heading that I added to the `index.md` file changed to red.
-
-I also did a view source and navigated to the generated css file referenced in the header link tag: `<link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">`
-to see that the generated style `.main-content h1{color:#ff0000}` is applied to the h1 tag inside the main tag:
-
-```html
-<main id="content" class="main-content" role="main">
-      <h1 id="hello-world">hello world</h1>
-```
+As you can see there already exists a `.main-content h1` style in the file.
+This is the style that gets overriden when we added the our own `.main-content h1` style to our local `style.scss` file.
 
 ## Conclusion
