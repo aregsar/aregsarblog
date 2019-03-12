@@ -4,7 +4,7 @@ I'm a software developer that helps small development teams rapidly build and de
 
 In the past I have developed software for organizations as diverse as America Online, Autobytel and Walt Disney.
 
-I use functional programming, object oriented programming and domain driven design principles while coding in C#, PHP and Javascript to help teams build reliable software.
+I use functional programming, object oriented programming and domain driven design principles while coding in C#, PHP, Python and Javascript to help teams build reliable software.
 
 ## My web development stack
 
@@ -13,6 +13,7 @@ I use functional programming, object oriented programming and domain driven desi
 + [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) - High performance asynchronous web API framework
 + [Stimulus](https://stimulusjs.org) - Controllers for organizing client side javascript
 + [Vue](https://vuejs.org) - Javascript UI widgets embedded in HTML rendered pages
++ [Flask](https://http://flask.pocoo.org/) - Micro web framework for utility APIs
 
 ## My lean development process
 
