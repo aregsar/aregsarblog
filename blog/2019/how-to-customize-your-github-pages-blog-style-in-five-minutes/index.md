@@ -1,6 +1,6 @@
 # How to customize your github pages blog style in five minutes
 
-Mar 11, 2019 by Areg Sarkissian
+Mar 12, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 Articles in this series:
 
@@ -66,7 +66,7 @@ mkdir css && cd css
 echo '---' >> style.scss
 echo '---' >> style.scss
 echo >> style.scss
-echo '@import "{{ site.theme }}";' >> style.scss
+echo '@import "{{  "{{" }} site.theme }}";' >> style.scss
 ```
 
 At this point the `style.scss` will contain the following content:
@@ -75,10 +75,10 @@ At this point the `style.scss` will contain the following content:
 ---
 ---
 
-@import "{{ site.theme }}";
+@import "{{ "{{" }} site.theme }}";
 ```
 
-Jekyll transforms the `@import "{{ site.theme }}";` line in the file to 
+Jekyll transforms the `@import "{{ site.theme }}";` line in the file to
 `@import "jekyll-theme-cayman";` by using the setting `theme: jekyll-theme-cayman` specified in our `_config.yml` file.
 
 So the tranformed content will be:
@@ -92,7 +92,7 @@ So the tranformed content will be:
 
 This is the same import statement used in the default theme style https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss file.
 
-## step 3 - Customized the theme styles
+## Step 3 - Customized the theme styles
 
 Now that we have overriden the default `styles.scss` file with our local `styles.scss` file, we can add styles our local `styles.scss` file to customize the styles for our pages.
 
