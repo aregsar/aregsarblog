@@ -1,6 +1,5 @@
 # how-to-setup-your-github-pages-blog-structure-in-five-minutes
 
-
 ## create the directory structure and files
 
 Your Github pages URL structure follows your repository directory structure
@@ -12,10 +11,10 @@ Markdown files by any other name will be accessed by using the filename without 
 So to start this blog I first created an about page by adding the following:
 
 Added an about page to the site root
+
 ```bash
 touch about.md
 ```
-
 
 ## Added global navigation links in the layout file
 
@@ -27,12 +26,7 @@ Next, in the `_layouts/default.html` file, I added anchor tags just after the op
       {{ "{{" }} content }}
 ```
 
-
 ## Added the directory structur for blog posts
-
-
-
-
 
 To add a directory structure that segments my posts into yearly posts I typed:
 
@@ -45,7 +39,6 @@ mkdir 2019 && cd 2019
 
 To add the file for the first blog post of the site, I chose to use the directory name as the name of the post and add an index.md file inside the directory to hold the content of the post. This way I could add any images used by the post in the same directory.
 
-
 Inside the `\blogs\2019\` directory I typed:
 
 ```bash
@@ -55,7 +48,6 @@ touch index.md
 ```
 
 I could have chosen not to create a directory for the post instead use the name I used for the directory to simply creat a file by that name and put the file where I created the directory.  
-
 
 ## Add navigation links and content to index.md
 
@@ -70,7 +62,6 @@ Jan 30, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 ```
 
 ## Adding image tags to our posts
-
 
 ```markdown
 ![Image](https://aregsar.com/blog/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
@@ -117,4 +108,3 @@ In the bottom of this blog post I added the following markdown anchor tag to lin
 ```markdown
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
 ```
-

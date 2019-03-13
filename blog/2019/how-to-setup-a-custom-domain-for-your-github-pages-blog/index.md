@@ -1,8 +1,5 @@
 # how-to-setup-a-custom-domain-for-your-github-pages-blog
 
-
-
-
 ## Pointing a custom domain name to your github pages site
 
 To setup a custom domain for my blog, I registered my custom domain name with my domain registrar dnsimple.com.

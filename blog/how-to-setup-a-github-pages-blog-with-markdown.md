@@ -1,15 +1,10 @@
-
-
-## Outline of this blog post
+# Outline of this blog post
 
 Below are jump links to each section of this blog:
 
 [Abbreviated Companion Blog Post](#abbreviated-companion-blog-post)
 
 [Github pages technology](#github-pages-technology)
-
-
-
 
 ## Github pages technology
 
@@ -37,15 +32,17 @@ To publish our pages at a custom domain name we need to add DNS records to point
 
 So once we register a custom domain at our favorite domain registrar, we need to go to the domain name administration panel of the registrar and create the neccessary records to point the custom domain to our GitHub pages site.
 
-The process of pointing your custom domain to your Guthub pages repository URL is detailed in the following links 
+The process of pointing your custom domain to your Guthub pages repository URL is detailed in the following links
 
-https://help.github.com/articles/using-a-custom-domain-with-github-pages/
+`https://help.github.com/articles/`
 
-https://help.github.com/articles/setting-up-an-apex-domain/
+`using-a-custom-domain-with-github-pages/`
 
-https://help.github.com/articles/setting-up-a-www-subdomain/
+`https://help.github.com/articles/setting-up-an-apex-domain/`
 
-This blog has the domain https://aregsar.com set as the Github Pages domain.
+`https://help.github.com/articles/setting-up-a-www-subdomain/`
+
+This blog has the domain `https://aregsar.com` set as the Github Pages domain.
 
 To setup a custom domain for my blog, I registered my custom domain name with my domain registrar dnsimple.com.
 
@@ -93,31 +90,7 @@ After checking the Https checkbox the published URL endpoint for the blog will c
 
 > Note: if you see any github pages error messages, after checking the HTTPS box, wait for github pages to generate SSL certificates and publish at the https endpoint. Any error should resolve automatically in a few minutes.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Overriding the default Jekyll layout
-
 
 So after copying the default.html content,
 I replaced the content in the `<body>` tags with:
@@ -143,13 +116,9 @@ Refer to this StackOverflow post to see how to escape Liquid template parameters
 
 [How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
 
-
-
 The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pages uses to add the buttons and content to our layout.
 
 The REPO_SETTINGS parameters are specified by the default repository settings such as repo name. However next, we will specify the settings in the _config.yml file that will override the default settings.
-
-
 
 ### Adding a heading to our index.md page
 
@@ -174,15 +143,6 @@ After some delay you can refresh the page and do a view source in the browser to
 `<h1 id="hello-world">hello world</h1>`
 
 note that the text of the h1 tag markdown is used a the id of the h1 html tag with a dash used for the space character
-
-
-
-
-
-
-
-
-
 
 ### The URL structure of our blog
 
@@ -348,7 +308,5 @@ This style of linking has issues that I wont go into detail of, but the primary 
 That is why I chose using absolute URL linking for this site
 
 ## Conclusion
-
-
 
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
