@@ -14,11 +14,11 @@ Welcome to part 3 of this series on setting up a blog with Github pages.
 
 In this blog post I will show you the steps I took to override the default theme style of my Github pages blog after I selected the default theme in part 1.
 
-> Note: Jekyll, the engine behind github pages applies the selected theme during its markdown file transformation process. For the cayment theme the default theme files are located in the jekyll themes repository located at: [https://github.com/pages-themes/cayman](https://github.com/pages-themes/cayman).
+> Note: Jekyll, the engine behind github pages applies the selected theme during its markdown file transformation process. The default theme files for the caymen theme that I selected, are located in the jekyll themes repository at: [https://github.com/pages-themes/cayman](https://github.com/pages-themes/cayman).
 
 ## How styles are applied by Github pages
 
-Before showing the steps I took to override he default theme style of this blog, It would be helpful to describe how styles are applied by Github pages.
+It would be helpful to describe how styles are applied by Github pages, before showing the steps I took to override the default theme style of this blog.
 
 The default style that Jekyll applies for the cayman theme is located at [https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss](https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss).
 
@@ -30,13 +30,13 @@ This statement imports the styles located at [https://github.com/pages-themes/ca
 
 By default Jekyll compiles the `https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss` file to a `style.css` file that is used to style this blog.
 
-The compiled `style.css` is referenced using a `<link>` tag inside the `<head>` tag of the layout file used for this blog.
+The compiled `style.css` is referenced using a `<link>` tag inside the `<head>` tag of the layout file used for this blog. To override the default `style.scss` file used by Jekyll to generate the `style.css` file, we need to add our own `style.scss` file to our repository that will.
 
 In the following sections I will detail the steps I took to override the default style of my github pages blog in approximately 5 minutes.
 
 ## Step 1 - Added a heading to the empty home page file
 
-To test overriding the style I added a h1 tag to the `index.md` file in the root of the repository by adding the markdown content below:
+To test overriding the style I added a h1 tag to the `index.md` home page file in the root of the repository by adding the markdown content below:
 
 ```bash
 echo '# hello world' >> index.md
@@ -44,9 +44,9 @@ echo '# hello world' >> index.md
 
 After I pushed this change to the remote repository, I refreshed the page and did a view source in the browser to verify that jekyll converted the markdown to the following html:
 
-`<h1 id="hello-world">hello world</h1>`
+`<h1 id="hello-world">Hello World</h1>`
 
-> Aside: You can see that the space in the text of the h1 tag is replaced by a dash and is set to the id of the h1 html tag.
+> Aside: You can see that the space in the display text of the h1 tag is replaced by a dash, is lowercased and is set to the id of the h1 html tag.
 
 ## Step 2 - Created a local style.css file
 
@@ -72,7 +72,7 @@ At this point the `style.scss` will contain the following content:
 @import "{{ "{{" }} site.theme }}";
 ```
 
-Jekyll transforms the `@import "{{ site.theme }}";` line in the file to `@import "jekyll-theme-cayman";` by using the setting `theme: jekyll-theme-cayman` specified in our `_config.yml` file.
+Jekyll transforms the `@import "{{ "{{" }} site.theme }}";` line in the file to `@import "jekyll-theme-cayman";` by using the setting `theme: jekyll-theme-cayman` specified in our `_config.yml` file.
 
 So the content of style.scss file will be transformed to:
 
@@ -91,11 +91,11 @@ Now that we have overriden the default `styles.scss` file with our local `styles
 
 To customize we can add any custom imports or css or scss styles immediately after the `@import "{{ site.theme }}";` line in our local styles.scss file.
 
-Styles added to this file override the defaut styles applied by Jekyll to our pages.
+Styles added to this file override the defautt styles at [https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss](https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss) that are applied by Jekyll to our pages.
 
-To test this out, I added the `.main-content h1` style to the `assets/css/style.scss` right after the import statement.
+To test this out, I added the `.main-content h1` style to my local `assets/css/style.scss` file, right after the import statement.
 
-So after I added the style, the `style.scss` file content looked like:
+After I added the style, the `style.scss` file content looked like:
 
 ```scss
 ---
@@ -120,11 +120,11 @@ The added style overrides the color of the h1 tag in the html snippet of the hom
 
 The html was generated by Jekyll, from the transformed content of the `index.md` markdown file that was then injected into the `main` tag of the layout file.
 
-After pushing the change to the remote repository, Jekyll uses the `assets/css/style.scss` file to generate the `style.css` that is applied to the page.
+After pushing the change to the remote repository, Jekyll uses the local `assets/css/style.scss` file to generate the `style.css` that is applied to the page.
 
 I verified this by doing a view source on the refreshed page to see the published style.css link tag: `<link rel="stylesheet" href="/assets/css/style.css?v=f97443281054e55039f2bad9d2237e5486d287c7">`
 
-To see the overide style I navigated to the generated css `style.css` reference in the `<link>` tag to see the style `.main-content h1{color:#ff0000}` which is applied to the h1 tag inside the main tag:
+To see the overide style I navigated to the generated css `style.css` that is referenced in the `<link>` tag to see the style `.main-content h1{color:#ff0000}` which is applied to the `h1` tag inside the `main` tag shown again here:
 
 ```html
 <main id="content" class="main-content" role="main">
@@ -168,13 +168,13 @@ a {
 
 As you can see there already exists a `.main-content h1` style in the file.
 
-This is the style that gets overriden when we added the our own `.main-content h1` style to our local `style.scss` file.
+This is the style that gets overriden when we added our own `.main-content h1` style to our local `style.scss` file.
 
-Content from all other pages of the site get injected inside the `main` tag, that has a css class of `.main-content`, in the layout file.
+Content from each of the other pages of the site, when published, also get injected inside the `main` tag of the layout file.
 
-So any h1 headings in any of the pages of this blog will get the same stying. This is because each page get injected into the same location in the same layout file that we used to override the default layout in part 2.
+So any h1 headings in any of the pages of this blog will get the same stying.
 
-We can similarly override other html tags in our pages, by adding more overriding styles in the local `style.css` file.
+We can similarly override other html tag styles, by adding more overriding styles in our local `style.scss` file.
 
 ## Conclusion
 
