@@ -189,3 +189,5 @@ I also showed you the file where the default theme style declarations reside to 
 Check out next post in the series to see how I added a custom domain name for this blog.
 
 Thanks for reading.
+
+[Top](#how-to-customize-your-github-pages-blog-style-in-five-minutes)

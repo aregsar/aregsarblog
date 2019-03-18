@@ -77,3 +77,5 @@ In this process I showed you the easy process of setting up a custom domain name
 Check out the next post in the series where I show you how I set up the file structure of this blog that determined the URL structure of the blog.
 
 Thanks for reading.
+
+[Top](#how-to-setup-a-custom-domain-for-your-github-pages-blog-in-five-minutes)

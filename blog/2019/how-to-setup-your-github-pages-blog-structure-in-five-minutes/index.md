@@ -126,4 +126,3 @@ In the bottom of this blog post I added the following markdown anchor tag to lin
 Thanks for reading.
 
 [Top](#how-to-setup-your-github-pages-blog-structure-in-five-minutes)
-

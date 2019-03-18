@@ -122,3 +122,5 @@ I will detail how I added global navigation links to the layout file for this bl
 Check out part 3 to see how I override the default theme style of my Github pages blog.
 
 Thanks for reading.
+
+[Top](#how-to-customize-your-github-pages-blog-layout-in-five-minutes)

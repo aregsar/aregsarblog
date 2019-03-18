@@ -118,4 +118,4 @@ Be sure to check out part 2 of this post to see how I override the default theme
 
 Thanks for reading.
 
-[Top](https://aregsar.com/blog/2019/how-to-setup-a-github-pages-blog-in-five-minutes)
+[Top](#how-to-setup-a-github-pages-blog-in-five-minutes)
