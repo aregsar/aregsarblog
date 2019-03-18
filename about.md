@@ -4,9 +4,9 @@ I'm a software developer that helps small development teams rapidly build and de
 
 In the past I have developed software for organizations as diverse as America Online, Autobytel and Walt Disney.
 
-I use Functional Programming, Object Oriented Programming, Domain Driven Design and [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/) principles while coding in C#, PHP, Python and Javascript to help teams build reliable software.
+I use Functional Programming, Object Oriented Programming, Domain Driven Design and [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/) principles while coding in C#, PHP, Python and Javascript to help teams build reliable software, faster and more efficiently.
 
-I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value faster.
+I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value faster, using [tools](https://alwaysdeployed.com/tools) that support this development process.
 
 ## My web development stack
 
