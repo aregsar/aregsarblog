@@ -12,6 +12,8 @@ Articles in this series:
 
 [Part 4 - Setup a custom domain for your github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-custom-domain-for-your-github-pages-blog-in-five-minutes)
 
+[Part 5 - Setup your github pages blog structure in five minutes](https://aregsar.com/blog/2019/how-to-setup-your-github-pages-blog-structure-in-five-minutes)
+
 In this post in the series I will show you how I published this blog under the aregsar.com domain name by registering the custom domain name and then setting up the proper DNS records to point the custom domain name to the location that Github pages hosts the blog.
 
 This process required four easy steps that took approximately 5 minutes to complete, most of which was waiting for the DNS records to propegate and Github pages to issue SSL certificates.

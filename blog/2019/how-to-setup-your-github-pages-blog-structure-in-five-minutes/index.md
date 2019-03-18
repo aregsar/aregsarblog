@@ -1,4 +1,18 @@
-# how-to-setup-your-github-pages-blog-structure-in-five-minutes
+# How to setup your github pages blog structure in five minutes
+
+Mar 19, 2019 by [Areg Sarkissian](https://aregsar.com/about)
+
+Articles in this series:
+
+[Part 1 - Setup a Github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-github-pages-blog-in-five-minutes)
+
+[Part 2 - Customize your github pages blog layout in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-layout-in-five-minutes)
+
+[Part 3 - Customize your github pages blog style in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-style-in-five-minutes)
+
+[Part 4 - Setup a custom domain for your github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-custom-domain-for-your-github-pages-blog-in-five-minutes)
+
+[Part 5 - Setup your github pages blog structure in five minutes](https://aregsar.com/blog/2019/how-to-setup-your-github-pages-blog-structure-in-five-minutes)
 
 ## create the directory structure and files
 
@@ -108,3 +122,8 @@ In the bottom of this blog post I added the following markdown anchor tag to lin
 ```markdown
 [Top](#how-to-setup-a-github-pages-blog-with-markdown)
 ```
+
+Thanks for reading.
+
+[Top](#how-to-setup-your-github-pages-blog-structure-in-five-minutes)
+
