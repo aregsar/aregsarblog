@@ -10,6 +10,8 @@ Articles in this series:
 
 [Part 3 - Customize your github pages blog style in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-style-in-five-minutes)
 
+[Part 4 - Setup a custom domain for your github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-custom-domain-for-your-github-pages-blog-in-five-minutes)
+
 Welcome to the first post on my new blog.
 
 In this post I will show you how I set up this blog using [GitHub Pages](https://pages.github.com/) and [Markdown](https://commonmark.org/help/) and how you can easily do the same.
