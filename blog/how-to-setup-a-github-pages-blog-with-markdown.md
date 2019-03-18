@@ -306,7 +306,3 @@ where ../ parent directory traversal is used to navigate to the root from the bl
 This style of linking has issues that I wont go into detail of, but the primary one being that the generated URLs for the anchor tags will contain the .html extension and I wanted my links to use extensionless URLS.
 
 That is why I chose using absolute URL linking for this site
-
-## Conclusion
-
-[Top](#how-to-setup-a-github-pages-blog-with-markdown)
