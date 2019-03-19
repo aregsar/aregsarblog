@@ -14,6 +14,8 @@ Articles in this series:
 
 [Part 5 - Setup your github pages blog structure in five minutes](https://aregsar.com/blog/2019/how-to-setup-your-github-pages-blog-structure-in-five-minutes)
 
+Welcome to part 5 of this series on setting up a blog with Github pages.
+
 In this post I will show you how I set up the directory structure of my Github pages blog to give an example of how the pages and posts can be organized and how they can link to each other.
 
 The directory structure of a Github pages repository determines the URL structure of the site. If a directory contains an `index.md` markdown file then that file becomes the default published page which can be accessed by a URL that ends with the directory name. A directory can also have other markdown files. In that scenario the URL needs to specify the file name without the `.md` extension as the trailing segment of the URL.
