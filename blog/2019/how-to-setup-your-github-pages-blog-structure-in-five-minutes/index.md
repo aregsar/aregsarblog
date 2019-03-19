@@ -80,6 +80,8 @@ There of four types of links that I have in my Github pages blog.
 
 In the four following sections, I will show you how I added each of these four types of links.
 
+> Note: Github pages uses Github Flavored Markdown which is a flavor of markdown with additional syntax for code highlighting.
+
 ## Added global navigation links in the layout file
 
 Next, in the `_layouts/default.html` file, I added anchor tags just after the opening `<main>` tag as shown below:
@@ -90,21 +92,37 @@ Next, in the `_layouts/default.html` file, I added anchor tags just after the op
       {{ "{{" }} content }}
 ```
 
-## Add navigation links and content to index.md
+## Added markdown navigation links and content to home page
 
-I opened `index.md` file and replaced the content with:
+I opened `index.md` file at the root of the repository and replaced the content with:
 
 ```markdown
-# Posts
+# All Posts
 
-Jan 30, 2019 by [Areg Sarkissian](https://aregsar.com/about)
+Mar 18, 2019
 
-[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown)
+[Setup a custom domain for your github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-custom-domain-for-your-github-pages-blog-in-five-minutes)
+
+Mar 12, 2019
+
+[Customize your github pages blog style in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-style-in-five-minutes)
+
+Mar 11, 2019
+
+[Customize your github pages blog layout in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-layout-in-five-minutes)
+
+Mar 7, 2019
+
+[Setup a Github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-github-pages-blog-in-five-minutes)
 ```
 
-## Adding image tags to our posts
+You can see this content by navigating to [https://aregsar.com/index.md](https://aregsar.com/index.md)
 
-I added the image file `github-pages-repo-settings-area.jpg` to the `blog/images/how-to-setup-a-github-pages-blog-with-markdown/` directory
+> Note: content may not be exactly the same as I have probably updated it since.
+
+## Added image tags to my blog post markdown pages
+
+I added the image file `github-pages-repo-settings-area.jpg` to the `blog/images/how-to-setup-a-github-pages-blog-with-markdown/` directory.
 
 Then I added the following markdown to a page in this blog to display the image:
 
@@ -112,17 +130,45 @@ Then I added the following markdown to a page in this blog to display the image:
 ![Image](https://aregsar.com/blog/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
 ```
 
-## Linking to headers within a page
+## Added relative links to headers within a markdown page
 
-The GFM syntax for linking to heading tags within a page uses the text of the heading.
+In the bottom of this blog post I added the following markdown anchor tag to add a relative link to the title h1 heading of this post which has heading text `How to setup your github pages blog structure in five minutes`:
 
-Jekyll first converts the markdown heading text to all ower case characters. Also dashes replace any spaces in the text and any periods in the text are removed.
+```markdown
+[Top](#how-to-setup-your-github-pages-blog-structure-in-five-minutes)
+```
 
-Then it sets the text to the id attribute of the header.
+Below I'll describe in detail the syntax of relative markdown links and how Jekyll processes them:
 
-So to link to the heading we can use the same converted text placed inside the parenthesis portion of a markdown link tag and prepended with a # symbol.
+The markdown syntax for linking to heading tags within a page uses the text of the heading.
 
-So for example if have markdown heading `# MyPosts` then Jekyll will convert the markdown text to the following heading tag: `<h2 id='myposts'>MyPosts</h2>`
+Jekyll first converts the markdown heading text to all lower case characters and uses dashes replace any spaces in the text. It also removes any periods in the text.
+
+Then Jekyll sets the converted heading text to the id attribute of the header.
+
+So to link to the heading we need to use the converted heading text, place it inside the parenthesis portion of a regular markdown link tag, then prepended the text with a # symbol.
+
+So in the example above the title heading text of this page is `How to setup your github pages blog structure in five minutes` at the top of the page where it is extracted from the markdown for the h1 heading tag:
+
+```markdown
+# How to setup your github pages blog structure in five minutes
+```
+
+So Jekyll converts that text to `how-to-setup-your-github-pages-blog-structure-in-five-minutes` and sets it to the id attribute of the converted markdown h1 heading tag which is:
+
+```html
+<h1 id="how-to-setup-your-github-pages-blog-structure-in-five-minutes">How to setup your github pages blog structure in five minutes</h1>
+```
+
+and finally to relatively reference this heading html we prepend the hash `#` symbol to the text and set it to the URL portion of the markdown link tag to reference the id attribute of the h1 tag:
+
+```markdown
+[Top](#how-to-setup-your-github-pages-blog-structure-in-five-minutes)
+```
+
+More Generic examples follow for most variations of heading content and how they get converted by Jekyll:
+
+In the first example if have markdown heading `# MyPosts` then Jekyll will convert the markdown text to the following heading tag: `<h1 id='myposts'>MyPosts</h2>`
 
 So the markdown link to the heading tag will use the converted name as shown:
 
@@ -130,29 +176,32 @@ So the markdown link to the heading tag will use the converted name as shown:
 [My Postings](#myposts)
 ```
 
-Here is another example where the heading text has spaces between words. In this case the markdown heading is `# My Posts` which is converted to `<h2 id='my-posts'>My Posts</h2>` then the markdown link will again use the converted text like so:
+Here is another example where the heading text has spaces between words. In this case the markdown heading is `# My Posts` which is converted to `<h1 id='my-posts'>My Posts</h2>` then the markdown link will again use the converted text like so:
 
 ```markdown
 [My Postings](#my-posts)
 ```
 
-Note that the link text inside the brackets can be any text we wish just like a standard markdown anchor tag.
+> Note that the link text inside the brackets can be any text we wish just like a standard markdown anchor tag.
 
 Here is an example that uses a period in the heading text
-where the text is `How to create an index.md page`
+where the text is `How to create an index.md page`.
+
 In this case  the link text would be:
 
 ```markdown
 [Top](#how-to-create-an-indexmd-page)
 ```
 
-Note that the period in `index.md` part was removed.
+> Note that the period in `index.md` part was removed.s
 
-In the bottom of this blog post I added the following markdown anchor tag to link to the title h1 heading of this post with that has heading text `How to setup a github pages blog with markdown`
+## Conclusion
 
-```markdown
-[Top](#how-to-setup-a-github-pages-blog-with-markdown)
-```
+In this blog post I showed you how I setup the directory structure of this blog, how the structure determines the URL structure of the site and alternative structures.
+
+I also showed you the many forms of navigation links that I added to this blog.
+
+In the next post in the series I will show you how to add comments to your Github pages blog using disqus.
 
 Thanks for reading.
 
