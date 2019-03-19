@@ -1,34 +1,14 @@
 # how-to-setup-services-for-your-github-pages-blog
 
-Mar 19, 2019 by [Areg Sarkissian](https://aregsar.com/about)
-
-Articles in this series:
-
-[Part 1 - Setup a Github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-github-pages-blog-in-five-minutes)
-
-[Part 2 - Customize your github pages blog layout in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-layout-in-five-minutes)
-
-[Part 3 - Customize your github pages blog style in five minutes](https://aregsar.com/blog/2019/how-to-customize-your-github-pages-blog-style-in-five-minutes)
-
-[Part 4 - Setup a custom domain for your github pages blog in five minutes](https://aregsar.com/blog/2019/how-to-setup-a-custom-domain-for-your-github-pages-blog-in-five-minutes)
-
-[Part 5 - Setup your github pages blog structure in five minutes](https://aregsar.com/blog/2019/how-to-setup-your-github-pages-blog-structure-in-five-minutes)
-
-
-
 Separate this post into 3 posts
 
 one for adding disqus commnets
 one for adding mailchimp newsletter email
 one for adding gumroad digital downloads
 
-# Outline of this blog post
 
-Below are jump links to each section of this blog:
 
-[Abbreviated Companion Blog Post](#abbreviated-companion-blog-post)
 
-[Github pages technology](#github-pages-technology)
 
 ## Github pages technology
 
@@ -144,158 +124,8 @@ The layout change removed all the {{ site.<REPO_SETTINGS> }} tags that github pa
 
 The REPO_SETTINGS parameters are specified by the default repository settings such as repo name. However next, we will specify the settings in the _config.yml file that will override the default settings.
 
-### Adding a heading to our index.md page
 
-The Jekyll engine substitutes the content of the index.md file for the `{{ "{{" }} content }}` parameter in the _layouts/default.html page
 
-All subsequent markddown pages you add to the repo will similarly be substituted for the `{{ "{{" }} content }}` parameter when published
-
-Now in the index.md file I added the h1 tag markdown line:
-
-`# hello world`
-
-using the bash script:
-
-```bash
-echo '# hello world' >> index.md
-```
-
-I saved and pushed the changes.
-
-After some delay you can refresh the page and do a view source in the browser to see that jekyll converted the markdown to the following html:
-
-`<h1 id="hello-world">hello world</h1>`
-
-note that the text of the h1 tag markdown is used a the id of the h1 html tag with a dash used for the space character
-
-### The URL structure of our blog
-
-The url for the index.md file. Note we dont need to specify the file name since Github pages uses index.md as the default website root file.
-
-`[Posts](https://aregsar.com)`
-
-which is the same as
-
-`[Posts](https://aregsar.com/index)`
-
-The url for the about.md file
-
-`[About](https://aregsar.com/about)`
-
-The url for the blog post
-
-`[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown)`
-
-Note you can also reference file with an html extension
-
-`[About](https://aregsar.com/about.html)`
-
-`[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown.html)`
-
-or for the index
-
-`[Posts](https://aregsar.com/index.html)`
-
-To referenence the source markdown files that are converted to html use:
-
-`[About](https://aregsar.com/about.md)`
-
-`[Posts](https://aregsar.com/index.md)`
-
-`[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown.md)`
-
-### Adding links to the site layout
-
-I added the html anchor tags for the index and about pages right above the `{{ "{{" }} content }}` parameter in the _layouts/default.html file.
-
-Markdown can not be used in the layout.html file since the layout is a html file and will not be converted by jekyll.
-
-Here is a sippet from default.html that shows the anchor tags pasted right above the `{{ "{{" }} content }}` parameter
-
-```html
- <main id="content" class="main-content" role="main">
-      <a href="https://aregsar.com">Posts</a> | <a href="https://aregsar.com/about">About</a>
-      {{ "{{" }} content }}
-```
-
-### Linking to the blog post from index.md file
-
-I opened index.md file and replaced the content with:
-
-```markdown
-# Posts
-
-Jan 30, 2019 by [Areg Sarkissian](https://aregsar.com/about)
-
-[How to setup a github pages blog with markdown](https://aregsar.com/blog/how-to-setup-a-github-pages-blog-with-markdown)
-```
-
-And thats all there is to it!
-
-## Linking to headers within a page
-
-The GFM syntax for linking to heading tags within a page uses the text of the heading.
-
-Jekyll first converts the markdown heading text to all ower case characters. Also dashes replace any spaces in the text and any periods in the text are removed.
-
-Then it sets the text to the id attribute of the header.
-
-So to link to the heading we can use the same converted text placed inside the parenthesis portion of a markdown link tag and prepended with a # symbol.
-
-So for example if have markdown heading `# MyPosts` then Jekyll will convert the markdown text to the following heading tag: `<h2 id='myposts'>MyPosts</h2>`
-
-So the markdown link to the heading tag will use the converted name as shown:
-
-```markdown
-[My Postings](#myposts)
-```
-
-Here is another example where the heading text has spaces between words. In this case the markdown heading is `# My Posts` which is converted to `<h2 id='my-posts'>My Posts</h2>` then the markdown link will again use the converted text like so:
-
-```markdown
-[My Postings](#my-posts)
-```
-
-Note that the link text inside the brackets can be any text we wish just like a standard markdown anchor tag.
-
-Here is an example that uses a period in the heading text
-where the text is `How to create an index.md page`
-In this case  the link text would be:
-
-```markdown
-[Top](#how-to-create-an-indexmd-page)
-```
-
-Note that the period in `index.md` part was removed.
-
-In the bottom of this blog post I added the following markdown anchor tag to link to the title h1 heading of this post with that has heading text `How to setup a github pages blog with markdown`
-
-```markdown
-[Top](#how-to-setup-a-github-pages-blog-with-markdown)
-```
-
-## Adding image tags to our posts
-
-To have a directory for images used in my blog posts, I added a directory named "images" inside the blog directory.
-
-using the bash script:
-
-```bash
-cd blog
-mkdir images
-```
-
-Then for each blog post I create a directory in the images directory using the blog post title as the directory name. So for images for this post I created the subdirectory `images/how-to-setup-a-github-pages-blog-with-markdown/` in the root.
-
-This is where any images for this blog post are added.
-
-In order to show an image of the Github pages settings area on the Github pages repository settings page, I added the image file github-pages-repo-settings-area.jpg to the directory.
-
-Then I added the following markdown image tag in this blog post to reference the image.
-
-```markdown
-![Image](https://aregsar.com/blog/images/how-to-setup-a-github-pages-blog-with-markdown/github-pages-repo-settings-area.jpg)
-```
 
 ## Adding third party comments for your posts
 
@@ -305,30 +135,6 @@ Here is a Stack Overflow link that describes how to add Disqus comments to your 
 
 [How do I use disqus comments in github pages blog markdown](https://stackoverflow.com/questions/21446165/how-do-i-use-disqus-comments-in-github-pages-blog-markdown)
 
-## Notes on using relative URLs
-
-GFM has a Markdown extension that allows us to use relative page references instead of absolute URLs in our Markdown links.
-
-Using relative page references, the link to the root index.md file from the about.md page would be
-
-`[Posts](index.md)`
-
-the link to about.md page from the index.md page would be
-
-`[About](about.md)`
-
-and the link from the index.md page to this blog post page setting-up-a-blog-with-github-pages-using-markdown.md would be
-
-`[Setup a Github pages blog using markdown and Jekyll themes](blog/setting-up-a-blog-with-github-pages-using-markdown.md)`
-
-Also the links from this page to the index and about pages at the root would be
-
-`[Posts](../index.md)` and `[About](../about.md)`
-
-where ../ parent directory traversal is used to navigate to the root from the blog subdiectory.
-
-This style of linking has issues that I wont go into detail of, but the primary one being that the generated URLs for the anchor tags will contain the .html extension and I wanted my links to use extensionless URLS.
-
-That is why I chose using absolute URL linking for this site
+## Conslusion
 
 [Top](#how-to-setup-services-for-your-github-pages-blog)

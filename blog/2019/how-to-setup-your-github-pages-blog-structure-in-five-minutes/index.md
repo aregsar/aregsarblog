@@ -26,9 +26,19 @@ Also note that if you type`aregsar.com/index.md` you can see the actual markdown
 
 Also I have an `about.md` page at the root of this repository. So in this case I can navigate to the published page with the URL `aregsar.com/about`. But if I add a trailing forward slash `aregsar.com/about/` I will get a 404 file not found becaus that URL is looking for an `index.md` file inside the `about` directory and I don't have an about directory.
 
+Note that you can also reference the about page with an html extension as well.
+
+`aregsar.com/about.html)`
+
 Once again if we navigate to `aregsar.com/about.md` we can see the markdown content of the page.
 
-Below I show the steps I took to create the structure of the blog.
+As an aside, here is how I would specify the link to the about page as markdown inside a markdown file:
+
+`[About](https://aregsar.com/about)`
+
+where the text of the link is in the square brackets and the URL is inside the parenthesis.
+
+Below I detail the steps I took to create the structure of this blog.
 
 ## Step 1 - Created the directory structure and files
 
@@ -93,6 +103,10 @@ Next, in the `_layouts/default.html` file, I added anchor tags just after the op
       <a href="https://aregsar.com">Posts</a> | <a href="https://aregsar.com/about">About</a> | <a href="https://alwaysdeployed.com/tools">Tools</a>
       {{ "{{" }} content }}
 ```
+
+Markdown can not be used in the layout.html file since the layout is a html file and will not be converted by jekyll.
+
+The snppet above shows the anchor tags pasted right above the `{{ "{{" }} content }}` parameter.
 
 ## Added markdown navigation links and content to home page
 
@@ -195,7 +209,33 @@ In this case  the link text would be:
 [Top](#how-to-create-an-indexmd-page)
 ```
 
-> Note that the period in `index.md` part was removed.s
+> Note that the period in `index.md` part was removed.
+
+## Notes on using relative URLs
+
+GFM has a Markdown extension that allows us to use relative page references instead of absolute URLs in our Markdown links.
+
+Using relative page references, the link to the root index.md file from the about.md page would be
+
+`[Posts](index.md)`
+
+the link to about.md page from the index.md page would be
+
+`[About](about.md)`
+
+and the link from the index.md page to this blog post page setting-up-a-blog-with-github-pages-using-markdown.md would be
+
+`[Setup a Github pages blog using markdown and Jekyll themes](blog/setting-up-a-blog-with-github-pages-using-markdown.md)`
+
+Also the links from this page to the index and about pages at the root would be
+
+`[Posts](../index.md)` and `[About](../about.md)`
+
+where ../ parent directory traversal is used to navigate to the root from the blog subdiectory.
+
+This style of linking has issues that I wont go into detail of, but the primary one being that the generated URLs for the anchor tags will contain the .html extension and I wanted my links to use extensionless URLS.
+
+That is why I chose using absolute URL linking for this site
 
 ## Conclusion
 
