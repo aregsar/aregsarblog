@@ -243,7 +243,7 @@ In this blog post I showed you how I setup the directory structure of this blog,
 
 I also showed you the many forms of navigation links that I added to this blog.
 
-In the next post in the series I will show you how to add comments to your Github pages blog using disqus.
+In the next post in the series I will show you how to add third party services to your Github pages blog.
 
 Thanks for reading.
 
