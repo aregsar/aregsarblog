@@ -12,3 +12,5 @@ In the following week we will give you a public URL to track the progress of you
 
 Ofcourse you will get access to the code repository as well, in addition to all third party service account passwords,secrets and keys.
 And access to a shared Kanban board where you can comment on features being developed so we can collaborate and incorporate your feedback as we are building out your application.
+
+Send us an email to start the conversation at projects@76ideaz.com

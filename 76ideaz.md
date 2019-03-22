@@ -14,19 +14,11 @@ Should you decide to continue, you can pay us for the week and we will work the 
 
 The last week of the project is always on us.
 
-We charge $10,000 USD per week to do the maximum amount of work for our exclusive client for that week.
+We charge $10,000 USD per week to do the maximum amount of work possible based on our agile workflow, for our exclusive client for that week.
 
 We work exclusively with one client at a time on a week to week basis so we can give the proper attention our clients need to their concerns.
 
-By the end of the first week you will have a bare bones web application with a home page deployed and running in production to which you can add more and more features on a weekly basis.
-
-In addition at the end of the first week your application will be up and running behind a secure load balancer on an application server backed a cache and database server provisioned along with a job queue,background job workers and a periodic task scheduler.
-
-Optionally if needed, we can add a user authentication system with registration, login, email verification and background email delivery integrated with a third party email delivery service.
-
-To top it all off you will have database backups and application monitoring services in place.
-
-In the following week we will give you a public URL to track the progress of your project in the real world, along with dashboard accounts to monitor your applications.
+By the end of the first week you will have a bare bones web application with a home page deployed and running in production to which you can add more and more features on a weekly basis. See our first week free offer page for more details: [76ideaz Offer](https://aregsar.com/76ideazoffer)
 
 Send us an email to start the conversation at projects@76ideaz.com
 
@@ -37,30 +29,30 @@ Here is how we are different from other consultancies:
 1-We focus on making Simple, Usable and quick to build applications:
 
 At 76ideaz We specialize in simple, clean and usable html rendered web sites that are quick to develop and easy to change and maintain.
-We use only the least amount of javascript needed to add interactivity where it makes sense. 
+We use only the least amount of javascript needed to add interactivity where it makes sense.
 
-We don't build bloated, complicated and slow loading, with tons of loading spinners, javascript heavy web applications. 
+We don't build bloated, complicated and slow loading, with tons of loading spinners, javascript heavy web applications.
+
 These types of apps are complex and time consuming to develop, an harder to debug and maintain.
 
 SPAS and Javascript frameworks may be all the rage these days, but the truth is that these technologies actually make web applications much more complex and time consuming to develop. They slow down the time to build and deploy applications by up to ten times in some cases.
 
-Javascript heavy apps are harder to test, introduce a whole new set of possible bugs and errors and in many cases perform worse than simple html rendered apps. 
-And frankly most often they are overkill and not needed for the best user experience.
+Javascript heavy apps are harder to test, introduce a whole new set of possible bugs and errors and in many cases perform worse than simple html rendered apps. And frankly most often they are overkill and not needed for the best user experience.
 
-The types of apps that we build are apps that are designed for the web where the same site can be used for all user devices.
- 
-These range from simple marketing and information sites to media content sites, event ticketing sites, ecommerce sites, SAAS, small business and professional services sites, membership and marketplace sites,  to simple and easy to use dashboards, CRMs and CMSs. 
+The types of apps that we build are apps that are designed for the web where the same site can be used for all user devices. All our tooling and workflow is geared to make building of these types of applications very fast.
+
+The types of apps we can develop range from simple marketing and information sites to media content sites, event ticketing sites, ecommerce sites, SAAS, small business and professional services sites, membership and marketplace sites. We can also develop simple and easy to use dashboards, CRMs and CMSs.
 
 If you need highly interactive dash boards or desktop application like functionality then we might not be the right fit for you.
 
-2-We have aTransparent Process
+2-We have a transparent process
 
 We use ad and edd principles to get your site up and running quickly, BEFORE we start building features, so you can see results daily and use the site as we continue build it. 
 This way we can course correct quickly based on your feedback and you will have the comfort of knowing that your site is actually working as we add more features without last minutes surprises.
 
 3-We use Simple to manage infrastructure
 
-We deploy all our sites to digital ocean because they greatly simplify infrastructure management and allow us to focus on your application features. 
+We deploy all our sites to digital ocean because they greatly simplify infrastructure management and allow us to focus on your application features.
 
 -For $20/mo digital ocean offers a managed database service with database backups, failover and server maintanance to give you high availabilty and confidence that your data is safe.
 
