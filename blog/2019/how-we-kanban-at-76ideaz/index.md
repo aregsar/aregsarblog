@@ -95,3 +95,9 @@ In these scenarions, when waiting on other team members, a member can work on im
 Also the wait time can be used by team members to do reseach, experimentation, spikes and prototyping work that helps the team in the long run and helps the team grow in experience.
 
 We think it is better for the company and team members, to have slack time then to have team members jumping to other tasks and switching back or multi tasking.
+
+## Conclusion
+
+Our unique kanban process and board setup is optimized to make us stay focus, avoid multitasking and context switching and deliver truely completed production worthy features faster.
+
+Thanks for reading
