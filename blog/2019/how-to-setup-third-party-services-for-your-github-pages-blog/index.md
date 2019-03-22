@@ -44,4 +44,6 @@ TBD
 
 In this post I detailed resources you can use to add comments, newsletter and digital downloads to your blog.
 
+Thanks for reading.
+
 [Top](#how-to-setup-third-party-services-for-your-github-pages-blog)
