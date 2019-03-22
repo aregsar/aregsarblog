@@ -1,5 +1,9 @@
 # All Posts
 
+Mar 22, 2019
+
+[Git pull configuration for trunk based development](https://aregsar.com/blog/2019/git-pull-configuration-for-trunk-based-development)
+
 Mar 21, 2019
 
 [How we Kanban at 76ideaz](how-we-kanban-at-76ideas)

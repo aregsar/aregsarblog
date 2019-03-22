@@ -1,6 +1,7 @@
 # About Me
 
-I'm the founder and principal software developer at 76ideaz a web software consultancy that helps small development teams rapidly build and deploy robust and maintainable web application features.
+I'm the founder, director and principal software architect at
+[76ideaz](https://aregsar.com/76ideaz) a web software consultancy that helps small development teams rapidly build and deploy robust and maintainable web application features.
 
 In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Walt Disney.
 
