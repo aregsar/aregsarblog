@@ -16,6 +16,8 @@ Articles in this series:
 
 [Part 6 - Setup third party services for your github pages blog](https://aregsar.com/blog/2019/how-to-setup-third-party-services-for-your-github-pages-blog)
 
+[Part 7 - Github pages tech stack: Jekyll, Liquid, Markdown](https://aregsar.com/blog/2019/github-pages-tech-stack-jekyll-markdown-liquid)
+
 Welcome to part 3 of this series on setting up a blog with Github pages.
 
 In this blog post I will show you the steps I took to override the default theme style of my Github pages blog after I selected the default theme in part 1.

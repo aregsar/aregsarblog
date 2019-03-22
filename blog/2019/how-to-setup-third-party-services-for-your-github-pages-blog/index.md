@@ -1,6 +1,6 @@
 # How to setup third party services for your github pages blog
 
-Mar 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
+Mar 19, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 Articles in this series:
 
@@ -15,6 +15,8 @@ Articles in this series:
 [Part 5 - Setup your github pages blog structure in five minutes](https://aregsar.com/blog/2019/how-to-setup-your-github-pages-blog-structure-in-five-minutes)
 
 [Part 6 - Setup third party services for your github pages blog](https://aregsar.com/blog/2019/how-to-setup-third-party-services-for-your-github-pages-blog)
+
+[Part 7 - Github pages tech stack: Jekyll, Liquid, Markdown](https://aregsar.com/blog/2019/github-pages-tech-stack-jekyll-markdown-liquid)
 
 In this post I will list resources you can check to learn how to integrate third party services into your Github pages blob.
 

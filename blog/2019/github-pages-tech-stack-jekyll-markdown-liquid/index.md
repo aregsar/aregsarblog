@@ -1,7 +1,7 @@
 
 # Github pages tech stack: Jekyll, Liquid, Markdown
 
-Apr 1, 2019 by [Areg Sarkissian](https://aregsar.com/about)
+Mar 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 Articles in this series:
 
@@ -16,6 +16,10 @@ Articles in this series:
 [Part 5 - Setup your github pages blog structure in five minutes](https://aregsar.com/blog/2019/how-to-setup-your-github-pages-blog-structure-in-five-minutes)
 
 [Part 6 - Setup third party services for your github pages blog](https://aregsar.com/blog/2019/how-to-setup-third-party-services-for-your-github-pages-blog)
+
+[Part 7 - Github pages tech stack: Jekyll, Liquid, Markdown](https://aregsar.com/blog/2019/github-pages-tech-stack-jekyll-markdown-liquid)
+
+Welcome to the final part in this series of posts.
 
 In this post I want to discuss the technologies that Github pages uses under the hood to take the markdown pages in your blog and transform and publish them as html content for consumption via web browsers.
 
