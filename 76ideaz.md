@@ -1,4 +1,4 @@
-# 76ideaz - Independant ideas from a to z
+# 76ideaz - Independent ideas from a to z
 
 At 76ideaz its not business as usual.
 
