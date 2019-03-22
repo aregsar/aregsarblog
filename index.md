@@ -6,7 +6,7 @@ Mar 22, 2019
 
 Mar 21, 2019
 
-[How we Kanban at 76ideaz](how-we-kanban-at-76ideas)
+[How we Kanban at 76ideaz](https://aregsar.com/blog/2019/how-we-kanban-at-76ideas)
 
 Mar 20, 2019
 
