@@ -1,14 +1,14 @@
 # About Me
 
-I'm a software developer that helps small development teams rapidly build and deploy robust and maintainable web application features.
+I'm the founder and principal software developer at 76ideaz a web software consultancy that helps small development teams rapidly build and deploy robust and maintainable web application features.
 
-In the past I have developed software for organizations as diverse as America Online, Autobytel and Walt Disney.
+In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Walt Disney.
 
 I use Functional Programming, Object Oriented Programming, Domain Driven Design and [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/) principles while coding in C#, PHP, Python and Javascript to help teams build reliable software, faster and more efficiently.
 
 I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value, faster, by using [tools](https://alwaysdeployed.com/tools) that support this development process.
 
-## My web development stack
+## Our web development stack
 
 + [Docker](https://www.docker.com/why-docker) - Containers that run my development environment
 + [Laravel](https://laravel.com) - Rapid Application Development PHP web framework
@@ -18,7 +18,7 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [Vue](https://vuejs.org) - Javascript UI components
 + [React](https://reactjs.org) with [Hooks](https://reactjs.org/docs/hooks-intro.html) - Functional Javascript UI components.
 
-## My lean development process
+## Our lean development process
 
 + [Always Deployed](https://alwaysdeployed.com) - continuous delivery guarded by feature flags
 + [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - incremental feature development guarded by feature tests

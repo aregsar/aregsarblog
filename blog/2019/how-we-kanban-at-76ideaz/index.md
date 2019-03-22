@@ -1,6 +1,6 @@
-# How we Kanban at 76ideas
+# How we Kanban at 76ideaz
 
-Mar 21, 2019
+Mar 21, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I will describe our unique Kanban workflow at my web software consulting company, 76ideaz.
 

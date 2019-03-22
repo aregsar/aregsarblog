@@ -1,5 +1,9 @@
 # All Posts
 
+Mar 21, 2019
+
+[How we Kanban at 76ideaz](how-we-kanban-at-76ideas)
+
 Mar 20, 2019
 
 [Github pages tech stack: Jekyll, Liquid, Markdown](https://aregsar.com/blog/2019/github-pages-tech-stack-jekyll-markdown-liquid)
