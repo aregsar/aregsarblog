@@ -23,8 +23,6 @@ Welcome to the final part in this series of posts.
 
 In this post I want to discuss the technologies that Github pages uses under the hood to take the markdown pages in your blog and transform and publish them as html content for consumption via web browsers.
 
-This information may help you to have a better understanding of the content of this series of posts on publishin your own blog on Github pages.
-
 ## Markdown files and Github Flavored Markdown
 
 Github pages uses standard Github repositories to host Github pages content.
@@ -38,24 +36,21 @@ GFM is a flavor of Markdown that adds a few syntax extensions the allow for code
 
 ## The Jekyll transformation engine
 
-The markdown pages in the repository are converted to Html markup by Jekyll,.
-The repository content that is written in markdown, is converted to Html markup using Jekyll,the engine that Github pages uses to process the markdown pages in the repository.
+The repository content that is written in markdown, is converted to html markup using [Jekyll](https://jekyllrb.com/), the engine that Github pages uses to publish the markdown pages in the repository.
 
-After the markdown is transformed to html is published to the public Github pages URL of the repository.
-
-Any pure Html content will be published directly by Jekyll, without  transformation.
+After the markdown is transformed to html, it is published to the public Github pages URL of the repository.
 
 Every time we push a change to our Github pages repository, Jekyll reprocesses and republishes the new markup after a brief delay.
 
 ## The Liquid Templating Language
 
-Jekyll also uses a templating language called Liquid that contains Liquid tags to plug in html content from various sources into markdown or html files.
+Jekyll also uses a templating language called [Liquid](https://shopify.github.io/liquid/). Jekyll uses Liquid tags embedded in markdown pages and the html layout file to plug in content from various sources.
 
-Jekyll uses Liquid tags to plug in the transformed page content into layout templates and also to substitute text and metadata defined in settings files and other sources into the Liquid tags in the layout file and transformed pages.
+To layout the pages in this blog, Jekyll plug in the transformed page content into the Liquid tag page content placeholder in the layout template. It also substitutes text and metadata defined in settings files and other sources into Liquid tags embedded in the layout file and transformed pages.
 
-## Plugging content into the default site layout
+## Plugging page content into the default site layout
 
-The layout file that Github pages uses for the pages in your repository is a standard Html file, within which it injects the Html transformed markdown page content.
+The layout file that Github pages uses to layout the pages in the repository is a standard html file, within which Jekull injects the transformed markdown page html content.
 
 Below is a snippet of code from the layout file of this blog:
 
@@ -76,23 +71,25 @@ Note that there exists a `{{ "{{" }} content }}` parameter in the html.
 
 This is a Liquid templating parameter that Jekyll uses to plug in the html content of a processed markdown page into the layout html file at the location of tag.
 
-In fact anywhere Jekyll sees Liquid template parameters, even in markdown page content or html code snippets in a markdown page, it will try to substitute the transformed content of another markdown page inside.
+In fact anywhere Jekyll sees Liquid template parameters, even in markdown page content or html code snippets inside a markdown page, it will try to substitute the transformed content of another markdown page inside.
 
-> Aside: If you want to actually literally include Liquid tags in your pablished content,
-you need to escape the tag. The way I was able to display the `{{ "{{" }} content }}` parameter right here in the markdown text of this blog post, was to escape it.
-Otherwise Jekyll will substitute another page content instead of just allowing the `{{ "{{" }} content }}` text to be displayed.
+> Aside: If you want to literally include Liquid tags in your published content,
+you need to escape the Liquid tag. Otherwise Jekyll will substitute transformed content of another page into the tag, instead of just allowing the `{{ "{{" }} content }}` text to be displayed as is.
+The way I was able to display the `{{ "{{" }} content }}` parameter right here in the markdown text of this blog post, was to escape it.
 Refer to this StackOverflow post to see how to escape Liquid template parameters in your Github pages: [How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
+
+## Plugging repository setting values into the default site layout
 
 The layout file also contains Liquid tags that such as `{{ "{{" }}site.<REPO_SETTING_PARAM> }}` that github pages uses to add the buttons and content to our layout.
 
-The <REPO_SETTING_PARAM> value can be any default setting such the default repository name which will replace `{{ "{{" }}site.name }}`.
+The <REPO_SETTING_PARAM> value can be any default setting such the default repository name which will replace the  `{{ "{{" }}site.name }}` setting.
 
-The default setting value can be overridden by adding a _config.yml file to the root of the repositiry that can contain name value pairs. 
+The default setting value can be overridden by adding a _config.yml file to the root of the repositiry that can contain name value pairs.
 
-So for instance if we have a `name` setting name in the _config.yml file, it's value will override the defualt repository name setting.
+So for instance if we have a `name` setting name in the _config.yml file, it's value will override the defualt repository name setting and this value will be plugged into the Liquid tag.
 
 ## Conclusion
 
-In this post I detailed the basics of how Github pages processing engine Jekyll transforms markdown and html content, plugging in content and settings into Liquid templating tags in the process.
+In this post I detailed the basics of how Github pages processing engine, Jekyll, transforms markdown and html content, plugging in content and settings into Liquid templating tags in the process.
 
 Thanks for reading
