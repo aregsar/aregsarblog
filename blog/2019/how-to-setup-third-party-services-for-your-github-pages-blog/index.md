@@ -44,8 +44,6 @@ Here is the link to instructions to embed a product purchase widget into your Gi
 
 [Gumroad widgets](https://gumroad.com/widgets)
 
-<a href="https://aregsar.com/blog/2019/how-to-setup-third-party-services-for-your-github-pages-blog">link</a>
-
 ## Conslusion
 
 In this post I detailed resources you can use to add comments, newsletter and digital downloads to your blog.
