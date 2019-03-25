@@ -2,6 +2,8 @@
 
 Mar 21, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
+[How we Kanban at 76ideaz](https://aregsar.com/blog/2019/how-we-kanban-at-76ideaz)
+
 In this post I will describe our unique Kanban workflow at my web software consulting company, 76ideaz.
 
 Whether working solo or within a cross functional team, the way we use the kanban board is based on the Kanban workflow process that we continue iterating on as we determine the most efficient workflow for our company.
