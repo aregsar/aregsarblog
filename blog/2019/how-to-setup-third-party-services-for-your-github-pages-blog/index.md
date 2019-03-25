@@ -34,11 +34,17 @@ Here is a Stack Overflow link that describes how to embedd Disqus comments to yo
 
 ## Part 2 - Adding MailChimp third party email newsletter service
 
-TBD
+Here are the instructions to create a MailChimp newsletter subscription form and generate code and embed it into your Github pages html or markdown files.
+
+[MailChimp subscription form setup](https://mailchimp.com/help/add-a-signup-form-to-your-website/)
 
 ## Part 3 - Adding Gumroad third party digital download service
 
-TBD
+Here is the link to instructions to embed a product purchase widget into your Github pages html or markdown files.
+
+[Gumroad widgets](https://gumroad.com/widgets)
+
+<a href="https://aregsar.com/blog/2019/how-to-setup-third-party-services-for-your-github-pages-blog">link</a>
 
 ## Conslusion
 
