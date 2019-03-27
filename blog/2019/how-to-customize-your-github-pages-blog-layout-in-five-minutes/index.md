@@ -115,6 +115,8 @@ echo 'description: Areg Sarkissians Blog' >> _config.yml
 
 Jekyll uses these settings in the `_config.yml` file to override the default repository title and description values used when publishing the site.
 
+Finally I pushed the changes to _config.yml file to the remote repository to see the overriden title in the browser tab after the site is republished.
+
 ## Conclusion
 
 In this post I showed you how I overrode the default theme layout file and its content. I also showed how I overrode the default theme layout file title and description meta tags.
