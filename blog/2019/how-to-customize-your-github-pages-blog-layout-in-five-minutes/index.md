@@ -38,7 +38,7 @@ mkdir _layouts && cd _layouts
 touch default.html
 ```
 
-At this point we have an empty local layout file.
+At this point we have an empty local layout file `default.html`.
 
 ## Step 2 - Copying the default theme layout file content
 
@@ -85,17 +85,19 @@ To replace the boilerplate with my own layout page markup, I replaced the conten
 
 After pushing this change to my Github repo, I saw the new content displayed in the page.
 
-> Note the __content__ tag in the body section of the layout file is a Liquid template placeholder where Jekyll places the, converted to html, content of your markdown pages into the layout file.
+> Note the __content__ tag in the body section of the layout file is a Liquid template placeholder where Jekyll places the, converted to html, content of your markdown pages into the layout file. A later post in the series will describe how the Github pages engine Jekyll uses the Liquid templating language to inject content.
 
 So at this point the content of our home page `index.md` file is converted to html by Jekyll and then injected into the layout where the placeholder tag is located.
 
-Since we don't have any content in our home page yet, nothing more then the layout content is displayed. In a future post in the series I will demonstrate adding sample content to show how we can change the default theme styling.
+Since we don't have any content in our home page yet, nothing more then the layout content is displayed. You can verify this by refreshing the published page.
+
+In a future post in the series I will demonstrate adding sample markdown content to the `index.md` page to show how we can change the default theme styling.
 
 ## Step 4 - Override the default layout title and description meta tags
 
 The `<head>` tag of `default.html` layout file content that we copied in step 2, contains a `seo` Liquid template tag that when processed by Jekyll, will generate title and description html meta tags used for SEO purposes.
 
-The generated `title` meta tag uses the Github repository name as the title text that gets displayed for the blog in the web browser tab.
+The generated `title` meta tag uses the Github repository name as the title text that gets displayed in the web browser tab.
 
 Similarly the genrated `description` meta tag uses the optional Github repository description text that I enetered when I created the repository.
 
@@ -103,10 +105,10 @@ To override the repository name and repository description text that are used by
 
 Specifically, I typed the following bash statements in the terminal to add two additional lines to the `_config.yml` file.
 
-The first line set the title text to `aregsar` and the second line set the description text to `Areg Sarkissians Blog`.
+The first line sets the title text to `aregsar` and the second line sets the description text to `Areg Sarkissians Blog`.
 
 ```bash
-echo ''
+echo '' >> _config.yml
 echo 'title: aregsar' >> _config.yml
 echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
