@@ -113,9 +113,7 @@ echo 'title: aregsar' >> _config.yml
 echo 'description: Areg Sarkissians Blog' >> _config.yml
 ```
 
-Jekyll uses these settings in the `_config.yml` file to override the default values for the repository title and description.
-
-> Note: the first bash echo statement with empty text argument just adds a newline to the end of the existing line that specifies the caymen theme in _config.yml.
+Jekyll uses these settings in the `_config.yml` file to override the default repository title and description values used when publishing the site.
 
 ## Conclusion
 
