@@ -192,11 +192,11 @@ We can similarly override other html tag styles, by adding more overriding style
 
 ## Conclusion
 
-In this post I showed you how I replaced the default theme style for the heading tag with a local style file that you can use to add custom styles that override the built in default theme styles.
+In this post I showed you how I added a local style file that you can use to add custom styles that override the built in default theme styles in the default theme style file.
 
 I also showed you the file where the default theme style declarations reside to see the available styles to override.
 
-Check out next post in the series to see how I added a custom domain name for this blog.
+Check out the next post in the series to see how I added a custom domain name for this blog.
 
 Thanks for reading.
 
