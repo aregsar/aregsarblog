@@ -80,7 +80,7 @@ To activate Github pages I did the following:
 
 Once I selected the source branch, the message below appeared at the top of the github pages section:
 
-`your site is published at https://aregsar.github.io/aregsarblog/`
+`Your site is published at https://aregsar.github.io/aregsarblog/`
 
 > Note: for a brief period of time, until Github pages publishes your blog, you may see the message:
 Your site is ready to be published at https://aregsar.github.io/aregsarblog/.
