@@ -38,13 +38,13 @@ This statement imports the styles located at [https://github.com/pages-themes/ca
 
 By default Jekyll compiles the `https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss` file to a `style.css` file that is used to style this blog.
 
-The compiled `style.css` is referenced using a `<link>` tag inside the `<head>` tag of the layout file used for this blog. To override the default `style.scss` file used by Jekyll to generate the `style.css` file, we need to add our own `style.scss` file to our repository that will.
+The compiled `style.css` is referenced using a `<link>` tag inside the `<head>` tag of the layout file used for this blog. To override the default `style.scss` file used by Jekyll to generate the `style.css` file, we need to add our own `style.scss` file to our repository that can be used to override the styles imported by the default `style.scss` file.
 
 In the following sections I will detail the steps I took to override the default style of my github pages blog in approximately 5 minutes.
 
 ## Step 1 - Added a heading to the empty home page file
 
-To test overriding the style I added a h1 tag to the `index.md` home page file in the root of the repository by adding the markdown content below:
+To test overriding the style I added a h1 tag to the `index.md` home page file in the root of the repository by adding the markdown content to the page using the bash statement below:
 
 ```bash
 echo '# hello world' >> index.md
@@ -54,7 +54,7 @@ After I pushed this change to the remote repository, I refreshed the page and di
 
 `<h1 id="hello-world">Hello World</h1>`
 
-> Aside: You can see that the space in the display text of the h1 tag is replaced by a dash, is lowercased and is set to the id of the h1 html tag.
+> Aside: You can see that the text set to the id attribute of the h1 tag is the transformed display text of the tag, where the space character is replaced by a dash and the text is lowercased.
 
 ## Step 2 - Created a local style.css file
 
@@ -68,7 +68,7 @@ mkdir css && cd css
 echo '---' >> style.scss
 echo '---' >> style.scss
 echo >> style.scss
-echo '@import "{{  "{{" }} site.theme }}";' >> style.scss
+echo '@import "{{ "{{" }} site.theme }}";' >> style.scss
 ```
 
 At this point the `style.scss` will contain the following content:
@@ -93,11 +93,15 @@ So the content of style.scss file will be transformed to:
 
 This is the same import statement used in the default theme style [https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss](https://github.com/pages-themes/cayman/blob/master/assets/css/style.scss) file.
 
+Since we did not add any overriding styles to the `style.scss` file the theme of the site will remain the same.
+
+I verified this by pushing my changes to the remote repository and refreshing the home page after the site is republished to see that the same default cayman style is still applied.
+
 ## Step 3 - Customized the theme style
 
 Now that we have overriden the default `styles.scss` file with our local `styles.scss` file, we can add styles to our local `styles.scss` file to customize the styles for our pages.
 
-To customize we can add any custom imports or css or scss styles immediately after the `@import "{{ site.theme }}";` line in our local styles.scss file.
+To customize we can add any custom imports or css or scss styles immediately after the `@import "{{ "{{" }} site.theme }}";` line in our local styles.scss file.
 
 Styles added to this file override the defautt styles at [https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss](https://github.com/pages-themes/cayman/blob/master/_sass/jekyll-theme-cayman.scss) that are applied by Jekyll to our pages.
 
@@ -109,7 +113,7 @@ After I added the style, the `style.scss` file content looked like:
 ---
 ---
 
-@import "{{ site.theme }}";
+@import "{{ "{{" }} site.theme }}";
 .main-content {
   h1 {
    color: #ff0000;
