@@ -84,7 +84,7 @@ Once I selected the source branch, the message below appeared at the top of the 
 
 > Note: for a brief period of time, until Github pages publishes your blog, you may see the message:
 Your site is ready to be published at https://aregsar.github.io/aregsarblog/.
-keep refreshing the repository settigs page until the message changes to the site is published message.
+keep refreshing the repository settings page until the message changes to the site is published message.
 
 Once the site is published message is displayed, you can navigate to the published URL for your own site to see the published page. At this point the page only displays the name of the repository.
 
