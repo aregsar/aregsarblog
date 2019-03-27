@@ -80,11 +80,15 @@ To activate Github pages I did the following:
 
 Once I selected the source branch, the message below appeared at the top of the github pages section:
 
-`your site is published https://aregsar.github.io/aregsarblog/`
+`your site is published at https://aregsar.github.io/aregsarblog/`
 
-You can navigate to the published URL for your own site to see the published page. At this point the page only displays the name of the repository.
+> Note: for a brief period of time, until Github pages publishes your blog, you may see the message:
+Your site is ready to be published at https://aregsar.github.io/aregsarblog/.
+keep refreshing the repository settigs page until the message changes to the site is published message.
 
-The displayed content is part of the default layout of the page. I will have a future post in the series that will cover how to customize the layout and content of the page.
+Once the site is published message is displayed, you can navigate to the published URL for your own site to see the published page. At this point the page only displays the name of the repository.
+
+The displayed content is part of the default layout template used to layout the `index.md` page. I will have a future post in the series that will cover how to customize the layout and content of the page.
 
 ## Step 5 - Selected a Github pages default theme
 
@@ -112,7 +116,7 @@ The actual theme name is the last segment which in my case is `cayman`.
 
 To see the updated page with the selected theme applied, you can navigate again to the URL of the published page.
 
-> Note: The Github pages processing engine takes a little bit of time to publish your pages after a change to the repository. So keep refreshing the page until the new content appears.
+> Note: The Github pages processing engine takes a little bit of time to publish your pages after a change to the repository. So keep refreshing the published page until the new content appears.
 
 ## Conclusion
 
