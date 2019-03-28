@@ -40,7 +40,7 @@ At this point Github pages adds a file named `CNAME` to the root of my remote re
 
 As always I did a `git pull` to get the `CNAME` file that was added to the remote repository.
 
-Since I had not configured DNS records for the custom domain yet, when the Site is re-published because of the setting change, the message changed to:
+Since I had not configured DNS records for the custom domain yet, when the site is re-published because of the setting change, the message changed to:
 
 `Domain's DNS record could not be retrieved.`
 
@@ -64,7 +64,7 @@ As you can see I added an ALIAS record for root domain `argesar.com` mapped to `
 
 I also added a CNAME record for the subdomain `www.aregsar.com` also mapped to `aregsar.github.io`.
 
-This way I can navgate to the blog using `www.aregsar.com` which gets redirected to the domain root `aregsar.com`.
+This way I can navigate to the blog using `www.aregsar.com` and Github pages redirects to the domain root `aregsar.com`.
 
 Github pages recomends adding a `www` sub domain and will automatically redirect it to the domain root.
 
@@ -74,7 +74,7 @@ Refreshing the repository settings page you can see that the publishing message 
 
 `Your site is published at http://aregsar.com/`
 
-Note the URL is not secured since we have not selected the https setting yet. We will do that in the next section.
+Note the URL is not secured since we have not selected the https setting yet. We will do that in the next step.
 
 ## Step 3 - Enabling the Enforce HTTPS checkbox
 
