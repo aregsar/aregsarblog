@@ -1,5 +1,7 @@
 # vscode editor keyboard shortcuts
 
+[vscode editor keyboard shortcuts](https://aregsar.com/blog/2019/vscode-editor-keyboard-shortcuts)
+
 My most used keyboard bindings. Not case sensitive.
 
 ## Toggle Fullscreen
@@ -46,9 +48,9 @@ CMD+S
 
 CMD+DArr
 
-## Open selected explorer file
+## change preview to open file
 
-CMD+RArr
+CM+K enter
 
 ## Expand selected explorer directory
 
@@ -65,15 +67,13 @@ CMD+P
 (Enter to open preview)
 (RArr to open file)
 
-## Command pallete
-
-CMD+SHFT+P
-
 ## Toggle rename selected explorer file
 
 Enter
 
-[vscode editor keyboard shortcuts](https://aregsar.com/blog/2019/vscode-editor-keyboard-shortcuts)
+## Command pallete
+
+CMD+SHFT+P
 
 ## Keyboard shortcuts pallete
 
