@@ -52,7 +52,7 @@ To Allow the DNS records to be retrieved we need to add them and map them to the
 
 > Caution: Before configuring your custom domain with your DNS provider, add your custom domain to your GitHub Pages site as detailed in step 2. Configuring your custom domain with your DNS provider without adding your custom domain to GitHub could result in someone being able to host a site on one of your subdomains. For more info see: [https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain](https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain)
 
-Using my domain regsitrars domain name administration panel, I added the neccessary DNS records to point my custom domain aregsar.com to the location where Github hosts my GitHub pages blog.
+Using my domain regsitrars domain name administration panel, I added the neccessary DNS records to point my custom domain `aregsar.com` to the location where Github hosts my GitHub pages blog.
 
 First I added the `ALIAS` record for the root domain `aregsar.com`:
 
@@ -68,7 +68,7 @@ I also added a CNAME record for the subdomain `www.aregsar.com` also mapped to `
 
 This way I can navigate to the blog using `www.aregsar.com` and Github pages redirects to the domain root `aregsar.com`.
 
-Github pages recomends adding a `www` sub domain and will automatically redirect it to the domain root.
+Github pages recomends adding a `www` sub domain and will automatically redirect it to the domain root. See [here](https://help.github.com/en/articles/about-supported-custom-domains#www-subdomains) for more details.
 
 > Note: your registrar may not support ALIAS records. In that case follow the instructions at [https://help.github.com/articles/setting-up-an-apex-domain/](https://help.github.com/articles/setting-up-an-apex-domain/) to add four `A` records instead that point to the IP address of the Github pages servers. The CNAME record should still map to `<your-github-username>.github.io` in this scenario.
 
