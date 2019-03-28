@@ -22,29 +22,29 @@ Welcome to part 4 of this series on setting up a blog with Github pages.
 
 In this post in the series I will show you how I published this blog under the aregsar.com domain name by registering the custom domain name and then setting up the proper DNS records to point the custom domain name to the location that Github pages hosts the blog.
 
-This process required four easy steps that took approximately 5 minutes to complete, most of which was waiting for the DNS records to propegate and Github pages to apply SSL certificates.
+This process required four easy steps that took approximately 5 minutes to complete.
 
 ## Step 1 - Registered a custom domain name
 
-To setup a custom domain for my blog, I registered the custom domain name `aregsar.com` with my domain registrar dnsimple.com.
+To setup a custom domain for this blog, I registered the custom domain name `aregsar.com` with my domain registrar dnsimple.com.
 
-## Step 2 - added custom domain name to my Github pages repository
+## Step 2 - Added custom domain name to my Github pages repository
 
-I entered the custom domain `aregsar.com` into the custom domain name text box, in the github pages section of my repository settings page, then clicked save.
+I entered the custom domain `aregsar.com` into the custom domain name text box, in the Github pages section of my repository settings page, then clicked save.
 
-You should see the following message at the top of the section.
+After doing so, the following message displayed at the top of the Github pages section section.
 
-`Your site is ready to be published at http://laravelmvp.com/.`
-
-Since we have not configured DNS records for the custom domain yet, the message will change to when the site is re-published because of the setting change:
-
-`Domain's DNS record could not be retrieved.`
-
-You can see this by refreshing the repository settings page.
+`Your site is ready to be published at http://aregsar.com/.`
 
 At this point Github pages adds a file named `CNAME` to the root of my remote repository. This file contains a single line which is the domain name `aregsar.com` that I added in the custom domain text box in the Github pages settings section for my repository.
 
 As always I did a `git pull` to get the `CNAME` file that was added to the remote repository.
+
+Since I had not configured DNS records for the custom domain yet, when the Site is re-published because of the setting change, the message changed to:
+
+`Domain's DNS record could not be retrieved.`
+
+You have to refresh the repository settings page to see the changed message.
 
 ## Step 3 - Pointing custom domain to Github pages
 
