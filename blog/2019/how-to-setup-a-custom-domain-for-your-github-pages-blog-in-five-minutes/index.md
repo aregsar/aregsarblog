@@ -36,7 +36,7 @@ After doing so, the following message displayed at the top of the Github pages s
 
 `Your site is ready to be published at http://aregsar.com/.`
 
-At this point Github pages adds a file named `CNAME` to the root of my remote repository. This file contains a single line which is the domain name `aregsar.com` that I added in the custom domain text box in the Github pages settings section for my repository.
+At this point Github pages adds a file named `CNAME` to the root of my remote repository. This file contains a single line which is the domain name `aregsar.com` that I added in the custom domain text box.
 
 As always I did a `git pull` to get the `CNAME` file that was added to the remote repository.
 
@@ -47,6 +47,8 @@ Since I had not configured DNS records for the custom domain yet, when the site 
 You have to refresh the repository settings page to see the changed message.
 
 ## Step 3 - Pointing custom domain to Github pages
+
+To Allow the DNS records to be retrieved we need to add them and map them to the Github pages published URL for our blog.
 
 > Caution: Before configuring your custom domain with your DNS provider, add your custom domain to your GitHub Pages site as detailed in step 2. Configuring your custom domain with your DNS provider without adding your custom domain to GitHub could result in someone being able to host a site on one of your subdomains. For more info see: [https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain](https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain)
 
