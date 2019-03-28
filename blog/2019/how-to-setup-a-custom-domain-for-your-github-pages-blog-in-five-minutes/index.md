@@ -76,29 +76,27 @@ Refreshing the repository settings page you can see that the publishing message 
 
 Note the URL is not secured since we have not selected the https setting yet. We will do that in the next step.
 
-## Step 3 - Enabling the Enforce HTTPS checkbox
+## Step 3 - Enforcing HTTPS
 
 I removed and then re-added the custom domain `aregsar.com` to the custom domain text box in the Github pages section of the repository settings page to trigger the process of enabling HTTPS.
 
-> Note: you must click the save button after you clear the text box and then add the custom domain name back in and click the save button again. Then click the Enforce HTTPS checkbox if it is not checked to publish to https URL.
+> Note: you must click the save button after you clear the text box and then add the custom domain name back in and click the save button again.
 
-You will see the message `Your site is ready to be published at https://laravelmvp.com/.`
+At this point the Enforce HTTPS checkbox was automatically checked for me. If that is not the case for you, click the Enforce HTTPS checkbox if it is not checked to publish to https URL.
 
-> Note: wait for DNS record propagation to take effect if github pages does not allow you to check the HTTPS checkbox and displays error messages complaining that it can't enable https. Any error should resolve automatically in a few minutes.
-
-After checking the Https checkbox the published URL endpoint for the blog will change as indicated by the message at the top of the github pages section, which for me is:
+After checking the Https checkbox the, published URL endpoint  at the top of the github pages section changed to the message:
 
 `Your site is ready to be published at https://aregsar.com/`
 
-When the site is re-published because of the settings change, the message will change to:
+A few momemnts later when the site was re-published because of the settings change, the message changed to:
 
 `Your site is published at https://aregsar.com/`
 
-You can see this by refreshing the repository settings page.
+This can be seen after refreshing the repository settings page.
 
 ## Conclusion
 
-In this process I showed you the process of setting up a custom domain name for this blog.
+In this process I showed you the process of setting up a custom domain name for this blog. You can do the same using your own custom domain name for your own Github pages blog.
 
 Check out the next post in the series where I show you how I set up the file structure of this blog.
 
