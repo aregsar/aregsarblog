@@ -53,7 +53,8 @@ To Allow the DNS records to be retrieved we need to add them and map them to the
 > Caution: Before configuring your custom domain with your DNS provider, add your custom domain to your GitHub Pages site as detailed in step 2. Configuring your custom domain with your DNS provider without adding your custom domain to GitHub could result in someone being able to host a site on one of your subdomains. For more info see: [https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain](https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain)
 
 Using my domain regsitrars domain name administration panel, I added the neccessary DNS records to point my custom domain `aregsar.com` to the location where Github hosts my GitHub pages blog.
-Since my Github username is `aregsar`, the location that Github pages hosts my blog is `aregsar.github.io`. For your own site it will publishing to <your-github-username>.github.io.
+
+> Since my Github username is `aregsar`, the location that Github pages hosts my blog is `aregsar.github.io`. For your own site it will publishing to `<your-github-username>.github.io`.
 
 First I added the `ALIAS` record for the root domain `aregsar.com`:
 
