@@ -53,12 +53,13 @@ To Allow the DNS records to be retrieved we need to add them and map them to the
 > Caution: Before configuring your custom domain with your DNS provider, add your custom domain to your GitHub Pages site as detailed in step 2. Configuring your custom domain with your DNS provider without adding your custom domain to GitHub could result in someone being able to host a site on one of your subdomains. For more info see: [https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain](https://help.github.com/en/articles/quick-start-setting-up-a-custom-domain)
 
 Using my domain regsitrars domain name administration panel, I added the neccessary DNS records to point my custom domain `aregsar.com` to the location where Github hosts my GitHub pages blog.
+Since my Github username is `aregsar`, the location that Github pages hosts my blog is `aregsar.github.io`. For your own site it will publishing to <your-github-username>.github.io.
 
 First I added the `ALIAS` record for the root domain `aregsar.com`:
 
 `ALIAS aregsar.com -> aregsar.github.io`
 
-Next I added a `CNAME` record for the `www` sub domain. 
+Next I added a `CNAME` record for the `www` sub domain.
 
 `CNAME www.aregsar.com -> aregsar.github.io`
 
@@ -86,15 +87,17 @@ I removed and then re-added the custom domain `aregsar.com` to the custom domain
 
 At this point the Enforce HTTPS checkbox was automatically checked for me. If that is not the case for you, click the Enforce HTTPS checkbox if it is not checked to publish to https URL.
 
-After checking the Https checkbox the, published URL endpoint  at the top of the github pages section changed to the message:
+After checking the Https checkbox the, published URL endpoint message at the top of the github pages section changed to the message:
 
 `Your site is ready to be published at https://aregsar.com/`
 
-A few momemnts later when the site was re-published because of the settings change, the message changed to:
+A few moments later when the site was re-published because of the settings change, the message changed to:
 
 `Your site is published at https://aregsar.com/`
 
 This can be seen after refreshing the repository settings page.
+
+After this final step I was able to navigate to `aregsar.com` or `www.aregsar.com` and see my blog home page.
 
 ## Conclusion
 
