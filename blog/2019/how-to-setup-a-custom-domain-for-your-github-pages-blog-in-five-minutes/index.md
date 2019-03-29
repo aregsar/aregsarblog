@@ -86,7 +86,7 @@ I removed and then re-added the custom domain `aregsar.com` to the custom domain
 
 > Note: you must click the save button after you clear the text box and then add the custom domain name back in and click the save button again.
 
-At this point the Enforce HTTPS checkbox was automatically checked for me. If that is not the case for you, click the Enforce HTTPS checkbox if it is not checked to publish to https URL.
+At this point the Enforce HTTPS checkbox was automatically checked for me. If that is not the case for you, click the Enforce HTTPS checkbox if it is not checked to publish the blog using an Https URL.
 
 After checking the Https checkbox the, published URL endpoint message at the top of the github pages section changed to the message:
 
