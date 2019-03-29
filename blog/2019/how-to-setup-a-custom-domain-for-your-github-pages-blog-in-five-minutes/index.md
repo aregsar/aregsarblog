@@ -54,7 +54,7 @@ To Allow the DNS records to be retrieved we need to add them and map them to the
 
 Using my domain regsitrars domain name administration panel, I added the neccessary DNS records to point my custom domain `aregsar.com` to the location where Github hosts my GitHub pages blog.
 
-> Since my Github username is `aregsar`, the location that Github pages hosts my blog is `aregsar.github.io`. For your own site it will publishing to `<your-github-username>.github.io`.
+> Since my Github username is `aregsar`, the location that Github pages hosts my blog is `aregsar.github.io`. For your own site it will publish to `<your-github-username>.github.io`.
 
 First I added the `ALIAS` record for the root domain `aregsar.com`:
 
