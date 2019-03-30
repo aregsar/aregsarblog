@@ -8,13 +8,9 @@ The reasons behind this configuration are explained in great detail in the blog 
 
 [https://megakemp.com/2019/03/20/the-case-for-pull-rebase/](https://megakemp.com/2019/03/20/the-case-for-pull-rebase/)
 
-here is a quote from that article:
-
-> The standard git pull command doesn’t play well with the Trunk-based development workflow. Fortunately, there’s a somewhat obscure way to make things right.
-
 ## Configuring the git pull command using an alias
 
-The easiest way to setup a short command for the git pull command is to use and alias in your bash profile dotfile.
+The easiest way to setup a short command for the git pull command is to use an alias in your bash profile dotfile.
 
 Here is mine in my .profile file:
 
@@ -25,7 +21,9 @@ alias pull = git pull --rebase=preserve
 # alias pull = git pull --rebase=merges
 ```
 
-## Configuring the git pull command using an your global git config file
+## Configuring the git pull command using the global git config file
+
+You can add the following to your git configuration file settings.
 
 ```bash
 git config --global pull.rebase preserve
@@ -36,6 +34,6 @@ git config --global pull.rebase preserve
 
 ## Conclusion
 
-To avoid cluttering your git history with pull rebase merges when using Trunk based development, use the tips in this article to configure git pull to avoid these issues.
+To avoid cluttering your git history with pull rebase merges when using Trunk based development, use the git pull settings described in this article to configure git pull.
 
 Thanks for reading
