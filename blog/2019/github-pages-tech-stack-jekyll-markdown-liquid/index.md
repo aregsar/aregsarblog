@@ -26,7 +26,7 @@ In this post I want to discuss the technologies that Github pages uses under the
 ## Markdown files and Github Flavored Markdown
 
 Github pages uses standard Github repositories to host Github pages content.
-The URL path structure of the published pages follows the repository diectory hierarchy and content structure.
+The URL path structure of the published pages follows the repository directory hierarchy and content structure.
 
 Each directory can contain a default markdown page named `index.md`. Each directory can also contain other markdown and html pages.
 
@@ -76,20 +76,20 @@ This is a Liquid templating tag that Jekyll uses to plug in the html content of 
 In fact anywhere Jekyll sees Liquid template parameters, even in markdown page content or html code snippets inside a markdown page, it will try to substitute the transformed content of another markdown page inside.
 
 > Aside: If you want to literally include Liquid tags in your published content to be displayed as is in a page,
-you need to escape the Liquid tag. Otherwise Jekyll will substitute transformed content of another page into the tag, instead of just allowing the `{{ "{{" }} content }}` text to be displayed as is.
-The way I was able to display the `{{ "{{" }} content }}` parameter right here in the markdown text of this blog post, was to escape it. Refer to this StackOverflow post to see how to escape Liquid template parameters in your Github pages: [How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
+you need to escape the Liquid tag. Otherwise Jekyll will substitute transformed content of another page into the tag, instead of just allowing the text to be displayed as is.
+The way I was able to display the `{{ "{{" }} content }}` parameter tag right here in the markdown text of this blog post, was to escape it. Refer to this StackOverflow post to see how to escape Liquid template parameters in your Github pages: [How to escape liquid template tags](https://stackoverflow.com/questions/3426182/how-to-escape-liquid-template-tags)
 
 ## Plugging repository setting values into the default site layout
 
-The layout file also contains Liquid tags in the format of `{{ "{{" }}site.<REPO_SETTING_PARAM> }}` that github pages uses to add buttons and other content to the layout file.
+The layout file also contains Liquid tags in the format of `{{ "{{" }} site.<REPO_SETTING_PARAM> }}` that github pages uses to add buttons and other content to the layout file.
 
-The <REPO_SETTING_PARAM> parameter in the tag can be the name of any default setting for the repository. When Jekyll processes the files, it will substitute the value of that setting for the name of the setting in the tag.
+The <REPO_SETTING_PARAM> parameter in the tag can be the name of any default setting for the repository. When Jekyll processes the files, it will substitute the value of that setting in the tag.
 
-For example the  `{{ "{{" }}site.name }}` setting uses the default repository name `aregsarblog` for the `site.name` parameter.
+For example the  `{{ "{{" }} site.name }}` setting uses the default repository name `aregsarblog` for the `site.name` parameter.
 
 The default setting value can be overridden by adding a _config.yml file to the root of the repositiry that can contain name value pairs for the settings to override.
 
-So for instance if we have a `name=aregsar` setting name in the _config.yml file, the value `aregsar` will override the defualt repository name `aregsarblog` in `{{ "{{" }}site.name }}`.
+So for instance if we have a `name=aregsar` setting in the _config.yml file, the value `aregsar` will override the defualt repository name `aregsarblog` in the `{{ "{{" }} site.name }}` tag.
 
 ## Conclusion
 
