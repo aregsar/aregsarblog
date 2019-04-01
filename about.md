@@ -12,10 +12,12 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 
 + [Laravel](https://laravel.com) - Rapid Application Development PHP web framework
 + [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core) - High performance asynchronous C# Web API framework
++ [Spring Boot](https://spring.io/projects/spring-boot) - Java Web Services framework
 + [Masonite](https://docs.masoniteproject.com/) - Rapid Application Development Python web framework inspired by Laravel
 + [Stimulus](https://stimulusjs.org) - Controllers for organizing client side javascript
 + [Vue](https://vuejs.org) - Javascript UI components
-+ [React](https://reactjs.org) with [Hooks](https://reactjs.org/docs/hooks-intro.html) - Functional Javascript UI components.
++ [React](https://reactjs.org) with [Hooks](https://reactjs.org/docs/hooks-intro.html) - Functional Javascript UI components
++ [Angular](https://angular.io/) - Javascript SPA Dashboards
 
 ## My lean development process
 
@@ -32,4 +34,3 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [WireMock](http://wiremock.org/) - Mock API server
 + [ngrok](https://ngrok.com/) - Secure public URLs for local webhook testing
 + [Wireshark](https://www.wireshark.org/) - Network traffic monitor
-+ [jwt.io](https://jwt.io/) - JWT token decoder
