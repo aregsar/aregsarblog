@@ -17,7 +17,7 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [Stimulus](https://stimulusjs.org) - Controllers for organizing client side javascript
 + [Vue](https://vuejs.org) - Javascript UI components
 + [React](https://reactjs.org) with [Hooks](https://reactjs.org/docs/hooks-intro.html) - Functional Javascript UI components
-+ [Angular](https://angular.io/) - Javascript SPA Dashboards
++ [Angular](https://angular.io/) - Javascript SPA dashboards
 
 ## My lean development process
 
