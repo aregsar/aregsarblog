@@ -199,7 +199,31 @@ The installation steps for installing older versions of php is the same except y
 
 Once installed the installations will be in the equivalent directories under the installed version directory.
 
-So if we install `brew install php@7.2` the installed directories will be as follows:
+So if we install `brew install php@7.2` the installed directories will be under:
+
+`/usr/local/Cellar/php@7.2/7.2.18/`
+
+as apposed to `/usr/local/Cellar/php/7.3.5/` for the latest (7.3) version.
+
+so for v 7.2 the php, pecl and php-fpm binaries will be at:
+
+`/usr/local/Cellar/php@7.2/7.2.18/bin/php`
+`/usr/local/Cellar/php@7.2/7.2.18/bin/pecl`
+`/usr/local/Cellar/php@7.2/7.2.18/sbin/`
+
+and the configuration files will be installed in:
+
+`/usr/local/etc/php/7.2/`
+
+where the `/usr/local/etc/php/7.2/php.ini` file will specify the pecl installation directory setting for php extensions as:
+
+`extension_dir = "/usr/local/lib/php/pecl/20170718"`
+
+> Note: the extensions directory uses the release date instead of the version number.
+
+Now when we run the v 7.2 pecl command `/usr/local/Cellar/php@7.2/7.2.18/bin/pecl install xdebug` for instance, the xdebug.so extension file will be installed in the `/usr/local/lib/php/pecl/20170718` directory.
+
+> Note if we want to switch to using the older version of php for our projects directly using the `php` command, we have to
 
 ## Conclusion
 
