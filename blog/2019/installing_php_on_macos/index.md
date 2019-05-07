@@ -44,14 +44,13 @@ So for instance if you have the latest PHP version (7.3) installed and you also 
 
 ## Removing installed versions of PHP
 
-To do a fresh install, we will remove any existing homebrew PHP installations.
+To do a fresh install, we will first remove any existing homebrew PHP installations.
 The following is the bash commands I use to clean out my PHP installation directories:
 
 ```bash
 brew list | grep php | xargs brew uninstall --force
-rm -rf /usr/local/etc/php
 rm -rf /usr/local/lib/php
-#rm -rf /usr/local/opt/php
+rm -rf /usr/local/etc/php
 rm ~/Library/LaunchAgents/homebrew.mxcl.php*
 sudo rm /Library/LaunchDaemons/homebrew.mxcl.php*
 brew untap homebrew/php
@@ -59,15 +58,11 @@ brew cleanup -s
 brew untap homebrew/homebrew-dupes
 ```
 
-At this point the following directories should not exist:
+The first line in the above bash statements goes through all installed versions and removes them all.
 
-+ /usr/local/Cellar/php/
-+ /usr/local/lib/php/
-+ /usr/local/opt/php/
-+ /usr/local/etc/php/
-+ /usr/local/opt/php/
+> Note: some of the commands above may not be required, but running them all will ensure a clean uninstall.
 
-and the `/usr/local/bin/php` symlink should not exits either
+At this point the `/usr/local/Cellar/php/` where homebrew installs the latest php files and the `/usr/local/bin/php` symlink to it should not exit.
 
 ## Installing the latest PHP version
 
