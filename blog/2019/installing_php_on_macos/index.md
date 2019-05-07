@@ -223,8 +223,101 @@ where the `/usr/local/etc/php/7.2/php.ini` file will specify the pecl installati
 
 Now when we run the v 7.2 pecl command `/usr/local/Cellar/php@7.2/7.2.18/bin/pecl install xdebug` for instance, the xdebug.so extension file will be installed in the `/usr/local/lib/php/pecl/20170718` directory.
 
-> Note if we want to switch to using the older version of php for our projects directly using the `php` command, we have to
+## Switching between latest and older installed php versions
+
+In order to run older version of php when we execute the php, pecl commands and also to run the older version of php-fpm server we need to use brew to switch between versons.
+
+Assuming we already installed the the latest(7.3) and 7.2 versions by running brew install php and brew install php@7.2, we can switch the version by running the following commands:
+
+```bash
+sudo brew services stop php
+brew unlink php && brew link --force php@7.2
+sudo brew services start php@7.2
+```
+
+> Note: we need to use the --force flag when linking older versions of php
+
+If we look in `/usr/local/bin/` and  `/usr/local/sbin/` before executing the commands we see the following php binary file symlinks pointing to the latest version homebrew install directories:
+
+# in /usr/local/sbin/
+php-fpm -> ../Cellar/php/7.3.5/sbin/php-fpm
+
+# in /usr/local/bin/
+php -> ../Cellar/php/7.3.5/bin/php
+pecl -> ../Cellar/php/7.3.5/bin/pecl
+pear -> ../Cellar/php/7.3.5/bin/pear
+peardev -> ../Cellar/php/7.3.5/bin/peardev
+phar -> ../Cellar/php/7.3.5/bin/phar
+phar.phar -> ../Cellar/php/7.3.5/bin/phar.phar
+php-cgi -> ../Cellar/php/7.3.5/bin/php-cgi
+php-config -> ../Cellar/php/7.3.5/bin/php-config
+hpdbg -> ../Cellar/php/7.3.5/bin/phpdbg
+phpize -> ../Cellar/php/7.3.5/bin/phpize
+
+But after we run the command we see the symlinks point to the older v 7.3 version installation dirctories
+
+# in /usr/local/sbin/
+php-fpm -> ../Cellar/php/7.3.5/sbin/php-fpm
+
+# in /usr/local/bin/
+php -> ../Cellar/php/7.3.5/bin/php
+pecl -> ../Cellar/php/7.3.5/bin/pecl
+pear -> ../Cellar/php/7.3.5/bin/pear
+peardev -> ../Cellar/php/7.3.5/bin/peardev
+phar -> ../Cellar/php/7.3.5/bin/phar
+phar.phar -> ../Cellar/php/7.3.5/bin/phar.phar
+php-cgi -> ../Cellar/php/7.3.5/bin/php-cgi
+php-config -> ../Cellar/php/7.3.5/bin/php-config
+hpdbg -> ../Cellar/php/7.3.5/bin/phpdbg
+phpize -> ../Cellar/php/7.3.5/bin/phpize
+
+Remember that we added `/usr/local/bin/` and  `/usr/local/sbin/` to our PATH variable so when we run the `php` or `pecl` commands we are executing the command that is symlinked to the proper version of the binary file we want to run. And since we are running the symlinked version of `pecl`, the php extensions that we install or uninstall are installed in the proper versions extenion file directory.
+
+Before switching versions we stopped the current versions `php-fpm` service if it was running and started the service for the version that we switched to.
+
+Running `php -v` we can see that the older version is reported.
+
+To switch back to using the latest version we need to reverse the process by executing:
+
+```bash
+sudo brew services stop php@7.2
+brew unlink php@7.2 && brew link php
+sudo brew services start php
+```
+
+Running `php -v` we can see that the lates version is reported again.
+
+As an aside, we can list all the services installed by brew to see the php-fpm instances
+
+```bash
+brew services list | grep php
+```
+
+After running this command I can see the php-fpm services for each version installed on my machine and their status:
+
+```bash
+php       started aregsarkissian /usr/local/opt/php/homebrew.mxcl.php.plist
+php@7.2   stopped
+```
 
 ## Conclusion
 
-I listed the steps to take to install homebrew and then use homebrew to install php
+I listed the steps to take to install homebrew and then use homebrew to install php.
+
+Here is a recap of the directories for the latest and older version of php.
+
+The following resources were used to produce this article:
+
+[a](https://discourse.brew.sh/t/pecl-with-multiple-php-versions/1977/2)
+
+[b](https://threenine.co.uk/setting-php7-development-mac-osx/)
+
+[c](https://tommcfarlin.com/running-multiple-versions-of-php-with-homebrew/)
+
+[d](https://stitcher.io/blog/php-73-upgrade-mac)
+
+[e](https://vyspiansky.github.io/2018/11/08/set-up-php-7.2-on-macos-mojave-with-homebrew/)
+
+[f](https://medium.com/@romaninsh/install-php-7-2-xdebug-on-macos-high-sierra-with-homebrew-july-2018-d7968fe7e8b8)
+
+[g](https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/)
