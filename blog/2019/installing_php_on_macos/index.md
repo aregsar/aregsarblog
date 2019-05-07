@@ -74,7 +74,39 @@ Now install the latest PHP version using the command:
 
 `brew install php`
 
-After running this command latest version of php (7.3 at this time ) will be installed. Run the following command to verify.
+After running this command latest version of php (7.3 at this time ) will be installed.
+
+The latest version of php will be installed at:
+
+`usr/local/Cellar/php/7.3.5`
+
+brew will create the following symlinks to the installation directory as well:
+
+`/usr/locl/opt/php -> usr/local/Cellar/php/7.3.5`
+`/usr/locl/opt/php@7.3 -> usr/local/Cellar/php/7.3.5`
+
+Note that both /usr/locl/opt/php and /usr/locl/opt/php@7.3 reference the same installation.
+
+> The symlinks above will not be relevent to this article but I mentioned them here FYI in any case.
+
+The following symlinks that reference the php binaries are also created by brew in the /usr/local/sbin/ and /usr/local/bin/ directories:
+
+# in /usr/local/sbin/
+php-fpm -> ../Cellar/php/7.3.5/sbin/php-fpm
+
+# in /usr/local/bin/
+php -> ../Cellar/php/7.3.5/bin/php
+pecl -> ../Cellar/php/7.3.5/bin/pecl
+pear -> ../Cellar/php/7.3.5/bin/pear
+peardev -> ../Cellar/php/7.3.5/bin/peardev
+phar -> ../Cellar/php/7.3.5/bin/phar
+phar.phar -> ../Cellar/php/7.3.5/bin/phar.phar
+php-cgi -> ../Cellar/php/7.3.5/bin/php-cgi
+php-config -> ../Cellar/php/7.3.5/bin/php-config
+hpdbg -> ../Cellar/php/7.3.5/bin/phpdbg
+phpize -> ../Cellar/php/7.3.5/bin/phpize
+
+You can run the following command to verify the current php version.
 
 `php -v`
 
@@ -94,7 +126,8 @@ You can show all installed versions of php by running:
 
 `brew list | grep php`
 
-The result that does not have an extension is the latest version. On mu machine I see:
+The result of this command that does not have an extension is the latest version.
+On my machine I see two results the first is for the latest php v7.3 and the other is obviously php v7.2:
 
 ```bash
 php
@@ -342,7 +375,19 @@ pcre.jit=0
 
 I listed the steps to take to install homebrew and then use homebrew to install php.
 
-Here is a recap of the directories for the latest and older version of php.
+Here is a recap of the directories for the latest and older version of php after installing each version:
+
+After running `brew install php`
+
+
+
+
+
+
+
+
+
+
 
 The following resources were used to produce this article:
 
