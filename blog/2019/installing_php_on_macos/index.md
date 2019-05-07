@@ -95,7 +95,18 @@ Run this command to see the symlink created taht points to the installed php CLI
 
 `which php`
 
-The following directories are the relevent installation
+You can show all installed versions of php by running:
+
+`brew list | grep php`
+
+The result that does not have an extension is the latest version. On mu machine I see:
+
+```bash
+php
+php@7.2
+```
+
+where the first line is my latest php version 7.3.
 
 ## The installation directories
 
@@ -151,6 +162,10 @@ and the php-fpm.conf file at:
 
 `/usr/local/etc/php/7.3/php-fpm.conf`
 
+To find the location of the php.ini file you can run the following command:
+
+`pear config-show | grep php.ini`
+
 ## Installing PHP extensions using PECL
 
 The pecl cli installed by homebrew can be used to install further php extensions that we requires by running the command `pecl install <extension>`.
@@ -173,7 +188,11 @@ So after we run `pecl install xdebug` we can see that xdebug is installed at:
 
 `/usr/local/lib/php/pecl/20180731/xdebug.so`
 
-It may appear that the extensions are also installed in `/usr/local/Cellar/php/7.3.5/pecl/20180731/` as well, but that is because `/usr/local/Cellar/php/7.3.5/pecl/` is a symlink to `/usr/local/lib/php/pecl/`.
+To show the value of pecl extension directory setting in the php.ini file , you can run the following:
+
+`pecl config-get ext_dir`
+
+> Note: It may appear that the php extensions are also installed in `/usr/local/Cellar/php/7.3.5/pecl/20180731/`, but that is because `/usr/local/Cellar/php/7.3.5/pecl/` is a symlink to `/usr/local/lib/php/pecl/`.
 
 ## How php detects pecl installed extensions
 
@@ -305,6 +324,25 @@ php@7.2   stopped
 > Note: PHP extensions installed using `pecl install` command are installed for the version of the php that is currently activated. So you must install php extensions you need for each installed version of php seperately. You can however reference the pecl binary for each version directly to install extensions for that version, without having to switch versions. For example you can run `/usr/local/Cellar/php/7.3.5/bin/pecl install xdebug` directly to install extensions for php version 7.2 while the current activated version of php that you are running is set to the latest v7.3.
 Also note that the version of an extension that you need to install for older version might not be the latest version of the extension. In that case you need to run install the specific versone of the extenion you need. For instance instead of `pecl install xdebug` you will need to run `pecl install xdebug-2.7.1`. Finally you can upgrade the installed version of an extenion by running `pecl upgrade <extension-name>` for instance `pecl upgrade xdebug`.
 
+## Resolving PHP 7.3 and JIT Compiler error
+
+If you have the php `composer` package manager installed, you may need to deactivate the php v7.3 JIT compiler setting so that the  `composer global update` command does not fail.
+
+The JIT setting is in the `/usr/local/etc/php/7.3/php.ini` file.
+
+You can run the following to see the setting:
+
+```bash
+cd cd /usr/local/etc/php/7.3
+cat php.ini | grep 'pcre.jit'
+```
+
+uncommnet the setting:
+;pcre.jit=1
+
+and change its value:
+pcre.jit=0
+
 ## Conclusion
 
 I listed the steps to take to install homebrew and then use homebrew to install php.
@@ -313,16 +351,16 @@ Here is a recap of the directories for the latest and older version of php.
 
 The following resources were used to produce this article:
 
-[a](https://discourse.brew.sh/t/pecl-with-multiple-php-versions/1977/2)
+[https://medium.com/@romaninsh/install-php-7-2-xdebug-on-macos-high-sierra-with-homebrew-july-2018-d7968fe7e8b8](https://medium.com/@romaninsh/install-php-7-2-xdebug-on-macos-high-sierra-with-homebrew-july-2018-d7968fe7e8b8)
 
-[b](https://threenine.co.uk/setting-php7-development-mac-osx/)
+[https://vyspiansky.github.io/2018/11/08/set-up-php-7.2-on-macos-mojave-with-homebrew/](https://vyspiansky.github.io/2018/11/08/set-up-php-7.2-on-macos-mojave-with-homebrew/)
 
-[c](https://tommcfarlin.com/running-multiple-versions-of-php-with-homebrew/)
+[bhttps://threenine.co.uk/setting-php7-development-mac-osx/](https://threenine.co.uk/setting-php7-development-mac-osx/)
 
-[d](https://stitcher.io/blog/php-73-upgrade-mac)
+[https://stitcher.io/blog/php-73-upgrade-mac](https://stitcher.io/blog/php-73-upgrade-mac)
 
-[e](https://vyspiansky.github.io/2018/11/08/set-up-php-7.2-on-macos-mojave-with-homebrew/)
+[https://tommcfarlin.com/running-multiple-versions-of-php-with-homebrew/](https://tommcfarlin.com/running-multiple-versions-of-php-with-homebrew/)
 
-[f](https://medium.com/@romaninsh/install-php-7-2-xdebug-on-macos-high-sierra-with-homebrew-july-2018-d7968fe7e8b8)
+[https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/)](https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/)
 
-[g](https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/)
+[https://discourse.brew.sh/t/pecl-with-multiple-php-versions/1977/2](https://discourse.brew.sh/t/pecl-with-multiple-php-versions/1977/2)
