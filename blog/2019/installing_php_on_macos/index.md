@@ -51,6 +51,7 @@ The following is the bash commands I use to clean out my PHP installation direct
 brew list | grep php | xargs brew uninstall --force
 rm -rf /usr/local/etc/php
 rm -rf /usr/local/lib/php
+#rm -rf /usr/local/opt/php
 rm ~/Library/LaunchAgents/homebrew.mxcl.php*
 sudo rm /Library/LaunchDaemons/homebrew.mxcl.php*
 brew untap homebrew/php
@@ -64,6 +65,7 @@ At this point the following directories should not exist:
 + /usr/local/lib/php/
 + /usr/local/opt/php/
 + /usr/local/etc/php/
++ /usr/local/opt/php/
 
 and the `/usr/local/bin/php` symlink should not exits either
 
@@ -299,6 +301,9 @@ After running this command I can see the php-fpm services for each version insta
 php       started aregsarkissian /usr/local/opt/php/homebrew.mxcl.php.plist
 php@7.2   stopped
 ```
+
+> Note: PHP extensions installed using `pecl install` command are installed for the version of the php that is currently activated. So you must install php extensions you need for each installed version of php seperately. You can however reference the pecl binary for each version directly to install extensions for that version, without having to switch versions. For example you can run `/usr/local/Cellar/php/7.3.5/bin/pecl install xdebug` directly to install extensions for php version 7.2 while the current activated version of php that you are running is set to the latest v7.3.
+Also note that the version of an extension that you need to install for older version might not be the latest version of the extension. In that case you need to run install the specific versone of the extenion you need. For instance instead of `pecl install xdebug` you will need to run `pecl install xdebug-2.7.1`. Finally you can upgrade the installed version of an extenion by running `pecl upgrade <extension-name>` for instance `pecl upgrade xdebug`.
 
 ## Conclusion
 
