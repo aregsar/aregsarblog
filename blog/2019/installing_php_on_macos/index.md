@@ -42,7 +42,7 @@ When installing older versions of software, brew uses the version number to name
 
 So for instance if you have the latest PHP version (7.3) installed and you also have PHP version 7.2 installed, you can run `brew upgrate php` to upgrade the latest version and run `brew upgrade php@7.2` to upgrade the older version 7.2.
 
-## Removing installed versions of PHP
+## Removing all brew installed versions of PHP
 
 To do a fresh install, we will first remove any existing homebrew PHP installations.
 The following is the bash commands I use to clean out my PHP installation directories:
@@ -62,13 +62,7 @@ The first line in the above bash statements goes through all installed versions 
 
 > Note: some of the commands above may not be required, but running them all will ensure a clean uninstall.
 
-At this point the `/usr/local/Cellar/php/` where homebrew installs the latest php files and the `/usr/local/bin/php` symlink to it should not exit.
-
 ## Installing the latest PHP version
-
-Start with updating brew itself
-
-`brew update`
 
 Now install the latest PHP version using the command:
 
@@ -88,7 +82,7 @@ Run the following to list the installed PHP extensions:
 
 `php -m`
 
-Run this command to see the symlink created taht points to the installed php CLI binary:
+Run this command to see the symlink created that points to the installed php CLI binary:
 
 `which php`
 
@@ -100,59 +94,46 @@ The result of this command that does not have an extension is the latest version
 On my machine I see two results the first is for the latest php v7.3 and the other is obviously php v7.2:
 
 ```bash
-php
+php #latest version 7.3
 php@7.2
 ```
 
-where the first line is my latest php version 7.3.
-
 ## The installation directories
 
-The latest version of php will be installed at:
+For php v7.3, which is the latest version of php as of this article date, when we run the `brew install php` command, the php files will be installed under the base path of:
 
 `/usr/local/Cellar/php/7.3.5`
 
+> Note: If the latest version of php is v7.3, then running `brew install php` or `brew install php@7.3` will result in the same installation directory. That is, the base directory would still be `/usr/local/Cellar/php/7.3.5/`. So both commands are effectively the same.
+However if latest version is 7.3 and we install an older version of php, say for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see includes the `@7.2` version number in the path and has the latest php 7.2 version number.
 
-
-
-
-Homebrew installes the latest php CLI binaries:
+Homebrew installes the latest php binaries at:
 
 `/usr/local/Cellar/php/7.3.5/bin`
 
-So the `/usr/local/bin/php` symlink points to `/usr/local/Cellar/php/7.3.5/bin/php`
+So the `php` cli is located at `/usr/local/Cellar/php/7.3.5/bin/php` and the `pecl` cli for installing php extensions is located at `/usr/local/Cellar/php/7.3.5/bin/pecl`
 
-This is the php CLI that runs when we type `php` on the command line.
+Similarly brew installs the latest system binaries for php at:
 
-We just need to make sure we have `/usr/local/bin` in our PATH envoronment variable.
+`/usr/local/Cellar/php/7.3.5/sbin`
 
-Also the `pecl` CLI for installing php extensions is located at:
+Therefore the `php-fpm` server is installed at `/usr/local/Cellar/php/7.3.5/sbin/php-fpm`
 
-`/usr/local/Cellar/php/7.3.5/bin/pecl`
+Brew also adds symlinks that point to the installed binary files in the `/usr/local/bin/` and `/usr/local/sbin` directories.
 
-Similarly homebrew installs the system binaries for php in:
+For instance it adds the symlink `/usr/local/bin/php` symlink that points to the `/usr/local/Cellar/php/7.3.5/bin/php` binary.
 
-`/usr/local/Cellar/php/7.3.5/sbin`.
+So to be able to run the php commands globally we then need to add `/usr/local/bin` and `/usr/local/sbin` in our PATH envoronment variable.
 
-Therefore the `php-fpm` server is installed at:
-
-`/usr/local/Cellar/php/7.3.5/sbin/php-fpm`
-
-To be able to access the php cli and php-fpm server binaries, my PATH variable starts with:
+For example, to be able to access the php cli and php-fpm server binaries, my PATH variable starts with:
 
 `export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin`
 
-We can configure php-fpm to auto-start by running the brew command:
-
-`sudo brew services start php`
-
-Then we can check to see if is running using the brew command:
-
-`brew services list`
-
 ## Symlinks to the installation directory
 
-When installing the latest version of php using the `brew install php` command the brew installation will create the following symlinks that reference the php binaries under the base `/usr/local/Cellar/php/7.3.5/` installation directory:
+As mentioned before, when installing the latest version of php using the `brew install php` command the brew installation will create symlinks that reference the php binaries under the base `/usr/local/Cellar/php/7.3.5/` installation directory.
+
+Here is a full list of the symlinks:
 
 ```bash
 /usr/local/sbin/php-fpm -> /usr/local/Cellar/php/7.3.5/sbin/php-fpm
@@ -169,10 +150,6 @@ When installing the latest version of php using the `brew install php` command t
 /usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
 ```
 
-> Note: If the latest version of php is v7.3 then running `brew install php` or `brew install php@7.3` will result in the same installation directory. That is the base directory would still be `/usr/local/Cellar/php/7.3.5/`. So both commands are effectively the same.
-However if latest version is 7.3 and you install an older version of php, for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see it includes the `@7.2` version number in the path.
-
-
 Brew will also create the following symlinks to the installation directory:
 
 `/usr/local/opt/php -> usr/local/Cellar/php/7.3.5`
@@ -180,7 +157,7 @@ Brew will also create the following symlinks to the installation directory:
 
 Note that both `/usr/locl/opt/php` and `/usr/locl/opt/php@7.3` reference the same installation.
 
-> The symlinks in the `/usr/local/opt/` directory will not be relevent to this article but in any case I mention them here for your information.
+> Note: The symlinks in the `/usr/local/opt/` directory will not be relevent to this article but in any case I mention them here for your information.
 
 ## PHP ini and configuration files
 
