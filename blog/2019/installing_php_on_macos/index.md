@@ -270,6 +270,11 @@ php       stopped
 php@7.2   stopped
 ```  
 
+On my machine, the actual full path of the LaunchDaemons files created for each version of the php-fpm service is:
+
+`/Users/aregsarkissian/Library/LaunchAgents/homebrew.mxcl.php.plist`
+`/Users/aregsarkissian/Library/LaunchAgents/homebrew.mxcl.php@7.2.plist`
+
 > Note: We can start or stop either version of php-fpm regardless of which installed version of php is configured as our current version.
 So if we have both the latest version 7.3 and php 7.2 installed but we have configured version 7.3 to be our current active version, as described in the following sections, we can still run `sudo brew services start php@7.2` to run the 7.2 installed version.
 However it recommended to run the php-fpm version that matches your current active version . You can check the current active version by runnung `php -v`.
@@ -469,9 +474,6 @@ Also FYI there is an alternate installation location for PHP binaries for both v
 
 pecl install --force xdebug
 pecl install --force memcached
-
-/Users/aregsarkissian/Library/LaunchAgents/homebrew.mxcl.php@7.2.plist
-/Users/aregsarkissian/Library/LaunchAgents/homebrew.mxcl.php.plist
 
 In this article I listed the steps to take to install homebrew and then use homebrew to install multiple php versions.
 
