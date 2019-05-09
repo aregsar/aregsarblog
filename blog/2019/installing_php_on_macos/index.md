@@ -397,24 +397,83 @@ uncommnet the setting:
 and change its value:
 pcre.jit=0
 
+## Recap of installation directories for latest version and version 7.2
+
+Here is a recap of the directories for the latest php version and php version 7.2 for quick reference:
+
+After running `brew install php` we have the following installation directories:
+
+PHP binaries:
+
+`/usr/local/Cellar/php/7.3.5/bin/php`
+`/usr/local/Cellar/php/7.3.5/bin/pecl`
+`/usr/local/Cellar/php/7.3.5/sbin/php-fpm`
+
+PHP configuration files:
+
+`/usr/local/etc/php/7.3/php.ini`
+`/usr/local/etc/php/7.3/php-fpm.conf`
+
+PHP extensions location:
+
+`/usr/local/lib/php/pecl/20180731/`
+
+Opcache extension location:
+
+`/usr/local/Cellar/php/7.3.5/lib/php/20180731/opcache.so`
+
+In addition symlinks to binaries are added only when installing the latest version:
+
+`/usr/local/bin/php`
+`/usr/local/bin/pecl`
+`/usr/local/sbin/php-fpm`
+
+After running `brew install php@7.2` we have the following installation directories:
+
+PHP binaries:
+
+`/usr/local/Cellar/php@7.2/7.2.18/bin/php`
+`/usr/local/Cellar/php@7.2/7.2.18/bin/pecl`
+`/usr/local/Cellar/php@7.2/7.2.18/sbin/php-fpm`
+
+PHP configuration files:
+
+`/usr/local/etc/php/7.2/php.ini`
+`/usr/local/etc/php/7.2/php-fpm.conf`
+
+PHP extensions location:
+
+`/usr/local/lib/php/pecl/20170718/`
+
+Opcache extension location:
+
+`/usr/local/Cellar/php@7.2/7.2.18/lib/php/20170718/opcache.so`
+
+> Note: Installing older version of php does not create new symlinks to the installed binaries. We need to unlink the active version and link to the older version for brew to remove the existing symlinks and create new symlinks for the old installation.
+
+> Note: directories `/usr/local/Cellar/php/7.3.5/pecl` and `/usr/local/Cellar/php@7.2/7.2.18/pecl` created by the brew for the latest and 7.2 versions are both symlinks to `/usr/local/lib/php/pecl` which is the base directory for the php extensions for each installed version of php.
+
+Also FYI there is an alternate installation location for PHP binaries for both versions that is not used:
+
+`/usr/local/opt/php/bin/php`
+`/usr/local/opt/php/bin/pecl`
+`/usr/local/opt/php/sbin/php-fpm`
+`/usr/local/opt/php@7.3/bin/php`
+`/usr/local/opt/php@7.3/bin/pecl`
+`/usr/local/opt/php@7.3/sbin/php-fpm`
+`/usr/local/opt/php@7.2/bin/php`
+`/usr/local/opt/php@7.2/bin/pecl`
+`/usr/local/opt/php@7.2/sbin/php-fpm`
+
 ## Conclusion
 
-I listed the steps to take to install homebrew and then use homebrew to install php.
+pecl install --force xdebug
+pecl install --force memcached
 
-Here is a recap of the directories for the latest and older version of php after installing each version:
+/Users/aregsarkissian/Library/LaunchAgents/homebrew.mxcl.php@7.2.plist
+/Users/aregsarkissian/Library/LaunchAgents/homebrew.mxcl.php.plist
 
-After running `brew install php`
-
-#php installed at
-/usr/local/Cellar/php/7.3.5/bin/
-
-
-
-
-
-
-
-
+In this article I listed the steps to take to install homebrew and then use homebrew to install multiple php versions.
 
 The following resources were used to produce this article:
 
