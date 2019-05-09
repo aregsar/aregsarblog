@@ -229,9 +229,18 @@ So if we run `pecl install memcached` for instance, the extension will be instal
 
 > Note: when installing the memcached extension on my machine, a cached version of a previous install was not cleaned up so pecl was detecting memcached was installed when in fact it was not. To solve this I did a `pecl uninstall memcached` and then I re-installed the extension with `pecl install memcached` and that resolved the issue.
 
-> Note: if after installing the xdebug extension, it is not detected and listed under [Zend Modules] when running `php -m` make sure that `zend_extension="xdebug.so"` is added to the top of the php.ini file, and if any standard installed php extension is not listed under [PHP Modules] when running `php -m` make sure that the `extension="<php-extension>.so"` for that extension name is added to the top of the php.ini file.
+## How to resovle issue encountered with pecl
 
-Its good practice to run `pecl list` and check the pecl extensions directory after running `pecl install` to make sure the extension is indeed installed. Then you should run `php -m` to make sure the extension is detected by php and if not, make sure that the extension setting for each installed extenion is added to the php.ini file.
+Sometimes even after a clean install, the `pecl list` command reports that an extension is installed when `php -m` does not detect the extension. In fact after checking the proper extensions directory for the active php version the extension file is actually not there. Also looking in the php.ini file for the active version, the extension is not listed there either.
+
+This means `pecl list` is actually in error and probably has a cache somewhere that is not cleared. Attempting to actually install the extension using `pecl install` in this scenario fails and reports that the extension is already installed.
+
+There are two ways to get around this issue. The easiest way is just to force pecl to install the extension using the `--force` flag. The other way is to first run `pecl uninstall` to clear the cache and then run `pecl install` to install the extension.
+
+I ran in this scenario when I had installed xdebug and memcached for the latest php version and then after doing a fresh install of php, pecl list would report both extensions as already existing where in fact the files were not there, php.ini did not have them and php did not detect them. I force installed them using `pecl install --force xdebug` and `pecl install --force memcached` which added the files and the php.ini settings and php detected the extensions again.
+
+> Its good practice to run `php -m` after running `pecl install` to make sure the extension is detected by php.
+If the extension file exists in the extensions directory and php does not detect it, check the php.ini file to make sure the extension is added to the file.
 
 ## running the php-fpm service using brew
 
@@ -279,7 +288,7 @@ On my machine, the actual full path of the LaunchDaemons files created for each 
 So if we have both the latest version 7.3 and php 7.2 installed but we have configured version 7.3 to be our current active version, as described in the following sections, we can still run `sudo brew services start php@7.2` to run the 7.2 installed version.
 However it recommended to run the php-fpm version that matches your current active version . You can check the current active version by runnung `php -v`.
 
-## installing older versions of php
+## Installing older versions of php
 
 The installation steps for installing older versions of php is the same as installing the latest version of php except you need specify the php version number using the `@` symbol in the brew install command.
 
@@ -365,7 +374,7 @@ But after we run the `brew unlink php && brew link --force php@7.2` command we s
 
 Remember that we added `/usr/local/bin/` and  `/usr/local/sbin/` to our PATH variable so when we run the `php` or `pecl` commands we will execute the command that is symlinked to the proper version of the binary file we want to run.
 
-And since we are running the symlinked version of `pecl`, the php extensions that we install (or uninstall) will installed in the proper versions extenion file directory.
+And since we are running the symlinked version of `pecl`, the php extensions that we install (or uninstall) will installed in the proper version's extenion file directory.
 
 Running `php -v` we can see that the older version 7.2 is reported.
 
@@ -380,8 +389,10 @@ sudo brew services start php
 Running `php -v` we can see that the latest version is reported again.
 
 > Note: PHP extensions installed using `pecl install` command are installed for the version of the php that is currently activated. So you must install php extensions you need for each installed version of php seperately after you switch to that version of php.
-Also note that the version of an extension that you need to install for older version might not be the latest version of the extension because the latest version of the extension may be incompatible with the older php version. In that case you need to install the specific version of the extenion you need by specifying the extension version when you run pecl install. For instance instead of `pecl install xdebug` which will install the latest version of the extension, you might need to run `pecl install xdebug-2.7.1`. 
-Finally you can upgrade the installed version of an extenion by running `pecl upgrade <extension-name>`. For instance `pecl upgrade xdebug` will upgrade the xdebug extension to the latest version.
+
+>Also note that the version of an extension that you need to install for older version might not be the latest version of the extension because the latest version of the extension may be incompatible with the older php version. In that case you need to install the specific version of the extenion you need by specifying the extension version when you run pecl install. For instance instead of `pecl install xdebug` which will install the latest version of the extension, you might need to run `pecl install xdebug-2.7.1`. 
+
+You can upgrade the installed version of an extenion by running `pecl upgrade <extension-name>`. For instance `pecl upgrade xdebug` will upgrade the xdebug extension to the latest version.
 
 ## Resolving PHP 7.3 and JIT Compiler error
 
@@ -469,6 +480,8 @@ Also FYI there is an alternate installation location for PHP binaries for both v
 `/usr/local/opt/php@7.2/bin/php`
 `/usr/local/opt/php@7.2/bin/pecl`
 `/usr/local/opt/php@7.2/sbin/php-fpm`
+
+After we install the latest php version or after we install and switch to an older version we can run `pecl install` to add the extension we need. We can add the --force flag to the pecl install command in the case where pecl mistakingly thinks that the extension is already installed.
 
 ## Conclusion
 
