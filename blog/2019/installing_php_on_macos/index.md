@@ -112,33 +112,9 @@ The latest version of php will be installed at:
 
 `/usr/local/Cellar/php/7.3.5`
 
-brew will create the following symlinks to the installation directory as well:
 
-`/usr/local/opt/php -> usr/local/Cellar/php/7.3.5`
-`/usr/local/opt/php@7.3 -> usr/local/Cellar/php/7.3.5`
 
-Note that both /usr/locl/opt/php and /usr/locl/opt/php@7.3 reference the same installation.
 
-> The symlinks in the `/usr/local/opt/` directory will not be relevent to this article but in any case I mention them here for your information.
-
-The following symlinks that reference the php binaries are also created by brew:
-
-```bash
-# in /usr/local/sbin/
-/usr/local/sbin/php-fpm -> /usr/local/Cellar/php/7.3.5/sbin/php-fpm
-
-# in /usr/local/bin/
-/usr/local/bin/php -> /usr/local/Cellar/php/7.3.5/bin/php
-/usr/local/bin/pecl -> /usr/local/Cellar/php/7.3.5/bin/pecl
-/usr/local/bin/pear -> /usr/local/Cellar/php/7.3.5/bin/pear
-/usr/local/bin/peardev -> /usr/local/Cellar/php/7.3.5/bin/peardev
-/usr/local/bin/phar -> /usr/local/Cellar/php/7.3.5/bin/phar
-/usr/local/bin/phar.phar -> /usr/local/Cellar/php/7.3.5/bin/phar.phar
-/usr/local/bin/php-cgi -> /usr/local/Cellar/php/7.3.5/bin/php-cgi
-/usr/local/bin/php-config -> /usr/local/Cellar/php/7.3.5/bin/php-config
-/usr/local/bin/hpdbg -> /usr/local/Cellar/php/7.3.5/bin/phpdbg
-/usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
-```
 
 Homebrew installes the latest php CLI binaries:
 
@@ -173,6 +149,38 @@ We can configure php-fpm to auto-start by running the brew command:
 Then we can check to see if is running using the brew command:
 
 `brew services list`
+
+## Symlinks to the installation directory
+
+When installing the latest version of php using the `brew install php` command the brew installation will create the following symlinks that reference the php binaries under the base `/usr/local/Cellar/php/7.3.5/` installation directory:
+
+```bash
+/usr/local/sbin/php-fpm -> /usr/local/Cellar/php/7.3.5/sbin/php-fpm
+
+/usr/local/bin/pecl -> /usr/local/Cellar/php/7.3.5/bin/pecl
+/usr/local/bin/pear -> /usr/local/Cellar/php/7.3.5/bin/pear
+/usr/local/bin/peardev -> /usr/local/Cellar/php/7.3.5/bin/peardev
+/usr/local/bin/phar -> /usr/local/Cellar/php/7.3.5/bin/phar
+/usr/local/bin/phar.phar -> /usr/local/Cellar/php/7.3.5/bin/phar.phar
+/usr/local/bin/php -> /usr/local/Cellar/php/7.3.5/bin/php
+/usr/local/bin/php-cgi -> /usr/local/Cellar/php/7.3.5/bin/php-cgi
+/usr/local/bin/php-config -> /usr/local/Cellar/php/7.3.5/bin/php-config
+/usr/local/bin/hpdbg -> /usr/local/Cellar/php/7.3.5/bin/phpdbg
+/usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
+```
+
+> Note: If the latest version of php is v7.3 then running `brew install php` or `brew install php@7.3` will result in the same installation directory. That is the base directory would still be `/usr/local/Cellar/php/7.3.5/`. So both commands are effectively the same.
+However if latest version is 7.3 and you install an older version of php, for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see it includes the `@7.2` version number in the path.
+
+
+Brew will also create the following symlinks to the installation directory:
+
+`/usr/local/opt/php -> usr/local/Cellar/php/7.3.5`
+`/usr/local/opt/php@7.3 -> usr/local/Cellar/php/7.3.5`
+
+Note that both `/usr/locl/opt/php` and `/usr/locl/opt/php@7.3` reference the same installation.
+
+> The symlinks in the `/usr/local/opt/` directory will not be relevent to this article but in any case I mention them here for your information.
 
 ## PHP ini and configuration files
 
@@ -294,37 +302,37 @@ sudo brew services start php@7.2
 
 If we look in `/usr/local/bin/` and  `/usr/local/sbin/` before executing the commands we see the following php binary file symlinks pointing to the latest version homebrew install directories:
 
-# in /usr/local/sbin/
-php-fpm -> ../Cellar/php/7.3.5/sbin/php-fpm
+```bash
+/usr/local/sbin/php-fpm -> /usr/local/Cellar/php/7.3.5/sbin/php-fpm
 
-# in /usr/local/bin/
-php -> ../Cellar/php/7.3.5/bin/php
-pecl -> ../Cellar/php/7.3.5/bin/pecl
-pear -> ../Cellar/php/7.3.5/bin/pear
-peardev -> ../Cellar/php/7.3.5/bin/peardev
-phar -> ../Cellar/php/7.3.5/bin/phar
-phar.phar -> ../Cellar/php/7.3.5/bin/phar.phar
-php-cgi -> ../Cellar/php/7.3.5/bin/php-cgi
-php-config -> ../Cellar/php/7.3.5/bin/php-config
-hpdbg -> ../Cellar/php/7.3.5/bin/phpdbg
-phpize -> ../Cellar/php/7.3.5/bin/phpize
+/usr/local/bin/pecl -> /usr/local/Cellar/php/7.3.5/bin/pecl
+/usr/local/bin/pear -> /usr/local/Cellar/php/7.3.5/bin/pear
+/usr/local/bin/peardev -> /usr/local/Cellar/php/7.3.5/bin/peardev
+/usr/local/bin/phar -> /usr/local/Cellar/php/7.3.5/bin/phar
+/usr/local/bin/phar.phar -> /usr/local/Cellar/php/7.3.5/bin/phar.phar
+/usr/local/bin/php -> /usr/local/Cellar/php/7.3.5/bin/php
+/usr/local/bin/php-cgi -> /usr/local/Cellar/php/7.3.5/bin/php-cgi
+/usr/local/bin/php-config -> /usr/local/Cellar/php/7.3.5/bin/php-config
+/usr/local/bin/hpdbg -> /usr/local/Cellar/php/7.3.5/bin/phpdbg
+/usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
+```
 
-But after we run the command we see the symlinks point to the older v 7.3 version installation dirctories
+But after we run the `brew unlink php && brew link --force php@7.2` command we see the symlinks point to the older v 7.3 version installation dirctories
 
-# in /usr/local/sbin/
-php-fpm -> ../Cellar/php/7.3.5/sbin/php-fpm
+```bash
+/usr/local/sbin/php-fpm -> /usr/local/Cellar/php@7.2/7.2.18/sbin/php-fpm
 
-# in /usr/local/bin/
-php -> ../Cellar/php/7.3.5/bin/php
-pecl -> ../Cellar/php/7.3.5/bin/pecl
-pear -> ../Cellar/php/7.3.5/bin/pear
-peardev -> ../Cellar/php/7.3.5/bin/peardev
-phar -> ../Cellar/php/7.3.5/bin/phar
-phar.phar -> ../Cellar/php/7.3.5/bin/phar.phar
-php-cgi -> ../Cellar/php/7.3.5/bin/php-cgi
-php-config -> ../Cellar/php/7.3.5/bin/php-config
-hpdbg -> ../Cellar/php/7.3.5/bin/phpdbg
-phpize -> ../Cellar/php/7.3.5/bin/phpize
+/usr/local/bin/pecl -> /usr/local/Cellar/php@7.2/7.2.18/bin/pecl
+/usr/local/bin/pear -> /usr/local/Cellar/php@7.2/7.2.18/bin/pear
+/usr/local/bin/peardev -> /usr/local/Cellar/php@7.2/7.2.18/bin/peardev
+/usr/local/bin/phar -> /usr/local/Cellar/php@7.2/7.2.18/bin/phar
+/usr/local/bin/phar.phar -> /usr/local/Cellar/php@7.2/7.2.18/bin/phar.phar
+/usr/local/bin/php -> /usr/local/Cellar/php@7.2/7.2.18/bin/php
+/usr/local/bin/php-cgi -> /usr/local/Cellar/php@7.2/7.2.18/bin/php-cgi
+/usr/local/bin/php-config -> /usr/local/Cellar/php@7.2/7.2.18/bin/php-config
+/usr/local/bin/phpdbg -> /usr/local/Cellar/php@7.2/7.2.18/bin/phpdbg
+/usr/local/bin/phpize -> /usr/local/Cellar/php@7.2/7.2.18/bin/phpize
+```
 
 Remember that we added `/usr/local/bin/` and  `/usr/local/sbin/` to our PATH variable so when we run the `php` or `pecl` commands we are executing the command that is symlinked to the proper version of the binary file we want to run. And since we are running the symlinked version of `pecl`, the php extensions that we install or uninstall are installed in the proper versions extenion file directory.
 
