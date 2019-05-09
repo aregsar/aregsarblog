@@ -227,17 +227,19 @@ Normally php extensions are installed as standard php extensions and will be ref
 
 So if we run `pecl install memcached` for instance, the extension will be installed at `/usr/local/lib/php/pecl/20180731/memcached.so` and `extension="memcached.so"` will be added to the top of the php.ini file.
 
-> Note: when installing the memcached extension on my machine, a cached version of a previous install was not cleaned up so pecl was detecting memcached was installed when in fact it was not. To solve this I did a `pecl uninstall memcached` and then I re-installed the extension with `pecl install memcached` and that resolved the issue.
+## How to resolve missing extension issue encountered with pecl
 
-## How to resovle issue encountered with pecl
+Sometimes even after a clean install, the `pecl list` command reports that an extension is installed when `php -m` does not detect the extension. In fact after checking the proper extensions directory for the active php version the extension file is actually not there. Also looking in the php.ini file for the active version, the extension setting is not listed there either.
 
-Sometimes even after a clean install, the `pecl list` command reports that an extension is installed when `php -m` does not detect the extension. In fact after checking the proper extensions directory for the active php version the extension file is actually not there. Also looking in the php.ini file for the active version, the extension is not listed there either.
-
-This means `pecl list` is actually in error and probably has a cache somewhere that is not cleared. Attempting to actually install the extension using `pecl install` in this scenario fails and reports that the extension is already installed.
+This means that `pecl list` is actually in error and probably has a cache somewhere that is not cleared. Attempting to actually install the extension using `pecl install` in this scenario fails and reports that the extension is already installed.
 
 There are two ways to get around this issue. The easiest way is just to force pecl to install the extension using the `--force` flag. The other way is to first run `pecl uninstall` to clear the cache and then run `pecl install` to install the extension.
 
-I ran in this scenario when I had installed xdebug and memcached for the latest php version and then after doing a fresh install of php, pecl list would report both extensions as already existing where in fact the files were not there, php.ini did not have them and php did not detect them. I force installed them using `pecl install --force xdebug` and `pecl install --force memcached` which added the files and the php.ini settings and php detected the extensions again.
+I ran into this issue when I had installed xdebug and memcached for the latest php version and then after doing a fresh install of php, `pecl list` would report both extensions as already existing where in fact the files were not there, php.ini did not have them and php did not detect them. 
+
+I force installed the extensions using `pecl install --force xdebug` and `pecl install --force memcached` which added the files and the php.ini settings and then php detected the extensions again.
+
+> Note: when installing the memcached extension on my machine, a cached version of a previous install was not cleaned up so pecl was detecting memcached was installed when in fact it was not. To solve this I did a `pecl uninstall memcached` and then I re-installed the extension with `pecl install memcached` and that resolved the issue.
 
 > Its good practice to run `php -m` after running `pecl install` to make sure the extension is detected by php.
 If the extension file exists in the extensions directory and php does not detect it, check the php.ini file to make sure the extension is added to the file.
