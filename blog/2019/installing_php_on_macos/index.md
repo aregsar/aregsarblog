@@ -74,37 +74,7 @@ Now install the latest PHP version using the command:
 
 `brew install php`
 
-After running this command latest version of php (7.3 at this time ) will be installed.
-
-The latest version of php will be installed at:
-
-`usr/local/Cellar/php/7.3.5`
-
-brew will create the following symlinks to the installation directory as well:
-
-`/usr/locl/opt/php -> usr/local/Cellar/php/7.3.5`
-`/usr/locl/opt/php@7.3 -> usr/local/Cellar/php/7.3.5`
-
-Note that both /usr/locl/opt/php and /usr/locl/opt/php@7.3 reference the same installation.
-
-> The symlinks above will not be relevent to this article but I mentioned them here FYI in any case.
-
-The following symlinks that reference the php binaries are also created by brew in the /usr/local/sbin/ and /usr/local/bin/ directories:
-
-# in /usr/local/sbin/
-php-fpm -> ../Cellar/php/7.3.5/sbin/php-fpm
-
-# in /usr/local/bin/
-php -> ../Cellar/php/7.3.5/bin/php
-pecl -> ../Cellar/php/7.3.5/bin/pecl
-pear -> ../Cellar/php/7.3.5/bin/pear
-peardev -> ../Cellar/php/7.3.5/bin/peardev
-phar -> ../Cellar/php/7.3.5/bin/phar
-phar.phar -> ../Cellar/php/7.3.5/bin/phar.phar
-php-cgi -> ../Cellar/php/7.3.5/bin/php-cgi
-php-config -> ../Cellar/php/7.3.5/bin/php-config
-hpdbg -> ../Cellar/php/7.3.5/bin/phpdbg
-phpize -> ../Cellar/php/7.3.5/bin/phpize
+After running this command latest version of php (7.3 as of this time) will be installed.
 
 You can run the following command to verify the current php version.
 
@@ -138,7 +108,39 @@ where the first line is my latest php version 7.3.
 
 ## The installation directories
 
-Homebrew installes the latest php binaries:
+The latest version of php will be installed at:
+
+`/usr/local/Cellar/php/7.3.5`
+
+brew will create the following symlinks to the installation directory as well:
+
+`/usr/local/opt/php -> usr/local/Cellar/php/7.3.5`
+`/usr/local/opt/php@7.3 -> usr/local/Cellar/php/7.3.5`
+
+Note that both /usr/locl/opt/php and /usr/locl/opt/php@7.3 reference the same installation.
+
+> The symlinks in the `/usr/local/opt/` directory will not be relevent to this article but in any case I mention them here for your information.
+
+The following symlinks that reference the php binaries are also created by brew:
+
+```bash
+# in /usr/local/sbin/
+/usr/local/sbin/php-fpm -> /usr/local/Cellar/php/7.3.5/sbin/php-fpm
+
+# in /usr/local/bin/
+/usr/local/bin/php -> /usr/local/Cellar/php/7.3.5/bin/php
+/usr/local/bin/pecl -> /usr/local/Cellar/php/7.3.5/bin/pecl
+/usr/local/bin/pear -> /usr/local/Cellar/php/7.3.5/bin/pear
+/usr/local/bin/peardev -> /usr/local/Cellar/php/7.3.5/bin/peardev
+/usr/local/bin/phar -> /usr/local/Cellar/php/7.3.5/bin/phar
+/usr/local/bin/phar.phar -> /usr/local/Cellar/php/7.3.5/bin/phar.phar
+/usr/local/bin/php-cgi -> /usr/local/Cellar/php/7.3.5/bin/php-cgi
+/usr/local/bin/php-config -> /usr/local/Cellar/php/7.3.5/bin/php-config
+/usr/local/bin/hpdbg -> /usr/local/Cellar/php/7.3.5/bin/phpdbg
+/usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
+```
+
+Homebrew installes the latest php CLI binaries:
 
 `/usr/local/Cellar/php/7.3.5/bin`
 
@@ -150,7 +152,7 @@ We just need to make sure we have `/usr/local/bin` in our PATH envoronment varia
 
 Also the `pecl` CLI for installing php extensions is located at:
 
-`/usr/local/Cellar/php/7.3.5/bin/pecl`.
+`/usr/local/Cellar/php/7.3.5/bin/pecl`
 
 Similarly homebrew installs the system binaries for php in:
 
@@ -158,7 +160,7 @@ Similarly homebrew installs the system binaries for php in:
 
 Therefore the `php-fpm` server is installed at:
 
-`/usr/local/Cellar/php/7.3.5/sbin/php-fpm`.
+`/usr/local/Cellar/php/7.3.5/sbin/php-fpm`
 
 To be able to access the php cli and php-fpm server binaries, my PATH variable starts with:
 
@@ -196,7 +198,7 @@ To find the location of the php.ini file you can run the following command:
 
 ## Installing PHP extensions using PECL
 
-The pecl cli installed by homebrew can be used to install further php extensions that we requires by running the command `pecl install <extension>`.
+The pecl CLI installed by homebrew can be used to install further php extensions that we may require by running the command `pecl install <extension>`.
 
 For instance we can install the xdebug extension by typing:
 
@@ -206,9 +208,9 @@ and we can list the pecl installed php extensions by running:
 
 `pecl list` or `php -m`
 
-The directory where the php extensions are installed depends on the php version.
+The directory where the php extensions are installed depends on the php version. Each installed php version will add a release date directory to the base extentions directory underwhich the extensions will be added.
 
-Each installed php version will have its own php.ini file within which the php extensions directory is specified. The setting in the php.ini file that does this is:
+Each installed php version will has its own php.ini configuration file within which the php extensions directory for that version is specified. The setting in the php.ini file that specifies the installation directory is:
 
 `extension_dir = "/usr/local/lib/php/pecl/20180731"`
 
@@ -220,25 +222,29 @@ To show the value of pecl extension directory setting in the php.ini file , you 
 
 `pecl config-get ext_dir`
 
+To print all pecl configuration settings run the following:
+
+`pecl config-show`
+
 > Note: It may appear that the php extensions are also installed in `/usr/local/Cellar/php/7.3.5/pecl/20180731/`, but that is because `/usr/local/Cellar/php/7.3.5/pecl/` is a symlink to `/usr/local/lib/php/pecl/`.
 
 ## How php detects pecl installed extensions
 
-In order for php to detect pecl installed extensions, we must declare them in the php.ini file. The pecl install command adds the extension to the php.ini file for us.
+In order for php to detect pecl installed extensions, we must declare them in the php.ini file. The `pecl install` command will add the extension to the php.ini file for us.
 
 If we look inside the php.ini file we will see that xdebug is actually installed as a special type of extension that is a zend extension:
 
 `zend_extension="xdebug.so"`
 
-Normally php extensions are installed as standard php extensions and will be reference in the php.ini file as:
+Normally php extensions are installed as standard php extensions and will be referenced in the php.ini file as:
 
 `extension="<php-extension>.so"`
 
-So if we run `pecl install memcached` for instance, the extension will be installed at `/usr/local/lib/php/pecl/20180731/memcached.so` and `extension="memcached.so"` will be added to the php.ini file.
+So if we run `pecl install memcached` for instance, the extension will be installed at `/usr/local/lib/php/pecl/20180731/memcached.so` and `extension="memcached.so"` will be added to the top of the php.ini file.
 
 > Note: when installing the memcached extension on my machine, a cached version of a previous install was not cleaned up so pecl was detecting memcached was installed when in fact it was not. To solve this I did a `pecl uninstall memcached` and then I re-installed the extension with `pecl install memcached` and that resolved the issue.
 
-> Note: if after installing the xdebug extension, if it is not detected and listed under [Zend Modules] when running `php -m` make sure that `zend_extension="xdebug.so"` is added to the top of the php.ini file, and if any standard installed php extension is not listed under [PHP Modules] when running `php -m` make sure that the `extension="<php-extension>.so"` for that extension name is added to the top of the php.ini file.
+> Note: if after installing the xdebug extension, it is not detected and listed under [Zend Modules] when running `php -m` make sure that `zend_extension="xdebug.so"` is added to the top of the php.ini file, and if any standard installed php extension is not listed under [PHP Modules] when running `php -m` make sure that the `extension="<php-extension>.so"` for that extension name is added to the top of the php.ini file.
 
 Its good practice to run `pecl list` and check the pecl extensions directory after running `pecl install` to make sure the extension is indeed installed. Then you should run `php -m` to make sure the extension is detected by php and if not, make sure that the extension setting for each installed extenion is added to the php.ini file.
 
@@ -379,7 +385,8 @@ Here is a recap of the directories for the latest and older version of php after
 
 After running `brew install php`
 
-
+#php installed at
+/usr/local/Cellar/php/7.3.5/bin/
 
 
 
