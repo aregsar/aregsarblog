@@ -233,6 +233,47 @@ So if we run `pecl install memcached` for instance, the extension will be instal
 
 Its good practice to run `pecl list` and check the pecl extensions directory after running `pecl install` to make sure the extension is indeed installed. Then you should run `php -m` to make sure the extension is detected by php and if not, make sure that the extension setting for each installed extenion is added to the php.ini file.
 
+## running the php-fpm service using brew
+
+We can check to see all the versions of php-fpm installed on our machine by running:
+
+`brew services list | grep php`
+
+On my machine I see:
+
+```bash
+php       stopped
+php@7.2   stopped
+```  
+
+The first line is the php-fpm service for the latest version.
+
+We can use brew to configure latest version of php-fpm to auto-start by running the brew command:
+
+`sudo brew services start php`
+
+Now when we run `brew services list | grep php` again and we will see:
+
+```bash
+php       started root           /Library/LaunchDaemons/homebrew.mxcl.php.plist
+php@7.2   stopped
+```
+
+brew will add the file `/Library/LaunchDaemons/homebrew.mxcl.php.plist` when we run the service
+
+We can stop the service by running `sudo brew services stop php`
+
+Running `brew services list | grep php` again we see the service is stopped and the file `/Library/LaunchDaemons/homebrew.mxcl.php.plist` is removed:
+
+```bash
+php       stopped
+php@7.2   stopped
+```  
+
+> Note: We can start or stop either version of php-fpm regardless of which installed version of php is configured as our current version.
+So if we have both the latest version 7.3 and php 7.2 installed but we have configured version 7.3 to be our current active version, as described in the next section, we can still run `sudo brew services start php@7.2` to run the 7.2 installed version.
+However it recommended to run the php-fpm version that matches your current active version . You can check the current active version by runnung `php -v`.
+
 ## installing older versions of php
 
 The installation steps for installing older versions of php is the same except you specify the version number in the install command
