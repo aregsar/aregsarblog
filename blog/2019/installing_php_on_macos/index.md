@@ -10,17 +10,21 @@ In this post I will detail the installation steps to install PHP on a Mac using 
 
 Before we install PHP we need to install the Homebrew package manager, here after referenced simply as brew.
 
-The installations for installing brew are at https://brew.sh/. You simply run the following bash statement:
+The installations for installing brew are located at [https://brew.sh/](https://brew.sh/).
+
+Gathered from the docs, you can run the following bash statement to install brew:
 
 ```bash
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-The bash script downloads and runs a Ruby language script using the default Ruby installation on your Mac.
+This bash script downloads and runs a Ruby language script using the default Ruby installation on your Mac.
 
 ## Updating Homebrew
 
-If you already had brew installed, make sure to update it before installing PHP by running `brew update`
+If you already have brew installed, make sure to update it before installing PHP by running:
+
+`brew update`
 
 > Note: Be careful to not run __brew upgrade__ instead, which updates all the packages that brew has installed on your system.
 
@@ -28,23 +32,24 @@ Run `brew doctor` afterwards to make sure brew does not see any issues with curr
 
 ## Upgrading to the latest PHP Homebrew installation
 
-If you already have a PHP version installed, you can run `brew upgrade php` to upgrade to the latest released PHP version.
+If you already have a PHP version installed by brew, you can run `brew upgrade php` to upgrade the latest version of PHP installed on your machine to the latest released version of PHP.
 
-You will notice that we don't specify the php version in the brew command. That is because the latest version of the installed software does not use the version number to name the installation directories.
+> Note: We did not specify the php version to upgrade which defaults to upgrade the latest installed version on our machine.
 
 > Note: Even if you are on the latest minor release of PHP, running `brew upgrade php` will ensure that all the latest patches are applied.
 
-## Upgrading a specific PHP homebrew installation
+## Upgrading a specific PHP version Homebrew installation
 
-If you have multiple PHP versions installed, you can upgrade the older versions with the latest patches by running `brew upgrate php@<version>`.
+If you have multiple PHP versions installed by brew, you can upgrade the older versions with the latest patches by running `brew upgrate php@<version>`.
 
 When installing older versions of software, brew uses the version number to name the installation directories so we have to use the version number in the command to tell brew which version we want to upgrade.
 
-So for instance if you have the latest PHP version (7.3) installed and you also have PHP version 7.2 installed, you can run `brew upgrate php` to upgrade the latest version and run `brew upgrade php@7.2` to upgrade the older version 7.2.
+So for instance if you have the latest PHP version 7.3 installed and you also have PHP version 7.2 installed, you can run `brew upgrate php` to upgrade the PHP version 7.3 and run `brew upgrade php@7.2` to upgrade the older version 7.2.
 
 ## Removing all brew installed versions of PHP
 
-To do a fresh install, we will first remove any existing brew PHP installations.
+To do a fresh install, we first need to remove any existing brew PHP installations.
+
 The following is the bash commands I use to clean out my PHP installation directories:
 
 ```bash
@@ -60,7 +65,7 @@ brew untap homebrew/homebrew-dupes
 
 The first line in the above bash statements goes through all installed versions and removes them all.
 
-> Note: some of the commands above may not be required, but running them all will ensure a clean uninstall.
+> Note: some of the commands above may not be required, but running them all will ensure a clean uninstall. You can safely ignore any file or directory does not exist errors.
 
 ## Installing the latest PHP version
 
@@ -74,15 +79,15 @@ You can run the following command to verify the current PHP version.
 
 `php -v`
 
-Run the following to see all information and configuration settings regarding the installed version:
+Run the following to see all information and configuration settings for the installed version:
 
 `php -i`
 
-Run the following to list the installed PHP extensions:
+Run the following to only list the installed PHP extensions:
 
 `php -m`
 
-Run this command to see the symlink created that points to the installed PHP CLI binary:
+Run the following command to see the symlink created that points to the installed PHP CLI binary:
 
 `which php`
 
@@ -90,8 +95,7 @@ You can show all installed versions of PHP by running:
 
 `brew list | grep php`
 
-The result of this command that does not have an extension is the latest version.
-On my machine I see two results the first is for the latest PHP v7.3 and the other is obviously PHP v7.2:
+On my machine I see two results the first result is for the latest PHP v7.3 and the other is obviously PHP v7.2:
 
 ```bash
 php #latest version 7.3
@@ -100,18 +104,18 @@ php@7.2
 
 ## The installation directories
 
-For PHP v7.3, which is the latest version of php as of this article date, when we run the `brew install php` command, the php files will be installed under the base path of:
+When we run the `brew install php` command, the latest version of PHP is installed with files placed under the base path of:
 
 `/usr/local/Cellar/php/7.3.5`
 
 > Note: If the latest version of PHP is v7.3, then running `brew install php` or `brew install php@7.3` will result in the same installation directory. That is, the base directory would still be `/usr/local/Cellar/php/7.3.5/`. So both commands are effectively the same.
-However if latest version is 7.3 and we install an older version of PHP, say for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see includes the `@7.2` version number in the path and has the latest PHP 7.2 version number.
+However if the latest version is v7.3 and we install an older version of PHP, say for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see includes the `@7.2` version and the PHP 7.2 release version number in the path.
 
-brew installs the latest PHP binaries at:
+Brew installs the latest PHP binaries under the bin sub directory:
 
 `/usr/local/Cellar/php/7.3.5/bin`
 
-So the `php` cli is located at `/usr/local/Cellar/php/7.3.5/bin/php` and the `pecl` cli for installing PHP extensions is located at `/usr/local/Cellar/php/7.3.5/bin/pecl`
+So the `php` CLI is located at `/usr/local/Cellar/php/7.3.5/bin/php` and the `pecl` CLI for installing PHP extensions is located at `/usr/local/Cellar/php/7.3.5/bin/pecl`
 
 Similarly brew installs the latest system binaries for PHP at:
 
@@ -121,17 +125,19 @@ Therefore the `php-fpm` server is installed at `/usr/local/Cellar/php/7.3.5/sbin
 
 Brew also adds symlinks that point to the installed binary files in the `/usr/local/bin/` and `/usr/local/sbin` directories.
 
-For instance it adds the symlink `/usr/local/bin/php` symlink that points to the `/usr/local/Cellar/php/7.3.5/bin/php` binary.
+For instance it adds the symlink `/usr/local/bin/php` that points to the `/usr/local/Cellar/php/7.3.5/bin/php` binary.
 
-So to be able to run the PHP commands globally we then need to add `/usr/local/bin` and `/usr/local/sbin` in our PATH environment variable.
+## Adding the binary file symlinks to the PATH variable
 
-For example, to be able to access the PHP cli and php-fpm server binaries, my PATH variable starts with:
+To be able to run the PHP and PECL CLI commands globally we need to add the `/usr/local/bin` and `/usr/local/sbin` symlink directories to our PATH environment variable.
+
+For example, to be able to globally run the php, pecl and php-fpm commands, my PATH variable starts with:
 
 `export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin`
 
 ## Symlinks to the installation directory
 
-As mentioned before, when installing the latest version of PHP using the `brew install php` command the brew installation will create symlinks that reference the PHP binaries under the base `/usr/local/Cellar/php/7.3.5/` installation directory.
+As mentioned before, when installing the latest version of PHP using the `brew install php` command the brew installation will create symlinks that reference the PHP binaries under the `/usr/local/Cellar/php/7.3.5/bin/` installation directory.
 
 Here is a full list of the symlinks:
 
@@ -150,14 +156,12 @@ Here is a full list of the symlinks:
 /usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
 ```
 
-Brew will also create the following symlinks to the installation directory:
+Brew will also create the following symlinks to the base installation directory:
 
 `/usr/local/opt/php -> usr/local/Cellar/php/7.3.5`
 `/usr/local/opt/php@7.3 -> usr/local/Cellar/php/7.3.5`
 
-Note that both `/usr/locl/opt/php` and `/usr/locl/opt/php@7.3` reference the same installation.
-
-> Note: The symlinks in the `/usr/local/opt/` directory will not be relevant to this article but in any case I mention them here for your information.
+> Note that both `/usr/locl/opt/php` and `/usr/locl/opt/php@7.3` reference the same installation directory. The symlinks in the `/usr/local/opt/` directory will not be relevant to this article but in any case I mention them here for your information.
 
 ## PHP ini and configuration files
 
@@ -165,7 +169,7 @@ The brew installation puts the configuration files for installed PHP versions in
 
 `/usr/local/etc/php/<version>/`
 
-So the brew installation for the latest PHP version on my machine put all configuration files for the PHP cli and php-fpm in:
+So the brew installation for the latest PHP version on my machine put all configuration files for the PHP CLI and PHP_FPM in:
 
 `/usr/local/etc/php/7.3/`
 
@@ -177,21 +181,25 @@ and the php-fpm.conf file at:
 
 `/usr/local/etc/php/7.3/php-fpm.conf`
 
-To find the location of the php.ini file you can run the following command:
+To show the location of the php.ini file you can run the following command:
 
 `pear config-show | grep php.ini`
 
 ## Installing PHP extensions using PECL
 
-The PECL CLI installed by brew can be used to install further PHP extensions that we may require by running the command `pecl install <extension>`.
+The PECL CLI installed by brew can be used to install specific PHP extensions that we may require for our projects. 
+
+We can install extensions by running the command `pecl install <extension>`.
 
 For instance we can install the xdebug extension by typing:
 
 `pecl install xdebug`
 
-and we can list the PECL installed PHP extensions by running:
+We can list the PECL installed PHP extensions by running:
 
-`pecl list` or `php -m`
+`php -m`
+
+> Note: The `pecl list` command can  also be used to list the installed extensions. However there is an issue with this command that I will detail later which means that the only reliable way to see if an installed extension is recognized by PHP is by run `php -m`.
 
 The directory where the PHP extensions are installed depends on the PHP version. Each installed php version will add a release date directory to the base extension directory under which the extensions will be added.
 
