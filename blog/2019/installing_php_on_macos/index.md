@@ -515,7 +515,17 @@ Also as an FYI there is an alternate installation location for PHP binaries for 
 
 ## Conclusion
 
-In this article I listed the steps to take to install the Homebrew package manager for the macOS. and then use brew to install multiple PHP versions.
+In this article I listed the steps to take to install the Homebrew package manager for the macOS.
+
+Next I showed how to upgrade an existing PHP installation using brew.
+
+Then I showed how we can use brew to install the latest version of PHP from scratch followed by instructions on how to also install older versions of PHP side by side using brew.
+
+I also explained how to use the PECL extension manager CLI for managing PHP extensions for each installed version of PHP.
+
+Finally I showed how we can switch the active PHP version between multiple installed versions of PHP.
+
+In the process I detailed where the PHP configuration files are installed and the configuration settings required for the PHP extensions. I also detailed the installation directories for the PHP binaries for each installed version.
 
 The following resources were used to produce this article:
 
@@ -532,3 +542,5 @@ The following resources were used to produce this article:
 [https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/)](https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/)
 
 [https://discourse.brew.sh/t/pecl-with-multiple-php-versions/1977/2](https://discourse.brew.sh/t/pecl-with-multiple-php-versions/1977/2)
+
+Thanks for reading.
