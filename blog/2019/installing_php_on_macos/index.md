@@ -445,9 +445,9 @@ pcre.jit=0
 
 ## Recap of installation directories for latest version and version 7.2
 
-Here is a recap of the directories for the latest PHP version and PHP version 7.2 for quick reference:
+Here is a recap of the directories for the latest PHP version 7.3 and the older PHP version 7.2 for quick reference:
 
-After running `brew install php` we have the following installation directories:
+After running `brew install php` to install the latest version 7.3 we have the following installation directories:
 
 PHP binaries:
 
@@ -495,11 +495,13 @@ Opcache extension location:
 
 `/usr/local/Cellar/php@7.2/7.2.18/lib/php/20170718/opcache.so`
 
-> Note: Installing older version of PHP does not create new symlinks to the installed binaries. We need to unlink the active version and link to the older version for brew to remove the existing symlinks and create new symlinks for the old installation.
+> Note: Installing the older versions of PHP does not create new symlinks to the installed binaries. We need to unlink the active latest version and link to the older version for brew to remove the existing symlinks and create new symlinks to the old versions installed binaries.
 
-> Note: directories `/usr/local/Cellar/php/7.3.5/pecl` and `/usr/local/Cellar/php@7.2/7.2.18/pecl` created by the brew for the latest and 7.2 versions are both symlinks to `/usr/local/lib/php/pecl` which is the base directory for the PHP extensions for each installed version of PHP.
+After we install the latest PHP version or after we install and switch the active version to an older version of PHP, we can run `pecl install` to add the specific PHP extensions that we need for the active version. And we can add the `--force` flag to the `pecl install` command in the case where pecl mistakingly thinks that the extension is already installed.
 
-Also FYI there is an alternate installation location for PHP binaries for both versions that is not used:
+> Note: directories `/usr/local/Cellar/php/7.3.5/pecl` and `/usr/local/Cellar/php@7.2/7.2.18/pecl` created by the brew for the latest and 7.2 versions are both symlinks to `/usr/local/lib/php/pecl` which is the common base path for the PHP extensions for each installed version of PHP.
+
+Also as an FYI there is an alternate installation location for PHP binaries for both versions that is not used:
 
 `/usr/local/opt/php/bin/php`
 `/usr/local/opt/php/bin/pecl`
@@ -511,14 +513,9 @@ Also FYI there is an alternate installation location for PHP binaries for both v
 `/usr/local/opt/php@7.2/bin/pecl`
 `/usr/local/opt/php@7.2/sbin/php-fpm`
 
-After we install the latest PHP version or after we install and switch to an older version we can run `pecl install` to add the extension we need. We can add the --force flag to the pecl install command in the case where pecl mistakingly thinks that the extension is already installed.
-
 ## Conclusion
 
-pecl install --force xdebug
-pecl install --force memcached
-
-In this article I listed the steps to take to install brew and then use brew to install multiple PHP versions.
+In this article I listed the steps to take to install the Homebrew package manager for the macOS. and then use brew to install multiple PHP versions.
 
 The following resources were used to produce this article:
 
