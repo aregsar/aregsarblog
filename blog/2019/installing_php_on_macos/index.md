@@ -1,6 +1,6 @@
 # Installing PHP on macOS
 
-[installing_php_on_macOS](https://aregsar.com/blog/2019/installing_php_on_macos)
+May 13, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Introduction
 

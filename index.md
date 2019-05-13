@@ -1,5 +1,9 @@
 # All Posts
 
+May 13, 2019
+
+[installing_php_on_macOS](https://aregsar.com/blog/2019/installing_php_on_macos)
+
 Mar 22, 2019
 
 [Git pull configuration for trunk based development](https://aregsar.com/blog/2019/git-pull-configuration-for-trunk-based-development)
