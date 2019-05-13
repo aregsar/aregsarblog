@@ -1,4 +1,4 @@
-# installing_php_on_macos
+# installing_php_on_macOS
 
 [installing_php_on_macos](https://aregsar.com/blog/2019/installing_php_on_macos)
 
@@ -22,7 +22,7 @@ The bash script downloads and runs a Ruby language script using the default Ruby
 
 If you already had brew installed, make sure to update it before installing PHP by running `brew update`
 
-> Note: Be careful to not run __brew upgade__ instead, which updates all the packages that brew has installed on your system.
+> Note: Be careful to not run __brew upgrade__ instead, which updates all the packages that brew has installed on your system.
 
 Run `brew doctor` afterwards to make sure brew does not see any issues with current installed packages.
 
@@ -30,7 +30,7 @@ Run `brew doctor` afterwards to make sure brew does not see any issues with curr
 
 If you already have a PHP version installed, you can run `brew upgrade php` to upgrade to the latest released PHP version.
 
-You will notice that we dont specify the php version in the brew command. That is because the latest version of the installed software does not use the version number to name the installation directories.
+You will notice that we don't specify the php version in the brew command. That is because the latest version of the installed software does not use the version number to name the installation directories.
 
 > Note: Even if you are on the latest minor release of PHP, running `brew upgrade php` will ensure that all the latest patches are applied.
 
@@ -38,7 +38,7 @@ You will notice that we dont specify the php version in the brew command. That i
 
 If you have multiple php versions installed, you can upgrade the older versions with the latest patches by running `brew upgrate php@<version>`.
 
-When installing older versions of software, brew uses the version number to name the installion directories so we have to use the version number in the command to tell brew which version we want to upgrade.
+When installing older versions of software, brew uses the version number to name the installation directories so we have to use the version number in the command to tell brew which version we want to upgrade.
 
 So for instance if you have the latest PHP version (7.3) installed and you also have PHP version 7.2 installed, you can run `brew upgrate php` to upgrade the latest version and run `brew upgrade php@7.2` to upgrade the older version 7.2.
 
@@ -107,7 +107,7 @@ For php v7.3, which is the latest version of php as of this article date, when w
 > Note: If the latest version of php is v7.3, then running `brew install php` or `brew install php@7.3` will result in the same installation directory. That is, the base directory would still be `/usr/local/Cellar/php/7.3.5/`. So both commands are effectively the same.
 However if latest version is 7.3 and we install an older version of php, say for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see includes the `@7.2` version number in the path and has the latest php 7.2 version number.
 
-Homebrew installes the latest php binaries at:
+Homebrew installs the latest php binaries at:
 
 `/usr/local/Cellar/php/7.3.5/bin`
 
@@ -123,7 +123,7 @@ Brew also adds symlinks that point to the installed binary files in the `/usr/lo
 
 For instance it adds the symlink `/usr/local/bin/php` symlink that points to the `/usr/local/Cellar/php/7.3.5/bin/php` binary.
 
-So to be able to run the php commands globally we then need to add `/usr/local/bin` and `/usr/local/sbin` in our PATH envoronment variable.
+So to be able to run the php commands globally we then need to add `/usr/local/bin` and `/usr/local/sbin` in our PATH environment variable.
 
 For example, to be able to access the php cli and php-fpm server binaries, my PATH variable starts with:
 
@@ -157,7 +157,7 @@ Brew will also create the following symlinks to the installation directory:
 
 Note that both `/usr/locl/opt/php` and `/usr/locl/opt/php@7.3` reference the same installation.
 
-> Note: The symlinks in the `/usr/local/opt/` directory will not be relevent to this article but in any case I mention them here for your information.
+> Note: The symlinks in the `/usr/local/opt/` directory will not be relevant to this article but in any case I mention them here for your information.
 
 ## PHP ini and configuration files
 
@@ -193,7 +193,7 @@ and we can list the pecl installed php extensions by running:
 
 `pecl list` or `php -m`
 
-The directory where the php extensions are installed depends on the php version. Each installed php version will add a release date directory to the base extentions directory underwhich the extensions will be added.
+The directory where the php extensions are installed depends on the php version. Each installed php version will add a release date directory to the base extension directory under which the extensions will be added.
 
 Each installed php version will has its own php.ini configuration file within which the php extensions directory for that version is specified. The setting in the php.ini file that specifies the installation directory is:
 
@@ -287,7 +287,7 @@ On my machine, the actual full path of the LaunchDaemons files created for each 
 
 > Note: We can start or stop either version of php-fpm regardless of which installed version of php is configured as our current version.
 So if we have both the latest version 7.3 and php 7.2 installed but we have configured version 7.3 to be our current active version, as described in the following sections, we can still run `sudo brew services start php@7.2` to run the 7.2 installed version.
-However it recommended to run the php-fpm version that matches your current active version . You can check the current active version by runnung `php -v`.
+However it recommended to run the php-fpm version that matches your current active version . You can check the current active version by running `php -v`.
 
 ## Installing older versions of php
 
@@ -321,7 +321,7 @@ where the `/usr/local/etc/php/7.2/php.ini` file will contain the pecl installati
 
 Now when we run the v 7.2 pecl command `/usr/local/Cellar/php@7.2/7.2.18/bin/pecl install xdebug` for instance, the xdebug.so extension file will be installed in the `/usr/local/lib/php/pecl/20170718` directory.
 
-> Normally we would switch the active php version we are using as described in the next section and then just use the global pecl command to install extensions, instead of referenceing the full pecl path for a specific version.
+> Normally we would switch the active php version we are using as described in the next section and then just use the global pecl command to install extensions, instead of referencing the full pecl path for a specific version.
 
 ## Switching between latest and older installed php versions
 
@@ -356,7 +356,7 @@ If we look in `/usr/local/bin/` and  `/usr/local/sbin/` before executing the `br
 /usr/local/bin/phpize -> /usr/local/Cellar/php/7.3.5/bin/phpize
 ```
 
-But after we run the `brew unlink php && brew link --force php@7.2` command we see the symlinks point to the older 7.2 version installation dirctories:
+But after we run the `brew unlink php && brew link --force php@7.2` command we see the symlinks point to the older 7.2 version installation directories:
 
 ```bash
 /usr/local/sbin/php-fpm -> /usr/local/Cellar/php@7.2/7.2.18/sbin/php-fpm
@@ -375,7 +375,7 @@ But after we run the `brew unlink php && brew link --force php@7.2` command we s
 
 Remember that we added `/usr/local/bin/` and  `/usr/local/sbin/` to our PATH variable so when we run the `php` or `pecl` commands we will execute the command that is symlinked to the proper version of the binary file we want to run.
 
-And since we are running the symlinked version of `pecl`, the php extensions that we install (or uninstall) will installed in the proper version's extenion file directory.
+And since we are running the symlinked version of `pecl`, the php extensions that we install (or uninstall) will installed in the proper version's extension file directory.
 
 Running `php -v` we can see that the older version 7.2 is reported.
 
@@ -389,11 +389,11 @@ sudo brew services start php
 
 Running `php -v` we can see that the latest version is reported again.
 
-> Note: PHP extensions installed using `pecl install` command are installed for the version of the php that is currently activated. So you must install php extensions you need for each installed version of php seperately after you switch to that version of php.
+> Note: PHP extensions installed using `pecl install` command are installed for the version of the php that is currently activated. So you must install php extensions you need for each installed version of php separately after you switch to that version of php.
 
->Also note that the version of an extension that you need to install for older version might not be the latest version of the extension because the latest version of the extension may be incompatible with the older php version. In that case you need to install the specific version of the extenion you need by specifying the extension version when you run pecl install. For instance instead of `pecl install xdebug` which will install the latest version of the extension, you might need to run `pecl install xdebug-2.7.1`. 
+>Also note that the version of an extension that you need to install for older version might not be the latest version of the extension because the latest version of the extension may be incompatible with the older php version. In that case you need to install the specific version of the extension you need by specifying the extension version when you run pecl install. For instance instead of `pecl install xdebug` which will install the latest version of the extension, you might need to run `pecl install xdebug-2.7.1`. 
 
-You can upgrade the installed version of an extenion by running `pecl upgrade <extension-name>`. For instance `pecl upgrade xdebug` will upgrade the xdebug extension to the latest version.
+You can upgrade the installed version of an extension by running `pecl upgrade <extension-name>`. For instance `pecl upgrade xdebug` will upgrade the xdebug extension to the latest version.
 
 ## Resolving PHP 7.3 and JIT Compiler error
 
@@ -408,7 +408,7 @@ cd cd /usr/local/etc/php/7.3
 cat php.ini | grep 'pcre.jit'
 ```
 
-uncommnet the setting:
+uncomment the setting:
 ;pcre.jit=1
 
 and change its value:
