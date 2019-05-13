@@ -26,7 +26,7 @@ If you already had brew installed, make sure to update it before installing PHP 
 
 Run `brew doctor` afterwards to make sure brew does not see any issues with current installed packages.
 
-## Upgrading to the latest PHP homebrew installation
+## Upgrading to the latest PHP Homebrew installation
 
 If you already have a PHP version installed, you can run `brew upgrade php` to upgrade to the latest released PHP version.
 
@@ -44,7 +44,7 @@ So for instance if you have the latest PHP version (7.3) installed and you also 
 
 ## Removing all brew installed versions of PHP
 
-To do a fresh install, we will first remove any existing homebrew PHP installations.
+To do a fresh install, we will first remove any existing brew PHP installations.
 The following is the bash commands I use to clean out my PHP installation directories:
 
 ```bash
@@ -107,7 +107,7 @@ For PHP v7.3, which is the latest version of php as of this article date, when w
 > Note: If the latest version of PHP is v7.3, then running `brew install php` or `brew install php@7.3` will result in the same installation directory. That is, the base directory would still be `/usr/local/Cellar/php/7.3.5/`. So both commands are effectively the same.
 However if latest version is 7.3 and we install an older version of PHP, say for example `brew install php@7.2`, then the base installation directory will be `/usr/local/Cellar/php@7.2/7.2.18/` which as you can see includes the `@7.2` version number in the path and has the latest PHP 7.2 version number.
 
-Homebrew installs the latest PHP binaries at:
+brew installs the latest PHP binaries at:
 
 `/usr/local/Cellar/php/7.3.5/bin`
 
@@ -183,7 +183,7 @@ To find the location of the php.ini file you can run the following command:
 
 ## Installing PHP extensions using PECL
 
-The PECL CLI installed by homebrew can be used to install further PHP extensions that we may require by running the command `pecl install <extension>`.
+The PECL CLI installed by brew can be used to install further PHP extensions that we may require by running the command `pecl install <extension>`.
 
 For instance we can install the xdebug extension by typing:
 
@@ -339,7 +339,7 @@ sudo brew services start php@7.2
 
 Before switching the version we also stop any running php-fpm instance for the latest version and afterwards we start the php-fpm service for the version we switched to.
 
-If we look in `/usr/local/bin/` and  `/usr/local/sbin/` before executing the `brew unlink php && brew link --force php@7.2` command, we see the following php binary file symlinks pointing to the latest version homebrew install directories:
+If we look in `/usr/local/bin/` and  `/usr/local/sbin/` before executing the `brew unlink php && brew link --force php@7.2` command, we see the following php binary file symlinks pointing to the latest version of the brew PHP installation directories:
 
 ```bash
 /usr/local/sbin/php-fpm -> /usr/local/Cellar/php/7.3.5/sbin/php-fpm
@@ -489,7 +489,7 @@ After we install the latest PHP version or after we install and switch to an old
 pecl install --force xdebug
 pecl install --force memcached
 
-In this article I listed the steps to take to install homebrew and then use homebrew to install multiple PHP versions.
+In this article I listed the steps to take to install brew and then use brew to install multiple PHP versions.
 
 The following resources were used to produce this article:
 
