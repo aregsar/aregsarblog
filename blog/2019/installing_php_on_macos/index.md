@@ -199,6 +199,12 @@ For instance we can install the xdebug extension by typing:
 
 `pecl install xdebug`
 
+You can also upgrade the installed version of an extension by running:
+
+`pecl upgrade <extension-name>`
+
+For instance `pecl upgrade xdebug` will upgrade the xdebug extension to the latest version.
+
 We can list the PECL installed PHP extensions by running:
 
 `php -m`
@@ -356,6 +362,8 @@ brew unlink php && brew link --force php@7.2
 sudo brew services start php@7.2
 ```
 
+The `brew unlink php` command unlinks the latest version of php (v7.3) and `brew link --force php@7.2` links the older version 7.2 instead.
+
 > Note: we need to use the --force flag when linking older versions of PHP
 
 Before switching the version we also stop any running php-fpm instance for the latest version and afterwards we start the php-fpm service for the version we switched to.
@@ -396,7 +404,7 @@ But after we run the `brew unlink php && brew link --force php@7.2` command we s
 
 Remember that we added `/usr/local/bin/` and  `/usr/local/sbin/` to our PATH variable so when we run the `php` or `pecl` commands we will execute the command that is symlinked to the proper version of the binary file we want to run.
 
-And since we are running the symlinked version of `pecl`, the php extensions that we install (or uninstall) will installed in the proper version's extension file directory.
+And since we are running the symlinked version of `pecl`, the php extensions that we install (or uninstall) will installed in the proper PHP version's extension file directory.
 
 Running `php -v` we can see that the older version 7.2 is reported.
 
@@ -412,13 +420,13 @@ Running `php -v` we can see that the latest version is reported again.
 
 > Note: PHP extensions installed using `pecl install` command are installed for the version of the PHP that is currently activated. So you must install PHP extensions you need for each installed version of PHP separately after you switch to that version of PHP.
 
->Also note that the version of an extension that you need to install for older version might not be the latest version of the extension because the latest version of the extension may be incompatible with the older PHP version. In that case you need to install the specific version of the extension you need by specifying the extension version when you run `pecl install`. For instance instead of `pecl install xdebug` which will install the latest version of the extension, you might need to run `pecl install xdebug-2.7.1`. 
+>Also note that the version of an extension that you need to install for older version of PHP, might not be the latest version of the extension because the latest version of the extension may be incompatible with the older PHP version. In that case you need to install the specific version of the extension you need, by specifying the extension version when you run `pecl install`. For instance instead of `pecl install xdebug` which will install the latest version of the extension, you might need to run `pecl install xdebug-2.7.1`.
 
-You can upgrade the installed version of an extension by running `pecl upgrade <extension-name>`. For instance `pecl upgrade xdebug` will upgrade the xdebug extension to the latest version.
+## Resolving PHP 7.3 Composer package manager error
 
-## Resolving PHP 7.3 and JIT Compiler error
+PHP uses a package manager named `Composer` that is a separate install from PHP itself.
 
-If you have the PHP `composer` package manager installed, you may need to deactivate the PHP v7.3 JIT compiler setting so that the  `composer global update` command does not fail.
+If you have the Composer PHP package manager installed, you may need to deactivate the PHP v7.3 JIT compiler setting so that the `composer global update` command does not fail.
 
 The JIT setting is in the `/usr/local/etc/php/7.3/php.ini` file.
 
