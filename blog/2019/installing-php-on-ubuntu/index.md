@@ -93,9 +93,32 @@ You can run the following commands before and after replacing the JIT setting to
 `cat /etc/php/7.3/cli/php.ini | grep ';pcre.jit=1'`
 `cat /etc/php/7.3/fpm/php.ini | grep ';pcre.jit=1'`
 
+
+Run `php -v` to see the version of installed PHP.
+Run `php -m` to see all installed PHP extensions.
+Run `php -i` to get all the information regarding the PHP installation
+
 ## The installation directories and configuration
 
-The PHP CLI and PHP-FPM configuration file will be located at:
+When we run `which php` we can see that the php command is running from /usr/bin/php so we must make sure we have /usr/bin in our PATH environment variable.
+
+The php files are installed in /usr/bin
+
+php7.3
+php-config7.3
+phpize7.3
+phar.phar7.3
+
+Symlinks are created to an alternate install directory
+
+php -> /etc/alternatives/php
+php-config -> /etc/alternatives/php-config
+phpize -> /etc/alternatives/phpize
+phar -> /etc/alternatives/phar
+phar.phar -> /etc/alternatives/phar.phar
+phar7.3 -> phar.phar7.3
+
+Also he PHP CLI and PHP-FPM configuration file will be located at:
 
 /etc/php/7.3/cli/php.ini
 
@@ -113,3 +136,7 @@ The /etc/php/7.3/cli/conf.d/ and /etc/php/7.3/fpm/conf.d/ directories will have 
 
 10-opcache.ini -> /etc/php/7.3/mods-available/opcache.ini
 20-xdebug.ini -> /etc/php/7.3/mods-available/xdebug.ini
+
+## Conclusion
+
+I have detailed the steps to take to install and run PHP on Ubuntu
