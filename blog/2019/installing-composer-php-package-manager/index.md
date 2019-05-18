@@ -52,10 +52,12 @@ php -r "unlink('composer-setup.php');"
 If you have not updated the JIT compiler setting configuration for you PHP v7.3 installation, you need to update it before running composer. This needs to be done to avoid an error caused by the setting.
 
 Here are the instructions to update the setting for the Ubuntu installation from the PHP installation on Ubuntu article
+
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/cli/php.ini`
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/fpm/php.ini`
 
 The instructions for updating the setting for the macOS installation of PHP can be found in the PHP installation on macOS article:
+
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /7.3/php.ini`
 
 ## Installation directories
@@ -69,7 +71,6 @@ macOS installation location
 
 ~/.composer
 /usr/local/bin/composer
-
 
 ## Running composer from Docker container
 
