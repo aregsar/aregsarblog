@@ -139,4 +139,6 @@ The /etc/php/7.3/cli/conf.d/ and /etc/php/7.3/fpm/conf.d/ directories will have 
 
 ## Conclusion
 
-I have detailed the steps to take to install and run PHP on Ubuntu
+I have detailed the steps to take to install and run PHP on Ubuntu.
+
+Thanks for reading.
