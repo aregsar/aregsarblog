@@ -62,27 +62,29 @@ The instructions for updating the setting for the macOS installation of PHP can 
 
 ## Installation directories
 
-Ubuntu installation location
+The composer executable was installed at:
 
-/root/.composer
-/usr/local/bin/composer
+`/usr/local/bin/composer`
 
-macOS installation location
+The directory where global packages will be installed was created under the home directory:
 
-~/.composer
-/usr/local/bin/composer
+`~/.composer`
 
 ## Running composer from Docker container
 
-Run in docker as interactive bash shell:
+Sometimes as an alternative to installing composer we can just execute some composer commands by using a docker container.
+
+We can run composer interactively in docker in a bash shell:
 
 `docker run -ti --rm composer bash`
 
-Run as a one shot command execution and exit:
+Or we can run it for one shot command execution and exit:
 
 `docker run --rm composer <composer command>`
 
 where `<command>` is any composer command that you can run using a locally installed composer CLI.
+
+> Note: For executing composer scripts you may need to extend the composer docker container by installing additional PHP extensions by creating your own docker file.
 
 ## Conclusion
 
