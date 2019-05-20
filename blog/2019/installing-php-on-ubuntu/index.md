@@ -106,10 +106,11 @@ You can run the following commands to verify the installation:
 + Run `php -v` to see the version of installed PHP.
 + Run `php -m` to see all installed PHP extensions.
 + Run `php -i` to get all the information regarding the PHP installation
++ Run `php-fpm7.3 -v` to see the version of installed PHP-FPM.
 
 ## The PHP installation directories
 
-If we look in `/urs/bin/` we will see the following symlink:
+If we look in `/usr/bin/` we will see the following symlink:
 
 `php -> /etc/alternatives/php`
 
@@ -122,6 +123,8 @@ Which shows that we are pointing to PHP v7.3.
 You can run `which php` to see that the php command is located at `/usr/bin/php`.
 
 This means that we must make sure we have the `/usr/bin` directory in our __PATH__ environment variable.
+
+Similarly if we run `which php-fpm7.3` we will see it is found at `/usr/sbin/php-fpm7.3` so we need to ensure `/usr/sbin/` is in our PATH as well.
 
 We can check that by executing:
 
@@ -136,6 +139,8 @@ The PHP CLI and PHP-FPM configuration files will be installed at the following l
 `/etc/php/7.3/fpm/php.ini`
 
 `/etc/php/7.3/fpm/php-fpm.conf`
+
+`/etc/php/7.3/fpm/pool.d/www.conf`
 
 ## PHP extension configuration files
 
@@ -160,8 +165,24 @@ If we take a look in `/etc/php/7.3/cli/conf.d/` we will see for example the foll
 
 The same symlinks will exist if we look in `/etc/php/7.3/fpm/conf.d/`.
 
+## Running PHP-FPM
+
+add the remote_enable to the xdebug extension configuration file
+echo `'xdebug.remote_enable=1' >> /etc/php/7.0/mods-available/xdebug.ini`
+
+`phpenmod xdebug`
+
+check configuration is correct
+`php-fpm7.3 -t`
+
+systemctl restart php7.3-fpm
+systemctl status php7.3-fpm
+
 ## Conclusion
 
 In this post have detailed the steps to take to install PHP on Ubuntu Linux.
+
+
+
 
 Thanks for reading.
