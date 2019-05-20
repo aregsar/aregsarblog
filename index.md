@@ -2,6 +2,10 @@
 
 May 20, 2019
 
+[Installing Laravel using Composer](https://aregsar.com/blog/2019/installing-laravel-using-composer)
+
+May 20, 2019
+
 [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager)
 
 May 20, 2019
