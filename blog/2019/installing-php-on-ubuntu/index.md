@@ -1,6 +1,6 @@
 # Installing PHP on Ubuntu Linux
 
-[installing php on ubuntu](https://aregsar.com/blog/2019/installing-php-on-ubuntu)
+May 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Introduction
 
