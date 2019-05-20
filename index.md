@@ -2,6 +2,10 @@
 
 May 20, 2019
 
+[Installing PHP on macOS](https://aregsar.com/blog/2019/installing-php-on-macos-redux)
+
+May 20, 2019
+
 [Installing Laravel using Composer](https://aregsar.com/blog/2019/installing-laravel-using-composer)
 
 May 20, 2019
@@ -14,7 +18,7 @@ May 20, 2019
 
 May 13, 2019
 
-[Installing PHP on macOS](https://aregsar.com/blog/2019/installing_php_on_macos)
+[Installing PHP on macOS](https://aregsar.com/blog/2019/installing-php-on-macos)
 
 Mar 22, 2019
 

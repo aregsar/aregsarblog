@@ -211,7 +211,7 @@ We can list the PECL installed PHP extensions by running:
 
 > Note: The `pecl list` command can also be used to list the installed extensions. However there is an issue with this command that I will detail later which means that the only reliable way to see if an installed extension is recognized by PHP is to run `php -m`.
 
-The directory where the PHP extensions are installed depends on the current active PHP version. Each installed PHP version will add a PHP release date directory to a base extension directory under which the extensions will be added.
+The directory where the PHP extensions are installed depends on the current active PHP version. Each installed PHP version will add a PHP release date directory to the base extension directory `/usr/local/lib/php/pecl/` under which the extensions will be added.
 
 Each installed PHP version has its own `php.ini` configuration file within which the PHP extensions directory for that version is specified. The setting in the `php.ini` file that specifies the extensions installation directory is:
 
