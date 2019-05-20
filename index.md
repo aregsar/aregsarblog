@@ -1,8 +1,12 @@
 # All Posts
 
+May 20, 2019
+
+[Installing PHP on Ubuntu](https://aregsar.com/blog/2019/installing-php-on-ubuntu)
+
 May 13, 2019
 
-[installing_php_on_macOS](https://aregsar.com/blog/2019/installing_php_on_macos)
+[Installing PHP on macOS](https://aregsar.com/blog/2019/installing_php_on_macos)
 
 Mar 22, 2019
 

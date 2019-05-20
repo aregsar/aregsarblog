@@ -165,24 +165,44 @@ If we take a look in `/etc/php/7.3/cli/conf.d/` we will see for example the foll
 
 The same symlinks will exist if we look in `/etc/php/7.3/fpm/conf.d/`.
 
-## Running PHP-FPM
+## Configuring extensions
 
-add the remote_enable to the xdebug extension configuration file
+Optionally we can configure xdebug for remote debugging and configure opcode caching:
+
 echo `'xdebug.remote_enable=1' >> /etc/php/7.0/mods-available/xdebug.ini`
+echo `'extension=apcu.so' >> /etc/php/7.3/mods-available/cache.ini`
 
+We can enable the xdebug extension using the following command:
 `phpenmod xdebug`
 
-check configuration is correct
+## Running PHP-FPM
+
+> Note: This section does not apply to the Ubuntu docker container used for testing the setup. This is because we can not run the PHP-FPM service using the `systemctl` command from within the docker container. The docker container only runs a single process and is not configured to run the `systemd` process manager.
+
+We can check if our PHP-FPM configuration is correct before running the service:
 `php-fpm7.3 -t`
 
-systemctl restart php7.3-fpm
-systemctl status php7.3-fpm
+We can start or restart the service by running:
+
+`systemctl restart php7.3-fpm`
+
+We can check the status of the service by running:
+
+`systemctl status php7.3-fpm`
 
 ## Conclusion
 
-In this post have detailed the steps to take to install PHP on Ubuntu Linux.
+In this post I detailed the steps to take to install PHP on Ubuntu Linux.
+I also described the installation of PHP extensions and the PHP_FPM FastCGI process manager for PHP.
 
+The following resources were used as a reference:
 
+https://www.linode.com/docs/web-servers/lemp/how-to-install-a-lemp-server-on-ubuntu-16-04/
 
+https://www.cloudbooklet.com/how-to-install-nginx-php-7-3-lemp-stack-on-ubuntu-18-04-google-cloud/
+
+https://thishosting.rocks/install-php-on-ubuntu/
+
+https://tecadmin.net/enable-disable-php-modules-ubuntu/
 
 Thanks for reading.
