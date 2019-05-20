@@ -170,6 +170,7 @@ The same symlinks will exist if we look in `/etc/php/7.3/fpm/conf.d/`.
 Optionally we can configure xdebug for remote debugging and configure opcode caching:
 
 echo `'xdebug.remote_enable=1' >> /etc/php/7.0/mods-available/xdebug.ini`
+
 echo `'extension=apcu.so' >> /etc/php/7.3/mods-available/cache.ini`
 
 We can enable the xdebug extension using the following command:
@@ -180,6 +181,7 @@ We can enable the xdebug extension using the following command:
 > Note: This section does not apply to the Ubuntu docker container used for testing the setup. This is because we can not run the PHP-FPM service using the `systemctl` command from within the docker container. The docker container only runs a single process and is not configured to run the `systemd` process manager.
 
 We can check if our PHP-FPM configuration is correct before running the service:
+
 `php-fpm7.3 -t`
 
 We can start or restart the service by running:

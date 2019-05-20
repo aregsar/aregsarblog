@@ -433,15 +433,13 @@ The JIT setting is in the `/usr/local/etc/php/7.3/php.ini` file.
 You can run the following to see the setting:
 
 ```bash
-cd cd /usr/local/etc/php/7.3
+cd /usr/local/etc/php/7.3
 cat php.ini | grep 'pcre.jit'
 ```
 
-uncomment the setting:
-;pcre.jit=1
+Run the following command to uncomment the setting and change its value:
 
-and change its value:
-pcre.jit=0
+`sed -i 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
 
 ## Recap of installation directories for latest version and version 7.2
 

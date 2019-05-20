@@ -1,10 +1,10 @@
-# installing composer php package manager
+# Installing Composer PHP Package Manager
 
-[installing composer php package manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager)
+May 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Introduction
 
-In this post I will go over the instructions at `https://composer.org` on installing the Composer PHP package manager on MacOS and Linux operating systems.
+In this post I will go over the instructions at [https://getcomposer.org/](`https://getcomposer.org/`) on installing the Composer PHP package manager on macOS and Linux operating systems.
 
 The pre-requisite for installing Composer is that you need to have PHP installed.
 
@@ -16,12 +16,13 @@ Check out my posts for details on installing PHP on MacOS and Ubuntu linux:
 
 ## removing older installation
 
-You can run the following bash commands to remove an older installation, if it exists, to do a fresh install:
+You can run the following bash commands to remove an older installation, if it exists, before doing a fresh install:
 
 ```bash
 # rmove the composer CLI binary
-cd /usr/local/bin
+cd /usr/local/bin/
 rm composer
+
 # delete the .composer directory from your home directory
 cd ~
 rm -rf .composer
@@ -29,9 +30,9 @@ rm -rf .composer
 
 ## Installing composer using bash commands
 
-To get the bash commands to install composer you can check out:
+To install Composer, get the latest installer file download and execution commands (including the latest file hash value) from:
 
-`https://composer.org`
+[https://getcomposer.org/download/](`https://getcomposer.org/download/`)
 
 I will repeat the bash installation commands here with comments that describe how they work:
 
@@ -39,7 +40,7 @@ I will repeat the bash installation commands here with comments that describe ho
 #download the composer-setup.php installation PHP script file to the current directory
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 #optional command that verifies the sha384 hash signature of the downloaded file.
-#check composer.org/downloads to make sure you have the hash value of the latest release
+#check https://getcomposer.org/download/ to make sure you have the latest hash value
 php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 #run the composer-setup.php script using PHP and specify the installation directory and file name of the composer binary
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
@@ -51,18 +52,18 @@ php -r "unlink('composer-setup.php');"
 
 If you have not updated the JIT compiler setting configuration for you PHP v7.3 installation, you need to update it before running composer. This needs to be done to avoid an error caused by the setting.
 
-Here are the instructions to update the setting for the Ubuntu installation from the PHP installation on Ubuntu article
+Here are the instructions to update the setting for the Ubuntu installation from the PHP installation on Ubuntu article:
 
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/cli/php.ini`
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/fpm/php.ini`
 
-The instructions for updating the setting for the macOS installation of PHP can be found in the PHP installation on macOS article:
+The instructions for updating the setting for the macOS installation of PHP is listed below from the PHP installation on macOS article:
 
-`sed -i 's/;pcre.jit=1/pcre.jit=0/g' /7.3/php.ini`
+`sed -i 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
 
-## Installation directories
+## The Composer installation directories
 
-The composer executable was installed at:
+The composer executable is installed at:
 
 `/usr/local/bin/composer`
 
@@ -72,22 +73,24 @@ The directory where global packages will be installed was created under the home
 
 ## Running composer from Docker container
 
-Sometimes as an alternative to installing composer we can just execute some composer commands by using a docker container.
+Sometimes as an alternative to installing composer we can just execute some composer commands by using the official Composer docker container.
 
-We can run composer interactively in docker in a bash shell:
+We can run composer interactively from within the docker container using a bash shell:
 
 `docker run -ti --rm composer bash`
 
-Or we can run it for one shot command execution and exit:
+Or we can run it as a one shot command execution:
 
 `docker run --rm composer <composer command>`
 
-where `<command>` is any composer command that you can run using a locally installed composer CLI.
+Where `<command>` is any composer command that you can run using a locally installed composer CLI.
 
-> Note: For executing composer scripts you may need to extend the composer docker container by installing additional PHP extensions by creating your own docker file.
+With one shot execution the container exits right after executing the command.
+
+> Note: For executing composer scripts you may need to install additional PHP extensions in the container using your own docker file that extends the official Composer Docker image.
 
 ## Conclusion
 
-In this post I detailed the steps required to install Composer the PHP package manager.
+In this post I detailed the steps required to install the Composer PHP package manager.
 
 Thanks for reading.

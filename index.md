@@ -2,6 +2,10 @@
 
 May 20, 2019
 
+[Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager)
+
+May 20, 2019
+
 [Installing PHP on Ubuntu](https://aregsar.com/blog/2019/installing-php-on-ubuntu)
 
 May 13, 2019
