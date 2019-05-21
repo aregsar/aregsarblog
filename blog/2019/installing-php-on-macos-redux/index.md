@@ -123,7 +123,7 @@ The above command runs the pear utility that was also installed when we installe
 
 The PECL CLI installed by brew can be used to install specific PHP extensions that we may require for our projects.
 
-Installing an extension involves adding an `<extension>.so` file to the extensions directory and,  depending on the extension type, adding either a `zend_extension="<zend-extension>.so"` or a `extension="<extension>.so"` setting to the `php.ini` configuration file. 
+Installing an extension involves adding an `<extension>.so` file to the extensions directory and,  depending on the extension type, adding either a `zend_extension="<zend-extension>.so"` or a `extension="<extension>.so"` setting to the `php.ini` configuration file.
 
 The `PECL install` command that installs the PHP extensions will add the extension file and the setting for us.
 
@@ -260,8 +260,10 @@ Opcache extension location:
 
 ## Conclusion
 
-In this article I listed the steps to take to install the Homebrew package manager for the macOS followed by the steps to install PHP using the package manager. This included the locations for the PHP configuration files.
+In this article I listed the steps to take to install the Homebrew package manager for the macOS followed by the steps to install PHP using the Homebrew.
 
-I also detailed how PHP extensions are installed and how the php-fpm Fast CGI process manager is activated.
+In addition I detailed how to install PHP extensions and how the php-fpm Fast CGI process manager is activated.
+
+Finally I detailed the installation locations for PHP binaries and configuration files.
 
 Thanks for reading.
