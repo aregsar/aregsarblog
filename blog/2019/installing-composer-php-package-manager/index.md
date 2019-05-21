@@ -59,7 +59,7 @@ Here are the instructions to update the setting for the Ubuntu installation from
 
 The instructions for updating the setting for the macOS installation of PHP is listed below from the PHP installation on macOS article:
 
-`sed -i 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
+`sed -i '' 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
 
 ## The Composer installation directories
 

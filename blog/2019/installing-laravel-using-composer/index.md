@@ -12,6 +12,37 @@ This post assumes that you have PHP and Composer installed on your local system.
 
 > Note: An alternate Laravel installation CLI tool is available that you can install as a global Composer package. We will avoid using this tool and just use Composer directly to create Laravel projects, using the composer create-project command. This eliminates an additional dependency on the Laravel installer tool that we don't need to install and keep updated.
 
+## Installing required PHP extensions for Laravel projects on macOS
+
+Before we create a new laravel project we need to make sure PHP, Composer and PHP extensions are installed.
+
+Laravel requires a minimum set of extensions to be installed.
+
+These extensions are already installed by the latest PHP installation.
+
+The Laravel documentation also mentions the OpenSSL PHP extension as a requirement which does not exist in the PHP extensions package repository.
+
+In the latest PHP installation, OpenSSL is selected by default. This can be seen by running `php -i | grep "SSL Version"` which shows:
+
+`SSL Version => OpenSSL/1.0.2r`
+
+You can check the installed extension by running `php -m`.
+
+I often install the following extensions by running a separate pecl install command for each individual extension:
+
+```bash
+pecl install --force xdebug
+pecl install --force memcached
+pecl install --force redis
+```
+
+> Note: It is recommended to install any required extensions individually instead of including a list of space character delimited extensions on a single line. This is because PECL gets confused when adding the extension setting to the php.ini file, if a zend extension such as xdebug is included in the list
+
+## PHP 7.3 Composer issue
+
+ Note: If you are using PHP 7.3 and you get an JIT compiler setting error when `composer install` is run, update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager).
+
+
 ## Using Composer to create a new Laravel project
 
 We ca run the following composer command to download and create a new Laravel project:
@@ -34,7 +65,6 @@ Since we are using Composer to create the project, Composer will also install th
 
 So running `composer install` from the project directory should indicate that there are no new packages to install.
 
-> Note: If you are using PHP 7.3 and you get an JIT compiler setting error when `composer install` is run, update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager).
 
 ## Installing NPM modules
 

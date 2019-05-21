@@ -439,7 +439,7 @@ cat php.ini | grep 'pcre.jit'
 
 Run the following command to uncomment the setting and change its value:
 
-`sed -i 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
+`sed -i '' 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
 
 ## Recap of installation directories for latest version and version 7.2
 

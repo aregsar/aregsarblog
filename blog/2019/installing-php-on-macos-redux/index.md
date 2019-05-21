@@ -177,26 +177,7 @@ To print out all PECL configuration settings run the following:
 
 > The special Opcache extension is installed at `/usr/local/Cellar/php/7.3.5/lib/php/20180731/opcache.so` when PHP is installed.
 
-## Installing required PHP extensions for Laravel projects
 
-In order to run the Laravel PHP framework I run the following commands to install useful extensions.
-
-Laravel requires a minimum set of extensions to be installed.
-These extensions are already installed by the the PHP installation.
-
-The Laravel documentation also mentions the OpenSSL PHP extension which as a requirement which does not exist in the PECL package repository.
-
-However the PHP OpenSSL is installed by default. This can be seen by
-running `php -i | grep "SSL Version"` which shows:
-
-`SSL Version => OpenSSL/1.0.2r`
-
-To use some of the Laravel supported data services we can install the following extensions:
-
-```bash
-pecl install --force xdebug memcached
-pecl install --force elasticsearch
-```
 
 ## Running the php-fpm service using brew
 
@@ -238,7 +219,9 @@ cat /usr/local/etc/php/7.3/php.ini | grep 'pcre.jit'
 
 Run the following command to uncomment the setting and change its value:
 
-`sed -i 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
+```bash
+sed -i '' 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini
+```
 
 ## Overview of installation directories
 
