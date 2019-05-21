@@ -181,10 +181,21 @@ To print out all PECL configuration settings run the following:
 
 In order to run the Laravel PHP framework I run the following commands to install useful extensions.
 
+Laravel requires a minimum set of extensions to be installed.
+These extensions are already installed by the the PHP installation.
+
+The Laravel documentation also mentions the OpenSSL PHP extension which as a requirement which does not exist in the PECL package repository.
+
+However the PHP OpenSSL is installed by default. This can be seen by
+running `php -i | grep "SSL Version"` which shows:
+
+`SSL Version => OpenSSL/1.0.2r`
+
+To use some of the Laravel supported data services we can install the following extensions:
+
 ```bash
-pecl install --force xdebug
-pecl install --force redis
-pecl install --force memcached
+pecl install --force xdebug memcached
+pecl install --force elasticsearch
 ```
 
 ## Running the php-fpm service using brew
