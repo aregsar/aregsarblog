@@ -8,13 +8,13 @@ In this post I will go over the instructions at [https://getcomposer.org/](`http
 
 The pre-requisite for installing Composer is that you need to have PHP installed.
 
-Check out my posts for details on installing PHP on MacOS and Ubuntu linux:
+Check out my posts for details on installing PHP on MacOS and Ubuntu Linux:
 
-[installing_php_on_macos](https://aregsar.com/blog/2019/installing_php_on_macos)
+[Installing PHP on macOS Redux](https://aregsar.com/blog/2019/installing-php-on-macos-redux)
 
-[installing php on ubuntu](https://aregsar.com/blog/2019/installing-php-on-ubuntu)
+[Installing PHP on Ubuntu](https://aregsar.com/blog/2019/installing-php-on-ubuntu)
 
-## removing older installation
+## Removing existing Composer installation
 
 You can run the following bash commands to remove an older installation, if it exists, before doing a fresh install:
 
@@ -48,18 +48,20 @@ php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 php -r "unlink('composer-setup.php');"
 ```
 
-## Note for PHP v7.3
+## Fixing Composer JIT compiler error for PHP v7.3
 
-If you have not updated the JIT compiler setting configuration for you PHP v7.3 installation, you need to update it before running composer. This needs to be done to avoid an error caused by the setting.
+If you have not updated the JIT compiler setting configuration for you PHP v7.3 installation, you need to update it before running composer.
 
-Here are the instructions to update the setting for the Ubuntu installation from the PHP installation on Ubuntu article:
+This needs to be done to avoid the JIT compiler setting error: `preg_match(): JIT compilation failed: no more memory` when running composer.
+
+For macOS you can run the following command to disable the JIT compiler:
+
+`sed -i '' 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
+
+For Ubuntu you can run the following commands to disable the JIT compiler:
 
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/cli/php.ini`
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/fpm/php.ini`
-
-The instructions for updating the setting for the macOS installation of PHP is listed below from the PHP installation on macOS article:
-
-`sed -i '' 's/;pcre.jit=1/pcre.jit=0/g' /usr/local/etc/php/7.3/php.ini`
 
 ## The Composer installation directories
 
@@ -71,7 +73,7 @@ The directory where global packages will be installed was created under the home
 
 `~/.composer`
 
-## Running composer from Docker container
+## Running Composer from Docker container
 
 Sometimes as an alternative to installing composer we can just execute some composer commands by using the official Composer docker container.
 
@@ -91,6 +93,6 @@ With one shot execution the container exits right after executing the command.
 
 ## Conclusion
 
-In this post I detailed the steps required to install the Composer PHP package manager.
+In this post I detailed the steps required to install the Composer PHP package manager on macOS and Ubuntu Linux.
 
 Thanks for reading.

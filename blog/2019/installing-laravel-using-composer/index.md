@@ -40,13 +40,17 @@ pecl install --force redis
 
 ## Using Composer to create a new Laravel project
 
-We ca run the following composer command to download and create a new Laravel project:
+We can run the following composer command to download and create a new Laravel project:
 
 `composer create-project --prefer-dist laravel/laravel:5.8 myapp`
 
 Here we specified `myapp` as the name of our project and `5.8` as the version of Laravel project that we want create.
 
-Since we did not specify a specific version patch such as `5.8.17`, the latest patch will be used.
+> Note: If you are using PHP 7.3 and you get an JIT compiler setting error:
+`preg_match(): JIT compilation failed: no more memory`
+when you run the `composer create-project` command, you have to update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager) under the section `Fixing Composer JIT compiler error for PHP v7.3`.
+
+When running the command we did not specify a specific version patch such as `5.8.17`, so the latest patch will be used.
 
 If we omit the Laravel version, the latest version of the framework will be installed:
 
@@ -54,10 +58,7 @@ If we omit the Laravel version, the latest version of the framework will be inst
 
 We can run `cd myapp` to see all the project files and directories.
 
-Note: If you are using PHP 7.3 and you get an JIT compiler setting error:
-[ErrorException]
-preg_match(): JIT compilation failed: no more memory
-when you run composer create-project, you have to update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager).
+
 
 ## Installing Composer packages
 
