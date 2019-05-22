@@ -83,9 +83,7 @@ apt-get autoremove -y && apt-get clean -y
 rm -rf /tmp/* /var/tmp/* /usr/share/doc/*
 ```
 
-Finally run the following to eliminate an issue between the PHP composer package manager and PHP v7.3 JIT compiler.
-
-Without this change for PHP v7.3, we will get an error if we install the Composer package manager and try to use it to install PHP packages.
+Finally run the following to fix a PHP v7.3 JIT Compiler error when running the PHP Composer package manager:
 
 ```bash
 sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/cli/php.ini
@@ -195,7 +193,7 @@ We can check the status of the service by running:
 ## Conclusion
 
 In this post I detailed the steps to take to install PHP on Ubuntu Linux.
-I also described the installation of PHP extensions and the PHP_FPM FastCGI process manager for PHP.
+I also described the installation of PHP extensions and the PHP-FPM FastCGI process manager for PHP.
 
 The following resources were used as a reference:
 
