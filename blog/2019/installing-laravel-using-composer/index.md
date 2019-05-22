@@ -4,31 +4,29 @@ May 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Introduction
 
-In this post I will detail how we can use the Composer, the PHP package manager, to create a new Laravel project.
+In this post I will detail how we can use Composer, the PHP package manager, to create a new Laravel project.
 
-I will further show how we can run composer to install the PHP packages for our project and run `Yarn` to install NPM modules for our project.
+I will further show how we can run composer to install PHP packages for our Laravel project.
 
 This post assumes that you have PHP and Composer installed on your local system.
 
-> Note: An alternate Laravel installation CLI tool is available that you can install as a global Composer package. We will avoid using this tool and just use Composer directly to create Laravel projects, using the composer create-project command. This eliminates an additional dependency on the Laravel installer tool that we don't need to install and keep updated.
+> Note: An alternate Laravel installation CLI tool is available that you can install as a global Composer package. We will avoid using this tool and just use  the `composer create-project` command to create Laravel projects. This eliminates an additional dependency on the Laravel installer tool that we don't need to install and keep updated.
+
+For completeness sake, I will also show how to run the Node package manager, `Yarn` to install NPM modules for our project.
 
 ## Installing required PHP extensions for Laravel projects on macOS
 
-Before we create a new laravel project we need to make sure PHP, Composer and PHP extensions are installed.
-
-Laravel requires a minimum set of extensions to be installed.
+Before we create a new laravel project we need to make sure certain PHP extensions are installed. These are required by Laravel.
 
 These extensions are already installed by the latest PHP installation.
 
-The Laravel documentation also mentions the OpenSSL PHP extension as a requirement which does not exist in the PHP extensions package repository.
-
-In the latest PHP installation, OpenSSL is selected by default. This can be seen by running `php -i | grep "SSL Version"` which shows:
-
-`SSL Version => OpenSSL/1.0.2r`
+> Note: The Laravel documentation requires the OpenSSL PHP extension as a requirement. However OpenSSL does not exist in the PHP extensions package repository any longer. In the latest PHP installation, OpenSSL is selected by default. This can be seen by running `php -i | grep "SSL Version"` which shows `SSL Version => OpenSSL/1.0.2r`.
 
 You can check the installed extension by running `php -m`.
 
-I often install the following extensions by running a separate pecl install command for each individual extension:
+## Installing additional PHP extensions:
+
+I often install the following extensions by running a separate `pecl install` command for each individual extension:
 
 ```bash
 pecl install --force xdebug
