@@ -2,7 +2,7 @@
 
 May 20, 2019
 
-[Installing PHP on macOS](https://aregsar.com/blog/2019/installing-php-on-macos-redux)
+[Installing PHP on macOS Redux](https://aregsar.com/blog/2019/installing-php-on-macos-redux)
 
 May 20, 2019
 
