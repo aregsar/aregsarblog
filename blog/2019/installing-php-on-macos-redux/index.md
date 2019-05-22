@@ -257,9 +257,9 @@ Opcache extension location:
 
 ## Conclusion
 
-In this article I listed the steps to take to install the Homebrew package manager for the macOS followed by the steps to install PHP using the Homebrew.
+In this article I listed the steps to take to install the Homebrew package manager for the macOS followed by the steps to install PHP using Homebrew.
 
-In addition I detailed how to install PHP extensions and how the php-fpm Fast CGI process manager is activated.
+In addition I detailed how to install PHP extensions and how the php-fpm FastCGI process manager is activated.
 
 Finally I detailed the installation locations for PHP binaries and configuration files.
 
