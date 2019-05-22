@@ -4,7 +4,7 @@ May 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Introduction
 
-In this post I will go over the instructions at [https://getcomposer.org/](`https://getcomposer.org/`) on installing the Composer PHP package manager on macOS and Linux operating systems.
+In this post I will go over the instructions at [https://getcomposer.org](https://getcomposer.org) on installing the Composer PHP package manager on macOS and Linux operating systems.
 
 The pre-requisite for installing Composer is that you need to have PHP installed.
 
@@ -28,11 +28,11 @@ cd ~
 rm -rf .composer
 ```
 
-## Installing composer using bash commands
+## Installing Composer
 
 To install Composer, get the latest installer file download and execution commands (including the latest file hash value) from:
 
-[https://getcomposer.org/download/](`https://getcomposer.org/download/`)
+[https://getcomposer.org/download](https://getcomposer.org/download)
 
 I will repeat the bash installation commands here with comments that describe how they work:
 
@@ -44,7 +44,7 @@ php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 php -r "if (hash_file('sha384', 'composer-setup.php') === '48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 #run the composer-setup.php script using PHP and specify the installation directory and file name of the composer binary
 php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-# delete the composer-setup.php that was downloaded
+# delete the composer-setup.php installer file that was downloaded
 php -r "unlink('composer-setup.php');"
 ```
 
@@ -52,7 +52,7 @@ php -r "unlink('composer-setup.php');"
 
 If you have not updated the JIT compiler setting configuration for you PHP v7.3 installation, you need to update it before running composer.
 
-This needs to be done to avoid the JIT compiler setting error: `preg_match(): JIT compilation failed: no more memory` when running composer.
+This needs to be done to avoid the JIT compiler setting error: `preg_match(): JIT compilation failed: no more memory` when running Composer commands.
 
 For macOS you can run the following command to disable the JIT compiler:
 
@@ -61,6 +61,7 @@ For macOS you can run the following command to disable the JIT compiler:
 For Ubuntu you can run the following commands to disable the JIT compiler:
 
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/cli/php.ini`
+
 `sed -i 's/;pcre.jit=1/pcre.jit=0/g' /etc/php/7.3/fpm/php.ini`
 
 ## The Composer installation directories
@@ -73,7 +74,7 @@ The directory where global packages will be installed was created under the home
 
 `~/.composer`
 
-## Running Composer from Docker container
+## Running Composer from Docker
 
 Sometimes as an alternative to installing composer we can just execute some composer commands by using the official Composer docker container.
 
@@ -89,7 +90,7 @@ Where `<command>` is any composer command that you can run using a locally insta
 
 With one shot execution the container exits right after executing the command.
 
-> Note: For executing composer scripts you may need to install additional PHP extensions in the container using your own docker file that extends the official Composer Docker image.
+> Note: For executing Composer scripts that execute PHP code, you may need to install additional PHP extensions in the container using your own docker file that extends the official Composer Docker image.
 
 ## Conclusion
 
