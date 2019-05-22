@@ -177,8 +177,6 @@ To print out all PECL configuration settings run the following:
 
 > The special Opcache extension is installed at `/usr/local/Cellar/php/7.3.5/lib/php/20180731/opcache.so` when PHP is installed.
 
-
-
 ## Running the php-fpm service using brew
 
 We can check to see all the versions of php-fpm installed on our machine by running:

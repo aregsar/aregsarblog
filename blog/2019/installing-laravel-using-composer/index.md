@@ -38,11 +38,6 @@ pecl install --force redis
 
 > Note: It is recommended to install any required extensions individually instead of including a list of space character delimited extensions on a single line. This is because PECL gets confused when adding the extension setting to the php.ini file, if a zend extension such as xdebug is included in the list
 
-## PHP 7.3 Composer issue
-
- Note: If you are using PHP 7.3 and you get an JIT compiler setting error when `composer install` is run, update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager).
-
-
 ## Using Composer to create a new Laravel project
 
 We ca run the following composer command to download and create a new Laravel project:
@@ -59,12 +54,16 @@ If we omit the Laravel version, the latest version of the framework will be inst
 
 We can run `cd myapp` to see all the project files and directories.
 
+Note: If you are using PHP 7.3 and you get an JIT compiler setting error:
+[ErrorException]
+preg_match(): JIT compilation failed: no more memory
+when you run composer create-project, you have to update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager).
+
 ## Installing Composer packages
 
 Since we are using Composer to create the project, Composer will also install the Laravel packages for us which will create the `vendor` directory where the packages are installed.
 
 So running `composer install` from the project directory should indicate that there are no new packages to install.
-
 
 ## Installing NPM modules
 
@@ -78,7 +77,7 @@ Running `yarn` will also create the `yarn.lock` dependency file in the project d
 
 ## Checking the installation using the Artisan CLI
 
-We can running the Laravel `Artisan` CLI command from the project directory to verify our Laravel installation:
+We can running the Laravel `Artisan` CLI command from within the project directory to verify our Laravel installation:
 
 `php artisan`
 
