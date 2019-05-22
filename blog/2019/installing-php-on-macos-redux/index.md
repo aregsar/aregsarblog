@@ -205,7 +205,7 @@ php       stopped
 
 PHP uses a package manager named `Composer` that is a separate install from PHP itself.
 
-If you have the Composer PHP package manager installed, you may need to deactivate the PHP v7.3 JIT compiler setting `pcre.jit` so that the `composer global update` command does not fail.
+If you have the Composer PHP package manager installed, you need to deactivate the PHP v7.3 JIT compiler setting `pcre.jit` so that the Composer commands do not fail with the JIT compiler setting error: `preg_match(): JIT compilation failed: no more memory`.
 
 The JIT setting is in the `/usr/local/etc/php/7.3/php.ini` file.
 
@@ -228,18 +228,23 @@ After running `brew install php` to install the latest version of PHP, we should
 PHP binaries:
 
 `/usr/local/Cellar/php/7.3.5/bin/php`
+
 `/usr/local/Cellar/php/7.3.5/bin/pecl`
+
 `/usr/local/Cellar/php/7.3.5/sbin/php-fpm`
 
 Symlinks to the PHP binaries:
 
 `/usr/local/bin/php`
+
 `/usr/local/bin/pecl`
+
 `/usr/local/sbin/php-fpm`
 
 PHP configuration files:
 
 `/usr/local/etc/php/7.3/php.ini`
+
 `/usr/local/etc/php/7.3/php-fpm.conf`
 
 PHP extension files location:
