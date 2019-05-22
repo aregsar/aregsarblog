@@ -12,7 +12,7 @@ This post assumes that you have PHP and Composer installed on your local system.
 
 > Note: An alternate Laravel installation CLI tool is available that you can install as a global Composer package. We will avoid using this tool and just use  the `composer create-project` command to create Laravel projects. This eliminates an additional dependency on the Laravel installer tool that we don't need to install and keep updated.
 
-For completeness sake, I will also show how to run the Node package manager, `Yarn` to install NPM modules for our project.
+For completeness sake, I will also mention running the Node package manager, `Yarn` to install NPM modules for our project.
 
 ## Installing required PHP extensions for Laravel projects on macOS
 
