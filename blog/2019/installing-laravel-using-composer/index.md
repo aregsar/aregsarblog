@@ -42,7 +42,7 @@ We can run the following composer command to download and create a new Laravel p
 
 `composer create-project --prefer-dist laravel/laravel:5.8 myapp`
 
-Here we specified `myapp` as the name of our project and `5.8` as the version of Laravel project that we want create.
+Here we specified `myapp` as the name of our project and `5.8` as the version of Laravel project that we want to create.
 
 > Note: If you are using PHP 7.3 and you get an JIT compiler setting error:
 `preg_match(): JIT compilation failed: no more memory`
@@ -54,9 +54,7 @@ If we omit the Laravel version, the latest version of the framework will be inst
 
 `composer create-project --prefer-dist laravel/laravel myapp`
 
-We can run `cd myapp` to see all the project files and directories.
-
-
+Run `cd myapp` to enter the project directory and view the project files and directories.
 
 ## Installing Composer packages
 
@@ -76,7 +74,7 @@ Running `yarn` will also create the `yarn.lock` dependency file in the project d
 
 ## Checking the installation using the Artisan CLI
 
-We can running the Laravel `Artisan` CLI command from within the project directory to verify our Laravel installation:
+We can run the Laravel `Artisan` CLI command from within the project directory to verify our Laravel installation:
 
 `php artisan`
 
