@@ -24,7 +24,7 @@ These extensions are already installed by the latest PHP installation.
 
 You can check the installed extension by running `php -m`.
 
-## Installing additional PHP extensions:
+## Installing additional PHP extensions
 
 I often install the following extensions by running a separate `pecl install` command for each individual extension:
 
@@ -48,19 +48,49 @@ Here we specified `myapp` as the name of our project and `5.8` as the version of
 `preg_match(): JIT compilation failed: no more memory`
 when you run the `composer create-project` command, you have to update the JIT compiler setting in your PHP configuration file as detailed in my blog post [Installing Composer PHP Package Manager](https://aregsar.com/blog/2019/installing-composer-php-package-manager) under the section `Fixing Composer JIT compiler error for PHP v7.3`.
 
-When running the command we did not specify a specific version patch such as `5.8.17`, so the latest patch will be used.
+When running the command we did not specify a specific version patch such as `5.8.17`, so while the latest version of the Laravel framework `5.8.17` will be installed but the zero patch version `5.8.0` of the Laravel project files will be installed .
 
-If we omit the Laravel version, the latest version of the framework will be installed:
+To get a specific patch version of the project files, just specify the full version like so:
+
+`composer create-project --prefer-dist laravel/laravel:5.8.17 myapp`
+
+> Note: This will still install the latest Laravel framework patch for the minor version of Laravel, regardless of the patch number we specfied. So there is a distinction between the version of the __framework__ files and the version of the __project_ files. The framework files are located in `vendor/laravel/` directory and the project files are all the files in the project directory and child directories except the `vendor` directory.
+
+If we omit the Laravel version entirely, the latest version of the __framework__, including the latest patch, will be installed as usual. In addition the latest version of the __project__ files will be installed.
+
+So running the following will install version `5.8.17` of the project files, if that is the latest version and within that project folder it will install version `5.8.19` of the framework files in the vendor directory, if that is the latest version of the framework:
 
 `composer create-project --prefer-dist laravel/laravel myapp`
 
-Run `cd myapp` to enter the project directory and view the project files and directories.
+> Note: If a specific version or patch number of the __project__ files does not exist in the composer repository, then the install will fail. Even if that patch is a valid version for the __framework__ files.
+
+After installation is complete, run `cd myapp` to enter the project directory and view the project files and directories.
 
 ## Installing Composer packages
 
 Since we are using Composer to create the project, Composer will also install the Laravel packages for us which will create the `vendor` directory where the packages are installed.
 
 So running `composer install` from the project directory should indicate that there are no new packages to install.
+
+## Checking the installation using the Artisan CLI
+
+We can run the Laravel `Artisan` CLI command from within the project directory to verify the version of the Laravel __framework__ files in the vendor directory:
+
+`php artisan`
+
+This should list the installed Laravel version and the list of available Artisan commands.
+
+> Note: To display the installed Laravel __framework__ verion, the php artisan command looks in file `vendor/laravel/framework/src/Illuminate/Foundation/Application.php` to inspect the `const VERSION = '5.8.17';` property specified in the `Application` class. This version number may be out of sync with version of the actual Laravel __project__ files that composer installs.
+
+## Checking the installed version of the project files
+
+To recap, the Laravel __framework__ version installed via the composer install command is always the latest patch version of the framework for the minor version of the installed framework.
+
+This is distinct from the version of the installed project files. The only way to know the version of the project files is to check the output of the composer install command and note the actual version of the project files that it is installing.
+
+So for instance after running `composer create-project --prefer-dist laravel/laravel:5.8 myapp` I can see that composer is creating version `5.8.0` of the __project__ files. But at the same time it is installing version `5.8.19` of the __framework__ files in the vendor directory.
+
+If I try to install `laravel/laravel:5.8.19`, it fails because the version `5.8.19` of the project files does not exist, since the latest version of the project files is `5.8.17`. But trying to install `laravel/laravel:5.8.17` succeeds in installing the version `5.8.17` of the project files and yet it installs version `5.8.19` of the framework files in the vendor directory. The installation output shows that version `5.8.17` of the project files are being installed, but if I run `php artisan` it shows version `5.8.19` because that command is reading the version number of the installed framework files from `vendor/laravel/framework/src/Illuminate/Foundation/Application.php`.
 
 ## Installing NPM modules
 
@@ -71,14 +101,6 @@ If we have NodeJS installed on our system, we can also run `yarn` from the proje
 Either way running the command will create the `node_modules` directory where the NPM modules will be installed.
 
 Running `yarn` will also create the `yarn.lock` dependency file in the project directory.
-
-## Checking the installation using the Artisan CLI
-
-We can run the Laravel `Artisan` CLI command from within the project directory to verify our Laravel installation:
-
-`php artisan`
-
-This should list the installed Laravel version and the list of available Artisan commands.
 
 ## Running the application
 
