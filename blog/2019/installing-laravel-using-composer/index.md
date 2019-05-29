@@ -2,6 +2,8 @@
 
 May 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
+Updated on May 29 by Areg Sarkissian
+
 ## Introduction
 
 In this post I will detail how we can use Composer, the PHP package manager, to create a new Laravel project.
