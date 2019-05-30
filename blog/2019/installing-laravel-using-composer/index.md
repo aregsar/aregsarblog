@@ -72,7 +72,7 @@ To find out the version of the Laravel framework that is installed, within the p
 
 The output of this command for my laravel project was `5.8.19`.
 
-As you can see the version of the installed Laravel framework `5.8.19`is different from the version of the Laravel project skelleton `5.8.17`. 
+As you can see the version of the installed Laravel framework `5.8.19`is different from the version of the Laravel project skelleton `5.8.17`.
 
 To understand why, you need to understand that there are two distinct codebases that get installed, from two distinct repositories, when we create a new Laravel project.
 
@@ -100,7 +100,7 @@ The project skeleton repository and the Laravel framework repositories have inde
 
 As you can see, the latest version for each is different and matches the versions that I saw for each when I installed the project skeleton from `https://github.com/laravel/laravel/releases/tag/v5.8.17` using `composer create-project`.
 
-> Note: the `*` patch version indicates that composer should download the latest tagged release which in this case is `5.8.17`. If we don't specify the patch by just specifying version `5.8` in the composer create-project command, then the `5.8.0` tagged release would be used.
+> Note: the `*` patch version used in the project skeleton version `5.8.*` of the create-project command indicates that composer should download the latest tagged release, which in this case is `5.8.17`.
 
 If we look at the `composer.json` file of the project skeleton that was installed, we will see the following composer require section:
 
@@ -122,25 +122,41 @@ When we run `php artisan --version` from the project directory, the installed La
 
  This is where the artisan command retrieves the installed version of the Laravel framework.
 
- > Note: Unfortunately the actual version of the project skeleton that was installed is not stored anywhere in the project. However since Composer prints out the version that it downloads in the results of the `composer create-project` command, we can copy it into the Read.me file for future reference.
+ > Note: Unfortunately the actual version of the project skeleton that was installed is not stored anywhere in the project. However since Composer prints out the version that it downloads in the results of the `composer create-project` command, we can copy it into the read.me file for future reference.
 
-> Note: Always remember the version we specify in the `composer create-project` command is the version of the project skeleton. The version of the Laravel framework that gets installed within the project is specified in the `composer.json` file of the project skeleton.
+> Note: Always remember that the version we specify in the `composer create-project` command is the version of the project skeleton. The version of the Laravel framework that gets installed within the project is specified in the `composer.json` file of the project skeleton.
 
 If we want a specific version of the project skeleton we can specify it explicitly in the command.
 
 `composer create-project --prefer-dist laravel/laravel:5.8.17 myapp`
 
-> Note: If a specific version or patch number of the project skeleton does not exist as a tagged release in the project skeleton repo `https://github.com/laravel/laravel`, then the install will fail.
+This will download version `5.8.17` of the project skeleton if exist as a tagged release in the project skeleton repo `https://github.com/laravel/laravel`.
+
+> Note: If a tagged release does not exist for the specific version specified, then create-project will fail.
+
+If we omit the patch version then the zero patch release will be downloaded:
+
+`composer create-project --prefer-dist laravel/laravel:5.8 myapp`
+
+This will download version `5.8.0` of the project skeleton.
 
 If we omit the project skeleton version entirely, the latest tagged version of the project skeleton will be installed:
 
 `composer create-project --prefer-dist laravel/laravel myapp`
 
+This will download version `5.8.17` of the project skeleton.
+
+In any of these cases the Laravel framework version that is installed will solely depend on the version specified in the `composer.json` file of the project skeleton.
+
 ## Installing Composer packages
 
-Since we are using Composer to create the project, Composer will also install the Laravel packages for us which will create the `vendor` directory where the packages are installed.
+As mentioned before composer create-project will also install the Laravel framework packages for us which will create the `vendor` directory where the packages are installed.
 
-So running `composer install` from the project directory should indicate that there are no new packages to install.
+So running `composer install` from the project directory, after the installation is complete, should indicate that there are no new packages to install.
+
+If we want to install additional packages using composer we can use the composer require command.
+
+For instance `composer require predis/predis` will install the latest Redis package that Laravel needs if we want to use Redis as a cache or queue in our laravel projects.
 
 ## Installing NPM modules
 
