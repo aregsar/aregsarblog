@@ -16,10 +16,44 @@ The URI's that Valet serves will be of the form `<project-name>.test` where the 
 
 > Note: we can configure a different domain then `.test`. You can check out the documentation for Laravel Valet for further info. `https://laravel.com/docs/5.8/valet`.
 
+https://laravel.com/docs/5.8/valet#installation
+
 ## Installing Valet via Composer
 
 To install Valet we can run:
 
+`composer global require laravel/valet`
+
+This creates
+`~/.composer/vendor/bin/vendor/bin/valet` is a symlink to the valet binary
+`~/.composer/vendor/bin/vendor/laravel/valet/valet` 
+
+so we need to add
+`~/.composer/vendor/bin/vendor/bin` to our path
+
+before we install add `~/.composer/vendor/bin` to our path where composer installs global packages
+
+Check version:
+
+`valet --version`
+
+## Configure Valet with NGinx ad Dnsmaq
+
+`valet install`
+
+On macOS uses Homebrew to install nginx and dnsmasq
+
+
+
+
+
+#setup websites
+
+Go to laravel projects directory where we creat new laravel projects
+
+Run:
+`valet park`
+~/.config/valet/Sites
 
 
 
