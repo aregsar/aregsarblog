@@ -24,16 +24,29 @@ To install Valet we can run:
 
 `composer global require laravel/valet`
 
-This creates
-`~/.composer/vendor/bin/vendor/bin/valet` is a symlink to the valet binary
-`~/.composer/vendor/bin/vendor/laravel/valet/valet` 
+the global `composer.json` file is located at:
 
-so we need to add
-`~/.composer/vendor/bin/vendor/bin` to our path
+`~/.composer/vendor/bin/composer.json`
 
-before we install add `~/.composer/vendor/bin` to our path where composer installs global packages
+So requiring valet globally installs valet at:
 
-Check version:
+`~/.composer/vendor/bin/vendor/laravel/valet/valet`
+
+and adds the symlinks:
+
+`/usr/local/bin/valet` -> `~/.composer/vendor/bin/vendor/laravel/valet/valet`
+
+and
+
+`~/.composer/vendor/bin/vendor/bin/valet` -> `~/.composer/vendor/bin/vendor/laravel/valet/valet`
+
+So we have to make sure either of these symlinks is added to the path env variable.
+
+Composer also creates the configuration directory:
+
+`~/.config/valet/`
+
+We can check the version:
 
 `valet --version`
 
@@ -43,17 +56,15 @@ Check version:
 
 On macOS uses Homebrew to install nginx and dnsmasq
 
-
-
-
-
 #setup websites
 
-Go to laravel projects directory where we creat new laravel projects
+Go to any directory where our laravel project directories reside and run:
 
-Run:
 `valet park`
-~/.config/valet/Sites
+
+This will serve any project using the URI `<projectname>.test` in the web browser
+
+
 
 
 
