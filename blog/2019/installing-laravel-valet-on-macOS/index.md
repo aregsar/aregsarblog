@@ -18,6 +18,23 @@ The URI's that Valet serves will be of the form `<project-name>.test` where the 
 
 https://laravel.com/docs/5.8/valet#installation
 
+## Uninstalling
+
+To get a clean install if you have an old installation, you can remove Valet and its dependencies by running the following
+
+```bash
+valet uninstall
+composer global remove laravel/valet
+sudo brew services stop nginx
+sudo brew services stop dnsmasq
+brew uninstall dnsmasq
+brew uninstall nginx
+sudo rm -rf ~/.config/valet
+rm /usr/local/bin/valet
+```
+
+Some of the steps may not be necessary based on your installation but will not do any harm.
+
 ## Installing Valet via Composer
 
 To install Valet we can run:
@@ -26,21 +43,17 @@ To install Valet we can run:
 
 the global `composer.json` file is located at:
 
-`~/.composer/vendor/bin/composer.json`
+`~/.composer/composer.json`
 
 So requiring valet globally installs valet at:
 
-`~/.composer/vendor/bin/vendor/laravel/valet/valet`
+`~/.composer/vendor/laravel/valet/valet`
 
-and adds the symlinks:
+Adds the symlinks:
 
-`/usr/local/bin/valet` -> `~/.composer/vendor/bin/vendor/laravel/valet/valet`
+`~/.composer/vendor/bin/valet` -> `~/.composer/vendor/laravel/valet/valet`
 
-and
-
-`~/.composer/vendor/bin/vendor/bin/valet` -> `~/.composer/vendor/bin/vendor/laravel/valet/valet`
-
-So we have to make sure either of these symlinks is added to the path env variable.
+So we have to make sure `~/.composer/vendor/bin` is added to the path env variable to run the `valet` command.
 
 Composer also creates the configuration directory:
 
