@@ -77,9 +77,28 @@ Go to any directory where our laravel project directories reside and run:
 
 This will serve any project using the URI `<projectname>.test` in the web browser
 
+## troubleshooting Valet install
 
+If after running `valet install` and `valet park`, the sites are not being resolved, check if the nginx and dnsmsq services were actually installed and are running. 
 
+You can verify if they were installed and are running by running this command:
 
+`brew list`
+
+If either service is not listed or is stopped you will need to install and run them manually.
+
+When I uninstalled Valet and re-installed it, for some reason it did not re-install the nginx and dnsmasq packages.
+
+So I had to manually install and run them for valet to work. Here are the steps I took
+
+```bash
+brew install dnsmasq
+brew install nginx
+sudo brew services start dnsmasq
+sudo brew services start nginx
+```
+
+## Conclusion
 
 
 
