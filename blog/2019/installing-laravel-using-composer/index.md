@@ -72,7 +72,7 @@ To find out the version of the Laravel framework that is installed, within the p
 
 The output of this command for my laravel project was `5.8.19`.
 
-As you can see the version of the installed Laravel framework `5.8.19`is different from the version of the Laravel project skelleton `5.8.17`.
+As you can see the version of the installed Laravel framework `5.8.19`is different from the version of the Laravel project skeleton `5.8.17`.
 
 To understand why, you need to understand that there are two distinct codebases that get installed, from two distinct repositories, when we create a new Laravel project.
 
@@ -94,7 +94,6 @@ The version of the Laravel framework that it will install into the vendor direct
 The project skeleton repository and the Laravel framework repositories have independent tagged releases. As of this writing the latest tagged releases for each repository is shown below:
 
 `https://github.com/laravel/laravel/releases/tag/v5.8.17`
-
 
 `https://github.com/laravel/framework/releases/tag/v5.8.19`
 
@@ -122,7 +121,7 @@ When we run `php artisan --version` from the project directory, the installed La
 
  This is where the artisan command retrieves the installed version of the Laravel framework.
 
- > Note: Unfortunately the actual version of the project skeleton that was installed is not stored anywhere in the project. However since Composer prints out the version that it downloads in the results of the `composer create-project` command, we can copy it into the read.me file for future reference.
+> Note: Unfortunately the actual version of the project skeleton that was installed is not stored anywhere in the project. However since Composer prints out the version that it downloads in the results of the `composer create-project` command, we can copy it into the read.me file for future reference.
 
 > Note: Always remember that the version we specify in the `composer create-project` command is the version of the project skeleton. The version of the Laravel framework that gets installed within the project is specified in the `composer.json` file of the project skeleton.
 
