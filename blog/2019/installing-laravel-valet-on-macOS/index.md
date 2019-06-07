@@ -88,7 +88,7 @@ For example, let's say you had a Laravel project directory named `movies` and th
 
 After running the command, you should be able to navigate your browser to `movies.test` and see your Laravel `movies` project homepage being served.
 
-## troubleshooting Valet install
+## Troubleshooting Valet install
 
 If after running `valet install` and `valet park`, the sites are not being resolved, check if the `nginx` and `dnsmsq` services were actually installed and are running.
 
