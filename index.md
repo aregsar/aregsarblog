@@ -1,8 +1,8 @@
 # All Posts
 
-May 20, 2019
+June 7, 2019
 
-[Installing PHP on macOS Redux](https://aregsar.com/blog/2019/installing-php-on-macos-redux)
+[Installing Laravel Valet on macOS](https://aregsar.com/blog/2019/installing-laravel-valet-on-macOS)
 
 May 20, 2019
 
@@ -15,6 +15,10 @@ May 20, 2019
 May 20, 2019
 
 [Installing PHP on Ubuntu](https://aregsar.com/blog/2019/installing-php-on-ubuntu)
+
+May 20, 2019
+
+[Installing PHP on macOS Redux](https://aregsar.com/blog/2019/installing-php-on-macos-redux)
 
 May 13, 2019
 
