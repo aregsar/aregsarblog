@@ -1,8 +1,6 @@
 # Installing Laravel Valet on macOS
 
-May 20, 2019 by [Areg Sarkissian](https://aregsar.com/about)
-
-Updated on May 29 by Areg Sarkissian
+June 7, 2019 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Introduction
 
