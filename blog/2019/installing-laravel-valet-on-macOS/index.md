@@ -6,7 +6,7 @@
 
 In this post I will detail the installation and running of Laravel Valet on macOS using the PHP Composer package manager.
 
-> Note: Laravel Valet has been ported to Ubuntu Linux. I will provide links for installing Valet on Linux or Windows Subsystem for Linux on Windows 10.
+> Note: Laravel Valet has been ported to `Ubuntu Linux`. Check out these links for installing Valet on `Linux` or `Windows Subsystem for Linux` on Windows 10: `https://cpriego.github.io/valet-linux/` and `https://github.com/cpriego/valet-linux`. You may be able to install Valet directly on the Windows 10 OS as well by using these resources `https://blog.hashvel.com/posts/how-to-install-laravel-valet-on-windows-os/` and `https://github.com/cretueusebiu/valet-windows`. I have not attempted to install Valet on Linux or Windows so this post only applies to macOS.
 
 Laravel Valet is a package that consists of a daemon process that runs in the background and serves up Laravel sites through an Nginx proxy server.
 
@@ -21,8 +21,6 @@ The URI's that Valet serves will be of the form `<project-name>.test` where the 
 Valet maps the project names to the directory name of the project to be served, by using the `Valet park` command in the parent directory of the project.
 
 > Note: we can configure a different domain name instead of `.test` for Valet to use. You can check out the documentation for Laravel Valet for further info. `https://laravel.com/docs/5.8/valet`.
-
-https://laravel.com/docs/5.8/valet#installation
 
 ## Uninstalling Valet
 
@@ -115,3 +113,6 @@ sudo brew services start nginx
 
 ## Conclusion
 
+In this post I described how to install Laravel Valet on macOS to be able to serve all your Laravel projects without having to manually launch a web server.
+
+Thanks for reading.
