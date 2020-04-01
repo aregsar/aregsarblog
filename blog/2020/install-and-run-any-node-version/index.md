@@ -1,7 +1,5 @@
 # Install And Run Any Node Version
 
-[install and run any node version](https://aregsar.com/blog/2020/install-and-run-any-node-version)
-
 March 30, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Installing NVM Node Version Manager
