@@ -17,7 +17,6 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [Turbolinks](https://github.com/turbolinks/turbolinks) - Framework for Ajax loaded html pages
 + [IntercoolerJS](https://intercoolerjs.org/) - Framework for Ajax loaded html fragments
 + [Tailwindcss](https://tailwindcss.com/) - Utility first CSS framework
-+ [Zeplin](https://zeplin.io/) -  Web design service for developer and designer collaboration
 
 ## My lean development process
 
@@ -36,3 +35,4 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [TablePlus](https://tableplus.com/) - SQL Database management GUI
 + [Medis](http://getmedis.com/) - Redis Management GUI 
 + [Mailtrap](https://mailtrap.io) - Email delivery testing service
++ [Zeplin](https://zeplin.io/) -  Web design service for developer and designer collaboration
