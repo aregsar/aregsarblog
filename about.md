@@ -9,9 +9,9 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 ## My web development stack (Built for development speed)
 
 + [Laravel](https://laravel.com) - Rapid Application Development PHP web framework
-+ [livewire](https://laravel-livewire.com) - Laravel javascript framework for rendering components
-+ [AlpineJS](https://laravel-livewire.com/docs/alpine-js) -  Declarative javaScript behavior framework
-+ [StimulusJS](https://stimulusjs.org) - MVC framework for organizing client side javascript
++ [livewire](https://laravel-livewire.com) - Laravel Javascript framework for rendering server side components
++ [AlpineJS](https://laravel-livewire.com/docs/alpine-js) -  Declarative JavaScript behavior framework
++ [StimulusJS](https://stimulusjs.org) - MVC framework for organizing client side Javascript
 + [Turbolinks](https://github.com/turbolinks/turbolinks) - Framework for Ajax loaded html pages
 + [IntercoolerJS](https://intercoolerjs.org/) - Framework for Ajax loaded html fragments
 + [Tailwindcss](https://tailwindcss.com/) - Utility first CSS framework
@@ -22,7 +22,7 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - incremental feature development guarded by feature tests
 + [Trunk Based Development](https://trunkbaseddevelopment.com) - continuous integration into master delivery branch
 + [No Estimates](http://ronjeffries.com/xprog/articles/the-noestimates-movement) - because working software is the primary measure of progress
-+ [Kanban](https://www.atlassian.com/agile/kanban) 
++ [Kanban](https://www.atlassian.com/agile/kanban) - Agile done right
 
 ## My development tools
 
