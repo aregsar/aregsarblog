@@ -4,8 +4,6 @@ I help development teams rapidly build and deploy robust and maintainable web ap
 
 In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Walt Disney.
 
-I use Functional Programming, Object Oriented Programming, Domain Driven Design and [Vertical Slice Architecture](https://jimmybogard.com/vertical-slice-architecture/) principles while coding in PHP, C#, and Javascript to help teams rapidly build reliable software.
-
 I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value, faster, by using [tools](https://alwaysdeployed.com/tools) that support this development process.
 
 ## My web development stack (Built for development speed)
