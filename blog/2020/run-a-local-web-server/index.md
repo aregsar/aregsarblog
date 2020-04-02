@@ -91,4 +91,4 @@ touch index.html
 echo '<html><body>Hello</body></html>' > index.html
 ```
 
-
+Now run any of the server execution script mentioned in this article to serve up the file.
