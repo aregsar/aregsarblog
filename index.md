@@ -1,5 +1,9 @@
 # All Posts
 
+April 2, 2020
+
+[Run A Local Web Server](https://aregsar.com/blog/2020/run-a-local-web-server)
+
 March 30, 2020
 
 [Install And Run Any Node Version](https://aregsar.com/blog/2020/install-and-run-any-node-version)
