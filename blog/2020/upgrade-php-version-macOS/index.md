@@ -37,18 +37,18 @@ php -v
 ## Switching current PHP version
 
 We can switch between multiple installed PHP versions globally
-Assuming we have both php@7.4.1 and php@7.3 installed and assuming the current version of php is set to php@7.4.1, we can switch to php@7.3
+Assuming we have both php@7.4 and php@7.3 installed and assuming the current version of php is set to php@7.4, we can switch to php@7.3
 
 ```bash
 brew unlink php && brew link --force --overwrite php@7.3
 ```
 
-> Note: this unlinks the `php` symlink located at `usr/local/bin/php` that is currently pointing to the `php@7.4.4` version located at `\cellar\php\php@7.4.4` to the `php@7.3` version located at `\cellar\php\php@7.3`
+> Note: this unlinks the `php` symlink located at `usr/local/bin/php` that is currently pointing to the `php@7.4` version located at `/usr/local/Cellar/php/7.4.4/bin` to point to the `php@7.3` version located at `/usr/local/Cellar/php/7.3.5/bin`
 
 To switch back simply change the version number in the command:
 
 ```bash
-brew unlink php && brew link --force --overwrite php@7.4.4
+brew unlink php && brew link --force --overwrite php@7.4
 ```
 
 I added the following function to my bash profile to easily switch to a version.
@@ -59,4 +59,4 @@ phpver() {
 }
 ```
 
-Now I can simply type `phpver 7.4.4` to set my php version to php@7.4.4
+Now I can simply type `phpver 7.4` to set my php version to php@7.4
