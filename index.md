@@ -1,5 +1,13 @@
 # All Posts
 
+April 3, 2020
+
+[Update Laravel Valet After PHP Upgrade](https://aregsar.com/blog/2020/update-laravel-valet-after-php-upgrade)
+
+April 3, 2020
+
+[Upgrade Php Version MacOS](https://aregsar.com/blog/2020/upgrade-php-version-macOS)
+
 April 2, 2020
 
 [Run A Local Web Server](https://aregsar.com/blog/2020/run-a-local-web-server)
