@@ -2,8 +2,6 @@
 
 April 3, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Update Laravel Valet After PHP Upgrade](https://aregsar.com/blog/2020/update-laravel-valet-after-php-upgrade)
-
 Use Homebrew MacOS package manager to upgrade the default php version to the latest php version.
 
 First update homebrew to latest version

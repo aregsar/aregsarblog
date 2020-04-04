@@ -1,5 +1,9 @@
 # All Posts
 
+April 4, 2020
+
+[Use NPX To Run Local And Remote Node Packages](https://aregsar.com/blog/2020/use-npx-to-run-local-and-remote-node-packages)
+
 April 3, 2020
 
 [Update Laravel Valet After PHP Upgrade](https://aregsar.com/blog/2020/update-laravel-valet-after-php-upgrade)

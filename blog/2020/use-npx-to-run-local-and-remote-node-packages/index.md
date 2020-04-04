@@ -1,6 +1,6 @@
 # Use NPX To Run Local And Remote Node Packages
 
-[Use NPX To Run Local And Remote Node Packages](https://aregsar.com/blog/2020/use-npx-to-run-local-and-remote-node-packages)
+April 4, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Note: NPX is only available with NPM 5.2 or later. If for some reason it is unavailable, you can install it via `npm install -g npx`
 
