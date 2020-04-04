@@ -15,7 +15,7 @@ npm install -g create-react-app
 npx create-react-app myreactapp
 ```
 
-## Use MPX to run a package installed in a project
+## Use NPX to run a package installed in a project
 
 ```bash
 mkdir myapp && cd myapp
