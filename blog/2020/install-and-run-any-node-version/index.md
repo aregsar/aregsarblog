@@ -44,21 +44,27 @@ You can check available versions of node using:
 nvm ls-remote
 ```
 
-You can check locally installed versions of node using:
+You can check installed versions of node using:
 
 ```bash
 nvm ls
 ```
 
+You can install globally the latest stable version
+
+```bash
+nvm install stable
+```
+
 Lets say there one of the available versions of node is version 13.12.0. We now can:
 
-Locally install version 13.12.0 of node:
+Install version 13.12.0 of node:
 
 ```bash
 nvm install 13.12.0
 ```
 
-Locally install version 13.12.0 of node and upgrade to latest `npm` for the installed version:
+Install version 13.12.0 of node and upgrade to latest `npm` for the installed version:
 
 ```bash
 nvm install 13.12.0 --latest-npm
@@ -97,6 +103,16 @@ nvm use 13.12.0
 nvm install-latest-npm
 ```
 
+An alternative way to upgrade npm is using its current version to upgrade itself
+
+```bash
+nvm use 13.12.0
+#install the latest version globally
+npm install -g npm@latest
+```
+
+> Note: NPM package manage comes bundled with the NPX package runner so they are versioned together and upgraded to the latest version together.
+
 ## Using NVM configuration files for using per project node versions
 
 We can eliminate the need to specify the version node to use with the `nvm use` command on a per project basis if we add a `.nvmrc` file in our node project directory.
@@ -121,3 +137,52 @@ I usually set a bash alias `alias nu=nvm use` in my .profile file to make this e
 The following article talks about using node `engines` as an alternative to switching node versions:
 
 `https://medium.com/@faith__ngetich/locking-down-a-project-to-a-specific-node-version-using-nvmrc-and-or-engines-e5fd19144245`
+
+## Checking NVM, Node, NPM , NPX versions
+
+Installing node installs the NPM package manager and NPX package runner
+
+You can check the version of each:
+
+```bash
+# check global nvm version
+nvm --version
+```
+
+```bash
+# check current global node version
+node -v
+```
+
+```bash
+# check current global npm version
+npm -v
+```
+
+```bash
+# check current global npx version
+npx -v
+```
+
+## Installing Yarn
+
+Yarn is an alternative to the npm package manager.
+
+While you can install yarn via npm, it is recommended that you install it with your OS packaging manager.
+
+MacOS install procedure using homebrew:
+
+```bash
+# install yarn globally
+brew install yarn
+```
+
+```bash
+# upgrade yarn
+brew upgrade yarn
+```
+
+```bash
+# check global yarn version
+yarn --version
+```
