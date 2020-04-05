@@ -34,8 +34,18 @@ Now update valet by installing it again
 valet install
 ```
 
-Finally tell valet to user the latest upgraded php
+Finally tell valet to use the latest upgraded php
 
 ```bash
 valet use php
 ```
+
+Now we can go into the directory that hosts our Laravel project directories and run `valet part` to re-register our sites and we can verify that the `~/.config/valet/config.json` file lists the directory that hosts the Laravel projects.
+
+To list all linked projects type:
+
+```bash
+valet links
+```
+
+Latest Valet docs can be found at `https://laravel.com/docs/7.x/valet`

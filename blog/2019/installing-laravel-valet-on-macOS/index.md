@@ -84,9 +84,20 @@ To add our projects to be served by Valet, go to the directory where our Laravel
 
 This will serve any project using the URI `<project-name>.test` in the web browser.
 
-For example, let's say you had a Laravel project directory named `movies` and this directory was created inside the `dev` directory. In this case you would navigate to `dev` directory and run the `valet park` command.
+For example, let's say you had a Laravel project directory named `movies` and this directory was created inside the `~/dev` directory. In this case you would navigate to `~/dev` directory and run the `valet park` command.
 
 After running the command, you should be able to navigate your browser to `movies.test` and see your Laravel `movies` project homepage being served.
+
+Also if we check the file `~/.config/valet/config.json` shown below we will see that `~/dev` is added to the `paths` property. Note that the `tld` (top level domain) property is set to `test` which is why we append the `.test` domain to the project name.
+
+```json
+{
+    "tld": "test",
+    "paths": [
+        "/Users/aregsarkissian/dev"
+    ]
+}
+```
 
 ## Troubleshooting Valet install
 
