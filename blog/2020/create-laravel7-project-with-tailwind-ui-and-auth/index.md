@@ -20,21 +20,11 @@ git remote add origin git@github.com:aregsar/myapp.git
 git push -u origin master
 ```
 
-Check your github repo to see the committed files.
+Check your Github repo to see the committed files.
 
 > Note: `composer create-project` also includes the `users` and `failed jobs` database migration files in `database/migrations`
 
-## Add Bootsrap UI and Authentication Scaffolding
-
-```bash
-composer require laravel/ui
-php artisan ui bootstrap --auth
-npm install && npm run dev
-```
-
-> The `--auth` option adds the `password resets` database migration file in `database/migrations`
-
-## Add Tailwind UI and Authentication Scaffolding
+## Add Tailwind UI with Authentication Scaffolding
 
 ```bash
 composer require laravel-frontend-presets/tailwindcss --dev
@@ -43,8 +33,17 @@ npm install && npm run dev
 ```
 
 > The `--auth` option adds the `password resets` database migration file in `database/migrations`
-> Note: No need to do `composer require laravel/ui` since the tailwind UI preset does this.
-> no need to do `npm install @tailwindcss/ui` because it was done as part of the preset
+> Note: `composer require laravel/ui` and `npm install @tailwindcss/ui` are part of the `laravel-frontend-presets/tailwindcss` preset
+
+## Using the Bootstrap alternative to tailwind
+
+You can use Bootsrap UI with Authentication Scaffolding instead of the previous steps:
+
+```bash
+composer require laravel/ui
+php artisan ui bootstrap --auth
+npm install && npm run dev
+```
 
 ## Running database migrations to add authentication
 
@@ -91,17 +90,20 @@ Migrated:  2019_08_19_000000_create_failed_jobs_table (0.01 seconds)
 
 ## Serving the site
 
-serve using artisan
+Serve using Laravel valet:
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome myapp.test
+```
+
+Or serve using artisan
 
 ```bash
 php artisan serve
-#open chrome localhost:8000
 ```
 
-Serve using valet 
-
 ```bash
-#open chrome myapp.test
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8000
 ```
 
 ## Tailwind configuration files
