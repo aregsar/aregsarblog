@@ -24,7 +24,6 @@ Check your github repo to see the committed files.
 
 > Note: `composer create-project` also includes the `users` and `failed jobs` database migration files in `database/migrations`
 
-
 ## Add Bootsrap UI and Authentication Scaffolding
 
 ```bash
@@ -51,8 +50,43 @@ npm install && npm run dev
 
 Before running the migrations we need to create a `myapp` database using `tableplus` and add database user and password settings to `.env`
 
+Assuming we create a database with default settings:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=myapp
+DB_USERNAME=root
+DB_PASSWORD=
+
+Open `.env` file
+
+replace
+DB_DATABASE=laravel
+with
+DB_DATABASE=myapp
+
+also replace
+APP_NAME=Laravel
+with
+APP_NAME=Myapp
+
+Then run:
+
 ```bash
 php artisan migrate
+```
+
+You should see:
+
+```base
+Migration table created successfully.
+Migrating: 2014_10_12_000000_create_users_table
+Migrated:  2014_10_12_000000_create_users_table (0.02 seconds)
+Migrating: 2014_10_12_100000_create_password_resets_table
+Migrated:  2014_10_12_100000_create_password_resets_table (0.02 seconds)
+Migrating: 2019_08_19_000000_create_failed_jobs_table
+Migrated:  2019_08_19_000000_create_failed_jobs_table (0.01 seconds)
 ```
 
 ## Serving the site
@@ -72,7 +106,9 @@ Serve using valet
 
 ## Tailwind configuration files
 
-#in tailwind.config.js preset added
+In tailwind.config.js preset added
+
+```js
 module.exports = {
   theme: {
     extend: {}
@@ -80,17 +116,21 @@ module.exports = {
   variants: {},
   plugins: [
     require('@tailwindcss/custom-forms')
-    #,require('@tailwindcss/ui'), #instead of ui has custom-forms? 
   ]
 }
+```
 
+```js
+In webpack.mix.js preset added
 
-#in webpack.mix.js preset added
 mix.js('resources/js/app.js', 'public/js')
    .postCss('resources/css/app.css', 'public/css')
    .tailwind('./tailwind.config.js');
+```
 
+```css
 #in resources/css/app.css preset added:
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+```
