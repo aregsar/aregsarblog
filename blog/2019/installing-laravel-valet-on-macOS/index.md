@@ -122,6 +122,32 @@ sudo brew services start dnsmasq
 sudo brew services start nginx
 ```
 
+## Troubleshooting other issues
+
+One issue I ran into with running the valet command was that it required `sudo` privilege
+
+To not require `sudo` execute:
+
+```bash
+valet trust
+```
+
+For some reason `valet park` was not working because app was not served using .test tld.
+
+To fix you can try:
+
+```bash
+valet start
+```
+
+This restarts all the `nginx` and `dnsmasq` processes
+
+If it is still not working try re-installing valet
+
+If that does not work try un-installing valet then doing a fresh install
+
+> Note the valet uninstall removes the current php installation so PHP and possibly its extensions may need to be re-installed via homebrew and pecl again. Also seem like the valet uninstall effected my current nvm node setting where node and npm were not found. This was most likely due to the node path setting being modified during the valet uninstall. To resolve that I used the `nvm use <nodeversion>` command to reset the node path
+
 ## Conclusion
 
 In this post I described how to install Laravel Valet on macOS to be able to serve all your Laravel projects without having to manually launch a web server.
