@@ -79,6 +79,45 @@ Also I change the default parameter to:
 
 > Note that I did not use the 'default' connection. This is because I like to separate my session Redis connection used by the Laravel Session from other Redis connections uses by the Laravel Redis facade to store application data in the cache or the connections used by the Larave Cache and Queue facades to cache data or queue jobs.
 
+For reference I have included the redis driver configuration from `config/database.php` here:
+
+```php
+'redis' => [
+
+        #driver uses phpredis client as default
+        # no need to set REDIS_CLIENT=phpredis in .env to specify phpredis explicitly
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        ],
+
+        # default connection
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        #cache connection
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),#uses different database then 'default' connection
+        ],
+
+    ],
+```
+
+For details on how to configure the Laravel redis driver see: 
+
+[Laravel7 Redis Configuration](https://aregsar.com/blog/2020/laravel7-redis-configuration)
+
 ##################################################################################################
 
 config/cache.php:
