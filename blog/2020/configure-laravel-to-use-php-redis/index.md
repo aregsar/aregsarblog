@@ -117,15 +117,21 @@ the `'connections'` database driver has `'sqlite'` and `'mysql'` connections amo
 
 You can add as many connections with different connection settings as you need to each driver.
 
-The `'default'` redis connection is used by the Laravel Redis facade by default. The Laravel Redis facade can use any of the `'redis'` connections by explicitly referencing the connection by connection name.
+The `'default'` redis connection is used by the Laravel Redis facade by default. 
 
-Examples of using both the default connection and named connections will be shown in the following sections.
+The Laravel Redis facade can use any of the `'redis'` connections by explicitly referencing the connection by connection name.
+
+Examples of using both the default connection and named connections are shown in the following sections.
 
 ## Avoiding namespace conflicts when using the default phpredis client
 
-The only down side of using the default `'phpredis'` redis client is that you can not use the Laravel redis facade alias within your application.
+There is one downside of using the default `'phpredis'` Redis client. The downside is that you will not be able to use the default Laravel Redis facade alias specified in the `config/app.php` file within your application unless it is renamed.
 
-This is because the `phpredis` extension has a class named `Redis` that conflicts with the `Redis` facade class name. So in order to use the `Redis` facade in our application code we must either fully qualify the class name with the class namespace or import the namespace into the file where we use the facade class. Both of these cases is demonstrated below:
+This is because the `phpredis` extension has a class named `Redis` that conflicts with the `Redis` facade class name.
+
+If you choose not to rename the alias, then you need to use the `Redis` facade class directly using the full facade class namespace.
+
+To use the `Redis` facade in our application code we must either fully qualify the class name with the class namespace or import the namespace into the file where we use the facade class. Both of these cases is demonstrated below:
 
 ```php
 # fully namespace qualified class name
@@ -140,9 +146,9 @@ use Illuminate\Support\Facades\Redis;
 Redis::connection()->ping();
 ```
 
-Alternatively you can rename the 'Redis' facade alias in `config/app.php` file so that it will not conflict with the class of the same name defined by `phpredis`:
+Alternatively, as mentioned before you can rename the Redis facade alias in `config/app.php` file so that it will not conflict with the class name defined by the `phpredis` extension:
 
-So the original alias name `Redis` specified in `config/app.php`:
+The original alias name `Redis` specified in `config/app.php` as shown here:
 
 ```php
 aliases' => [
@@ -150,7 +156,7 @@ aliases' => [
 ]
 ```
 
-Is changed to `ZRedis` for example:
+As an example I have changed the name to `ZRedis`:
 
 ```php
 aliases' => [
@@ -166,41 +172,48 @@ ZRedis::connection()->ping();
 
 ## Connecting to Redis using default and explicit connections
 
-If no connection is specified then the facade uses the `default` connection configuration.
+When using the redis facade, if no connection is explicitly specified, then the facade uses the `default` connection configuration of the `'redis'` driver.
+
+Here the default connection is used:
+
 ```php
-#uses the `default` connection from config/database.php
 Illuminate\Support\Facades\Redis::set('name', 'Taylor');
 ```
 
+Here also the default connection is used:
+
 ```php
-#uses `default` connection from config/database.php
 Illuminate\Support\Facades\Redis::connection()->set('name', 'Taylor');
 ```
 
+But here the `'cache'` connection from `config/database.php` is used:
+
 ```php
-#uses the explicit `cache` connection from config/database.php
 Illuminate\Support\Facades\Redis::connection('cache')->set('name', 'Taylor');
 ```
 
 ## Configuring Laravel to use a managed Redis cluster
 
-While you could add your own redis cluster configuration in the Clusters section. I like using a managed cluster. In order to use a managed cluster you only need to add line `'cluster' => env('REDIS_CLUSTER', 'redis')` to the 'options' array in the 'redis' driver in config/database.php:
+While you could add your own redis cluster configuration in the Clusters section of the `'redis'` driver, I like using a managed cluster. 
 
+In order to use a managed cluster you only need to add the line `'cluster' => env('REDIS_CLUSTER', 'redis')` to the 'options' array in the `'redis'` driver in `config/database.php` shown below:
+
+```bash
 'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
         ],
+```
 
-The line `'cluster' => env('REDIS_CLUSTER', 'redis')`
-tells the framework to use the default clustering capability of your managed Redis cluster. 
+The line `'cluster' => env('REDIS_CLUSTER', 'redis')` tells the framework to use the default clustering capability of a managed `redis` cluster.
 
-> Note: the default value of `redis` for the second argument is used because the .env file does not contain a REDIS_CLUSTER setting by default. If you define this variable in .env you must set its value to `redis` to tell the framework to use the managed cluster.
+> Note: the default value of `redis` for the second argument is used because the default `.env` file does not contain a `REDIS_CLUSTER` environment setting. If you define this variable in the `.env` file, you must set its value to `redis` to tell the framework to use a managed cluster.
 
-Since I am always using the DigitalOcean Redis cluster, I just hard code this value to `'cluster' => 'redis'`
+Since I am always using the DigitalOcean Redis cluster, I just hard code this value in `config/database.php` to `'cluster' => 'redis'`
 
-Instructions to setup laravel for connecting with the digital ocean managed Redis cluster can be found at:
+Instructions to setup Laravel for connecting with the DigitalO cean managed Redis cluster can be found at:
 `https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster`
 
-I have outlined the steps to install the PECL `phpredis` extension on Ubuntu from the article:
+I have outlined the steps from the article to install the PECL `phpredis` extension on Ubuntu below:
 
 The code below assumes PHP is already installed.
 
@@ -235,3 +248,25 @@ REDIS_PORT=25061
 ```
 
 > Note: We need use the `tls://` part before the name of the Redis cluster
+
+An now we can test the connections add the following route to a new controller that you can add named `ConnectionChecker`:
+
+```php
+Route::get('/redis', 'ConnectionChecker@redisTest');
+```
+
+Then add the following `redisTest` method to the controller:
+
+```php
+public static function redisTest()
+{
+    $redis = Redis::connection();
+    try{
+        var_dump($redis->ping());
+    } catch (Exception $e){
+        $e->getMessage();
+    }
+}
+```
+
+Visit the `/redis` path to see the result.
