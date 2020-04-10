@@ -110,12 +110,10 @@ By default the client is set to `phpredis` to use the `phpredis` php extension t
 
 As mentioned at the beginning of the article you can also set the client to or `predis` to use the `predis` composer package to connect to Redis.
 
-Each driver can have one or more connections that represent the
-connection settings for the particular type of database, for instance a relational database or a Redis data store.
-
 Each driver can have one or more connections. Each connection represents the connection settings for the particular type of database that the driver supports.
 
-For example `'default'` and `'cache'` are two connections for the `'redis'` driver that are included by default.
+So for example `'redis'` driver has the `'default'` and `'cache'` connections included by default and
+the `'connections'` database driver has `'sqlite'` and `'mysql'` connections among others that are included by default.
 
 You can add as many connections with different connection settings as you need.
 
