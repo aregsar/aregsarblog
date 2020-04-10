@@ -1,5 +1,9 @@
 # All Posts
 
+April 10, 2020
+
+[Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis)
+
 April 6, 2020
 
 [Create Laravel Project With Tailwind UI and Auth](https://aregsar.com/blog/2020/create-laravel-project-with-tailwind-ui-and-auth)
