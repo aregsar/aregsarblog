@@ -4,6 +4,8 @@ April 9, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis)
 
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
+
 > prerequisite: must have PHP and PECL installed. MacOS Hombrew PHP installation installs PECL as well. For Ubuntu you need to install PECL separately using apt package manager
 
 

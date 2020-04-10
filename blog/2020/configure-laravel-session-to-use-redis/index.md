@@ -1,8 +1,10 @@
-# Configure Redis Session Store For Laravel
+# Configure Laravel Session To Use Redis
 
 April 7, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Configure Redis Session Store For Laravel](https://aregsar.com/blog/2020/configure-redis-session-store-for-laravel)
+[Configure Laravel Session To Use Redis](https://aregsar.com/blog/2020/configure-laravel-session-to-use-redis)
+
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
 
 In a previous article we learned how to configure laravel to use Redis.
 

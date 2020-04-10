@@ -4,6 +4,8 @@ April 9, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Configure Laravel Cache To Use Redis](https://aregsar.com/blog/2020/configure-laravel-cache-to-use-redis)
 
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
+
 config/cache.php:
 
 has list of stores e.g redis or file stores
