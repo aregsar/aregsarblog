@@ -115,17 +115,17 @@ Each driver can have one or more connections. Each connection represents the con
 So for example `'redis'` driver has the `'default'` and `'cache'` connections included by default and
 the `'connections'` database driver has `'sqlite'` and `'mysql'` connections among others that are included by default.
 
-You can add as many connections with different connection settings as you need.
+You can add as many connections with different connection settings as you need to each driver.
 
-The 'default' connection is used by the Laravel Redis facade by default. The Laravel Redis facade can explicitly use any of the redis connections by explicity referencing the connection name.
+The `'default'` redis connection is used by the Laravel Redis facade by default. The Laravel Redis facade can use any of the `'redis'` connections by explicitly referencing the connection by connection name.
 
 Examples of using both the default connection and named connections will be shown in the following sections.
 
 ## Avoiding namespace conflicts when using the default phpredis client
 
-The only down side of sticking with the default 'phpredis' client is that you can not use the Laravel 'redis' facade alias within your application. 
+The only down side of using the default `'phpredis'` redis client is that you can not use the Laravel redis facade alias within your application.
 
-This is because the 'phpredis' extension has a class named 'Redis' that conflicts with the 'Redis' facade class name. So in order to use the 'Redis` facade in our application code we must either fully qualify the class name with the class namespace or import the namespace into the file where we use the facade class as demonstrated below:
+This is because the `phpredis` extension has a class named `Redis` that conflicts with the `Redis` facade class name. So in order to use the `Redis` facade in our application code we must either fully qualify the class name with the class namespace or import the namespace into the file where we use the facade class. Both of these cases is demonstrated below:
 
 ```php
 # fully namespace qualified class name
@@ -140,9 +140,9 @@ use Illuminate\Support\Facades\Redis;
 Redis::connection()->ping();
 ```
 
-Alternatively you can rename the 'Redis' facade alias in `config/app.php`
+Alternatively you can rename the 'Redis' facade alias in `config/app.php` file so that it will not conflict with the class of the same name defined by `phpredis`:
 
-from:
+So the original alias name `Redis` specified in `config/app.php`:
 
 ```php
 aliases' => [
@@ -150,15 +150,13 @@ aliases' => [
 ]
 ```
 
-To
+Is changed to `ZRedis` for example:
 
 ```php
 aliases' => [
     'ZRedis' => Illuminate\Support\Facades\Redis::class,
 ]
 ```
-
-Here I renamed the 'Redis' alias to 'ZRedis'
 
 So now you can use it without requiring a namespace:
 
