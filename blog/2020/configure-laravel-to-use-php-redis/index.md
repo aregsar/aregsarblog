@@ -1,8 +1,8 @@
-# Laravel7 Redis Configuration
+# Configure Laravel To Use Php Redis
 
 April 9, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Laravel7 Redis Configuration](https://aregsar.com/blog/2020/laravel7-redis-configuration)
+[Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis)
 
 > prerequisite: must have PHP and PECL installed. MacOS Hombrew PHP installation installs PECL as well. For Ubuntu you need to install PECL separately using apt package manager
 
@@ -87,7 +87,9 @@ and structure. For instance the Redis driver is named 'redis' but the SQL databa
 
 config/database.php has a list of drivers e.g. 'redis' or 'connections'
 
-Some drivers like the 'redis' driver can have a 'client' setting `'client' => env('REDIS_CLIENT', 'phpredis'),` that represents the php client that it  uses to connect. By default the client is set to 'phpredis' to use the phpredis php extension to connect to redis. As mentioned above you can set it to or 'predis' to use the predis composer package to connect to Redis.
+Some drivers like the 'redis' driver can have a 'client' setting `'client' => env('REDIS_CLIENT', 'phpredis'),` that represents the php client that it uses to connect. 
+
+By default the client is set to 'phpredis' to use the phpredis php extension to connect to redis. As mentioned above you can set it to or 'predis' to use the predis composer package to connect to Redis.
 
 Each driver can also have one or more connections that represent the
 connection settings for the particular type of database, for instance a relational database or a Redis database.

@@ -2,7 +2,7 @@
 
 April 6, 2020
 
-[Create Laravel7 Project With Tailwind UI and Auth](https://aregsar.com/blog/2020/create-laravel7-project-with-tailwind-ui-and-auth)
+[Create Laravel Project With Tailwind UI and Auth](https://aregsar.com/blog/2020/create-laravel-project-with-tailwind-ui-and-auth)
 
 April 4, 2020
 

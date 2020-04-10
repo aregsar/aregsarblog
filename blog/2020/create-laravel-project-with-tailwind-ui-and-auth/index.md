@@ -1,6 +1,8 @@
-# Create Laravel 7 Project With Tailwind UI and Auth
+# Create Laravel Project With Tailwind UI and Auth
 
 April 4, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
 
 ## Installation steps
 

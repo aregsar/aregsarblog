@@ -4,7 +4,6 @@ April 9, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Configure Laravel Cache To Use Redis](https://aregsar.com/blog/2020/configure-laravel-cache-to-use-redis)
 
-
 config/cache.php:
 
 has list of stores e.g redis or file stores
