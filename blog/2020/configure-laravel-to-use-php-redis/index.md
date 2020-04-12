@@ -274,10 +274,9 @@ Visit the `/redis` path to see the result.
 
 Each Redis server you configure a connection for in the config file will have its own unique set of host and port settings. However multiple connections can be configured to connect to the same Redis server but using a different database.
 
-The database value must be an integer between 0 and 16 Redis supports up to 16 additional databases in addition to its default database represented by integer 0. The connection string to redis will include the database as a path segment `redis://host:port/database` e.g.
-`redis://localhost:6379/0`
+The database value must be an integer between 0 and 15 because Redis supports only up to 16  databases. The connection string to redis will include the database as a path segment `redis://host:port/database` e.g. `redis://localhost:6379/0`
 
-Here is the default out of the box connections configured in `config/database.php` 
+Here is the default out of the box connections configured in `config/database.php`:
 
 ```bash
 'default' => [
@@ -386,4 +385,4 @@ For predis we can only set a common prefix inside the 'options' setting::
 
 The default out of the box .env file does not contain REDIS_PREFIX key so the second parameter of the env() function specifies a prefix using the APP_NAME. You can remover the out of the box prefix setting if you don't want a prefix.
 
-> I am not certain of this since I dont use the predis driver but the when connecting to redis server, the  Laravel predis driver code may substitute '_database_' in the prefix string with the database integer specified in the connection setting it uses to connect. Thereby giving a unique prefix per database.
+> I am not certain of this since I dont use the predis driver but the when connecting to redis server, the Laravel predis driver code may substitute '_database_' in the prefix string with the database integer specified in the connection setting it uses to connect. Thereby giving a unique prefix per database.
