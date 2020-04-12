@@ -4,7 +4,7 @@ April 10, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel
 > Prerequisite: must have PHP and PECL installed. The MacOS Hombrew PHP installation installs PECL as well. On Ubuntu you need to install PECL separately using apt package manager. You can find Ubuntu install instructions and link to instructions for connecting to the DigitalOcean redis cluster at the end of the article.
-> You might find the redis-cli cli docs at `https://redis.io/topics/rediscli` useful for working with Redis. Alternatively Medis `http://getmedis.com/` app is a nice GUI for working with redis data.
+> You might find the redis-cli cli docs at `https://redis.io/topics/rediscli` useful for working with Redis. Alternatively Medis `http://getmedis.com/` app and `https://tableplus.com/blog/2018/06/best-redis-gui-client-tableplus.html` are nice GUI redis clients for working with redis data.
 
 ## Default Redis driver in Laravel 7
 

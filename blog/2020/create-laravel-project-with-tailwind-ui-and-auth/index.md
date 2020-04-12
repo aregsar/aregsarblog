@@ -47,9 +47,10 @@ npm install && npm run dev
 
 ## Running database migrations to add authentication
 
-Before running the migrations we need to create a `myapp` database using `tableplus` and add database user and password settings to `.env`
+Before running the migrations we need to create a `myapp` database using your favorite database manager CLI or GUI. I use TablePlus `https://tableplus.com/` to add a database named `myapp`.
 
-Assuming we create a database with default settings:
+Next we need to add the database user and password settings to `.env`.
+Assuming we created a database with default settings:
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -60,15 +61,29 @@ DB_PASSWORD=
 
 Open `.env` file
 
-replace
-DB_DATABASE=laravel
-with
-DB_DATABASE=myapp
+Replace:
 
-also replace
+```ini
+DB_DATABASE=laravel
+```
+
+With:
+
+```ini
+DB_DATABASE=myapp
+```
+
+Also replace:
+
+```ini
 APP_NAME=Laravel
-with
+```
+
+With:
+
+```ini
 APP_NAME=Myapp
+```
 
 Then run:
 
@@ -76,9 +91,9 @@ Then run:
 php artisan migrate
 ```
 
-You should see:
+After you execute the script, you should see:
 
-```base
+```bash
 Migration table created successfully.
 Migrating: 2014_10_12_000000_create_users_table
 Migrated:  2014_10_12_000000_create_users_table (0.02 seconds)
