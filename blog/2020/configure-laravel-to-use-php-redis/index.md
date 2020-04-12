@@ -268,3 +268,36 @@ public static function redisTest()
 ```
 
 Visit the `/redis` path to see the result.
+
+## The redis key prefix and connections settings
+
+Each Redis server you configure a connection for in the config file will have its own unique set of host and port settings. However multiple connections can be configured to connect to the same Redis server. In that case the database setting of those connections can be used to segment the data stored into different sets. Since Redis is basically a big collection of key\value pairs, The database setting is appended as part of a prefix string to the key name. In this way two keys with the same name in the application, that use two different connections with the same host and port but different database settings, will have two distinct names when used to store and access redis data. 
+
+The application name is also used as part of prefix in case two different apps with identical connection settings are accessing the same Redis server.
+
+The  configuration below illustrates the above. Here we have two connections with identical settings except the database setting. One is set to REDIS_CACHE_DB_ONE = 1 and the other REDIS_CACHE_DB_TWO=2. 
+
+Note the string `'_database_'` appended to the end of the prefix setting inside the options setting. This string will get replaced by the database setting of the connection by the Laravel redis provider to build the key used to access data. The full prefix is actually be '<APP_NAME>_<DATABASE_NAME>_'. The app name in the prefix is used in case two different apps are accessing the same Redis server.
+
+> Note: since by default the REDIS_PREFIX is not defined in the .env file, the second parameter of the env() function will be set to the prefix. If you define REDIS_PREFIX in .env and want to have two identical connections with different database names, be sure to append '_database_' string as part of the value you set to the REDIS_PREFIX
+
+```bash
+'options' => [
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        ],
+'cacheone' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB_ONE', '1'),
+        ],
+'cachetwo' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB_TWO', '2'),
+        ],
+
+```
