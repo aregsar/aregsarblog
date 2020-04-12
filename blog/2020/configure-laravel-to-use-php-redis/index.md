@@ -301,3 +301,12 @@ Note the string `'_database_'` appended to the end of the prefix setting inside 
         ],
 
 ```
+
+> Note: the database value must be an integer between 0 and 16 Redis supports up to 16 additional databases in addition to its default database represented by integer 0. The connection string to redis includes the database as a path segment `redis://host:port/database` e.g.
+`redis://localhost:6379/0`
+
+It is good practice to segment keys of different types in their own database. For instance having the Laravel Session use the default database 0 and the Laravel redis queue driver use database 1.
+
+According to Laravel 7 docs PhpRedis also supports the following additional connection parameters: persistent, prefix, read_timeout and timeout
+
+> Docs for the redis-cli cli can be found at `https://redis.io/topics/rediscli`
