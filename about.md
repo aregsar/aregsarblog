@@ -30,7 +30,6 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 + [ngrok](https://ngrok.com/) - Secure public URLs for local webhook testing
 + [VSCode](https://code.visualstudio.com/) - Lightweight editor and IDE
 + [PHPStorm](https://www.jetbrains.com/phpstorm/) - Powerful PHP IDE
-+ [TablePlus](https://tableplus.com/) - SQL Database management GUI
-+ [Medis](http://getmedis.com/) - Redis Management GUI 
++ [TablePlus](https://tableplus.com/) - Database management GUI for MySQL,  Redis and more
 + [Mailtrap](https://mailtrap.io) - Email delivery testing service
 + [Zeplin](https://zeplin.io/) -  Web design service for developer and designer collaboration
