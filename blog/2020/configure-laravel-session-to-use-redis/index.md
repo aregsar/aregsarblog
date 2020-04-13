@@ -1,8 +1,6 @@
 # Configure Laravel Session To Use Redis
 
-April 7, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[Configure Laravel Session To Use Redis](https://aregsar.com/blog/2020/configure-laravel-session-to-use-redis)
+April 13, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
 
@@ -94,5 +92,3 @@ Alternatively in `config/session.php` you can hard code the session driver `conn
 ```
 
 This sets the value to directly to the new `session` connection added to `config/database.php`.
-
-> Note that I did not use the 'default' connection. This is because I like to separate my session Redis connection used by the Laravel Session from other Redis connections uses by the Laravel Redis facade to store application data in the cache or the connections used by the Larave Cache and Queue facades to cache data or queue jobs.
