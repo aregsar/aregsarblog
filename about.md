@@ -26,10 +26,11 @@ I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.c
 
 ## My development tools
 
-+ [PHPDocker.io](https://phpdocker.io/) - Docker containers for locally running the LEMP stack
++ [PHPDocker.io](https://phpdocker.io/) - Docker containers for locally running the [LEMP stack](https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-ubuntu-18-04), [Redis](https://redis.io/),[Elasticsearch](https://www.elastic.co/what-is/elasticsearch) and [Mailhog](https://blog.mailtrap.io/mailhog-explained/)
 + [ngrok](https://ngrok.com/) - Secure public URLs for local webhook testing
 + [VSCode](https://code.visualstudio.com/) - Lightweight editor and IDE
 + [PHPStorm](https://www.jetbrains.com/phpstorm/) - Powerful PHP IDE
 + [TablePlus](https://tableplus.com/) - Database management GUI for MySQL,  Redis and more
 + [Mailtrap](https://mailtrap.io) - Email delivery testing service
 + [Zeplin](https://zeplin.io/) -  Web design service for developer and designer collaboration
++ [DigitalOcean](https://www.digitalocean.com/) - Cloud deployment with managed MySQL database, managed Redis cluster, Managed Load Balancer and S3 compatible file storage

@@ -74,9 +74,7 @@ So the Redis driver configuration is specified by the `'redis'` key in the file 
 
 ```php
 'redis' => [
-        #driver uses phpredis client as default
-        # no need to set REDIS_CLIENT=phpredis in .env to specify phpredis explicitly
-        'client' => env('REDIS_CLIENT', 'ppredis'),
+        'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
