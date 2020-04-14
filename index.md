@@ -1,5 +1,9 @@
 # All Posts
 
+April 14, 2020
+
+[Configure Laravel Cache To Use Redis](https://aregsar.com/blog/2020/configure-laravel-cache-to-use-redis)
+
 April 13, 2020
 
 [Configure Laravel Session To Use Redis](https://aregsar.com/blog/2020/configure-laravel-session-to-use-redis)
