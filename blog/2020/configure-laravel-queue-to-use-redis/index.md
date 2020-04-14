@@ -98,21 +98,19 @@ $queue = $queueManager->connection('redis');
 $queue->push(new InvoiceEmail($order));
 
 
-
+#using
 
 From `config/queue.php` file:
 
 ```php
- #selects redis connection from connections array in this file
- #by using the QUEUE_CONNECTION=redis setting in .env file
- 'default' => env('QUEUE_CONNECTION', 'sync'),
-
  'connections' => [
         'redis' => [
             #hardcodes 'redis' driver from config/database.php
             'driver' => 'redis',
             #hard coded 'default' connection from 'redis' driver connection in config/database.php
             'connection' => 'default',
+            #queue name that is set to `default` since no REDIS_QUEUE setting is defined in .env file
+            #this name will be used as a Redis key prefix so we can have different queues with the same Redis connection (no need to change this setting)
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
