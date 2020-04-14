@@ -246,18 +246,19 @@ REDIS_PORT=25061
 
 > Note: We need use the `tls://` part before the name of the Redis cluster
 
-An now we can test the connections add the following route to a new controller that you can add named `ConnectionChecker`:
+An now we can test the connections add the following route to a new controller that you can add named `RedisController`:
 
 ```php
-Route::get('/redis', 'ConnectionChecker@redisTest');
+Route::get('/redis', 'RedisController@redisTest');
 ```
 
 Then add the following `redisTest` method to the controller:
 
 ```php
-public static function redisTest()
+public function redisTest()
 {
     $redis = Redis::connection();
+
     try{
         var_dump($redis->ping());
     } catch (Exception $e){

@@ -7,6 +7,7 @@ April 13, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 In a previous article [Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis) we learned how to configure laravel to use Redis.
 
 In this article I will show you how to convert the Laravel Session configuration to use Redis.
+
 By default Laravel uses the file driver to store session data on the server. This will not be performant for high traffic sites.
 
 ## Setting the Laravel session driver
