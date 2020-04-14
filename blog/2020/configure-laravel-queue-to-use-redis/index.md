@@ -33,8 +33,12 @@ From `config/queue.php` file:
         ],
 
         'redis' => [
+            #hard coded 'redis' driver from config/database.php
             'driver' => 'redis',
+            #hard coded 'default' connection from 'redis' driver connection in config/database.php
             'connection' => 'default',
+            #queue name that is set to `default` since no REDIS_QUEUE setting is defined in .env file
+            #this name will be used as a Redis key prefix so we can have different queues with the same Redis connection (no need to change this setting)
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
@@ -46,6 +50,7 @@ From `config/database.php` file:
 
 ```php
     'redis' => [
+        #out of the box 'default' redis connection
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -65,7 +70,7 @@ From `config/database.php` file:
     ],
 ```
 
-## changing the default queue connection to use Redis
+## changing the default queue connection to use the redis connection
 
 We can change the default Laravel queue store configuration to use the Redis key value store for its queue by changing the `default` setting specified in the `config/queue.php` configuration file shown below:
 
@@ -73,11 +78,50 @@ We can change the default Laravel queue store configuration to use the Redis key
 'default' => env('QUEUE_CONNECTION', 'sync'),
 ```
 
-We want to change the `QUEUE_CONNECTION` in the `.env` file from `QUEUE_CONNECTION=sync` to `QUEUE_CONNECTION=redis`.
+We want to change the `QUEUE_CONNECTION` in the `.env` file from `QUEUE_CONNECTION=sync` to `QUEUE_CONNECTION=redis` to set the `default` setting to use the `redis` connection defined in `config/queue.php`.
 
-> Note: We dont want to hard code the `default` setting to `redis` and we want to keep the value of the default parameter passed to env() to `sync` so that we can remove the `QUEUE_CONNECTION` variable from the .env file if we need the queue to operate synchronously for development testing.
+> Note: We don't want to hard code the `default` setting to `redis` and we want to keep the value of the default parameter passed to env() to `sync` so that we will be able to remove the `QUEUE_CONNECTION` variable from the .env file if we need the queue to operate synchronously for development testing.
 
+## changing the default redis connection to use a different cache store
 
+The `redis` connection in `config/queue.php` file has a  `'connection' => 'default'` setting
+that selects the `default` connection of the `redis` driver defined in `config/database.php`.
+
+We can change this so that the queue connection in `config/queue.php` can use a separate redis driver connection that we can add to `config/database.php`.
+
+Below we have shown the new configuration that adds a new redis driver connection named `queue` to 
+
+From `config/queue.php` file:
+
+```php
+ 'connections' => [
+        'redis' => [
+            #hard coded 'redis' driver from config/database.php
+            'driver' => 'redis',
+            #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
+            'connection' => 'queue',
+            'queue' => env('REDIS_QUEUE', 'default'),
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+]
+```
+
+From `config/database.php` file:
+
+```php
+    'redis' => [
+        #newly added `queue` connection (uses same connection setttings as the default connection)
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            #uses a separate database for the queue
+            'database' => env('REDIS_CACHE_DB', '2'),
+        ],
+    ],
+```
 
 ## Using the Laravel queue
 
@@ -96,41 +140,5 @@ $connection = Queue::connection('connection_name')->push(new InvoiceEmail($order
 $queueManager = app('queue');
 $queue = $queueManager->connection('redis');
 $queue->push(new InvoiceEmail($order));
-
-
-#using
-
-From `config/queue.php` file:
-
-```php
- 'connections' => [
-        'redis' => [
-            #hardcodes 'redis' driver from config/database.php
-            'driver' => 'redis',
-            #hard coded 'default' connection from 'redis' driver connection in config/database.php
-            'connection' => 'default',
-            #queue name that is set to `default` since no REDIS_QUEUE setting is defined in .env file
-            #this name will be used as a Redis key prefix so we can have different queues with the same Redis connection (no need to change this setting)
-            'queue' => env('REDIS_QUEUE', 'default'),
-            'retry_after' => 90,
-            'block_for' => null,
-        ],
-]
-```
-
-From `config/database.php` file:
-
-```php
-    'redis' => [
-        'queue' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-        ],
-
-    ],
-```
 
 
