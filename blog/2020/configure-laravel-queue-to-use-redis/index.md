@@ -89,11 +89,12 @@ that selects the `default` connection of the `redis` driver defined in `config/d
 
 We can change this so that the queue connection in `config/queue.php` can use a separate redis driver connection that we can add to `config/database.php`.
 
-Below we have shown the new configuration that adds a new redis driver connection named `queue` to 
+Below we have shown the new configuration that adds a new redis driver connection named `queue` to `config/database.php` and reference this new connection from the `connection` setting of the `redis` queue connection in `config/queue.php`:
 
 From `config/queue.php` file:
 
 ```php
+#config/queue.php
  'connections' => [
         'redis' => [
             #hard coded 'redis' driver from config/database.php
@@ -110,6 +111,7 @@ From `config/queue.php` file:
 From `config/database.php` file:
 
 ```php
+#config/database.php
     'redis' => [
         #newly added `queue` connection (uses same connection setttings as the default connection)
         'queue' => [
@@ -140,5 +142,3 @@ $connection = Queue::connection('connection_name')->push(new InvoiceEmail($order
 $queueManager = app('queue');
 $queue = $queueManager->connection('redis');
 $queue->push(new InvoiceEmail($order));
-
-
