@@ -384,4 +384,3 @@ For predis we can only set a common prefix inside the 'options' setting::
 
 The default out of the box .env file does not contain REDIS_PREFIX key so the second parameter of the env() function specifies a prefix using the APP_NAME. You can remover the out of the box prefix setting if you don't want a prefix.
 
-> I am not certain of this since I dont use the predis driver but the when connecting to redis server, the Laravel predis driver code may substitute '_database_' in the prefix string with the database integer specified in the connection setting it uses to connect. Thereby giving a unique prefix per database.

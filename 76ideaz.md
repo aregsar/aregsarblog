@@ -1,5 +1,7 @@
 # 76ideaz - Independent ideas from a to z
 
+> I am not certain of this since I dont use the predis driver but the when connecting to redis server, the Laravel predis driver code may substitute '_database_' in the prefix string with the database integer specified in the connection setting it uses to connect. Thereby giving a unique prefix per database.
+
 At 76ideaz its not business as usual.
 
 We are small team of web designers and developers that have many years of experience developing and deploying web applications.
