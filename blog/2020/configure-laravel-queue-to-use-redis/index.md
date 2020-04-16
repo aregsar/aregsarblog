@@ -10,7 +10,7 @@ In this article I will show you how to convert the Laravel Queue configuration t
 
 By default Laravel queue facade\provider is configured to use a `sync` driver for synchronously executing queued jobs. This will not be work in a production environment when jobs need to be queued to a data store to be picked up and executed in the background.
 
-## The queue configuration
+## The queue facade/provider configuration
 
 The file `config/queue.php` contains multiple queue connections specified in the `connections` setting. The file also contains a `default` connection setting for the queue that is set to the `sync` connection via the out of the box `QUEUE_CONNECTION` .env file setting and the default second parameter of the env() function.
 
@@ -70,7 +70,7 @@ From `config/database.php` file:
     ],
 ```
 
-## changing the default queue connection to use the redis connection
+## changing the default Laravel Queue connection to use Redis
 
 We can change the default Laravel queue store configuration to use the Redis key value store for its queue by changing the `default` setting specified in the `config/queue.php` configuration file shown below:
 

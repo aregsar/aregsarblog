@@ -76,36 +76,20 @@ The annotated snippets from  both `config/cache.php` and `config/database.php` s
     ],
 ```
 
-## Setting the default Laravel facade/provider cache driver
+## Changing the default Laravel facade/provider cache driver to use Redis
 
-We can change the default Laravel cache store configuration to use the Redis key value store to cache data, by changing the  `'default'` setting in the `config/cache.php` configuration file to use the `'redis'` store.
-
-Here I am showing only the file and redis store.
-
-Each store has a driver setting. The file store is set as the default store as defined by the `default` setting and in the `.env` file:
+To let the Laravel cache facade\provider use Redis by default we need to change the value of the `default` setting in `config/cache.php` to use the `'redis'` cache store show below:
 
 ```php
  'default' => env('CACHE_DRIVER', 'file'),
 ```
 
-```ini
-CACHE_DRIVER=file
-```
+We can do so by changing the out of the box `CACHE_DRIVER=file` setting in the `.env` file tp `CACHE_DRIVER=redis`
 
-## Changing the default cache store to use Redis
-
-To let the Laravel cache facade\provider to use Redis by default we need to change the cache store value of the `default` setting in `config/cache.php`.
-
-So first we need to change the `CACHE_DRIVER` setting in the `.env` file to a `CACHE_STORE` setting environment variable that is set to `redis`:
-
-```ini
-CACHE_STORE=redis
-```
-
-Then change the `default` setting in `config/cache.php`:
+If we know that we will always be using redis then we can even remove the `CACHE_DRIVER=redis` setting and just the change the default second parameter to env() function to `redis`:
 
 ```php
- 'default' => env('CACHE_STORE', 'redis'),
+ 'default' => env('CACHE_DRIVER', 'redis'),
 ```
 
 Alternatively if we always use Redis as the cache, we can remove the environment variable and hard code the setting in `config/cache.php`:
@@ -114,26 +98,29 @@ Alternatively if we always use Redis as the cache, we can remove the environment
  'default' => 'redis',
 ```
 
-## Using the Laravel Cache
+## Using the default Laravel Cache
 
-The snipper below uses the default cache store specified in `config/cache.php`:
+The snippet below uses the default cache store specified in `config/cache.php`:
 
 ```php
 $value = Cache::get('foo');
 ```
 
-select a store from stores specified in config/cache.php
+## Using an explicit cache store for Laravel Cache
 
-The snipper below explicitly uses a the `file` store specified in `config/cache.php` even though the default cache store is set to `redis` in `config/cache.php`:
+we can explicitly select a store from stores specified in `config/cache.php` to override the default cache configuration when using the cache provider or facade.
+
+The snippet below explicitly uses a the `file` store specified in `config/cache.php` even though the default cache store is set to `redis` in `config/cache.php`:
 
 ```php
 $value = Cache::store('file')->get('bar');
 ```
 
-Note: We can additional cache `redis` stores in `config/cache.php` that are configured to use other `redis` driver connections in `config/database.php`.
+## Adding and using additional cache stores
+
+We can additional cache `redis` stores in `config/cache.php` that are configured to use other `redis` driver connections in `config/database.php`.
 
 Below is an example of adding a `redis2` store to `config/cache.php` that references a `cache2` redis connection added to the `redis` driver in `config/database.php`:
-
 
 ```php
 # config/cache.php
@@ -178,4 +165,16 @@ Given the above settings we can explicitly use the new `redis2` store like so:
 
 ```php
 $value = Cache::store('redis2')->get('bar');
+```
+
+We could also change the `default` setting in `config/cache.php` to use the `redis2` cache store instead of the out of the box `redis` store:
+
+```php
+ 'default' => 'redis2',
+```
+
+Now the following code will use `redis2` store as the default store:
+
+```php
+$value = Cache::get('foo');
 ```
