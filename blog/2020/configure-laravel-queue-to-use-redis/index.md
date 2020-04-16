@@ -88,7 +88,11 @@ The `redis` connection in `config/queue.php` file has a  `'connection' => 'defau
 
 We can change this so that the queue connection in `config/queue.php` can use a separate redis driver connection that we can add to `config/database.php`.
 
-Below we have shown the new configuration that adds a new redis driver connection named `queue` to `config/database.php` and reference this new connection from the `connection` setting of the `redis` queue connection in `config/queue.php`:
+Below we have shown the new configuration that adds a new `redis` driver connection named `queue` to `config/database.php` and reference this new connection from the `connection` setting of the `redis` queue connection in `config/queue.php`.
+
+I have also added a whole new queue connection named `redis2` which references a `queue2` redis driver connection.
+
+The annotations in the configuration code snippets below should serve to clarify what is described above.
 
 From `config/queue.php` file:
 
@@ -101,10 +105,21 @@ From `config/queue.php` file:
             #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
             'connection' => 'queue',
             #this is the key prefix used for the queue keys, no need to change
+            #unless 'redis2' used the same 'queue' connection instead of the 'queue2' connection
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
-        ],
+        ],'redis2' => [
+            #hard coded 'redis' driver specified in config/database.php
+            'driver' => 'redis',
+            #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
+            'connection' => 'queue2',
+            #this is the key prefix used for the queue keys, no need to change
+            #unless we use the same connection as an
+            'queue' => env('REDIS_QUEUE', 'default'),
+            'retry_after' => 90,
+            'block_for' => null,
+        ]
 ]
 ```
 
@@ -127,15 +142,22 @@ From `config/database.php` file:
 
 > Note that the `queue` connection in `config/database.php` uses a value of `2` for its `database` setting to indicate a different Redis database. Otherwise there would be no point for adding this new connection
 
-## Using the Laravel queue
+## Using the Laravel default queue connection
 
-#uses the default connection setting in config/queue.php which includes the queue name to be used
-#the connection also specifies the driver and associated connection specified in config/database.php
+The following uses the default connection setting in `config/queue.php`:
+
+```php
 Queue::push(new InvoiceEmail($order));
+```
+
+## Overriding the default queue connection
 
 #names the queue explicitly but uses the default connection setting in config/queue.php
 #overrides the queue name specified in the default connection setting
+
+```php
 Queue::pushOn('emails', new InvoiceEmail($order));
+```
 
 #explicitely selecting a queue connection from config/queue.php connections
 $connection = Queue::connection('connection_name')->push(new InvoiceEmail($order));
