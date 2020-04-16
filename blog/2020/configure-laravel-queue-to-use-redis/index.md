@@ -84,8 +84,7 @@ We want to change the `QUEUE_CONNECTION` in the `.env` file from `QUEUE_CONNECTI
 
 ## changing the default redis connection to use a different cache store
 
-The `redis` connection in `config/queue.php` file has a  `'connection' => 'default'` setting
-that selects the `default` connection of the `redis` driver defined in `config/database.php`.
+The `redis` connection in `config/queue.php` file has a  `'connection' => 'default'` setting that selects the `default` connection of the `redis` driver defined in `config/database.php`.
 
 We can change this so that the queue connection in `config/queue.php` can use a separate redis driver connection that we can add to `config/database.php`.
 
@@ -97,10 +96,11 @@ From `config/queue.php` file:
 #config/queue.php
  'connections' => [
         'redis' => [
-            #hard coded 'redis' driver from config/database.php
+            #hard coded 'redis' driver specified in config/database.php
             'driver' => 'redis',
             #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
             'connection' => 'queue',
+            #this is the key prefix used for the queue keys, no need to change
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
@@ -124,6 +124,8 @@ From `config/database.php` file:
         ],
     ],
 ```
+
+> Note that the `queue` connection in `config/database.php` uses a value of `2` for its `database` setting to indicate a different Redis database. Otherwise there would be no point for adding this new connection
 
 ## Using the Laravel queue
 

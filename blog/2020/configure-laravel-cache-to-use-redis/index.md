@@ -167,7 +167,11 @@ Given the above settings we can explicitly use the new `redis2` store like so:
 $value = Cache::store('redis2')->get('bar');
 ```
 
-We could also change the `default` setting in `config/cache.php` to use the `redis2` cache store instead of the out of the box `redis` store:
+## changing the default redis store to use a different cache store
+
+We could also change the `default` setting in `config/cache.php` to use a different cache store the out of the box `redis` store.
+
+For instance we can use the `redis2` cache store we added above instead of the out of the box `redis` store:
 
 ```php
  'default' => 'redis2',
