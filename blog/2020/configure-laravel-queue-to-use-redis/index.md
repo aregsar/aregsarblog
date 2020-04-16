@@ -104,8 +104,7 @@ From `config/queue.php` file:
             'driver' => 'redis',
             #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
             'connection' => 'queue',
-            #this is the key prefix used for the queue keys, no need to change
-            #unless 'redis2' used the same 'queue' connection instead of the 'queue2' connection
+            #this specifies the default key prefix for this 'redis' connecton that is used for the queue keys
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
@@ -114,8 +113,7 @@ From `config/queue.php` file:
             'driver' => 'redis',
             #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
             'connection' => 'queue2',
-            #this is the key prefix used for the queue keys, no need to change
-            #unless we use the same connection as an
+            #this specifies the default key prefix for this 'redis2' connecton that is used for the queue keys
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
@@ -152,17 +150,36 @@ Queue::push(new InvoiceEmail($order));
 
 ## Overriding the default queue connection
 
-#names the queue explicitly but uses the default connection setting in config/queue.php
-#overrides the queue name specified in the default connection setting
+We can explicitly selecting a queue connection specified in `config/queue.php` by the queue connection name that we like to use.
+
+This will override the default queue connection set to the `default` setting.
 
 ```php
-Queue::pushOn('emails', new InvoiceEmail($order));
+$connection = Queue::connection('redis2')->push(new InvoiceEmail($order));
 ```
 
-#explicitely selecting a queue connection from config/queue.php connections
-$connection = Queue::connection('connection_name')->push(new InvoiceEmail($order));
+Alternatively can use a queue instance from queue manager:
 
-#Alternatively can get a queue instance from queue manager
+```php
 $queueManager = app('queue');
-$queue = $queueManager->connection('redis');
-$queue->push(new InvoiceEmail($order));
+$queueManager->connection('redis')->push(new InvoiceEmail($order));
+```
+
+Both above use the default queue for the connection they are using, which is specified by the `queue` setting of each connection in `config/queue.php`.
+
+## Overriding the connection queue
+
+We can override the default queue of the queue connection that is used by the facade by explicitly passing in a queue name.
+
+The code below names the queue explicitly but uses the default connection setting in config/queue.php. 
+
+```php
+Queue::pushOn('email', new InvoiceEmail($order));
+```
+
+The code below names the queue explicitly and  also overrides the default queue connection setting in config/queue.php.
+
+```php
+$connection = Queue::connection('redis2')->pushOn('email', new InvoiceEmail($order));
+```
+
