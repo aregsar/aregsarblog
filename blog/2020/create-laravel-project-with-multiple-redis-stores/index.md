@@ -37,7 +37,12 @@ with two out of the box connections named `default` and `cache`:
 
 Note that the `default` connection has a `database` default of `0` and the `cache` connection has a `database` default of `1` to assign separate databases to those connections that are configured to use the same Redis server.
 
-We will use the `default` connection for all in app access to Redis that directly use the Laravel `Redis` provider. We will use the `cache` connection for all in app access to Redis that uses the Laravel `Cache` provider.
+We will use the `default` connection for all in app access to Redis that directly use the Laravel `Redis` provider. 
+
+> Note: Unlike in the session,cache and queue configuration files, there is no special `default` setting in the config/database.php file that is set to the default redis connection. Instead by
+default when we use the Laravel `Redis` facade, helper or provider without specifying the connection to use, the connection that is labeled `default` will be used.
+
+We will use the `cache` connection for all in app access to Redis that uses the Laravel `Cache` provider.
 
 We need to add two more connections named `queue` and `session` for the Laravel `Session` and `Queue` providers to use.
 
