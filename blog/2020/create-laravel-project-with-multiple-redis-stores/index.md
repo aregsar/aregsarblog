@@ -203,14 +203,19 @@ We can leave the redis store connection value as is, since it is set to `cache` 
 
 FROM
 
+```php
 'default' => env('QUEUE_CONNECTION', 'sync'),
+```
 
 TO
 
+```php
   'default' => env('QUEUE_CONNECTION', 'redis'),
+```
 
 FROM
 
+```php
     'connections' => [
         'redis' => [
             'driver' => 'redis',
@@ -220,10 +225,11 @@ FROM
             'block_for' => null,
         ],
     ],
+```
 
 TO
 
-
+```php
       'connections' => [
         'redis' => [
             'driver' => 'redis',
@@ -234,6 +240,7 @@ TO
             'block_for' => null,
         ],
     ],
+```
 
 ## Setting up the environment variables for our configuration file to use
 
