@@ -117,8 +117,7 @@ The `cluster` setting , indicates that our Redis server connection is connecting
 
 If we always use a managed cluster wr can change the ` 'cluster' => env('REDIS_CLUSTER', 'redis')` cluster setting to the hard coded `'cluster' => 'redis'` setting
 
-
-## The Redis Driver
+## The Redis Client
 
 The default out of the box Laravel configuration is configured to use the Php Redis extension.
 
@@ -128,9 +127,97 @@ For that to work we need to make sure the Php Redis extension is installed.
 
 The instructions for doing so are here: `put link here`
 
+## Configuring the Session Configuration file to use redis
+
+FROM
+
+ 'driver' => env('SESSION_DRIVER', 'file'),
+
+ TO
+
+ 'driver' => env('SESSION_DRIVER', 'redis'),
+
+FROM
+
+ 'connection' => env('SESSION_CONNECTION', null),
+
+TO
+
+'connection' => env('SESSION_CONNECTION', 'redis'),
+
+## Configuring the Cache Configuration file to use redis
+
+FROM
+'default' => env('CACHE_DRIVER', 'file'),
+
+
+TO
+'default' => env('CACHE_DRIVER', 'redis'),
+
+NO CHANGE
+//leave this as is 
+    'stores' => [
+        'redis' => [
+            'driver' => 'redis',
+            //uses the 'cache' store
+            'connection' => 'cache',
+        ],      
+    ],
+
+
+FROM
+ 'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
+
+TO
+  'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'MyApplication'), '_').'_cache'),
+
+## Configuring the Queue Configuration file to use redis
+
+FROM
+
+'default' => env('QUEUE_CONNECTION', 'sync'),
+
+TO
+
+  'default' => env('QUEUE_CONNECTION', 'redis'),
+
+FROM
+
+    'connections' => [
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'default'),
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+    ],
+
+TO
+
+
+      'connections' => [
+        'redis' => [
+            'driver' => 'redis',
+            //uses queue connection of redis driver in config/database.php
+            'connection' => 'queue',
+            'queue' => env('REDIS_QUEUE', 'default'),
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+    ],
+
+
 ## Setting up the environment variables for our configuration file to use
 
-
+THe following 
+```ini
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=redis
+SESSION_DRIVER=redis
+REDIS_HOST=<127.0.0.1>
+REDIS_PASSWORD=<null>
+```
 
 
 
