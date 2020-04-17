@@ -132,49 +132,72 @@ For that to work we need to make sure the Php Redis extension is installed.
 
 The instructions for doing so are here: `put link here`
 
+Also unless we rename the facade alias we need to add a 
+`use Illuminate\Support\Facades\Redis;` statement in the file we use the `Redis` facade in.
+
 ## Configuring the Session Configuration file to use redis
 
 FROM
 
+```php
  'driver' => env('SESSION_DRIVER', 'file'),
+```
 
  TO
 
+```php
  'driver' => env('SESSION_DRIVER', 'redis'),
+```
 
 FROM
 
+```php
  'connection' => env('SESSION_CONNECTION', null),
+```
 
 TO
 
+```php
 'connection' => env('SESSION_CONNECTION', 'redis'),
+```
 
 ## Configuring the Cache Configuration file to use redis
 
 FROM
-'default' => env('CACHE_DRIVER', 'file'),
 
+```php
+'default' => env('CACHE_DRIVER', 'file'),
+```
 
 TO
-'default' => env('CACHE_DRIVER', 'redis'),
 
-NO CHANGE
-//leave this as is 
+```php
+'default' => env('CACHE_DRIVER', 'redis'),
+```
+
+FROM
+
+```php
+ 'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
+```
+
+TO
+
+```php
+  'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'MyApplication'), '_').'_cache'),
+```
+
+We can leave the redis store connection value as is, since it is set to `cache` out of the box which references the out of the box `cache` redis connection is `config/database.php`
+
+```php
     'stores' => [
         'redis' => [
             'driver' => 'redis',
             //uses the 'cache' store
             'connection' => 'cache',
-        ],      
+        ],
     ],
-
-
-FROM
- 'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
-
-TO
-  'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'MyApplication'), '_').'_cache'),
+```
 
 ## Configuring the Queue Configuration file to use redis
 
@@ -212,18 +235,19 @@ TO
         ],
     ],
 
-
 ## Setting up the environment variables for our configuration file to use
 
-THe following 
+The following environment variable need to be set to `redis`
+
 ```ini
 CACHE_DRIVER=redis
 QUEUE_CONNECTION=redis
 SESSION_DRIVER=redis
-REDIS_HOST=<127.0.0.1>
-REDIS_PASSWORD=<null>
 ```
 
+Additionally we need to set the host and password settings. The values set below are for a local edis instance running:
 
-
-
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+```
