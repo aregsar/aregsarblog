@@ -1,3 +1,7 @@
-# create laravel project with multiple redis stores
+# Create Laravel Project With Multiple Redis Stores
 
-[create laravel project with multiple redis stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
+April 18, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+
+[Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
+
+
