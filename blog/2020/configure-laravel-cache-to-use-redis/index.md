@@ -48,24 +48,24 @@ In other words the `redis` store setting in `config/cache.php` has a `driver` se
 The annotated snippets from  both `config/cache.php` and `config/database.php` shown below should clarify what I have jus described above:
 
 ```php
-# config/cache.php
+// config/cache.php
  'default' => env('CACHE_STORE', 'redis'),
  'stores' => [
-        #This is the redis store driver
+        // This is the redis store driver
         'redis' => [
-            # uses the redis driver defined in config/database.php
+            // uses the redis driver defined in config/database.php
             'driver' => 'redis',
-            #uses the 'cache' named connection of the 'redis' driver from config/database.php
+            // uses the 'cache' named connection of the 'redis' driver from config/database.php
             'connection' => 'cache',
         ]
     ],
 ```
 
 ```php
-# config/database.php
-#This is the 'redis' driver
+// config/database.php
+// This is the 'redis' driver
 'redis' => [
-        #This is the redis driver connection named 'cache'
+        // This is the redis driver connection named 'cache'
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -98,7 +98,7 @@ Alternatively if we always use Redis as the cache, we can remove the environment
  'default' => 'redis',
 ```
 
-## Using the default Laravel Cache
+## Using the default Laravel cache store
 
 The snippet below uses the default cache store specified in `config/cache.php`:
 
@@ -123,25 +123,25 @@ We can additional cache `redis` stores in `config/cache.php` that are configured
 Below is an example of adding a `redis2` store to `config/cache.php` that references a `cache2` redis connection added to the `redis` driver in `config/database.php`:
 
 ```php
-# config/cache.php
+// config/cache.php
  'stores' => [
         'redis' => [
-            # uses the redis driver defined in config/database.php
+            // uses the redis driver defined in config/database.php
             'driver' => 'redis',
-            #uses the 'cache' configuration of the 'redis' driver in config/database.php
+            // uses the 'cache' configuration of the 'redis' driver in config/database.php
             'connection' => 'cache',
         ],
         'redis2' => [
-            # uses the redis driver defined in config/database.php
+            // uses the redis driver defined in config/database.php
             'driver' => 'redis',
-            #uses the 'cache' configuration of the 'redis' driver in config/database.php
+            // uses the 'cache' configuration of the 'redis' driver in config/database.php
             'connection' => 'cache2',
         ]
     ],
 ```
 
 ```php
-# config/database.php
+// config/database.php
 'redis' => [
         'cache' => [
             'url' => env('REDIS_URL'),
@@ -167,11 +167,11 @@ Given the above settings we can explicitly use the new `redis2` store like so:
 $value = Cache::store('redis2')->get('bar');
 ```
 
-## changing the default redis store to use a different cache store
+## Changing the default redis store
 
-We could also change the `default` setting in `config/cache.php` to use a different cache store the out of the box `redis` store.
+We could also change the `default` setting in `config/cache.php` to use a different cache store instead of the out of the box configured `redis` store.
 
-For instance we can use the `redis2` cache store we added above instead of the out of the box `redis` store:
+For instance we can use the `redis2` cache store we added to `config/database.php` above and set it to the `default` setting in `config/cache.php` instead of using the out of the box `redis` store in `config/database.php`.
 
 ```php
  'default' => 'redis2',

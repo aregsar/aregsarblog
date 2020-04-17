@@ -43,9 +43,9 @@ If we know we are always going to use Redis for the session store, we can just h
 The `config/session.php` file also has a `'connection'` setting that selects which Redis driver `connection` the session should use, when the session is set to use the `redis` driver.
 
 ```php
-    #uses the 'cache' configuration of the 'redis' driver in config/database.php
-    # add SESSION_CONNECTION=default or SESSION_CONNECTION=cache to .env
-    # don't know if null parameter defaults to 'default' connection if SESSION_CONNECTION is not specified
+    // uses the 'cache' configuration of the 'redis' driver in config/database.php
+    // add SESSION_CONNECTION=default or SESSION_CONNECTION=cache to .env
+    // don't know if null parameter defaults to 'default' connection if SESSION_CONNECTION is not specified
     'connection' => env('SESSION_CONNECTION', null),
 ```
 
@@ -57,13 +57,12 @@ By default the `SESSION_CONNECTION` environment variable setting is not defined 
 
 Instead of allowing the session connection to use the default redis connection, I like to be more explicit.
 
-The following steps set the session connection to a completely separate redis connection.
+The following steps set the session connection to a completely separate redis connection added to `config/database.php`.
 
-First add a new connection to the available redis connections inside the `redis` driver section in `config/database.php`:
+First add a new connection named `session` to the available redis connections inside the `redis` driver section in `config/database.php`:
 
 ```bash
 'redis' => [
-
     'session' => [
                 'url' => env('REDIS_URL'),
                 'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -74,11 +73,11 @@ First add a new connection to the available redis connections inside the `redis`
 ],
 ```
 
-The new connection is named `session` and its `database` setting is set to `3` to use a different database then the default connection since they both use the same redis server settings.
+The new connection is named `session` and its `database` setting is set to `3` to use a different redis database then the redis database used by default connection since they both use the same redis server settings.
 
 Next remove default the `SESSION_CONNECTION=file` setting from the `.env` file because it will not be used.
 
-Finally in `config/session.php` I change the default connection parameter from `null` to `'session'` :
+Finally in `config/session.php` I changed the default connection parameter from `null` to `'session'` :
 
 ```php
     'connection' => env('SESSION_CONNECTION', 'session' ),

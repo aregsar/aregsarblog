@@ -1,8 +1,6 @@
 # Configure Laravel Queue To Use Redis
 
-April 9, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[Configure Laravel Queue To Use Redis](https://aregsar.com/blog/2020/configure-laravel-queue-to-use-redis)
+April 17, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
 
@@ -22,8 +20,9 @@ The `redis` connection also has a `connection` setting set to `default`. This `d
 From `config/queue.php` file:
 
 ```php
-#selects default sync connection from connections array in this file
-#by using the QUEUE_CONNECTION=sync in the .env file or by removing #QUEUE_CONNECTION=sync from the .env file
+// selects default sync connection from connections array in this file
+// by using the QUEUE_CONNECTION=sync in the .env file or by removing QUEUE_CONNECTION=sync from the .env file
+
  'default' => env('QUEUE_CONNECTION', 'sync'),
 
  'connections' => [
@@ -33,12 +32,12 @@ From `config/queue.php` file:
         ],
 
         'redis' => [
-            #hard coded 'redis' driver from config/database.php
+            // hard coded 'redis' driver from config/database.php
             'driver' => 'redis',
-            #hard coded 'default' connection from 'redis' driver connection in config/database.php
+            // hard coded 'default' connection from 'redis' driver connection in config/database.php
             'connection' => 'default',
-            #queue name that is set to `default` since no REDIS_QUEUE setting is defined in .env file
-            #this name will be used as a Redis key prefix so we can have different queues with the same Redis connection (no need to change this setting)
+            // queue name that is set to `default` since no REDIS_QUEUE setting is defined in .env file
+            // this name will be used as a Redis key prefix so we can have different queues with the same Redis connection (no need to change this setting)
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
@@ -97,23 +96,23 @@ The annotations in the configuration code snippets below should serve to clarify
 From `config/queue.php` file:
 
 ```php
-#config/queue.php
+// config/queue.php
  'connections' => [
         'redis' => [
-            #hard coded 'redis' driver specified in config/database.php
+            // hard coded 'redis' driver specified in config/database.php
             'driver' => 'redis',
-            #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
+            // hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
             'connection' => 'queue',
-            #this specifies the default key prefix for this 'redis' connecton that is used for the queue keys
+            // this specifies the default key prefix for this 'redis' connecton that is used for the queue keys
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
         ],'redis2' => [
-            #hard coded 'redis' driver specified in config/database.php
+            // hard coded 'redis' driver specified in config/database.php
             'driver' => 'redis',
-            #hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
+            // hard coded newly added 'queue' connection from 'redis' driver connection in config/database.php
             'connection' => 'queue2',
-            #this specifies the default key prefix for this 'redis2' connecton that is used for the queue keys
+            // this specifies the default key prefix for this 'redis2' connecton that is used for the queue keys
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
@@ -124,15 +123,15 @@ From `config/queue.php` file:
 From `config/database.php` file:
 
 ```php
-#config/database.php
+// config/database.php
     'redis' => [
-        #newly added `queue` connection (uses same connection setttings as the default connection)
+        // newly added `queue` connection (uses same connection setttings as the default connection)
         'queue' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            #uses a separate database for the queue
+            // uses a separate database for the queue
             'database' => env('REDIS_CACHE_DB', '2'),
         ],
     ],
@@ -183,3 +182,53 @@ The code below names the queue explicitly and  also overrides the default queue 
 $connection = Queue::connection('redis2')->pushOn('email', new InvoiceEmail($order));
 ```
 
+## Using connection queue prefix key for Redis Cluster queue
+
+When using a Redis cluster the `queue` value used as the prefix key must be wrapped
+in `{}` brackets as shown below:
+
+```php
+// The redis connection
+'redis' => [
+    'driver' => 'redis',
+    'connection' => 'default',
+    'queue' => '{default}',
+    'retry_after' => 90,
+],
+```
+
+As we can see the default queue prefix key is set to `'{default}'` instead of `'default'`.
+
+## Dispatching queued jobs with different queue configurations
+
+```php
+Job::dispatch();
+```
+
+```php
+Job::dispatch()->onQueue('emails');
+```
+
+```php
+PodcastJob::dispatch($podcast)->onConnection('queue');
+```
+
+```php
+PodcastJob::dispatch($podcast)->onConnection('queue')->onQueue('podcasts');
+```
+
+Instead of calling onConnection we can configure the job class to specify the queue connection:
+
+```php
+class ProcessPodcast implements App\Jobs\ShouldQueue
+{
+    //The queue connection that should handle the job.
+    public $connection = 'queue';
+}
+```
+
+We can process the job via the queue:work command
+
+```bash
+php artisan queue:work --tries=3
+```

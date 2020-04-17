@@ -205,7 +205,13 @@ The line `'cluster' => env('REDIS_CLUSTER', 'redis')` tells the framework to use
 
 > Note: the default value of `redis` for the second argument is used because the default `.env` file does not contain a `REDIS_CLUSTER` environment setting. If you define this variable in the `.env` file, you must set its value to `redis` to tell the framework to use a managed cluster.
 
-Since I am always using the DigitalOcean Redis cluster, I just hard code this value in `config/database.php` to `'cluster' => 'redis'`
+Since I am always using the DigitalOcean Redis cluster, I just hard code this value in `config/database.php` to `'cluster' => 'redis'`:
+
+```php
+'options' => [
+        'cluster' => 'redis',
+    ],
+```
 
 Instructions to setup Laravel for connecting with the DigitalO cean managed Redis cluster can be found at:
 `https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster`
@@ -383,4 +389,3 @@ For predis we can only set a common prefix inside the 'options' setting::
 ```
 
 The default out of the box .env file does not contain REDIS_PREFIX key so the second parameter of the env() function specifies a prefix using the APP_NAME. You can remover the out of the box prefix setting if you don't want a prefix.
-
