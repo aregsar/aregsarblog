@@ -137,25 +137,13 @@ Also unless we rename the facade alias we need to add a
 
 ## Configuring the Session Configuration file to use redis
 
-FROM
-
-```php
- 'driver' => env('SESSION_DRIVER', 'file'),
-```
-
- TO
+Change the `driver` configuration in `config/session.php` to:
 
 ```php
  'driver' => env('SESSION_DRIVER', 'redis'),
 ```
 
-FROM
-
-```php
- 'connection' => env('SESSION_CONNECTION', null),
-```
-
-TO
+Change the `connection` configuration in `config/session.php` to:
 
 ```php
 'connection' => env('SESSION_CONNECTION', 'redis'),
@@ -163,31 +151,19 @@ TO
 
 ## Configuring the Cache Configuration file to use redis
 
-FROM
-
-```php
-'default' => env('CACHE_DRIVER', 'file'),
-```
-
-TO
+Change the `default` store configuration in `config/cache.php` to:
 
 ```php
 'default' => env('CACHE_DRIVER', 'redis'),
 ```
 
-FROM
-
-```php
- 'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
-```
-
-TO
+Change the `prefix` configuration in `config/cache.php` to:
 
 ```php
   'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'MyApplication'), '_').'_cache'),
 ```
 
-We can leave the redis store connection value as is, since it is set to `cache` out of the box which references the out of the box `cache` redis connection is `config/database.php`
+> Note: we can leave the redis store connection value in `config/cache.php` as is, since it is set to `cache` out of the box which references the out of the box `cache` redis connection in `config/database.php`
 
 ```php
     'stores' => [
@@ -201,33 +177,13 @@ We can leave the redis store connection value as is, since it is set to `cache` 
 
 ## Configuring the Queue Configuration file to use redis
 
-FROM
-
-```php
-'default' => env('QUEUE_CONNECTION', 'sync'),
-```
-
-TO
+Change the `default` configuration in `config/queue.php` to:
 
 ```php
   'default' => env('QUEUE_CONNECTION', 'redis'),
 ```
 
-FROM
-
-```php
-    'connections' => [
-        'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-            'queue' => env('REDIS_QUEUE', 'default'),
-            'retry_after' => 90,
-            'block_for' => null,
-        ],
-    ],
-```
-
-TO
+Change the `connections` configuration in `config/queue.php` to:
 
 ```php
       'connections' => [
@@ -258,3 +214,14 @@ Additionally we need to set the host and password settings. The values set below
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 ```
+
+## The final redis configuration
+
+The final redis configuration settings for all redis related configuration files is shown below:
+
+`config/database.php`:
+
+```php
+//
+```
+
