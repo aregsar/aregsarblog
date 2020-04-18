@@ -261,6 +261,8 @@ Route::get('/redis', 'RedisController@redisTest');
 Then add the following `redisTest` method to the controller:
 
 ```php
+use Illuminate\Support\Facades\Redis;
+
 public function redisTest()
 {
     $redis = Redis::connection();

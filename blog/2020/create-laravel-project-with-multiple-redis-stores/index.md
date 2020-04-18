@@ -210,11 +210,20 @@ QUEUE_CONNECTION=redis
 SESSION_DRIVER=redis
 ```
 
-Additionally we need to set the host and password settings. The values set below are for a local edis instance running:
+Additionally we need to set the host and password settings. The values set below are for a local Redis instance running:
 
 ```ini
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+And these are Digitalocean Redis cluster settings:
+
+```ini
+REDIS_HOST=tls://<your_redis_host>.db.ondigitalocean.com
+REDIS_PASSWORD=<your_redis_password>
+REDIS_PORT=25061
 ```
 
 ## The final redis configuration
@@ -305,3 +314,39 @@ The final redis configuration settings for all redis related configuration files
 ## Testing the redis connections
 
 The following code can be run using Laravel tinker:
+
+Redis::incr('visits');
+
+#uses myconnection
+Redis::connection('myconnection')->set('name', 'Taylor');
+#uses default connection
+Redis::connection()->set('name', 'Taylor');
+#uses default connection
+Redis::set('name', 'Taylor');
+
+#uses mycluster
+Redis::connection('mycluster')->set('name', 'Taylor');
+
+
+An now we can test the connections add the following route to a new controller that you can add named `RedisController`:
+
+```php
+Route::get('/redis', 'RedisController@redisTest');
+```
+
+Then add the following `redisTest` method to the controller:
+
+```php
+use Illuminate\Support\Facades\Redis;
+
+public function redisTest()
+{
+    $redis = Redis::connection();
+
+    try{
+        var_dump($redis->ping());
+    } catch (Exception $e){
+        $e->getMessage();
+    }
+}
+```
