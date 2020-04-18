@@ -334,7 +334,7 @@ In my apps I like to also add two other Redis driver connections with separate d
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '2'),
+            'database' => env('REDIS_QUEUE_DB', '2'),
         ],
 
 'session' => [
@@ -342,9 +342,11 @@ In my apps I like to also add two other Redis driver connections with separate d
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '3'),
+            'database' => env('REDIS_SESSION_DB', '3'),
         ],
 ```
+
+> Note: the `database` setting for the `queue` and `session` settings is also updated to use `REDIS_QUEUE_DB` and `REDIS_SESSION_DB` environment settings accordingly
 
 In separate articles I will show how to configure the Laravel Session, Cache and Queue to use the redis driver with specific redis connections.
 
