@@ -315,19 +315,6 @@ The final redis configuration settings for all redis related configuration files
 
 The following code can be run using Laravel tinker:
 
-Redis::incr('visits');
-
-#uses myconnection
-Redis::connection('myconnection')->set('name', 'Taylor');
-#uses default connection
-Redis::connection()->set('name', 'Taylor');
-#uses default connection
-Redis::set('name', 'Taylor');
-
-#uses mycluster
-Redis::connection('mycluster')->set('name', 'Taylor');
-
-
 An now we can test the connections add the following route to a new controller that you can add named `RedisController`:
 
 ```php
@@ -345,6 +332,10 @@ public function redisTest()
 
     try{
         var_dump($redis->ping());
+
+        Redis::incr('visits');
+        Redis::set('name', 'Taylor');
+
     } catch (Exception $e){
         $e->getMessage();
     }
