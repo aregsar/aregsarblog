@@ -222,6 +222,83 @@ The final redis configuration settings for all redis related configuration files
 `config/database.php`:
 
 ```php
-//
+  'redis' => [
+
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'radar'), '_').'_database_'),
+        ],
+
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
+        ],
+        'session' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_SESSION_DB', '2'),
+        ],
+
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_QUEUE_DB', '3'),
+        ],
+    ],
 ```
 
+`config/cache.php`:
+
+```php
+  'redis' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
+
+    'default' => env('CACHE_DRIVER', 'file'),
+
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'myapp'), '_').'_cache'),
+```
+
+`config/session.php`:
+
+```php
+    'driver' => env('SESSION_DRIVER', 'redis'),
+```
+
+`config/queue.php`:
+
+```php
+  'default' => env('QUEUE_CONNECTION', 'redis'),
+
+    'connections' => [
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => env('REDIS_QUEUE', 'default'),
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+    ],
+```
+
+## Testing the redis connections
+
+The following code can be run using Laravel tinker:
