@@ -1,5 +1,9 @@
 # All Posts
 
+April 19, 2020
+
+[Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
+
 April 17, 2020
 
 [Configure Laravel Queue To Use Redis](https://aregsar.com/blog/2020/configure-laravel-queue-to-use-redis)

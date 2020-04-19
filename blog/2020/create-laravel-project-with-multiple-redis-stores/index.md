@@ -2,8 +2,6 @@
 
 April 18, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
-
 ## Configuring individual redis database connections in config/database.php
 
 In this section I will configure a separate database for each of the Redis, Session, Cache and Queue providers used in a Laravel application.
