@@ -1,5 +1,89 @@
 # 76ideaz - Independent ideas from a to z
 
+https://www.digitalocean.com/community/cheatsheets/how-to-manage-redis-databases-and-keys
+
+https://stackoverflow.com/questions/56743790/configuring-redis-as-cache-interface-in-a-laravel-5-application
+
+127.0.0.1:6379> SELECT 1
+127.0.0.1:6379[1]> KEYS *
+
+===================
+
+```php
+
+class RedisStore extends TaggableStore implements LockProvider
+{
+}
+
+class CacheManager implements FactoryContract
+{
+
+ public function store($name = null)
+    {
+        $name = $name ?: $this->getDefaultDriver();
+
+        return $this->stores[$name] = $this->get($name);
+    }
+
+ public function __call($method, $parameters)
+    {
+        return $this->store()->$method(...$parameters);
+    }
+}
+```
+
+==================
+
+VSCode debug/refactoring
+https://sentry.io/for/php/
+
+https://code.visualstudio.com/docs/introvideos/debugging
+
+https://code.visualstudio.com/docs/languages/php
+
+https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-debug
+
+https://marketplace.visualstudio.com/items?itemName=felixfbecker.php-intellisense
+
+=======================
+VSCode search
+https://superuser.com/questions/1366650/how-to-quick-search-files-in-whole-workspace-visual-studio-code
+
+ignored files may be ruled by .gitignore if in settings.json "search.useIgnoreFiles" is true.
+=======================
+VSCode settings.json
+https://www.youtube.com/watch?v=NsmLw6Ajpog
+Settings file locations#
+By default VS Code shows the Settings editor, but you can still edit the underlying settings.json file by using the Open Settings (JSON) command or by changing your default settings editor with the workbench.settings.editor setting.
+
+Depending on your platform, the user settings file is located here:
+
+Windows %APPDATA%\Code\User\settings.json
+macOS $HOME/Library/Application Support/Code/User/settings.json
+
+workbench.settings.editor is a setting inside
+
+$HOME/Library/Application Support/Code/User/settings.json
+
+If set to json, then settings.json will open as json file:
+"workbench.settings.editor":"json"
+
+=============
+
+systemctl status php7.4-fpm.service
+
+
+/etc/php/7.4/fpm/php-fpm.conf
+
+/lib/systemd/system/php7.4-fpm.service
+
+APP_URL=http://localhost
+
+since nginx in configured to listen for connections
+with location: /
+
+======================
+
 > I am not certain of this since I dont use the predis driver but the when connecting to redis server, the Laravel predis driver code may substitute '_database_' in the prefix string with the database integer specified in the connection setting it uses to connect. Thereby giving a unique prefix per database.
 
 At 76ideaz its not business as usual.
