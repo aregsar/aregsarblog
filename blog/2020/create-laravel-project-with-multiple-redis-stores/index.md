@@ -324,8 +324,10 @@ Route::get('/redis', 'RedisController@redisTest');
 Then add the following `redisTest` method to the controller:
 
 ```php
+//in RedisController file
 use Illuminate\Support\Facades\Redis;
 
+//in RedisController class
 public function redisTest()
 {
     $redis = Redis::connection();
@@ -334,7 +336,23 @@ public function redisTest()
         var_dump($redis->ping());
 
         Redis::incr('visits');
-        Redis::set('name', 'Taylor');
+        Redis::set('name', 'areg');
+        $name = Redis::get('name');
+        $nameexists = Redis::exists('name');
+
+        Session::all();
+        Session::put('name', 'areg');
+        $sname = Session::get('name');
+        Session::forget('name');
+        $snameexists = Session::exists('name');
+
+        Cache::put('name','areg',60);
+        $cname = Cache::get('name');
+        Cache::put('name2','areg2',now()->addDay());
+        Cache::forget('name');
+        //$cnameexists = Cache::has('name');
+        Cache::get('name3', fn () => 'areg3');
+        //Cache::Clear();
 
     } catch (Exception $e){
         $e->getMessage();
