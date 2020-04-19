@@ -1,14 +1,56 @@
 # Connecting Laravel To Digitalocean Managed MySql Database
 
-April 9, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Connecting Laravel To Digitalocean Managed MySql Database](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-mysql-database)
+
+https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster
+
+------------------
+
+https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-encrypted-connections.html
+mysql -h <hostname> -u <username>  -p –ssl-mode=DISABLED
+mysql> status
+
+https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel
+
+https://www.digitalocean.com/community/questions/ssl-client-key-certificate-for-managed-mysql-database
+-------------------------
+
+from https://www.digitalocean.com/community/tutorials/how-to-set-up-a-scalable-laravel-6-application-using-managed-databases-and-object-storage
+# install mysql-client
+sudo apt install mysql-client cli
+mysql -u phpuser -p -h host -P port
+# default status should be -ssl-mode=ENABLED
+mysql> status
+mysql> CREATE DATABASE myappdatabase;
+mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'phpuserpassword';
+mysql> GRANT ALL ON myappdatabase.* TO 'travellist-user'@'%';
+mysql> exit
+
+from https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04
+# install mysql-shell cli
+sudo apt install mysql-shell
+# connect to database and alter USER for php laravel app that will connect
+# to managed database
+mysqlsh -u phpuser -p -h host -P port --sql
+mysqlsh -u phpuser -p -h host -P port -D database --sql
+# for PHP to connect we need ti use mysql_native_password plugin
+# phpuser is the user laravel\php-fpm runs under
+# when creating a new user via cli
+CREATE USER phpuser IDENTIFIED WITH mysql_native_password BY 'password';
+# altering an existing user
+ALTER USER phpuser IDENTIFIED WITH mysql_native_password BY 'password';
+exit
+
+
+
+
 
 
 # Laravel Managed MySql connection settings
 
-
-In my .env add:
+In .env add:
 
 MYSQL_ATTR_SSL_CA="/full/path/to/ca-certifcate.crt" 
 SSL_MODE=required
