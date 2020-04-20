@@ -154,6 +154,3 @@ php artisan config:cache
 More info about the Laravel MySql SSL settings:
 
 `https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel`
-
-==============
-https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster
