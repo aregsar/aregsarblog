@@ -9,7 +9,7 @@ April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 DigitalOcean Managed Databases using MySQL 8+ are automatically configured to use caching_sha2_password authentication by default. This is is not compatible with some versions of php.
 
 According to `https://www.digitalocean.com/docs/databases/mysql/resources/troubleshoot-connections/` you need to change this MySql configuration
- if your mysql client is PHP7.1 or earlier. So you should not need to do this for PHP7.4. 
+ if your mysql client is PHP7.1 or earlier. So you should not need to do this for PHP7.4.
 
 According to the article if your applications are experiencing authentication issues, you can use the Password Encryption option in the control panel to set a user’s password encryption settings to MySQL 5.x encryption settings.
 
@@ -19,8 +19,8 @@ Here is the procedure to create a new User mysql_native_password:
 
 ```bash
 mysql -u phpuser -p -h host -P port
-mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mysqlpassword';
-mysql> GRANT ALL ON myappdatabase.* TO 'travellist-user'@'%';
+mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'user_password';
+mysql> GRANT ALL ON myappdatabase.* TO 'phpuser'@'%';
 mysql> exit
 ```
 
@@ -28,9 +28,24 @@ Here us the procedure to alter an existing User to use mysql_native_password:
 
 ```bash
 mysql -u phpuser -p -h host -P port
-mysql> ALTER USER phpuser IDENTIFIED WITH mysql_native_password BY 'mysqlpassword';
+mysql> ALTER USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'user_password';
 exit
 ```
+
+Here is and example of creating a user with the default caching_sha2_password configuration:
+
+```bash
+mysql -u phpuser -p -h host -P port
+mysql> CREATE USER 'phpuser'@'%' IDENTIFIED BY 'user_password';
+mysql> GRANT ALL ON myappdatabase.* TO 'phpuser'@'%';
+mysql> exit
+```
+
+> Note: the `%` means user can connect from any host
+
+More info on MySql user accounts and access:
+
+`https://linuxize.com/post/how-to-create-mysql-user-accounts-and-grant-privileges/`
 
 ## Using mysql-client cli
 
@@ -51,6 +66,8 @@ mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mysql
 mysql> GRANT ALL ON myappdatabase.* TO 'travellist-user'@'%';
 mysql> exit
 ```
+
+
 
 ## Using mysql-shell cli
 
@@ -99,7 +116,6 @@ The following links provide more details:
 `https://www.digitalocean.com/community/questions/ssl-client-key-certificate-for-managed-mysql-database`
 
 `https://dev.mysql.com/doc/refman/8.0/en/windows-and-ssh.html`
-
 
 # Laravel Managed MySql SSL connection settings
 
