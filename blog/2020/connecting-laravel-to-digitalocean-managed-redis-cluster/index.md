@@ -1,6 +1,6 @@
 # Connecting Laravel To Digitalocean Managed Redis Cluster
 
-[Connecting Laravel To Digitalocean Managed Redis Cluster](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-redis-cluster)
+April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Laravel environment settings
 
@@ -76,6 +76,12 @@ https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-redis
 https://redislabs.com/blog/stunnel-secure-redis-ssl/
 
 https://bencane.com/2014/02/18/sending-redis-traffic-through-an-ssl-tunnel-with-stunnel/
+
+## Restricting access to managed Redis cluster
+
+While SSL secures the data transmitted to and from the Redis cluster, it does not restrict who can connect to the cluster.
+
+The Managed Redis database allowes restricting network access based on client IP Address and VPC (Virtual Private Cloud) settings that can be configured via the Digitaloacean console or API
 
 ## Using a jump host to proxy requests to redis
 

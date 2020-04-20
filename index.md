@@ -2,6 +2,10 @@
 
 April 20, 2020
 
+[Connecting Laravel To Digitalocean Managed Redis Cluster](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-redis-cluster)
+
+April 20, 2020
+
 [Connecting Laravel To Digitalocean Managed MySql Database](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-mysql-database)
 
 April 19, 2020

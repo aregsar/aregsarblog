@@ -154,3 +154,10 @@ php artisan config:cache
 More info about the Laravel MySql SSL settings:
 
 `https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel`
+
+## Restricting access to managed MySQL database
+
+While SSL secures the data transmitted to and from the MySQL database, it does not restrict who can connect to the database.
+
+The Managed MySQL database allowes restricting network access based on client IP Address and VPC (Virtual Private Cloud) settings that can be configured via the Digitaloacean console or API
+
