@@ -2,8 +2,6 @@
 
 April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Connecting Laravel To Digitalocean Managed MySql Database](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-mysql-database)
-
 ## Changing MySql Connection password mode (for PHP 7.1 or earlier)
 
 DigitalOcean Managed Databases using MySQL 8+ are automatically configured to use caching_sha2_password authentication by default. This is is not compatible with some versions of php.

@@ -1,5 +1,9 @@
 # All Posts
 
+April 20, 2020
+
+[Connecting Laravel To Digitalocean Managed MySql Database](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-mysql-database)
+
 April 19, 2020
 
 [Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
