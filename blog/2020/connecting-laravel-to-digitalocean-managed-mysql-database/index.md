@@ -126,6 +126,8 @@ The following links provide more details:
 
 # Laravel Managed MySql SSL connection settings
 
+> Note when running in production we don't need to configure ssl mode to connect to the Managed MySql instance. This setup is for running Laravel locally.
+
 From `https://laracasts.com/discuss/channels/laravel/digital-ocean-managed-databases?page=0`
 
 In order to enable Laravel to use SSL mode when connecting to MySQl we can configure it as shown:
@@ -151,7 +153,7 @@ Then run:
 php artisan config:cache
 ```
 
-> Note when running in production we don't need to configure ssl mode to connect to the Managed MySql instance.
+More info about the Laravel MySql SSL settings:
 
 `https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel`
 
