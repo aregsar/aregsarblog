@@ -20,7 +20,7 @@ Here is the procedure to create a new User mysql_native_password:
 ```bash
 mysql -u phpuser -p -h host -P port
 mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'user_password';
-mysql> GRANT ALL ON myappdatabase.* TO 'phpuser'@'%';
+mysql> GRANT ALL PRIVILEGES ON myappdatabase.* TO 'phpuser'@'%';
 mysql> exit
 ```
 
@@ -37,13 +37,13 @@ Here is and example of creating a user with the default caching_sha2_password co
 ```bash
 mysql -u phpuser -p -h host -P port
 mysql> CREATE USER 'phpuser'@'%' IDENTIFIED BY 'user_password';
-mysql> GRANT ALL ON myappdatabase.* TO 'phpuser'@'%';
+mysql> GRANT ALL PRIVILEGES ON myappdatabase.* TO 'phpuser'@'%';
 mysql> exit
 ```
 
-> Note: the `%` means user can connect from any host
+> Note: the `%` in 'phpuser'@'%' means user can connect from any host and `myappdatabase.*` means GRANT ALL PRIVILEGES to all tables in myappdatabase database.
 
-More info on MySql user accounts and access:
+More info on MySql user accounts and access van be found here:
 
 `https://linuxize.com/post/how-to-create-mysql-user-accounts-and-grant-privileges/`
 
@@ -63,11 +63,9 @@ mysql -u phpuser -p -h host -P port
 mysql> status
 mysql> CREATE DATABASE myappdatabase;
 mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mysqlpassword';
-mysql> GRANT ALL ON myappdatabase.* TO 'travellist-user'@'%';
+mysql> GRANT ALL PRIVILEGES ON myappdatabase.* TO 'phpuser'@'%';
 mysql> exit
 ```
-
-
 
 ## Using mysql-shell cli
 
@@ -89,8 +87,8 @@ mysql> CREATE DATABASE myappdatabase;
 # for PHP to connect we need ti use mysql_native_password plugin
 # phpuser is the user laravel\php-fpm runs under
 # when creating a new user via cli
-mysql> CREATE USER phpuser IDENTIFIED WITH mysql_native_password BY 'password';
-mysql> GRANT ALL ON myappdatabase.* TO phpuser;
+mysql> CREATE USER 'phpuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mysqlpassword';
+mysql> GRANT ALL PRIVILEGES ON myappdatabase.* TO 'phpuser'@'%';
 exit
 ```
 
@@ -109,11 +107,11 @@ You can see checking the status that SSL is turned off.
 
 The following links provide more details:
 
+`https://www.digitalocean.com/community/questions/ssl-client-key-certificate-for-managed-mysql-database`
+
 `https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html#using-encrypted-connections-client-side-configuration`
 
 `https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-encrypted-connections.html`
-
-`https://www.digitalocean.com/community/questions/ssl-client-key-certificate-for-managed-mysql-database`
 
 `https://dev.mysql.com/doc/refman/8.0/en/windows-and-ssh.html`
 
@@ -144,7 +142,7 @@ php artisan config:cache
 
 `https://laracasts.com/discuss/channels/laravel/digital-ocean-managed-databases?page=0`
 
-https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel
+`https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel`
 
 ==============
 https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster
