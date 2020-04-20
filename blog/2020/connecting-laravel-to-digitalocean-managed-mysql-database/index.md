@@ -96,18 +96,27 @@ exit
 
 By default the MySql clients connect with MySQL in SSL mode because the Managed MySQL is configured with SSL enabled setup.
 
+```bash
+mysql -u phpuser -p -h host
+mysql> \s
+```
+
 In order to disable that we can turn off SSL mode when connecting:
 
 ```bash
-mysql -h <hostname> -u <username>  -p –ssl-mode=DISABLED
+mysql -u phpuser -p -h host –ssl-mode=disabled
 mysql> status
 ```
 
 You can see checking the status that SSL is turned off.
 
+> Note trying to connect with –ssl-mode=disabled may be rejected my the managed MySQL server
+
 The following links provide more details:
 
 `https://www.digitalocean.com/community/questions/ssl-client-key-certificate-for-managed-mysql-database`
+
+`https://www.digitalocean.com/community/tutorials/how-to-configure-ssl-tls-for-mysql-on-ubuntu-18-04`
 
 `https://dev.mysql.com/doc/refman/8.0/en/using-encrypted-connections.html#using-encrypted-connections-client-side-configuration`
 
@@ -117,7 +126,11 @@ The following links provide more details:
 
 # Laravel Managed MySql SSL connection settings
 
-In order to enable Laravel to use SSL mode when connecting to MySQl we can configure it as shown.
+From `https://laracasts.com/discuss/channels/laravel/digital-ocean-managed-databases?page=0`
+
+In order to enable Laravel to use SSL mode when connecting to MySQl we can configure it as shown:
+
+> Note: `ca-certifcate.crt` can be downloaded from the Managed database configuration. see `https://www.digitalocean.com/community/questions/ssl-client-key-certificate-for-managed-mysql-database`
 
 In `.env` file add:
 
@@ -139,8 +152,6 @@ php artisan config:cache
 ```
 
 > Note when running in production we don't need to configure ssl mode to connect to the Managed MySql instance.
-
-`https://laracasts.com/discuss/channels/laravel/digital-ocean-managed-databases?page=0`
 
 `https://stackoverflow.com/questions/53061182/mysql-connection-over-ssl-with-laravel`
 
