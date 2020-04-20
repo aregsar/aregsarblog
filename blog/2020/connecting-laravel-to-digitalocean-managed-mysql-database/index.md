@@ -122,7 +122,7 @@ The following links provide more details:
 
 `https://dev.mysql.com/doc/refman/8.0/en/windows-and-ssh.html`
 
-# Laravel Managed MySql SSL connection settings
+## Laravel Managed MySql SSL connection settings
 
 > Note when running in production we don't need to configure ssl mode to connect to the Managed MySql instance. This setup is for running Laravel locally.
 
