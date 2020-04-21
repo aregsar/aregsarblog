@@ -117,7 +117,21 @@ services:
 Remove the `webserver:` and `php-fpm:` sections
 Remove the `working_dir: /application` under `mariadb:` section
 Remove the `- .:/application` under the `volumes:` section in the `mariadb:` section
-Add `- ./data/mariadb:/etc/mysql` under the `volumes:` section in the `mariadb:` section
+Add `./data/mariadb:/etc/mysql` under the `volumes:` section in the `mariadb:` section
+Add `"8002:6379"` ports mapping under redis
+Add `"8004:9300"` ports mapping under elasticsearch
+Add `./data/redis:/etc/redis` volumes mapping section under redis
+
+Finally change the environment values under `mariadb` to:
+
+```ini
+MYSQL_ROOT_PASSWORD=root
+# for my_app_name substitute the name of your application
+MYSQL_DATABASE=my_app_name
+# for my_app_name substitute the name of your application
+MYSQL_USER=my_app_name
+MYSQL_PASSWORD=123456
+```
 
 You should be left with something that looks like this:
 
@@ -137,27 +151,74 @@ services:
     redis:
       image: redis:alpine
       container_name: radar-redis
+      ports:
+        - "8002:6379"
+      volumes:
+        - ./data/redis:/etc/redis
 
     mariadb:
       image: mariadb:10.4
       container_name: radar-mariadb
       volumes:
-        - ./data/mariadb:/etc/mysql
+        - ./data/mariadb:/var/lib/mysql
       environment:
-        - MYSQL_ROOT_PASSWORD=panama
-        - MYSQL_DATABASE=radar
-        - MYSQL_USER=radar
-        - MYSQL_PASSWORD=panama
+        - MYSQL_ROOT_PASSWORD=123456
+        - MYSQL_DATABASE=my_app_name
+        - MYSQL_USER=my_app_name
+        - MYSQL_PASSWORD=123456
       ports:
         - "8003:3306"
 
     elasticsearch:
       image: elasticsearch:6.5.4
       container_name: radar-elasticsearch
+      ports:
+        - "8004:9300"
 ```
 
+In your Laravel applictaions `.env` file specify the following:
 
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+# this is the left side of the mariadb port mapping in docker-compose.yml file
+DB_PORT=8083
+# for my_app_name substitute the name of the database that you want to be created 
+DB_DATABASE=my_app_name
+# for my_app_name substitute the name of your application
+DB_USERNAMRE=my_app_name
+DB_PASSWORD=123456
 
+REDIS_HOST=127.0.0.1
+REDIS_PORT=8002
+REDIS_PASSWORD=123456
+```
 
+## Running the container
+
+```bash
+cd mylaravelapp
+#run mariadb container and run the mysql cli in the running container
+docker-compose exec mariadb mysql -u my_app_name -p 123456
+# will display my_app_name database that was created upon starting the mariadb service
+show databases;
+#use my_app_name database
+use my_app_name;
+#should not contain any tables at this point
+show tables;
+```
+
+While mariadb container is running cd into your laravel app that is configured to connect to the mariadb instance running on this localhost container.
+
+Now open a new terminal window and run:
+
+```bash
+php artisan tinker
+DB::connection()->getPdo();
+```
+
+You should see the connetion info.
+
+Now switch to the terminal window where the mariadb continer is running and type `exit` to exit the mysql cli and consequently stop the running container.
 
 
