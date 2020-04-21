@@ -4,37 +4,6 @@ April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Setup Local Laravel Development With Docker Services](https://aregsar.com/blog/2020/setup-local-laravel-development-with-docker-services)
 
-```bash
-#show redis.conf file location 
-redis-cli -p 6379 info | grep 'config_file'
-# /usr/local/etc/redis.conf 
-
-#show file directory in redis.conf file
-cat /usr/local/etc/redis.conf | grep "dir "
-# /usr/local/var/db/redis/
-```
-
-```bash
-#show directory where the database files are stored
-mysql
-#
-MariaDB> select @@datadir;
-# /usr/local/var/mysql/
-#show connected user
-MariaDB> SELECT USER();
-# aregsarkissian@localhost
-#show selected database
-MariaDB> SELECT DATABASE();
-# NULL
-
-#show where the configuration files are located
-mysql --help | grep "Default options" -A 1
-# /usr/local/etc/my.cnf
-# datadir=/etc/mysql/mysql.conf.d/mysqld.cnf
-```
-
-===========
-
 In this post I will show how I run docker services that support my locally installed Laravel applications.
 
 I run the following services in individual docker containers to support local Laravel application development:
@@ -297,12 +266,7 @@ MariaDB> use my_app_name
 MariaDB> SELECT DATABASE();
 ```
 
-```bash
-#show where the configuration files are located
-mysql --help | grep "Default options" -A 1
-# /usr/local/etc/my.cnf
-# datadir=/etc/mysql/mysql.conf.d/mysqld.cnf
-```
+
 
 ## Connecting with PHP to running redis container
 
@@ -332,3 +296,76 @@ click on the test button to test connection
 click connect button to connect to mariadb running in the container
 
 ## Connecting with local redli CLI to running redis container
+
+How to Connect to Redis Database Clusters with redli
+https://www.digitalocean.com/docs/databases/redis/how-to/connect/
+
+https://github.com/IBM-Cloud/redli
+
+https://github.com/IBM-Cloud/redli/releases
+
+https://github.com/IBM-Cloud/redli#usage
+
+First we need to download and install redli:
+
+```bash
+wget https://github.com/IBM-Cloud/redli/releases/download/v0.4.4/redli_0.4.4_linux_amd64.tar.gz
+tar xvf redli_0.4.4_linux_amd64.tar.gz
+sudo mv redli /usr/local/bin/
+rm redli 0.4.4_linux_amd64.tar.gz
+```
+
+```bash
+#redli -h host -a password -p port
+redli -h 127.0.0.1 -a 123456 -p 8002
+127.0.0.1:8002> ping
+# pong
+127.0.0.1:8002> set tst:test "abcd"
+127.0.0.1:8002> get tst:test
+# abcd
+127.0.0.1:8002> exit
+# 127.0.0.1:8002> quit
+```
+
+## Connecting with local redis-cli CLI to running redis container
+
+Testing redis with following commands
+
+```bash
+redis-cli -p 8002
+127.0.0.1:8002> ping
+# pong
+127.0.0.1:8002> set tst:test "abcd"
+127.0.0.1:8002> get tst:test
+# abcd
+127.0.0.1:8002> exit
+# 127.0.0.1:8002> quit
+```
+
+## location of redis and mariadb data and config files within container
+
+
+```bash
+#show redis.conf file location
+redis-cli -p 8002 info | grep 'config_file'
+# /usr/local/etc/redis.conf
+# /etc/redis/redis.conf
+
+#show file directory in redis.conf file
+cat /usr/local/etc/redis.conf | grep "dir "
+# /usr/local/var/db/redis/
+```
+
+```bash
+mysql -u my_app_name -p -h 127.0.0.1 -P 8083
+#show directory where the database files are stored
+MariaDB> select @@datadir;
+# /usr/local/var/mysql/
+```
+
+```bash
+#show where the configuration files are located
+mysql --help | grep "Default options" -A 1
+# /usr/local/etc/my.cnf
+# datadir=/etc/mysql/mysql.conf.d/mysqld.cnf
+```

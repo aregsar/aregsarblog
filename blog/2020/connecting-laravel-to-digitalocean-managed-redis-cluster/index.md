@@ -69,6 +69,8 @@ Using Redis CLI in cluster mode:
 redis-cli -c
 ```
 
+https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
+
 https://brewinstall.org/Install-stunnel-on-Mac-with-Brew/
 
 https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-redis-over-tls-with-stunnel-and-redis-cli
