@@ -12,20 +12,22 @@ redis-cli -p 6379 info | grep 'config_file'
 #show file directory in redis.conf file
 cat /usr/local/etc/redis.conf | grep "dir "
 # /usr/local/var/db/redis/
+```
 
-
-
+```bash
+#show directory where the database files are stored
 mysql
+#
 MariaDB> select @@datadir;
 # /usr/local/var/mysql/
-SELECT USER();
+#show connected user
+MariaDB> SELECT USER();
 # aregsarkissian@localhost
-SELECT DATABASE();
+#show selected database
+MariaDB> SELECT DATABASE();
 # NULL
 
-
-
-
+#show where the configuration files are located
 mysql --help | grep "Default options" -A 1
 # /usr/local/etc/my.cnf
 # datadir=/etc/mysql/mysql.conf.d/mysqld.cnf
@@ -194,7 +196,7 @@ REDIS_PORT=8002
 REDIS_PASSWORD=123456
 ```
 
-## Running the container
+## Testing the mariadb the container
 
 ```bash
 cd mylaravelapp
@@ -220,5 +222,112 @@ DB::connection()->getPdo();
 You should see the connetion info.
 
 Now switch to the terminal window where the mariadb continer is running and type `exit` to exit the mysql cli and consequently stop the running container.
+
+Now back in the application terminal window cd into the `data/mariadb` directory to see the saved database files.
+
+## running all the containers
+
+In the application directory, type:
+
+```bash
+docker-compose up -d
+```
+
+All the containers should startup as can be seen by running the following command:
+
+```bash
+docker ps -a
+```
+
+## Connecting with PHP to running MariaDb container
+
+Now open a new terminal window and run:
+
+```bash
+php artisan tinker
+DB::connection()->getPdo();
+```
+
+Again you should see the connection info response.
+
+You should be able to run migrations against the mariadb container:
+
+```bash
+php artisan migrate
+```
+
+## Connecting with TablePlus to running MariaDb container
+
+Open TablePlus and create a connection with the following:
+
+click create a new connection
+select mariadb
+click create
+type in my_app_name for the connection name
+
+Enter the following credentials:
+
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=8083
+DB_DATABASE=my_app_name
+DB_USERNAME=my_app_name
+DB_PASSWORD=123456
+```
+
+click on the test button to test connection
+click connect button to connect to mariadb running in the container
+
+## Connecting with local mysql CLI to running MariaDb container
+
+```bash
+mysql -u my_app_name -p -h 127.0.0.1 -P 8083
+#mysql -u my_app_name -p -h 127.0.0.1 -P 8083
+#show directory where the database files are stored
+MariaDB> select @@datadir;
+# /usr/local/var/mysql/
+#show connected user
+MariaDB> SELECT USER();
+#show selected database
+MariaDB> SELECT DATABASE();
+# NULL
+MariaDB> use my_app_name
+MariaDB> SELECT DATABASE();
+```
+
+```bash
+#show where the configuration files are located
+mysql --help | grep "Default options" -A 1
+# /usr/local/etc/my.cnf
+# datadir=/etc/mysql/mysql.conf.d/mysqld.cnf
+```
+
+## Connecting with PHP to running redis container
+
+```bash
+php artisan tinker
+REDIS::connection()->ping();
+```
+
+## Connecting with TablePlus to running redis container
+
+Open TablePlus and create a connection with the following:
+
+click create a new connection
+select redis
+click create
+type in my_app_name for the connection name
+
+Enter the following credentials:
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PORT=8002
+REDIS_PASSWORD=123456
+```
+
+click on the test button to test connection
+click connect button to connect to mariadb running in the container
 
 
