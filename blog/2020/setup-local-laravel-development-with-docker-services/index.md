@@ -283,7 +283,8 @@ click connect button to connect to mariadb running in the container
 
 ```bash
 mysql -u my_app_name -p -h 127.0.0.1 -P 8083
-#mysql -u my_app_name -p -h 127.0.0.1 -P 8083
+# the -D flag specifies the default database to connect to
+#mysql -u my_app_name -p -h 127.0.0.1 -D my_app_name -P 8083
 #show directory where the database files are stored
 MariaDB> select @@datadir;
 # /usr/local/var/mysql/
@@ -307,7 +308,7 @@ mysql --help | grep "Default options" -A 1
 
 ```bash
 php artisan tinker
-REDIS::connection()->ping();
+Redis::connection()->ping();
 ```
 
 ## Connecting with TablePlus to running redis container
@@ -330,4 +331,4 @@ REDIS_PASSWORD=123456
 click on the test button to test connection
 click connect button to connect to mariadb running in the container
 
-
+## Connecting with local redli CLI to running redis container
