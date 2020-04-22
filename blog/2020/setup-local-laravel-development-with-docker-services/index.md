@@ -344,15 +344,15 @@ redis-cli -p 8002
 
 ## location of redis and mariadb data and config files within container
 
-
 ```bash
 #show redis.conf file location
 redis-cli -p 8002 info | grep 'config_file'
+# on macOS
 # /usr/local/etc/redis.conf
-# /etc/redis/redis.conf
 
 #show file directory in redis.conf file
 cat /usr/local/etc/redis.conf | grep "dir "
+# on macOS
 # /usr/local/var/db/redis/
 ```
 
@@ -360,12 +360,13 @@ cat /usr/local/etc/redis.conf | grep "dir "
 mysql -u my_app_name -p -h 127.0.0.1 -P 8083
 #show directory where the database files are stored
 MariaDB> select @@datadir;
+# on macOS
 # /usr/local/var/mysql/
 ```
 
 ```bash
 #show where the configuration files are located
 mysql --help | grep "Default options" -A 1
+# on macOS
 # /usr/local/etc/my.cnf
-# datadir=/etc/mysql/mysql.conf.d/mysqld.cnf
 ```
