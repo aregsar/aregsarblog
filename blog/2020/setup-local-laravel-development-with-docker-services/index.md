@@ -126,6 +126,19 @@ services:
       ports:
         - "8002:6379"
 
+    mysql:
+      image: mysql:8.0
+      container_name: app-mysql
+      volumes:
+        - ./data/mysql:/var/lib/mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD=php
+        - MYSQL_DATABASE=php
+        - MYSQL_USER=php
+        - MYSQL_PASSWORD=php
+      ports:
+        - "8002:3306"
+
     mariadb:
       image: mariadb:10.4
       container_name: app-mariadb
@@ -147,6 +160,7 @@ services:
 ```
 
 > Note: the redis-server --appendonly yes command overrided the `redis-server` command with no arguments that the standard container runs. This allows us to persist the redis data using a docker volume mapping
+> If we look at the standard mysql and redis dockerfiles we can see that there is a VOLUME defined that sets the mysql data directory to /var/lib/mysql and the redis data directory to /data in the container. By default when the container runs for the first time that volume is created within the container and the mysql and redis datafiles are persisted there. By mapping those directories to our host machine we can persist that data accross docker runs.
 
 In your Laravel applictaions `.env` file specify the following:
 
