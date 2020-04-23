@@ -1,8 +1,6 @@
 # Setup Local Laravel Development With Docker Services
 
-April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[Setup Local Laravel Development With Docker Services](https://aregsar.com/blog/2020/setup-local-laravel-development-with-docker-services)
+April 23, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I will show how I run docker services that support my locally installed Laravel applications.
 
@@ -44,29 +42,29 @@ services:
 
     redis:
       image: redis:alpine
-      container_name: radar-redis
+      container_name: app-redis
 
     mariadb:
       image: mariadb:10.4
-      container_name: radar-mariadb
+      container_name: app-mariadb
       working_dir: /application
       volumes:
         - .:/application
       environment:
         - MYSQL_ROOT_PASSWORD=panama
-        - MYSQL_DATABASE=radar
-        - MYSQL_USER=radar
-        - MYSQL_PASSWORD=panama
+        - MYSQL_DATABASE=app
+        - MYSQL_USER=app
+        - MYSQL_PASSWORD=123456
       ports:
         - "8003:3306"
 
     elasticsearch:
       image: elasticsearch:6.5.4
-      container_name: radar-elasticsearch
+      container_name: app-elasticsearch
 
     webserver:
       image: nginx:alpine
-      container_name: radar-webserver
+      container_name: app-webserver
       working_dir: /application
       volumes:
           - .:/application
@@ -115,21 +113,22 @@ services:
 
     mailhog:
       image: mailhog/mailhog:latest
-      container_name: radar-mailhog
+      container_name: app-mailhog
       ports:
         - "8001:8025"
 
     redis:
       image: redis:alpine
-      container_name: radar-redis
+      container_name: app-redis
+      command: redis-server --appendonly yes --requirepass 123456
+      volumes:
+      - ./data/redis:/data
       ports:
         - "8002:6379"
-      volumes:
-        - ./data/redis:/etc/redis
 
     mariadb:
       image: mariadb:10.4
-      container_name: radar-mariadb
+      container_name: app-mariadb
       volumes:
         - ./data/mariadb:/var/lib/mysql
       environment:
@@ -142,7 +141,7 @@ services:
 
     elasticsearch:
       image: elasticsearch:6.5.4
-      container_name: radar-elasticsearch
+      container_name: app-elasticsearch
       ports:
         - "8004:9300"
 ```
