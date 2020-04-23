@@ -146,6 +146,8 @@ services:
         - "8004:9300"
 ```
 
+> Note: the redis-server --appendonly yes command overrided the `redis-server` command with no arguments that the standard container runs. This allows us to persist the redis data using a docker volume mapping
+
 In your Laravel applictaions `.env` file specify the following:
 
 ```ini
@@ -289,6 +291,7 @@ Enter the following credentials:
 REDIS_HOST=127.0.0.1
 REDIS_PORT=8002
 REDIS_PASSWORD=123456
+#REDIS_PASSWORD=null if we ommit the --requirepass flag for the redis command
 ```
 
 click on the test button to test connection
