@@ -73,6 +73,8 @@ REDIS_PASSWORD=<your_redis_password>
     'connection' => 'session',
 ```
 
+Remove all .env keys prefied by `SESSION_`
+
 ## Redis enabled config/cache.php configuration file
 
 ```php
@@ -90,6 +92,8 @@ REDIS_PASSWORD=<your_redis_password>
   # remove this key if we never share a redis server between apps
   'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
 ```
+
+Remove all .env keys prefied by `CACHE_`
 
 ## Redis enabled config/queue.php configuration file
 
@@ -110,6 +114,8 @@ REDIS_PASSWORD=<your_redis_password>
         ],
     ],
 ```
+
+Remove all .env keys prefied by `QUEUE_`
 
 ## Redis Cluster Queue key hash tags
 
