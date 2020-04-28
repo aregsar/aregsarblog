@@ -48,8 +48,6 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 > Note: REDIS_QUEUE_PREFIX env setting is not hardcoded and only specified in production to allow production deployment to switch queue for new deployments with serialized model changes
 > Note: `prefix` setting is used instead of using different database number to be able to segment the keys when used with a managed redis cluster which does not support multiple databases. Also `prefix` prefixes keys for the app that uses this configuration. Cache and queue clients that use these redis connections may also specify an application level prefix to segment cache keys between different applications using the same redis server.
 
-https://laracasts.com/discuss/channels/laravel/redis-sessions-prefix
-
 ## Local environment variable settings for config/database.php configuration file
 
 ```ini
@@ -88,7 +86,7 @@ REDIS_PASSWORD=<your_redis_password>
         ],
   ],
 
-  # cache prefix (used to segment between multiple apps)
+  # redis cache key prefix (used to segment between multiple apps)
   # remove this key if we never share a redis server between apps
   'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
 ```
@@ -105,13 +103,25 @@ REDIS_PASSWORD=<your_redis_password>
             'connection' => 'queue',
             'retry_after' => 90,
             'block_for' => null,
-            # queue prefix (used to segment between multiple apps)
-            # setting value is used as a redis key prefix
-            # must be wrapped in brackets for redis cluster
+            # redis queue key prefix (used to segment between multiple apps)
             # remove this key if we never share a redis server between apps
+            # key must be wrapped in brackets for redis cluster(Note: TBD This may only apply when using client controlled clustering)
             'queue' => '{myapp}',
-            //'queue' => env('REDIS_QUEUE', 'myapp'),
-            //'queue' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
         ],
     ],
 ```
+
+## Redis Cluster Queue key hash tags
+
+> Note: TBD This may only apply when using client controlled clustering
+
+From Laravel docs at `https://laravel.com/docs/7.x/queues`
+
+If your Redis queue connection uses a Redis Cluster, your queue names must contain a key hash tag. This is required in order to ensure all of the Redis keys for a given queue are placed into the same hash slot:
+
+'redis' => [
+    'driver' => 'redis',
+    'connection' => 'default',
+    'queue' => '{default}',
+    'retry_after' => 90,
+],
