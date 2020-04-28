@@ -92,7 +92,9 @@ The resulting final set of connections is shown below:
 
 ## Setting the application name prefix key
 
-The `prefix` option sets the redis database prefix key for all keys of the application:
+> Note: This section only applies if you are using the old `predis` composer package redis client. When using the default `php-redis` php extension client, the `redis` => `options` => `prefix` key should be removed altogether.
+
+The `prefix` option appends the redis database prefix key to all redis keys used by the application:
 
 ```bash
  'redis' => [
