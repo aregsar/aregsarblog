@@ -13,7 +13,6 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
             'cluster' => 'redis',
         ],
         'default' => [
-            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
@@ -21,7 +20,6 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
             `prefix` => `d:`
         ],
         'cache' => [
-            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
@@ -29,7 +27,6 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
             `prefix` => `c:`
         ],
         'queue' => [
-            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
@@ -37,43 +34,48 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
             `prefix` => env('REDIS_QUEUE_PREFIX', 'q0:'),
         ],
         'session' => [
-            'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => '0',
+            #since config/session.php does not have an app level prefix we can change
+            #this prefx to `myapp:s:` if we share redis server between apps
             `prefix` => `s:`
         ],
     ],
 ```
 
 > Note: REDIS_QUEUE_PREFIX env setting is not hardcoded and only specified in production to allow production deployment to switch queue for new deployments with serialized model changes
-> Note: `prefix` setting is used instead of using different database number to be able to segment the keys when used with a managed redis cluster which does not support multiple databases.
+> Note: `prefix` setting is used instead of using different database number to be able to segment the keys when used with a managed redis cluster which does not support multiple databases. Also `prefix` prefixes keys for the app that uses this configuration. Cache and queue clients that use these redis connections may also specify an application level prefix to segment cache keys between different applications using the same redis server.
+
+https://laracasts.com/discuss/channels/laravel/redis-sessions-prefix
 
 ## Local environment variable settings for config/database.php configuration file
 
 ```ini
 REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
 REDIS_PORT=6379
+REDIS_PASSWORD=null
 ```
 
-## Digitalocean Managed Redis Cluster variable settings
+## Digitalocean Managed Redis Cluster environment variable settings
 
 ```ini
 REDIS_HOST=tls://<your_redis_host>.db.ondigitalocean.com
-REDIS_PASSWORD=<your_redis_password>
 REDIS_PORT=25061
+REDIS_PASSWORD=<your_redis_password>
 ```
 
-## config/session.php configuration file
+> Note: the `tls:` scheme and TLS protocol port number is used since managed Redis only supports TLS connections
+
+## Redis enabled config/session.php configuration file
 
 ```php
     'driver' => 'redis',
     'connection' => 'session',
 ```
 
-## config/cache.php configuration file
+## Redis enabled config/cache.php configuration file
 
 ```php
    #select the `redis` cache connection in `connections` setting below
@@ -87,10 +89,11 @@ REDIS_PORT=25061
   ],
 
   # cache prefix (used to segment between multiple apps)
-  //'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
+  # remove this key if we never share a redis server between apps
+  'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
 ```
 
-## config/queue.php configuration file
+## Redis enabled config/queue.php configuration file
 
 ```php
   #select the `redis` queue connection in `connections` setting below
@@ -100,14 +103,15 @@ REDIS_PORT=25061
         'redis' => [
             'driver' => 'redis',
             'connection' => 'queue',
+            'retry_after' => 90,
+            'block_for' => null,
             # queue prefix (used to segment between multiple apps)
             # setting value is used as a redis key prefix
             # must be wrapped in brackets for redis cluster
-            //'queue' => '{myapp}',
+            # remove this key if we never share a redis server between apps
+            'queue' => '{myapp}',
             //'queue' => env('REDIS_QUEUE', 'myapp'),
             //'queue' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
-            'retry_after' => 90,
-            'block_for' => null,
         ],
     ],
 ```
