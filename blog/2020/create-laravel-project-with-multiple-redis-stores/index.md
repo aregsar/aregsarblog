@@ -121,8 +121,57 @@ Change the `laravel` default to your app name.
 The `cluster` setting, indicates that our Redis server connection is connecting to a self managed Redis cluster.
 
 > Note: A self managed cluster connection connects to a proxy cluster manager that that manages a cluster of redis instances, without requiring the redis client to manages cluster nodes
+> If a redis cluster is not being used, this setting can be removed, however it will not effect using a standard redis instance if it remains.
 
 If we always use a managed cluster we could change the ` 'cluster' => env('REDIS_CLUSTER', 'redis')` cluster setting to the hard coded `'cluster' => 'redis'` setting
+
+Its important to note that clustered redis instances do not support multiple databases. They only have one database which is the default database number 0. 
+
+So in order to separate our redis, cache, session and queue keys, we need to use a different key prefix per connection:
+
+```bash
+ 'redis' => [
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        ],
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+            `prefix` => `d:`
+        ],
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+            `prefix` => `c:`
+        ],
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+            `prefix` => `q:`
+        ],
+        'session' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+            `prefix` => `s:`
+        ],
+    ],
+```
+
+As you can see all the `database` setting for all connections is set to 0 and we added an additiona `prefix` setting for each connection. Each connection prefix uses a unique letter to effectively namespace qualify the key used by the client by appending the prefix to the key.
 
 ## The Redis Client
 
