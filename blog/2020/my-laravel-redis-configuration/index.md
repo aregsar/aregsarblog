@@ -4,7 +4,7 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [My Laravel Redis Configuration](https://aregsar.com/blog/2020/my-laravel-redis-configuration)
 
-`config/database.php`:
+## config/database.php configuration file
 
 ```bash
  'redis' => [
@@ -48,4 +48,66 @@ April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 ```
 
 > Note: REDIS_QUEUE_PREFIX env setting is not hardcoded and only specified in production to allow production deployment to switch queue for new deployments with serialized model changes
+> Note: `prefix` setting is used instead of using different database number to be able to segment the keys when used with a managed redis cluster which does not support multiple databases.
 
+## Local environment variable settings for config/database.php configuration file
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+## Digitalocean Managed Redis Cluster variable settings
+
+```ini
+REDIS_HOST=tls://<your_redis_host>.db.ondigitalocean.com
+REDIS_PASSWORD=<your_redis_password>
+REDIS_PORT=25061
+```
+
+## config/session.php configuration file
+
+```php
+    'driver' => 'redis',
+    'connection' => 'session',
+```
+
+## config/cache.php configuration file
+
+```php
+   #select the `redis` cache connection in `connections` setting below
+  'default' => `redis`,
+
+  'stores' => [
+    'redis' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
+  ],
+
+  # cache prefix (used to segment between multiple apps)
+  //'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
+```
+
+## config/queue.php configuration file
+
+```php
+  #select the `redis` queue connection in `connections` setting below
+  'default' => 'redis',
+
+  'connections' => [
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'queue',
+            # queue prefix (used to segment between multiple apps)
+            # setting value is used as a redis key prefix
+            # must be wrapped in brackets for redis cluster
+            //'queue' => '{myapp}',
+            //'queue' => env('REDIS_QUEUE', 'myapp'),
+            //'queue' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+    ],
+```
