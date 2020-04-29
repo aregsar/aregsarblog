@@ -2,9 +2,13 @@
 
 April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[My Laravel Redis Configuration](https://aregsar.com/blog/2020/my-laravel-redis-configuration)
+This post contains all the configuration changes required to use Redis for Laravel application session, cache and queue services in addition to directly accessing Redis for application specific use cases.
 
 ## config/database.php configuration file
+
+Below is how the `redis` database driver is configured in `config/database.php`
+
+> Note: I run a Redis as docker service and configure the REDIS_HOST, REDIS_PORT and REDIS_PASSWORD `.env` file keys used in the `config/database.php` configuration file to connect to a running instance of Redis that persists its data on the local host that is running the container.
 
 ```bash
  'redis' => [
@@ -73,7 +77,7 @@ REDIS_PASSWORD=<your_redis_password>
     'connection' => 'session',
 ```
 
-Remove all .env keys prefied by `SESSION_`
+Remove all keys in `.env` file that are prefixed by `SESSION_`
 
 ## Redis enabled config/cache.php configuration file
 
@@ -93,7 +97,7 @@ Remove all .env keys prefied by `SESSION_`
   'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
 ```
 
-Remove all .env keys prefied by `CACHE_`
+Remove all keys in `.env` file that are prefixed by `CACHE_`
 
 ## Redis enabled config/queue.php configuration file
 
@@ -115,7 +119,7 @@ Remove all .env keys prefied by `CACHE_`
     ],
 ```
 
-Remove all .env keys prefied by `QUEUE_`
+Remove all keys in `.env` file that are prefixed by `QUEUE_`
 
 ## Redis Cluster Queue key hash tags
 

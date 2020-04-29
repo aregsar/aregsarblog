@@ -1,16 +1,13 @@
 # My Laravel Local Docker Services Configuration
 
-April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[My Laravel Local Docker Services Configuration](https://aregsar.com/blog/2020/my-laravel-local-docker-services-configuration)
+April 29, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 To run the MySql and Redis servers for your local Laravel project environment to connect to, add the following `docker-compose.yml` file to the root of your Laravel project:
 
 ```yaml
 version: "3.1"
 services:
-
-    redis:
+    myapp-redis:
       image: redis:alpine
       container_name: app-redis
       command: redis-server --appendonly yes --requirepass 123456
@@ -19,14 +16,14 @@ services:
       ports:
         - "8000:6379"
 
-    mysql:
+    myapp-mysql:
       image: mysql:8.0
       container_name: app-mysql
       volumes:
         - ./data/mysql:/var/lib/mysql
       environment:
         - MYSQL_ROOT_PASSWORD=root
-        # for MYSQL_DATABASE substitute the name of the database that you want to be created 
+        # for MYSQL_DATABASE substitute the name of the database that you want to be created
         - MYSQL_DATABASE=myapp
         - MYSQL_USER=root
         - MYSQL_PASSWORD=123456
@@ -40,11 +37,24 @@ If we look at the standard mysql and redis dockerfiles we can see that there is 
 
 > Note: the host machine `./data/redis` and `./data/mysql` volumes will be created within the Laravel project directory that contains the docket-compose.yml file when we run the `docker-compose up -d` command
 
+## Environment Variables for the Redis server container
+
+In your Laravel application `.env` file specify the following:
+
+```ini
+# connecting to local instance of redis docker container
+REDIS_HOST=127.0.0.1
+# this is the left side of the redis container port mapping in docker-compose.yml file
+REDIS_PORT=8000
+REDIS_PASSWORD=123456
+```
+
 ## Environment Variables for the MySql server container
 
 In your Laravel application `.env` file specify the following:
 
 ```ini
+# connecting to local instance of mysql docker container
 DB_HOST=127.0.0.1
 # this is the left side of the mysql container port mapping in docker-compose.yml file
 DB_PORT=8001
@@ -61,24 +71,14 @@ DB_CONNECTION=mysql
 
 > Note the `mysql` connection setting within the `config/database.php` loads the database credentials using the DB_DATABASE, DB_USERNAMRE and DB_PASSWORD environment settings in the `.env` file
 
-## Environment Variables for the Redis server container
-
-In your Laravel application `.env` file specify the following:
-
-```ini
-REDIS_HOST=127.0.0.1
-# this is the left side of the redis container port mapping in docker-compose.yml file
-REDIS_PORT=8000
-REDIS_PASSWORD=123456
-```
-
-## MySql configuration setting 
+## The Laravel MySql configuration setting
 
 For reference this is the mysql connection in the `config/database.php` file
 
 ```php
  'mysql' => [
             'driver' => 'mysql',
+            # if env key does not exist env($nonexistingkey) returns null by default  
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
