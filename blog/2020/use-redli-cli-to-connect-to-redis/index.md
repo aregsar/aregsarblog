@@ -74,11 +74,11 @@ Connected to 5.0.8
 >
 ```
 
-To exit the prompt and terminate the connection type ctrl C.
+To exit the prompt and terminate the connection type `Ctrl+c`.
 
 ## Executing Redis commands after connecting
 
-Commands to check the redis connection:
+Command to check the redis connection:
 
 ```bash
 > ping
