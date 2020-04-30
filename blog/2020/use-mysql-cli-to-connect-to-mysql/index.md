@@ -4,6 +4,10 @@ April 30, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Use MySQL CLI To Connect To MySQL](https://aregsar.com/blog/2020/use-mysql-cli-to-connect-to-mysql)
 
+https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04
+
+https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-encrypted-connections.html
+
 
 brew install mysql
 
