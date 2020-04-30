@@ -1,5 +1,9 @@
 # All Posts
 
+April 30, 2020
+
+[Use Redli CLI To Connect To Redis](https://aregsar.com/blog/2020/use-redli-cli-to-connect-to-redis)
+
 April 29, 2020
 
 [My Laravel Local Docker Services Configuration](https://aregsar.com/blog/2020/my-laravel-local-docker-services-configuration)
