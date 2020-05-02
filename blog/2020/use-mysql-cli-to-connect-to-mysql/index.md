@@ -4,20 +4,33 @@ April 30, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Use MySQL CLI To Connect To MySQL](https://aregsar.com/blog/2020/use-mysql-cli-to-connect-to-mysql)
 
+Reference links:
+
 https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04
 
-https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-encrypted-connections.html
+https://www.digitalocean.com/docs/databases/mysql/how-to/connect/
 
-## install the MySQL CLI
+https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-install-starting.html
+
+## install the mysql CLI
 
 brew install mysql
 
 echo 'export PATH=/usr/local/mysql/bin:$PATH' >> ~/.bash_profile
 
-## Connect to a mysql server
+## install the mysqlsh
+
+```bash
+wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.0.20-macos10.15-x86-64bit.tar.gz
+tar xvf mysql-shell-8.0.20-macos10.15-x86-64bit.tar.gz
+ln -s ~/mysql-shell-8.0.20-macos10.15-x86-64bit/bin/mysqlsh /usr/local/bin/
+```
+
+## Connect to a mysql server using mysql CLI
 
 #must have no space between -p and PASSWORD
 
+mysql -h 127.0.0.1 -P 3306 -u myname -pmypassword -D mydb
 mysql -h 127.0.0.1 -P 3306 -u myname -pmypassword mydb
 mysql -h localhost -P 3306 -u myname -pmypassword mydb
 mysql -h localhost -P 3306 -u myname -pmypassword
@@ -33,7 +46,9 @@ Clients can choose to connect with or without SSL as the server allows both type
 mysql -h hostnameorip -u root -p –ssl-mode=ENABLED
 mysql -h hostnameorip -u root -p –ssl-mode=DISABLED
 
-=====================
+## Connect to a mysql server using mysqlsh CLI
+
+mysqlsh --sql
 
 ## Database information
 
