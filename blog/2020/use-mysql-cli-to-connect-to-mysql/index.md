@@ -61,13 +61,17 @@ mysql -h hostnameorip -u root -p –ssl-mode=DISABLED
 ## Connect to a mysql server using mysqlsh CLI
 
 ```bash
-mysqlsh --sql
+mysqlsh --sql -h 127.0.0.1 -P 3306
+mysqlsh --sql -h 127.0.0.1 -P 3306 -u root
+# requires -D to use database
 mysqlsh --sql -h 127.0.0.1 -P 3306 -u myname -pmypassword -D mydb
 ```
 
+> Note: mysqlsh has some issues creating a user on my macOS installation. It is primarily used a client to connect to managed Digitalocean instance using `tls://` scheme.
+
 ## Database information
 
-Show connection stats:
+Show connection stats (mysql cli only):
 
 ```bash
 mysql> status
