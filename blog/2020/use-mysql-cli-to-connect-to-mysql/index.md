@@ -40,15 +40,12 @@ mysql -h localhost -P 3306 -u myname -pmypassword
 mysql -h localhost -P 3306 -u root -p
 #defaults to root@localhost:3306 no password no selected database
 mysql -u root
-#homeuser@localhost:3306 no password no selected database
-defaults to mysql
+#defaults to $(whoami)@localhost:3306 no password no selected database
+mysql
 ```
 
 > Note: 127.0.0.1 can be substituted for localhost
 
-aregsarkissian@localhost
-
-## SSL mode connections
 
 By default, MySQL server always installs and enables SSL configuration:
 
