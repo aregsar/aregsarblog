@@ -67,7 +67,7 @@ mysqlsh --sql -h 127.0.0.1 -P 3306 -u root
 mysqlsh --sql -h 127.0.0.1 -P 3306 -u myname -pmypassword -D mydb
 ```
 
-> Note: mysqlsh has some issues creating a user on my macOS installation. It is primarily used a client to connect to managed Digitalocean instance using `tls://` scheme.
+> Note: mysqlsh has some issues creating a user on my macOS installation. It is primarily used a client to connect to managed Digitalocean instance.
 
 ## Database information
 
