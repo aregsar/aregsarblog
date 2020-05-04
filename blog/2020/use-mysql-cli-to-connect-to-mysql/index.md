@@ -6,17 +6,18 @@ April 30, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 Reference links:
 
-https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04
+`https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04`
 
-https://www.digitalocean.com/docs/databases/mysql/how-to/connect/
+`https://www.digitalocean.com/docs/databases/mysql/how-to/connect/`
 
-https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-install-starting.html
+`https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-install-starting.html`
 
 ## install the mysql CLI
 
+```bash
 brew install mysql
-
 echo 'export PATH=/usr/local/mysql/bin:$PATH' >> ~/.bash_profile
+```
 
 ## install the mysqlsh
 
@@ -28,62 +29,95 @@ ln -s ~/mysql-shell-8.0.20-macos10.15-x86-64bit/bin/mysqlsh /usr/local/bin/
 
 ## Connect to a mysql server using mysql CLI
 
-#must have no space between -p and PASSWORD
+Below are commands to connect to mysql with various combinations of command line arguments:
 
-mysql -h 127.0.0.1 -P 3306 -u myname -pmypassword -D mydb
-mysql -h 127.0.0.1 -P 3306 -u myname -pmypassword mydb
+```bash
+#must have no space between -p and PASSWORD
+mysql -h localhost -P 3306 -u myname -pmypassword -D mydb
 mysql -h localhost -P 3306 -u myname -pmypassword mydb
 mysql -h localhost -P 3306 -u myname -pmypassword
+#defaults to no password no selected database
 mysql -h localhost -P 3306 -u root -p
-#root@localhost
+#defaults to root@localhost:3306 no password no selected database
 mysql -u root
-#homeuser@localhost
-mysql 
+#homeuser@localhost:3306 no password no selected database
+defaults to mysql
+```
 
-https://scalegrid.io/blog/configuring-and-managing-ssl-on-your-mysql-server/
-By default, MySQL server always installs and enables SSL configuration. 
-Clients can choose to connect with or without SSL as the server allows both types of connections. 
+> Note: 127.0.0.1 can be substituted for localhost
+
+aregsarkissian@localhost
+
+## SSL mode connections
+
+By default, MySQL server always installs and enables SSL configuration:
+
+`https://scalegrid.io/blog/configuring-and-managing-ssl-on-your-mysql-server/`
+
+Clients can choose to connect with or without SSL as the server allows both types of connections.
+
+```bash
 mysql -h hostnameorip -u root -p –ssl-mode=ENABLED
 mysql -h hostnameorip -u root -p –ssl-mode=DISABLED
+```
 
 ## Connect to a mysql server using mysqlsh CLI
 
+```bash
 mysqlsh --sql
+mysqlsh --sql -h 127.0.0.1 -P 3306 -u myname -pmypassword -D mydb
+```
 
 ## Database information
 
 Show connection stats:
 
-mysql> status;
+```bash
+mysql> status
+```
 
 Show all databases:
 
+```bash
 mysql> show databases;
+```
 
 Show tables in a database:
 
+```bash
 mysql> use appdb;show tables;
+```
 
 Select a database
 
-mysql> use appdb;
+```bash
+mysql> use appdb
+```
 
 Show tables in the selected database:
 
+```bash
 mysql> show tables;
+```
 
 ## Create a User
 
-mysql> CREATE USER 'appuser'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
-mysql> CREATE USER 'appuser'@'%' IDENTIFIED BY 'password';
-mysql> CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'password';
+```bash
+mysql> CREATE USER 'appuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mypassword';
+#create a user on any IP with password mypassword
+mysql> CREATE USER 'appuser'@'%' IDENTIFIED BY 'mypassword';
+mysql> CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'mypassword';
+```
 
 ## Create a database
 
+```bash
 mysql> CREATE DATABASE appdb;
+```
 
 ## Grant access permissions for a database to a user
 
+```bash
 mysql> GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'%';
 mysql> GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'localhost';
 mysql> GRANT ALL ON appdb.* TO 'appuser'@'%';
@@ -91,14 +125,10 @@ mysql> GRANT ALL ON *.* TO 'appuser'@'localhost';
 
 ####is IDENTIFIED BY 'password' needed. If not added then no login password will be required
 ####mysql> GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost' IDENTIFIED BY 'password';
-
+```
 
 ## Droping a Database
 
+```bash
 mysql> DROP DATABASE appdb;
-
-## ending the sesssion
-
-mysql> exit;
-
-or Ctrl+c
+```
