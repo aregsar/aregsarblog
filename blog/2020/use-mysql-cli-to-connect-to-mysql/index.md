@@ -103,9 +103,11 @@ mysql> show tables;
 ## Create a User
 
 ```bash
-mysql> CREATE USER 'appuser'@'%' IDENTIFIED WITH mysql_native_password BY 'mypassword';
+#create a user on any IP with no password
+mysql> CREATE USER 'appuser'@'%';
 #create a user on any IP with password mypassword
 mysql> CREATE USER 'appuser'@'%' IDENTIFIED BY 'mypassword';
+#create a user on localhost with password mypassword
 mysql> CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'mypassword';
 ```
 
@@ -118,13 +120,9 @@ mysql> CREATE DATABASE appdb;
 ## Grant access permissions for a database to a user
 
 ```bash
+mysql> GRANT ALL ON appdb.* TO 'appuser'@'%';
 mysql> GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'%';
 mysql> GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'localhost';
-mysql> GRANT ALL ON appdb.* TO 'appuser'@'%';
-mysql> GRANT ALL ON *.* TO 'appuser'@'localhost';
-
-####is IDENTIFIED BY 'password' needed. If not added then no login password will be required
-####mysql> GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost' IDENTIFIED BY 'password';
 ```
 
 ## Droping a Database
