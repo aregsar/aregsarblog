@@ -2,8 +2,6 @@
 
 May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker)
-
 ## Creating files and directories
 
 > Note if you have already a docker-compose.yml then these steps are not required

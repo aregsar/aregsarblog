@@ -2,6 +2,10 @@
 
 May 5, 2020
 
+[Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker)
+
+May 5, 2020
+
 [Laravel App With MySQL In Docker](https://aregsar.com/blog/2020/laravel-app-with-mysql-in-docker)
 
 May 5, 2020
