@@ -107,13 +107,16 @@ QUEUE_CONNECTION=redis
         'redis' => [
             'driver' => 'redis',
             'connection' => 'queue',
-            'queue' => env('REDIS_QUEUE', 'default'),
+            'queue' => '',
+            //'queue' => '{default}',
+            //'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
         ],
     ],
 ```
 
+https://redis.io/topics/cluster-spec#keys-hash-tags
 
 ## Test
 
