@@ -95,17 +95,14 @@ QUEUE_CONNECTION=redis
             'driver' => 'redis',
             'connection' => 'cache',
         ],
-
-    'default' => env('CACHE_DRIVER', 'redis'),
-
-    'prefix' => '',
+  'default' => env('CACHE_DRIVER', 'redis'),
+  'prefix' => '',
 ```
 
 `config/queue.php`:
 
 ```php
   'default' => env('QUEUE_CONNECTION', 'redis'),
-
   'connections' => [
         'redis' => [
             'driver' => 'redis',
