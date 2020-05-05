@@ -142,7 +142,7 @@ So in order to separate our redis, cache, session and queue keys, we need to use
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
-            `prefix` => `d:`
+            'prefix' => 'D:',
         ],
         'cache' => [
             'url' => env('REDIS_URL'),
@@ -150,7 +150,7 @@ So in order to separate our redis, cache, session and queue keys, we need to use
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
-            `prefix` => `c:`
+            'prefix' => 'C:',
         ],
         'queue' => [
             'url' => env('REDIS_URL'),
@@ -158,7 +158,7 @@ So in order to separate our redis, cache, session and queue keys, we need to use
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
-            `prefix` => `q:`
+            'prefix' => 'Q1:',
         ],
         'session' => [
             'url' => env('REDIS_URL'),
@@ -166,7 +166,7 @@ So in order to separate our redis, cache, session and queue keys, we need to use
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
-            `prefix` => `s:`
+            'prefix' => 'S:',
         ],
     ],
 ```
