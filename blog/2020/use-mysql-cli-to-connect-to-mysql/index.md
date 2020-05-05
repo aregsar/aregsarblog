@@ -1,6 +1,6 @@
 # Use MySQL CLI To Connect To MySQL
 
-April 30, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## install the mysql CLI
 

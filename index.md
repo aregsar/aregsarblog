@@ -2,6 +2,10 @@
 
 May 5, 2020
 
+[Laravel App With MySQL In Docker](https://aregsar.com/blog/2020/laravel-app-with-mysql-in-docker)
+
+May 5, 2020
+
 [Use MySQL CLI To Connect To MySQL](https://aregsar.com/blog/2020/use-mysql-cli-to-connect-to-mysql)
 
 April 30, 2020

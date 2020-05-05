@@ -1,9 +1,6 @@
-# laravel app with mysql in docker
+# Laravel App With MySQL In Docker
 
-[laravel app with mysql in docker](https://aregsar.com/blog/2020/laravel-app-with-mysql-in-docker)
-
-
-
+May 5, 2020
 
 
 
