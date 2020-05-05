@@ -1,5 +1,9 @@
 # All Posts
 
+May 5, 2020
+
+[Use MySQL CLI To Connect To MySQL](https://aregsar.com/blog/2020/use-mysql-cli-to-connect-to-mysql)
+
 April 30, 2020
 
 [Use Redli CLI To Connect To Redis](https://aregsar.com/blog/2020/use-redli-cli-to-connect-to-redis)
