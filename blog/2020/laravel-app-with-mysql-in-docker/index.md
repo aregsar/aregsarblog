@@ -1,14 +1,16 @@
 # Laravel App With MySQL In Docker
 
-May 5, 2020
+May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-
+## Creating files and directories
 
 echo "/data" >> .gitignore
 mkdir data
 touch docker-compose.yml
 
+## Adding the mysql service to docker-compose
 
+```yaml
 mysql:
   image: mysql:8.0
   container_name: myapp-mysql
@@ -21,16 +23,22 @@ mysql:
     - MYSQL_PASSWORD=myapp
   ports:
     - "8001:3306"
+```
 
+## Adding the environment variables for the mysql service
 
+```ini
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=8001
 DB_DATABASE=myapp
 DB_USERNAME=myapp
 DB_PASSWORD=myapp
+```
 
+## Changing mysql configuration settings for the mysql service
 
+```php
 'mysql' => [
         'driver' => 'mysql',
         'url' => env('DATABASE_URL'),
@@ -50,20 +58,23 @@ DB_PASSWORD=myapp
             PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
         ]) : [],
     ],
-
-
+```
 
 There are the relevent settings:
 
+```php
 'host' => env('DB_HOST', '127.0.0.1'),
 'port' => env('DB_PORT', '8001'),
 'database' => env('DB_DATABASE', 'myapp'),
 'username' => env('DB_USERNAME', 'myapp'),
 'password' => env('DB_PASSWORD', 'myapp'),
+```
 
+## Run the Docker services
 
+```bash
 docker-compose up -d
-
+```
 
 ## Connecting using mysql and mysqlsh client
 
@@ -71,20 +82,27 @@ docker-compose up -d
 
 Using mysqlsh cli:
 
+```bash
 sudo mysqlsh --sql -h localhost -P 8001 -u root -pmyapp -D myapp
+```
+
+```bash
 sudo mysqlsh --sql -h localhost -P 8001 -u myapp -pmyapp -D myapp
-
-
-
+```
 
 Using mysql cli:
 
+```bash
 sudo mysql -h localhost -P 8001 -u root -pmyapp myapp
+```
+
+```bash
 sudo mysql -h localhost -P 8001 -u myapp -pmyapp myapp
+```
 
 > Note you may be asked to type in your macOS password to execute the command
 
-
+```bash
 SQL > show databases;
 +--------------------+
 | Database           |
@@ -95,12 +113,15 @@ SQL > show databases;
 | radar              |
 | sys                |
 +--------------------+
-
+```
 
 ## Test Connection using artisan tinker
 
+```bash
 php artisan tinker
+```
 
+```bash
 >>> DB::connection()->getPdo();
 => PDO {#3043
      inTransaction: false,
@@ -123,11 +144,9 @@ php artisan tinker
      },
    }
 >>>
+```
 
-
-
-## Test connection with Laravel route closure
-
+## Test connection from Laravel application
 
 ```php
 try {
@@ -141,27 +160,34 @@ try {
             }
 ```
 
+## Running authentication database migrations
 
-## Running laravel authentication database migrations 
-
-
+```bash
 php artisan migrate
+```
 
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome -a radar.test
+Launch the browser
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome -a myapp.test
+```
+
+> Note: I am using Laravel Valet to host Laravel applications
 
 Register a user and log in
 
 ## Persisting data between docker container runs
 
+```bash
 docker-compose down
+```
 
 Try connecting to see failure
 
+```bash
 docker-compose up -d
+```
 
 See logged in user again
 
 Check data/mysql directory to see the persisted database files
-
-
-
