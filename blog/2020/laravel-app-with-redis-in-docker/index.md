@@ -147,7 +147,7 @@ Below is the queue configuration in `config/queue.php`:
             'driver' => 'redis',
             //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
-            //this is the redis queue key prefix that is applied when using the 'job' connection
+            //this is the redis queue key default prefix that is applied when using the 'job' connection. It can be overriden by explicitly passing the queue name.
             'queue' => '{job}',
             'retry_after' => 90,
             'block_for' => null,
@@ -158,7 +158,7 @@ Below is the queue configuration in `config/queue.php`:
             'driver' => 'redis',
             //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
-            //this is the redis queue key prefix that is applied when using the 'app' connection
+            //this is the redis queue key default prefix that is applied when using the 'app' connection.It can be overriden by explicitly passing the queue name.
             'queue' => '{app}',
             'retry_after' => 90,
             'block_for' => null,
@@ -262,3 +262,50 @@ docker-compose up -d
 See the connections are working again
 
 Check data/redis directory to see the persisted redis files
+
+
+## cache tests
+
+```php
+$value = Cache::get('foo');
+
+$value = Cache::store('redis')->get('foo');
+```
+
+## queue tests
+
+We can connect using the default connection and explicit connection specified in `config/queue.php` using the Queue::push command.
+We can also override the default `queue` name setting for each connection using the Queue::pushOn command.
+
+```php
+//push on the default 'job' queue of the default 'job' connection
+Queue::push(new WelcomeEmail());
+Queue::connection('job')->push(new WelcomeEmail());
+
+//push on a high priority 'high' queue using the default 'job' connection
+Queue::pushOn('high',new WelcomeEmail());
+Queue::connection('job')->pushOn('high',new WelcomeEmail());
+
+//push on the default 'app' queue of the 'app' connection
+Queue::connection('app')->push(new WelcomeEmail());
+
+//push on a high priority 'high' queue using the 'app' connection
+Queue::connection('app')->pushOn('high',new WelcomeEmail());
+
+//dipatch to the default 'job' queue of the default 'job' connection
+//WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set
+WelcomeEmailJob::dispatch();
+
+//dipatch to a high priority 'high' queue of the default 'job' connection
+//WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set
+WelcomeEmailJob::dispatch()->onQueue('high');
+```
+
+https://laravel-news.com/laravel-jobs-queues-101
+https://divinglaravel.com/pushing-jobs-to-queue
+php artisan queue:work --queue=emails
+
+First Laravel checks if a connection property is defined in your job class, using the property you can set which connection Laravel should send the queued job to, if no property was defined null will be used and in such case Laravel will use the default connection.
+
+
+
