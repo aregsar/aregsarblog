@@ -121,7 +121,7 @@ Below is the queue configuration in `config/queue.php`:
 
 ```php
   //use the 'redis' queue connection in this file
-  'default' => env('QUEUE_CONNECTION', 'redis'),
+  'default' => 'redis',
   'connections' => [
         //this is the 'redis' queue connection
         'redis' => [
