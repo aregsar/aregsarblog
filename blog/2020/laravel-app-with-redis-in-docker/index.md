@@ -303,6 +303,8 @@ WelcomeEmailJob::dispatch()->onQueue('high');
 
 https://laravel-news.com/laravel-jobs-queues-101
 https://divinglaravel.com/pushing-jobs-to-queue
+https://divinglaravel.com/queue-workers-how-they-work
+
 php artisan queue:work --queue=emails
 
 First Laravel checks if a connection property is defined in your job class, using the property you can set which connection Laravel should send the queued job to, if no property was defined null will be used and in such case Laravel will use the default connection.
