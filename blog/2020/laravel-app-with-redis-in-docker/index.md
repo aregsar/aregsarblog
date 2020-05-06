@@ -31,10 +31,9 @@ echo `services:' >> docker-compose.yml
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=myapp
 REDIS_PORT=8002
-CACHE_DRIVER=redis
-QUEUE_CONNECTION=redis
-#SESSION_DRIVER=redis
 ```
+
+Note: We can remove the SESSION_DRIVER, CACHE_DRIVER, QUEUE_CONNECTION keys as their values are hard coded to redis in the session, cache and queue configuration files. 
 
 ## redis connection configuration
 
@@ -137,7 +136,6 @@ Below is the cache configuration in `config/cache.php`:
 ## redis queue configuration
 
 Below is the queue configuration in `config/queue.php`:
- 
 
 ```php
   //uses the 'job' queue connection in this file
@@ -154,14 +152,14 @@ Below is the queue configuration in `config/queue.php`:
             'retry_after' => 90,
             'block_for' => null,
         ],
-        //this is the 'custom' queue connection
-        'custom' => [
+        //this is the 'app' queue connection
+        'app' => [
             //uses the redis driver from config/database.php
             'driver' => 'redis',
             //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
-            //this is the redis queue key prefix that is applied when using the 'custom' connection
-            'queue' => '{custom}',
+            //this is the redis queue key prefix that is applied when using the 'app' connection
+            'queue' => '{app}',
             'retry_after' => 90,
             'block_for' => null,
         ],
@@ -170,35 +168,13 @@ Below is the queue configuration in `config/queue.php`:
 
 > Note that the queue names are wrapped in brackets. This ensures that when using a redis cluster, redis hashes the name
 and uses the hash to put all keys with the same hash in the same bucket. See `https://redis.io/topics/cluster-spec#keys-hash-tags`
-> Note: The job and custom queues  use the same redis connection. The job connection is used when using the queued job dispatch and the queue facade without specifying a connection name
+> Note: The job and app queues  use the same redis connection. The job connection is used when using the queued job dispatch and the queue facade without specifying a connection name
 
-## Test
-
-php artisan queue:work --queue=default
-
-```php
-use Illuminate\Support\Facades\Redis;
-
-public function redisTest()
-{
-    $redis = Redis::connection();
-
-    try{
-        var_dump($redis->ping());
-    } catch (Exception $e){
-        $e->getMessage();
-    }
-}
-```
-
-## Connecting with PHP to running redis container
+## Run the Docker services
 
 ```bash
-php artisan tinker
-Redis::connection()->ping();
+docker-compose up -d
 ```
-
-
 
 ## Connecting redli CLI
 
@@ -216,7 +192,7 @@ redli -h 127.0.0.1 -a 123456 -p 8002
 
 ## Connecting redis-cli CLI 
 
-Testing redis with following commands
+Testing redis with following commands:
 
 ```bash
 redis-cli -p 8002
@@ -229,7 +205,6 @@ redis-cli -p 8002
 # 127.0.0.1:8002> quit
 ```
 
-
 ## Connecting with TablePlus to running redis container
 
 Open TablePlus and create a connection with the following:
@@ -239,3 +214,51 @@ select redis
 click create
 type in my_app_name for the 
 Enter the following credentials:
+
+## Connecting with artisan
+
+```bash
+php artisan tinker
+>>> Illuminate\Support\Facades\Redis::connection()->ping();
+>>> Illuminate\Support\Facades\Redis::connection("default")->ping();
+>>> Illuminate\Support\Facades\Redis::connection("session")->ping();
+>>> Illuminate\Support\Facades\Redis::connection("cache")->ping();
+>>> Illuminate\Support\Facades\Redis::connection("queue")->ping();
+```
+
+## Test redis connections from Laravel application
+
+```php
+use Illuminate\Support\Facades\Redis;
+
+public function redisTest()
+{
+    try{
+        var_dump(Redis::connection()->ping());
+        var_dump(Redis::connection("default")->ping());
+        var_dump(Redis::connection("session")->ping());
+        var_dump(Redis::connection("cache")->ping());
+        var_dump(Redis::connection("queue")->ping());
+    } catch (Exception $e){
+        var_dump($e->getMessage());
+    }
+}
+```
+
+## Persisting data between docker container runs
+
+```bash
+docker-compose down
+```
+
+Try connecting to redis see failure
+
+Bring the services back up.
+
+```bash
+docker-compose up -d
+```
+
+See the connections are working again
+
+Check data/redis directory to see the persisted redis files

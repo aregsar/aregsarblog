@@ -64,23 +64,13 @@ DB_PASSWORD=myapp
     ],
 ```
 
-There are the relevent settings:
-
-```php
-'host' => env('DB_HOST', '127.0.0.1'),
-'port' => env('DB_PORT', '8001'),
-'database' => env('DB_DATABASE', 'myapp'),
-'username' => env('DB_USERNAME', 'myapp'),
-'password' => env('DB_PASSWORD', 'myapp'),
-```
-
 ## Run the Docker services
 
 ```bash
 docker-compose up -d
 ```
 
-## Connecting using mysql and mysqlsh client
+## Connecting using mysqlsh cli
 
 > Note: make sure no space between the -p option an password
 
@@ -94,7 +84,9 @@ sudo mysqlsh --sql -h localhost -P 8001 -u root -pmyapp -D myapp
 sudo mysqlsh --sql -h localhost -P 8001 -u myapp -pmyapp -D myapp
 ```
 
-Using mysql cli:
+## Connecting using mysql cli
+
+> Note: make sure no space between the -p option an password
 
 ```bash
 sudo mysql -h localhost -P 8001 -u root -pmyapp myapp
@@ -105,6 +97,10 @@ sudo mysql -h localhost -P 8001 -u myapp -pmyapp myapp
 ```
 
 > Note you may be asked to type in your macOS password to execute the command
+
+## databases view as root user
+
+Once connected as root we can execute a the show databases command to see all application and system databases. We would not see the system databases if we were connected as a non root user.
 
 ```bash
 SQL > show databases;
@@ -123,9 +119,6 @@ SQL > show databases;
 
 ```bash
 php artisan tinker
-```
-
-```bash
 >>> DB::connection()->getPdo();
 => PDO {#3043
      inTransaction: false,
@@ -153,15 +146,12 @@ php artisan tinker
 ## Test connection from Laravel application
 
 ```php
-try {
-                $db = DB::connection()->getPdo();
-            }
-            catch (PDOException $e) {
-                self::fatal(
-                    "An error occurred while connecting to the database. ".
-                    "The error reported by the server was: ".$e->getMessage()
-                );
-            }
+   try {
+        var_dump(DB::connection()->getPdo());
+    } catch (PDOException $e){
+        var_dump($e->getMessage());
+    }
+
 ```
 
 ## Running authentication database migrations
@@ -186,12 +176,14 @@ Register a user and log in
 docker-compose down
 ```
 
-Try connecting to see failure
+Try connecting to mysql see failure.
+
+Bring the services back up.
 
 ```bash
 docker-compose up -d
 ```
 
-See logged in user again
+See the connection is working again
 
 Check data/mysql directory to see the persisted database files
