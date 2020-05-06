@@ -49,8 +49,6 @@ Below is the redis driver configuration in `config/database.php`:
         'options' => [
             //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            //this setting is only effective when using predis client. No impact if predis client is not used.
-            'prefix' => '',
         ],
 
         //connection used by the redis facade
@@ -61,8 +59,8 @@ Below is the redis driver configuration in `config/database.php`:
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_DB', '0'),
-            //redis key perfix for this connection
-            'prefix' => 'D',
+            //redis key prefix for this connection
+            'prefix' => 'd1:',
         ],
         //connection used by the cache facade when redis cache is configured in config/cache.php
         'cache' => [
@@ -72,8 +70,8 @@ Below is the redis driver configuration in `config/database.php`:
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_CACHE_DB', '0'),
-            //redis key perfix for this connection
-            'prefix' => 'C',
+            //redis key prefix for this connection
+            'prefix' => 'c1:',
         ],
         //connection used by the queue when redis cache is configured in config/queue.php
         'queue' => [
@@ -83,8 +81,8 @@ Below is the redis driver configuration in `config/database.php`:
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_QUEUE_DB', '0'),
-            //redis key perfix for this connection
-            'prefix' => '{Q1}',
+            //redis key prefix for this connection
+            'prefix' => 'v1:',
         ],
         //connection used by the session when redis cache is configured in config/session.php
         'session' => [
@@ -94,8 +92,8 @@ Below is the redis driver configuration in `config/database.php`:
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_SESSION_DB', '0'),
-            //redis key perfix for this connection
-            'prefix' => 'S',
+            //redis key prefix for this connection
+            'prefix' => 's1:',
         ],
     ],
 ```
@@ -103,44 +101,59 @@ Below is the redis driver configuration in `config/database.php`:
 Below is the cache configuration in `config/cache.php`:
 
 ```php
-  //use the 'redis' cache connection in this file
+  //use the 'redis' cache store in this file
   'default' => 'redis',
-  //this is the 'redis' cache connection
-  'redis' => [
-            //uses the redis driver from config/database.php
-            'driver' => 'redis',
-            //uses the 'cache' connection from the redis driver in config/database.php
-            'connection' => 'cache',
-        ],
+  'stores' => [
+    //this is the 'redis' cache connection
+    'redis' => [
+                //uses the redis driver from config/database.php
+                'driver' => 'redis',
+                //uses the 'cache' connection from the redis driver in config/database.php
+                'connection' => 'cache',
+            ],
+   ],
   //this is the redis cache key prefix for applied to all cache keys
-  //set to empty since key prefix is set at the redis connection level config/database.php
-  'prefix' => '',
+  'prefix' => 'def',
 ```
 
-Below is the queue configuration in `config/queue.php`:
+Below is the queue configuration in `config/queue.php` defining job and custom queues that use the same redis connection:
 
 ```php
-  //use the 'redis' queue connection in this file
-  'default' => 'redis',
+  //uses the 'job' queue connection in this file
+  'default' => 'job',
   'connections' => [
-        //this is the 'redis' queue connection
-        'redis' => [
+        //this is the 'job' queue connection
+        'job' => [
             //uses the redis driver from config/database.php
             'driver' => 'redis',
             //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
-            //this is the redis queue key prefix applied to all queue keys
-            //set to empty since key prefix is set at the redis connection level config/database.php
-            'queue' => '',
+            //this is the redis queue key prefix that is applied when using the 'job' connection
+            'queue' => '{job}',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+        //this is the 'custom' queue connection
+        'custom' => [
+            //uses the redis driver from config/database.php
+            'driver' => 'redis',
+            //uses the 'queue' connection from the redis driver in config/database.php
+            'connection' => 'queue',
+            //this is the redis queue key prefix that is applied when using the 'custom' connection
+            'queue' => '{custom}',
             'retry_after' => 90,
             'block_for' => null,
         ],
     ],
 ```
 
-https://redis.io/topics/cluster-spec#keys-hash-tags
+> note that the queue names are wrapped in brackets. This ensures that when using a redis cluster, redis hashes the name
+and uses the hash to put all keys with the same hash in the same bucket. See `https://redis.io/topics/cluster-spec#keys-hash-tags`
+> the default connection is used when using the queued job dispatch and the queue facade without specifying a connection name
 
 ## Test
+
+php artisan queue:work --queue=default
 
 ```php
 use Illuminate\Support\Facades\Redis;
