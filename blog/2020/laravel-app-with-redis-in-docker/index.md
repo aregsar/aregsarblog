@@ -38,76 +38,100 @@ QUEUE_CONNECTION=redis
 
 ## Changing redis configuration settings for the redis service
 
-`config/database.php`:
+Below is the redis driver configuration in `config/database.php`:
 
 ```php
+  //the redis driver
   'redis' => [
-
-        'client' => env('REDIS_CLIENT', 'phpredis'),
+        //the redis client (requires installing the phpredis.so extension using pecl)
+        'client' => 'phpredis',
 
         'options' => [
+            //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'myapp'), '_').'_database_'),
+            //this setting is only effective when using predis client. No impact if predis client is not used.
+            'prefix' => '',
         ],
 
+        //connection used by the redis facade
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_DB', '0'),
-            'prefix' => 'D:',
+            //redis key perfix for this connection
+            'prefix' => 'D',
         ],
-
+        //connection used by the cache facade when redis cache is configured in config/cache.php
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_CACHE_DB', '0'),
-            'prefix' => 'C:',
+            //redis key perfix for this connection
+            'prefix' => 'C',
         ],
+        //connection used by the queue when redis cache is configured in config/queue.php
         'queue' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_QUEUE_DB', '0'),
-            'prefix' => 'Q1:',
+            //redis key perfix for this connection
+            'prefix' => '{Q1}',
         ],
+        //connection used by the session when redis cache is configured in config/session.php
         'session' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
             'database' => env('REDIS_SESSION_DB', '0'),
-            'prefix' => 'S:',
+            //redis key perfix for this connection
+            'prefix' => 'S',
         ],
     ],
 ```
 
-`config/cache.php`:
+Below is the cache configuration in `config/cache.php`:
 
 ```php
+  //use the 'redis' cache connection in this file
+  'default' => 'redis',
+  //this is the 'redis' cache connection
   'redis' => [
+            //uses the redis driver from config/database.php
             'driver' => 'redis',
+            //uses the 'cache' connection from the redis driver in config/database.php
             'connection' => 'cache',
         ],
-  'default' => env('CACHE_DRIVER', 'redis'),
+  //this is the redis cache key prefix for applied to all cache keys
+  //set to empty since key prefix is set at the redis connection level config/database.php
   'prefix' => '',
 ```
 
-`config/queue.php`:
+Below is the queue configuration in `config/queue.php`:
 
 ```php
+  //use the 'redis' queue connection in this file
   'default' => env('QUEUE_CONNECTION', 'redis'),
   'connections' => [
+        //this is the 'redis' queue connection
         'redis' => [
+            //uses the redis driver from config/database.php
             'driver' => 'redis',
+            //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
+            //this is the redis queue key prefix applied to all queue keys
+            //set to empty since key prefix is set at the redis connection level config/database.php
             'queue' => '',
-            //'queue' => '{default}',
-            //'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
         ],
