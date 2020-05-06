@@ -36,7 +36,7 @@ QUEUE_CONNECTION=redis
 #SESSION_DRIVER=redis
 ```
 
-## Changing redis configuration settings for the redis service
+## redis connection configuration
 
 Below is the redis driver configuration in `config/database.php`:
 
@@ -98,6 +98,24 @@ Below is the redis driver configuration in `config/database.php`:
     ],
 ```
 
+We have separate connections for session, cache , queue and a default application specific redis connection.
+They all use the same redis server with their own key prefix.
+
+The the session, cache and queue configurations will use the corresponding redis connection specified here.
+
+## redis session configuration
+
+Below is the session configuration in `config/session.php`:
+
+```php
+//uses the redis driver from config/database.php
+'driver' => 'redis',
+ //uses the 'session' connection from the redis driver in config/database.php
+'connection' => 'session',
+```
+
+## redis cache configuration
+
 Below is the cache configuration in `config/cache.php`:
 
 ```php
@@ -116,7 +134,10 @@ Below is the cache configuration in `config/cache.php`:
   'prefix' => 'def',
 ```
 
-Below is the queue configuration in `config/queue.php` defining job and custom queues that use the same redis connection:
+## redis queue configuration
+
+Below is the queue configuration in `config/queue.php`:
+ 
 
 ```php
   //uses the 'job' queue connection in this file
@@ -147,9 +168,9 @@ Below is the queue configuration in `config/queue.php` defining job and custom q
     ],
 ```
 
-> note that the queue names are wrapped in brackets. This ensures that when using a redis cluster, redis hashes the name
+> Note that the queue names are wrapped in brackets. This ensures that when using a redis cluster, redis hashes the name
 and uses the hash to put all keys with the same hash in the same bucket. See `https://redis.io/topics/cluster-spec#keys-hash-tags`
-> the default connection is used when using the queued job dispatch and the queue facade without specifying a connection name
+> Note: The job and custom queues  use the same redis connection. The job connection is used when using the queued job dispatch and the queue facade without specifying a connection name
 
 ## Test
 
@@ -170,3 +191,51 @@ public function redisTest()
 }
 ```
 
+## Connecting with PHP to running redis container
+
+```bash
+php artisan tinker
+Redis::connection()->ping();
+```
+
+
+
+## Connecting redli CLI
+
+```bash
+#redli -h host -a password -p port
+redli -h 127.0.0.1 -a 123456 -p 8002
+127.0.0.1:8002> ping
+# pong
+127.0.0.1:8002> set tst:test "abcd"
+127.0.0.1:8002> get tst:test
+# abcd
+127.0.0.1:8002> exit
+# 127.0.0.1:8002> quit
+```
+
+## Connecting redis-cli CLI 
+
+Testing redis with following commands
+
+```bash
+redis-cli -p 8002
+127.0.0.1:8002> ping
+# pong
+127.0.0.1:8002> set tst:test "abcd"
+127.0.0.1:8002> get tst:test
+# abcd
+127.0.0.1:8002> exit
+# 127.0.0.1:8002> quit
+```
+
+
+## Connecting with TablePlus to running redis container
+
+Open TablePlus and create a connection with the following:
+
+click create a new connection
+select redis
+click create
+type in my_app_name for the 
+Enter the following credentials:

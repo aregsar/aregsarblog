@@ -281,8 +281,6 @@ MariaDB> use my_app_name
 MariaDB> SELECT DATABASE();
 ```
 
-
-
 ## Connecting with PHP to running redis container
 
 ```bash
