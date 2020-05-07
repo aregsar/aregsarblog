@@ -263,51 +263,92 @@ See the connections are working again
 
 Check data/redis directory to see the persisted redis files
 
+## Using the Session facade
 
-## cache tests
+Session variables will now be saved in Redis:
 
 ```php
-$value = Cache::get('foo');
+Session::set('foo','bar');
 
-$value = Cache::store('redis')->get('foo');
+$bar = Session::get('foo');
+```
+
+## Using the Cache facade
+
+Cache variables will now be saved in Redis:
+
+The default cache store is named `redis` and we can access it like so:
+
+```php
+Cache::store('foo','bar');
+
+$bar = Cache::store('redis')->get('foo');
+```
+
+As we saw it is not necessary to explicitly reference the default store, however it may be useful to be able to do so if we define additional redis stores that use different redis connections
+
+We can explicitly reference the `redis` cache store like so:
+
+```php
+Cache::store('redis')->store('foo','bar');
+
+$bar = Cache::store('redis')->get('foo');
 ```
 
 ## queue tests
 
-We can connect using the default connection and explicit connection specified in `config/queue.php` using the Queue::push command.
-We can also override the default `queue` name setting for each connection using the Queue::pushOn command.
+Queue access methods use the configuration settings from `config.queue.php`:
 
 ```php
-//push on the default 'job' queue of the default 'job' connection
-Queue::push(new WelcomeEmail());
-Queue::connection('job')->push(new WelcomeEmail());
+//push on the '{job}' queue of the default 'job' connection
+Queue::push(new WelcomeEmailJob());
 
-//push on a high priority 'high' queue using the default 'job' connection
-Queue::pushOn('high',new WelcomeEmail());
-Queue::connection('job')->pushOn('high',new WelcomeEmail());
+//push on the '{high}' queue of the default 'job' connection
+//Note: the {high} queue setting of the default 'job' connection is set on the fly
+Queue::pushOn('{high}',new WelcomeEmailJob());
+```
 
-//push on the default 'app' queue of the 'app' connection
-Queue::connection('app')->push(new WelcomeEmail());
+We can explicitly specify the queue connection to override the default `job` connection:
 
-//push on a high priority 'high' queue using the 'app' connection
-Queue::connection('app')->pushOn('high',new WelcomeEmail());
+```php
+//push on the '{app}' queue of the default 'app' connection
+Queue::connection('app')->push(new WelcomeEmailJob());
 
-//dipatch to the default 'job' queue of the default 'job' connection
-//WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set
+//push on the '{high}' queue of the 'app' connection
+//Note: the {high} queue setting of the selected 'app' connection is set on the fly
+Queue::connection('app')->pushOn('{high}',new WelcomeEmailJob());
+```
+
+We can also use the Job dispatch method:
+
+```php
+//dipatch to the '{job}' queue of the default 'job' connection (if the
+//connection property of WelcomeEmailJob has not been explicitly set to a different connection)
 WelcomeEmailJob::dispatch();
 
-//dipatch to a high priority 'high' queue of the default 'job' connection
-//WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set
-WelcomeEmailJob::dispatch()->onQueue('high');
+//dipatch to the '{high}' queue of the default 'job' connection
+//Note: the {high} queue setting of the default 'job' connection is set on the fly
+WelcomeEmailJob::dispatch()->onQueue('{high}');
 ```
+
+> Note: WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set. By default `WelcomeEmailJob::dispatch()` will dispatch to the queue setting of the connection that is set to its connection property. If no connection is set to the property, then it will use the queue setting of default connection.
+
+## Processing queue items
+
+```bash
+# process queue items from the default '{job}' queue of the default 'job' connection
+php artisan queue:work
+```
+
+```bash
+# process queue items from the '{high}' queue of the default 'job' connection
+php artisan queue:work --queue=high
+```
+
 
 https://laravel-news.com/laravel-jobs-queues-101
 https://divinglaravel.com/pushing-jobs-to-queue
 https://divinglaravel.com/queue-workers-how-they-work
-
-php artisan queue:work --queue=emails
-
-First Laravel checks if a connection property is defined in your job class, using the property you can set which connection Laravel should send the queued job to, if no property was defined null will be used and in such case Laravel will use the default connection.
 
 
 
