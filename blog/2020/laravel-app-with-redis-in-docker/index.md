@@ -226,24 +226,7 @@ php artisan tinker
 >>> Illuminate\Support\Facades\Redis::connection("queue")->ping();
 ```
 
-## Test redis connections from Laravel application
 
-```php
-use Illuminate\Support\Facades\Redis;
-
-public function redisTest()
-{
-    try{
-        var_dump(Redis::connection()->ping());
-        var_dump(Redis::connection("default")->ping());
-        var_dump(Redis::connection("session")->ping());
-        var_dump(Redis::connection("cache")->ping());
-        var_dump(Redis::connection("queue")->ping());
-    } catch (Exception $e){
-        var_dump($e->getMessage());
-    }
-}
-```
 
 ## Persisting data between docker container runs
 
@@ -262,6 +245,44 @@ docker-compose up -d
 See the connections are working again
 
 Check data/redis directory to see the persisted redis files
+
+## Using the Redis facade
+
+```php
+Illuminate\Support\Facades\Redis::connection()->ping();
+Illuminate\Support\Facades\Redis::connection("default")->ping();
+Illuminate\Support\Facades\Redis::connection("session")->ping();
+Illuminate\Support\Facades\Redis::connection("cache")->ping();
+Illuminate\Support\Facades\Redis::connection("queue")->ping();
+
+Illuminate\Support\Facades\Redis::set('foo','bar');
+$bar = Illuminate\Support\Facades\Redis::get('foo');
+$has = Illuminate\Support\Facades\Redis::exists('foo');
+Illuminate\Support\Facades\Redis::del('foo');
+//expire in seconds
+Illuminate\Support\Facades\Redis::expire('foo',60);
+Illuminate\Support\Facades\Redis::expireat('foo', '1495469730');
+Illuminate\Support\Facades\Redis::set('foo', 'bar', 'EX', 60);
+Illuminate\Support\Facades\Redis::command('set', ['foo','bar']);
+```
+
+Test in a route:
+
+```php
+use Illuminate\Support\Facades\Redis;
+public function redisTest()
+{
+    try{
+        var_dump(Redis::connection()->ping());
+        var_dump(Redis::connection("default")->ping());
+        var_dump(Redis::connection("session")->ping());
+        var_dump(Redis::connection("cache")->ping());
+        var_dump(Redis::connection("queue")->ping());
+    } catch (Exception $e){
+        var_dump($e->getMessage());
+    }
+}
+```
 
 ## Using the Session facade
 
