@@ -268,9 +268,11 @@ Check data/redis directory to see the persisted redis files
 Session variables will now be saved in Redis:
 
 ```php
-Session::set('foo','bar');
-
+Session::put('foo','bar');
 $bar = Session::get('foo');
+$has = Session::exists('users');
+Session::forget('foo');
+$data = Session::all();
 ```
 
 ## Using the Cache facade
@@ -297,7 +299,7 @@ $bar = Cache::store('redis')->get('foo');
 Cache::store('redis')->forget('foo');
 ```
 
-## queue tests
+## Using the Queue facade and Queue dispatch
 
 Queue access methods use the configuration settings from `config.queue.php`:
 
