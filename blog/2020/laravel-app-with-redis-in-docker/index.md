@@ -31,6 +31,7 @@ echo `services:' >> docker-compose.yml
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=myapp
 REDIS_PORT=8002
+QUEUE_PREFIX_VERSION=V1:
 ```
 
 Note: We can remove the SESSION_DRIVER, CACHE_DRIVER, QUEUE_CONNECTION keys as their values are hard coded to redis in the session, cache and queue configuration files. 
@@ -49,7 +50,6 @@ Below is the redis driver configuration in `config/database.php`:
             //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
             'cluster' => env('REDIS_CLUSTER', 'redis'),
         ],
-
         //connection used by the redis facade
         'default' => [
             'url' => env('REDIS_URL'),
@@ -57,9 +57,9 @@ Below is the redis driver configuration in `config/database.php`:
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
-            'database' => env('REDIS_DB', '0'),
+            'database' => '0',
             //redis key prefix for this connection
-            'prefix' => 'd1:',
+            'prefix' => 'd:',
         ],
         //connection used by the cache facade when redis cache is configured in config/cache.php
         'cache' => [
@@ -68,20 +68,9 @@ Below is the redis driver configuration in `config/database.php`:
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
-            'database' => env('REDIS_CACHE_DB', '0'),
+            'database' => '0',
             //redis key prefix for this connection
-            'prefix' => 'c1:',
-        ],
-        //connection used by the queue when redis cache is configured in config/queue.php
-        'queue' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            //database set to 0 since only database 0 is supported in redis cluster
-            'database' => env('REDIS_QUEUE_DB', '0'),
-            //redis key prefix for this connection
-            'prefix' => 'v1:',
+            'prefix' => 'c:',
         ],
         //connection used by the session when redis cache is configured in config/session.php
         'session' => [
@@ -90,9 +79,20 @@ Below is the redis driver configuration in `config/database.php`:
             'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
-            'database' => env('REDIS_SESSION_DB', '0'),
+            'database' => '0',
             //redis key prefix for this connection
-            'prefix' => 's1:',
+            'prefix' => 's:',
+        ],
+        //connection used by the queue when redis cache is configured in config/queue.php
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', ''),
         ],
     ],
 ```
@@ -304,7 +304,7 @@ Cache::store('redis')->forget('foo');
 Queue access methods use the configuration settings from `config.queue.php`:
 
 ```php
-//push on the '{job}' queue of the default 'job' connection
+//push on the default '{job}' queue of the default 'job' connection
 Queue::push(new WelcomeEmailJob());
 
 //push on the '{high}' queue of the default 'job' connection
@@ -315,7 +315,7 @@ Queue::pushOn('{high}',new WelcomeEmailJob());
 We can explicitly specify the queue connection to override the default `job` connection:
 
 ```php
-//push on the '{app}' queue of the default 'app' connection
+//push on the default '{app}' queue of the default 'app' connection
 Queue::connection('app')->push(new WelcomeEmailJob());
 
 //push on the '{high}' queue of the 'app' connection
@@ -326,13 +326,19 @@ Queue::connection('app')->pushOn('{high}',new WelcomeEmailJob());
 We can also use the Job dispatch method:
 
 ```php
-//dipatch to the '{job}' queue of the default 'job' connection (if the
-//connection property of WelcomeEmailJob has not been explicitly set to a different connection)
+//dipatch to the default '{job}' queue of the default 'job' connection
 WelcomeEmailJob::dispatch();
+
+//dipatch to the default '{app}' queue of the 'app' connection
+WelcomeEmailJob::dispatch()->onConnection('app');
 
 //dipatch to the '{high}' queue of the default 'job' connection
 //Note: the {high} queue setting of the default 'job' connection is set on the fly
 WelcomeEmailJob::dispatch()->onQueue('{high}');
+
+//dipatch to the '{high}' queue of the 'app' connection
+//Note: the {high} queue setting of the 'app' connection is set on the fly
+WelcomeEmailJob::dispatch()->onConnection('app')->onQueue('{high}');
 ```
 
 > Note: WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set. By default `WelcomeEmailJob::dispatch()` will dispatch to the queue setting of the connection that is set to its connection property. If no connection is set to the property, then it will use the queue setting of default connection.
@@ -348,11 +354,3 @@ php artisan queue:work
 # process queue items from the '{high}' queue of the default 'job' connection
 php artisan queue:work --queue=high
 ```
-
-
-https://laravel-news.com/laravel-jobs-queues-101
-https://divinglaravel.com/pushing-jobs-to-queue
-https://divinglaravel.com/queue-workers-how-they-work
-
-
-
