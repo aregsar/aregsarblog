@@ -280,9 +280,11 @@ Cache variables will now be saved in Redis:
 The default cache store is named `redis` and we can access it like so:
 
 ```php
-Cache::store('foo','bar');
-
-$bar = Cache::store('redis')->get('foo');
+Cache::put('foo','bar');
+$bar = Cache::get('foo');
+Cache::forget('foo');
+Cache::put('tmp', 'bar', 60);
+$has = Cache::has('tmp');
 ```
 
 As we saw it is not necessary to explicitly reference the default store, however it may be useful to be able to do so if we define additional redis stores that use different redis connections
@@ -290,9 +292,9 @@ As we saw it is not necessary to explicitly reference the default store, however
 We can explicitly reference the `redis` cache store like so:
 
 ```php
-Cache::store('redis')->store('foo','bar');
-
+Cache::store('redis')->put('foo','bar');
 $bar = Cache::store('redis')->get('foo');
+Cache::store('redis')->forget('foo');
 ```
 
 ## queue tests
