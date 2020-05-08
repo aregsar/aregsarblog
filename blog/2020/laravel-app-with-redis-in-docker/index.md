@@ -182,11 +182,12 @@ docker-compose up -d
 
 ```bash
 #redli -h host -a password -p port
-redli -h 127.0.0.1 -a 123456 -p 8002
+#redli -h 127.0.0.1 -a mypassword -p 8002
+redli -p 8002 -a mypassword
 127.0.0.1:8002> ping
 # pong
-127.0.0.1:8002> set tst:test "abcd"
-127.0.0.1:8002> get tst:test
+127.0.0.1:8002> set rdl:test "abcd"
+127.0.0.1:8002> get rdl:test
 # abcd
 127.0.0.1:8002> exit
 # 127.0.0.1:8002> quit
@@ -197,11 +198,11 @@ redli -h 127.0.0.1 -a 123456 -p 8002
 Testing redis with following commands:
 
 ```bash
-redis-cli -p 8002
+redis-cli -p 8002 -a mypassword
 127.0.0.1:8002> ping
 # pong
-127.0.0.1:8002> set tst:test "abcd"
-127.0.0.1:8002> get tst:test
+127.0.0.1:8002> set rds:test "abcd"
+127.0.0.1:8002> get rds:test
 # abcd
 127.0.0.1:8002> exit
 # 127.0.0.1:8002> quit
