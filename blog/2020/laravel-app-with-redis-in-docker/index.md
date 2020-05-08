@@ -131,8 +131,8 @@ Below is the cache configuration in `config/cache.php`:
                 'connection' => 'cache',
             ],
    ],
-  //this is the redis cache key prefix for applied to all cache keys
-  'prefix' => 'def',
+  //this is the redis cache key prefix applied to all cache keys
+  'prefix' => '',
 ```
 
 ## redis queue configuration
