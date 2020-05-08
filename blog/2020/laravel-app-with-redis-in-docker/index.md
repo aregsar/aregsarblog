@@ -149,7 +149,7 @@ Below is the queue configuration in `config/queue.php`:
             'driver' => 'redis',
             //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
-            //this is the redis queue key default prefix that is applied when using the 'job' connection. It can be overriden by explicitly passing the queue name.
+            //this is the redis queue key default prefix that is applied when using this 'job' connection. It can be overriden by explicitly passing the queue name.
             'queue' => '{job}',
             'retry_after' => 90,
             'block_for' => null,
@@ -160,7 +160,7 @@ Below is the queue configuration in `config/queue.php`:
             'driver' => 'redis',
             //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
-            //this is the redis queue key default prefix that is applied when using the 'app' connection.It can be overriden by explicitly passing the queue name.
+            //this is the redis queue key default prefix that is applied when using this 'app' connection.It can be overriden by explicitly passing the queue name.
             'queue' => '{app}',
             'retry_after' => 90,
             'block_for' => null,
