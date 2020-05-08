@@ -4,13 +4,15 @@ May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Creating files and directories
 
-> Note if you have already a docker-compose.yml then these steps are not required
+> Note if you have already a docker-compose.yml then skip to the next section.
 
+```bash
 echo '/data' >> .gitignore
 mkdir data
 touch docker-compose.yml
 echo `version: "3.1"' >> docker-compose.yml
 echo `services:' >> docker-compose.yml
+```
 
 ## Adding the mysql service to docker-compose
 
