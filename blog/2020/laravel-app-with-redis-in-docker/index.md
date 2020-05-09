@@ -94,7 +94,7 @@ Below is the redis driver configuration in `config/database.php`:
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => '0',
             //redis key prefix for this connection
-            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', ''),
+            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', 'V1:'),
         ],
     ],
 ```
@@ -325,6 +325,20 @@ Cache::store('redis')->forget('foo');
 
 Queue access methods use the configuration settings from `config.queue.php`:
 
+First we need to create a Job class that can be queued for background processing. For testing we will just make the job log a message:
+
+```php
+class WelcomeEmailJob
+{
+    handle()
+    {
+        //todo: complete this
+    }
+}
+```
+
+Now we can queue this job to redis:
+
 ```php
 //push on the default '{job}' queue of the default 'job' connection
 Queue::push(new WelcomeEmailJob());
@@ -365,14 +379,28 @@ WelcomeEmailJob::dispatch()->onConnection('app')->onQueue('{high}');
 
 > Note: WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set. By default `WelcomeEmailJob::dispatch()` will dispatch to the queue setting of the connection that is set to its connection property. If no connection is set to the property, then it will use the queue setting of default connection.
 
+We can now inspect the serialized job class in redis.
+
 ## Processing queue items
 
+We can run the artisan queue:work to process the jobs we queued to redis in the last section:
+
 ```bash
-# process queue items from the default '{job}' queue of the default 'job' connection
+# process queue items from the default {job} queue of the default 'job' connection
 php artisan queue:work
 ```
 
 ```bash
-# process queue items from the '{high}' queue of the default 'job' connection
-php artisan queue:work --queue=high
+# process queue items from the explicit '{high}' queue of the default 'job' connection
+php artisan queue:work --queue={high}
+```
+
+```bash
+# process queue items from the default {app}  queue of the 'app' connection
+php artisan queue:work -- app
+```
+
+```bash
+# process queue items from the explicit '{high}' queue of the 'app' connection
+php artisan queue:work --queue={high} -- app
 ```
