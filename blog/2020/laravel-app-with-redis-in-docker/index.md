@@ -404,3 +404,129 @@ php artisan queue:work -- app
 # process queue items from the explicit '{high}' queue of the 'app' connection
 php artisan queue:work --queue={high} -- app
 ```
+
+## Adding Additional cache stores and queue connections
+
+If we so desire, we can have additional cache and queue redis connection and stores that use different redis connections. In order to do that we can define additional redis connections in config/database.php.
+
+For example below we have added the `cache2` and a `queue2` connections that connect to a different redis server.
+
+```php
+  //the redis driver
+  'redis' => [
+
+        //connection used by the cache facade when redis cache is configured in config/cache.php
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'c:',
+        ],
+
+        //connection used by the queue when redis cache is configured in config/queue.php
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', 'V1:'),
+        ],
+
+        //connection used by the cache facade when redis cache is configured in config/cache.php
+        'cache2' => [
+            'url' => env('REDIS_URL2'),
+            'host' => env('REDIS_HOST2', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => '',
+        ],
+         //connection used by the queue when redis cache is configured in config/queue.php
+        'queue2' => [
+            'url' => env('REDIS_URL2'),
+            'host' => env('REDIS_HOST2', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => env('QUEUE_PREFIX_VERSION', 'V1:'),
+        ],
+    ],
+```
+
+Then in config/cache.php we can add a `redis2` cache store that uses the `cache2` redis connection from config/database.php:
+
+```php
+  //use the 'redis' cache store in this file
+  'default' => 'redis',
+  'stores' => [
+    //this is the 'redis' cache connection
+    'redis' => [
+                //uses the redis driver from config/database.php
+                'driver' => 'redis',
+                //uses the 'cache' connection from the redis driver in config/database.php
+                'connection' => 'cache',
+            ],
+    //this is the 'redis2' cache connection
+    'redis2' => [
+                //uses the redis driver from config/database.php
+                'driver' => 'redis',
+                //uses the 'cache' connection from the redis driver in config/database.php
+                'connection' => 'cache2',
+            ],
+   ],
+```
+
+Also in config/queue.php we can add a `job2` queue connection that uses the `queue2` redis connection from config/database.php:
+
+```php
+  //uses the 'job' queue connection in this file
+  'default' => 'job',
+  'connections' => [
+        //this is the 'job' queue connection
+        'job' => [
+            //uses the redis driver from config/database.php
+            'driver' => 'redis',
+            //uses the 'queue' connection from the redis driver in config/database.php
+            'connection' => 'queue',
+            //this is the redis queue key default prefix that is applied when using this 'job' connection. It can be overriden by explicitly passing the queue name.
+            'queue' => '{job}',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+        //this is the 'app' queue connection
+        'job2' => [
+            //uses the redis driver from config/database.php
+            'driver' => 'redis',
+            //uses the 'queue' connection from the redis driver in config/database.php
+            'connection' => 'queue2',
+            //this is the redis queue key default prefix that is applied when using this 'app' connection.It can be overriden by explicitly passing the queue name.
+            'queue' => '{job}',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+    ],
+```
+
+## Scaling out redis in production
+
+The configuration used in this article uses a single redis server with database set to 0 so the same configuration can be used in production redis cluster.
+Multiple redis connections are confgured in config/database.php each with a unique redis key prefix to differentiate between redis keys written by the session vs cache and queue facades. All the connections use the same host and port therbye using the same redis server.
+
+This makes it easy to scale out these connections by assigning a different redis server for each connection.  
+So sessions would have their own redis server and the default cache store will have its own redis server and the default queue will have its own redis server. 
+We can even scale this out further by adding more cache stores and queue connections each with their own additional redis connection that uses a different redis server. 
+
+Also In this scenario instead of each queue connection using other named queues in addition to their default queue, they could just use a separate queue connection with its own default queue instead of the named queue.
+
+Queue workers can also we scaled by running them with the queue connection flag specifying the queue they need to service.
