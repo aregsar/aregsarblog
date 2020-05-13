@@ -50,19 +50,21 @@ MAIL_FROM_NAME="${APP_NAME}"
 The `config/mail.php` file is where these env vars are used:
 
 ```php
-<?php
-return [
-  "driver" => "smtp",
-  "host" => "smtp.mailtrap.io",
-  "port" => 2525,
-  "from" => array(
-      "address" => "admin@myapp.com",
-      "name" => "Admin"
-  ),
-  "username" => "1a2b3c4d5e6f7g"
-  "password" => "1a2b3c4d5e6f7g"
-  "sendmail" => "/usr/sbin/sendmail -bs"
-];
+'mailers' => [
+      'smtp' => [
+          'transport' => 'smtp',
+          'host' => env('MAIL_HOST', 'localhost'),
+          'port' => env('MAIL_PORT', 8003),
+          'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+          'username' => env('MAIL_USERNAME'),
+          'password' => env('MAIL_PASSWORD'),
+          'timeout' => null,
+      ],
+],
+  'from' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@myapp.com'),
+        'name' => env('MAIL_FROM_NAME', 'Admin'),
+    ],
 ```
 
 ## Sending new user verification emails to MailHog
