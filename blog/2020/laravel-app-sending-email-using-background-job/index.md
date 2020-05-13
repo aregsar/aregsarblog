@@ -1,12 +1,12 @@
 # Laravel App Sending Email Using Background Job
 
-[Laravel App Sending Email Using Background Job](https://aregsar.com/blog/2020/laravel-app-sending-email-using-background-job)
+May 13, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this article I will show you how we can created a background job that sends an email using the Laravel Mailable class and queue that job to send the email in the background using a Redis backed queue.
 
-> I have covered configuring Laravel queue to use redis here xxxx. So I will not go over that part here.
+> I have covered configuring Laravel queue to use redis here [Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker). So I will not go over that part here.
 
-> I have covered configuring a local email server in docker here xxxx. This article assumes we are using that configuration to send and view the emails.
+> I have covered configuring a local email server in docker here [Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker). This article assumes we are using that configuration to send and view the emails.
 
 ## Create the Html and Text blade email templates
 

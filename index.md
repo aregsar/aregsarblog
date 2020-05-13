@@ -2,6 +2,10 @@
 
 May 13, 2020
 
+[Laravel App Sending Email Using Background Job](https://aregsar.com/blog/2020/laravel-app-sending-email-using-background-job)
+
+May 13, 2020
+
 [Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker)
 
 May 5, 2020
