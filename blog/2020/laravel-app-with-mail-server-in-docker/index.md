@@ -2,15 +2,11 @@
 
 May 11, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker)
-
-## Creating files and directories
+## Creating the docker-compose file
 
 > Note if you have already a docker-compose.yml then skip to the next section.
 
 ```bash
-echo '/data' >> .gitignore
-mkdir data
 touch docker-compose.yml
 echo `version: "3.1"' >> docker-compose.yml
 echo `services:' >> docker-compose.yml
