@@ -6,6 +6,36 @@ In this article I will show you how we can created a background job that sends a
 
 > I have covered configuring Laravel queue to use redis here xxxx. So I will not go over that part here.
 
+> I have covered configuring a local email server in docker here xxxx. This article assumes we are using that configuration to send and view the emails.
+
+## Create the Html and Text blade email templates
+
+Create the following blade template file:
+
+```bash
+touch resources/views/mails/welcomeemail.blade.php
+```
+
+Put the following markup in welcomeemail.blade.php
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome</title>
+</head>
+<body>
+Welcome to our app
+</body>
+</html>
+```
+
+Create the following blade file with only raw test inside:
+
+```bash
+touch resources/views/mails/welcomeemail-text.blade.php
+echo 'Welcome to our app' > resources/views/mails/welcomeemail-text.blade.php
+```
 
 ## Creating the Mailable
 
@@ -33,7 +63,10 @@ class WelcomeEmail extends Mailable
   
     public function build()
     {
-        return $this->from('admin@app.com', 'Admin')
+        //The mails.welcomeemail is a html blade template
+        //the mails.welcomeemail-text is a text blade template as a fallback
+        //either one can be removed if we want to only send html or text email
+        return $this->from('admin@myapp.com', 'Admin')
                     ->subject('Welcome')
                     ->view('mails.welcomeemail')
                     ->text('mails.welcomeemail-text');
