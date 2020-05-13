@@ -153,7 +153,7 @@ Below is the queue configuration in `config/queue.php`:
 
 ```php
   //uses the 'job' queue connection in this file
-  'default' => 'job',
+  'default' => env('QUEUE_CONNECTION', 'job'),
   'connections' => [
         //this is the 'job' queue connection
         'job' => [
@@ -178,6 +178,12 @@ Below is the queue configuration in `config/queue.php`:
             'block_for' => null,
         ],
     ],
+```
+
+Then add set the QUEUE_CONNECTION in .env file to job
+
+```ini
+QUEUE_CONNECTION=job
 ```
 
 > Note that the queue names are wrapped in brackets. This ensures that when using a redis cluster, redis hashes the name
