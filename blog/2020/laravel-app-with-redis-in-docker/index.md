@@ -110,9 +110,15 @@ Below is the session configuration in `config/session.php`:
 
 ```php
 //uses the redis driver from config/database.php
-'driver' => 'redis',
+'driver' => env('SESSION_DRIVER', 'redis'),
  //uses the 'session' connection from the redis driver in config/database.php
 'connection' => 'session',
+```
+
+Then add set the SESSION_DRIVER in .env file to redis
+
+```ini
+SESSION_DRIVER=redis
 ```
 
 ## redis cache configuration
@@ -121,7 +127,7 @@ Below is the cache configuration in `config/cache.php`:
 
 ```php
   //use the 'redis' cache store in this file
-  'default' => 'redis',
+  'default' => env('CACHE_DRIVER', 'redis'),
   'stores' => [
     //this is the 'redis' cache connection
     'redis' => [
@@ -133,6 +139,12 @@ Below is the cache configuration in `config/cache.php`:
    ],
   //this is the redis cache key prefix applied to all cache keys
   'prefix' => '',
+```
+
+Then add set the CACHE_DRIVER in .env file to redis
+
+```ini
+CACHE_DRIVER=redis
 ```
 
 ## redis queue configuration
