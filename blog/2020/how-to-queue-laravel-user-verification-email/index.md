@@ -45,6 +45,7 @@ The default implementation of the of the sendEmailVerificationNotification() met
 ```php
 public function sendEmailVerificationNotification()
 {
+    //Notifications\VerifyEmail relative to Illuminate\Auth\
     $this->notify(new Notifications\VerifyEmail);
 }
 ```
@@ -63,6 +64,8 @@ Create a new notification that extends the verify email notification:
 ```bash
 artisan make:notification Auth/QueuedVerifyEmail
 ```
+
+This command creates the class `\App\Notifications\Auth\QueuedVerifyEmail`
 
 Make this class extend ` Illuminate\Auth\Notifications\VerifyEmail`
 and implement `Illuminate\Contracts\Queue\ShouldQueue`
@@ -125,13 +128,13 @@ Next in the handle() method we need to copy the notification implementation that
 ```php
 namespace App\Jobs;
 
-use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use App\User;
 
 class QueuedVerifyEmailJob implements ShouldQueue
 {
@@ -147,23 +150,25 @@ class QueuedVerifyEmailJob implements ShouldQueue
 
     public function handle()
     {
-        // This queued job sends verification to the user by triggering the notification
-        $this->user->notify(new Notifications\VerifyEmail);
+        // This queued job sends
+        //Illuminate\Auth\Notifications\VerifyEmail verification
+        //to the user by triggering the notification
+        $this->user->notify(new VerifyEmail);
     }
 }
 ```
 
-The original implementation was slightly different as shown below:
+The original implementation shown in a previous section above was slightly different as shown below:
 
 ```php
 public function sendEmailVerificationNotification()
 {
-    //Notifications\VerifyEmail relative to App\Auth
+    //Notifications\VerifyEmail relative to Illuminate\Auth\
     $this->notify(new Notifications\VerifyEmail);
 }
 ```
 
-This is because the orginal implemenation, the $this pointer was the User class in which we added the trait that has the sendEmailVerificationNotification implemenation.
+This is because the original implementation, the $this pointer was the User class in which we added the trait that has the sendEmailVerificationNotification implementation.
 That is why in the `handle` method of the job class we call `$this->user->notify` instead of `$this->notify`.
 
 
