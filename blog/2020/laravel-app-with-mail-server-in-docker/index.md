@@ -99,6 +99,13 @@ The modified version of the auth routes method should look like:
 
 ## Step 3: Add the email verification middleware
 
+In order to make sure routes that need validated email will block access to the route if the authenticated user has not validated their email we need to add the `verified` middleware to those routes to protect them.
+
+So in this final step we will add the middleware to the home controller
+which will check any requests to routs mapped the home controller to see if the user has verified their email. 
+
+If not the middleware will redirect to a page indicating that the user is not verified with an option to resent a verification email.
+
 Add the `verified` middleware to the middleware in the HomeController constructor:
 
 The modified version of the constructor should look like:
@@ -109,6 +116,9 @@ public function __construct()
     $this->middleware('auth','verified');
 }
 ```
+
+> Note: In order for the `verified` middleware to take action, the auth middleware must authenticate the user so the user can be inspected to see if it is verified. So the `auth` middleware must run before the `verified` middleware. Obviously if the user is not authenticated then by default they are not verified either and they will not even get to the `verified` middleware because the `auth` middleware will redirect them to a login page.
+Also if a rout is not covered by an `auth` middleware then it makes no sense to have a `verified` because anonymous users don`t have registered email to be verified.
 
 ## Testing the user verification email
 
