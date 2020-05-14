@@ -1,11 +1,41 @@
 # 76ideaz - Independent ideas from a to z
 
+https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password
+
+
 https://www.digitalocean.com/community/cheatsheets/how-to-manage-redis-databases-and-keys
 
 https://stackoverflow.com/questions/56743790/configuring-redis-as-cache-interface-in-a-laravel-5-application
 
 127.0.0.1:6379> SELECT 1
 127.0.0.1:6379[1]> KEYS *
+
+===================
+
+Laravel Job class handle method that throttles sending an email
+from 
+https://stackoverflow.com/questions/52671993/how-to-rate-limit-queued-verification-and-password-reset-notification-emails-in
+
+class QueuedVerifyEmail implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $user;
+
+    public function __construct(User $user)
+    {
+        $this->user = $user;
+    }
+
+    public function handle()
+    {
+        Redis::throttle('email')->allow(2)->every(60)->then(function () {
+            $this->user->notify(new VerifyEmail);
+        }, function() {
+           return $this->release(10);
+        });
+    }
+}
 
 ===================
 
