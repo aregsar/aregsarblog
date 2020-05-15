@@ -1,10 +1,10 @@
-# How To Queue Laravel User Verification Email
+# How To Queue Laravel Password Reset Email
 
 May 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[How To Queue Laravel User Verification Email](https://aregsar.com/blog/2020/how-to-queue-laravel-user-verification-email)
+[How To Queue Laravel Password Reset Email](https://aregsar.com/blog/2020/how-to-queue-laravel-password-reset-email)
 
-## Sending User Verification Email
+## Sending Password Reset Email
 
 I have instructions here that sets up a mail server in a docker container and tests it by configuring the Laravel user verification email here:
 
@@ -214,3 +214,76 @@ Note that the original implementation of sendEmailVerificationNotification was s
 In the `handle` method of the job class we call `$this->user->notify` where as the original sendEmailVerificationNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
 This is because in the `MustVerifyEmail` traits implementation of the sendEmailVerificationNotification method the $this pointer references the User class that includes the trait.
 So in the job class we we reference the User and call notify on it.
+
+==================================
+==================================
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Auth\Notifications\ResetPassword;
+
+class QueuedResetPasswordNotification extends ResetPassword implements ShouldQueue
+{
+    use Queueable;
+
+    public function __construct()
+    {
+        $this->queue = 'verify';
+        //$this->connection = 'verify';
+    }
+}
+
+
+
+
+namespace App;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\Auth\QueuedResetPasswordNotification($token));
+    }
+}
+
+===================
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+
+class User extends Model implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
+{
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
+}
+
+--------
+
+namespace Illuminate\Auth\Passwords;
+
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
+
+trait CanResetPassword
+{
+   
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+}
