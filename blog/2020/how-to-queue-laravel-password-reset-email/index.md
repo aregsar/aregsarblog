@@ -22,9 +22,7 @@ class User extends Authenticatable implements CanResetPassword
 
 ## Queuing the Password Reset email
 
-By default Laravel triggers a notification when a user completed the registration step to send a verification email when the `Auth::routes` method has this feature enabled via the  `['verify' => true]` parameter.
-
-This notification directly sends the email as part of the web request by calling the sendEmailVerificationNotification() method on the User class. The sendEmailVerificationNotification method is included in the User class through the extended `Illuminate\Foundation\Auth\User` class:
+Normally the included password reset notification directly sends the email as part of the web request by calling the sendPasswordResetNotification() method on the User class. The sendPasswordResetNotification method is included in the User class through the extended `Illuminate\Foundation\Auth\User` class:
 
 ```php
 namespace App;
@@ -40,7 +38,7 @@ class User extends Authenticatable
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `MustVerifyEmail` trait that in turn contains the default implementation of the sendEmailVerificationNotification method
+The `Illuminate\Foundation\Auth\User` class implements the `MustVerifyEmail` trait that in turn contains the default implementation of the sendPasswordResetNotification method
 
 ```php
 class User extends Model implements
@@ -52,7 +50,7 @@ class User extends Model implements
 }
 ```
 
-Here is the default  sendEmailVerificationNotification implementation in the MustVerifyEmail trait:
+Here is the default  sendPasswordResetNotification implementation in the MustVerifyEmail trait:
 
 ```php
 namespace Illuminate\Auth;
@@ -68,9 +66,9 @@ trait MustVerifyEmail
 }
 ```
 
-Because sendEmailVerificationNotification method is included as a trait in the extended User class, we can override its default implementation by simply adding a sendEmailVerificationNotification method in the User class with our overridden implementation that will queue the delivery of this email.
+Because sendPasswordResetNotification method is included as a trait in the extended User class, we can override its default implementation by simply adding a sendPasswordResetNotification method in the User class with our overridden implementation that will queue the delivery of this email.
 
-Inside the overridden sendEmailVerificationNotification method we can take one of two approaches for the implementation within the sendEmailVerificationNotification method:
+Inside the overridden sendPasswordResetNotification method we can take one of two approaches for the implementation within the sendPasswordResetNotification method:
 
 Approach 1-We can queue the notification
 Approach 2-We can dispatch a queued job that sends the notification
@@ -79,7 +77,7 @@ These approaches are shown in the next two sections.
 
 ## Approach 1 - Queuing the notification approach
 
-With this approach we will extend the Illuminate\Auth\Notifications\VerifyEmail notification that the MustVerifyEmail trait sends into a queue-able notification and queue this extended notification in the overridden sendEmailVerificationNotification of the User class.
+With this approach we will extend the Illuminate\Auth\Notifications\VerifyEmail notification that the MustVerifyEmail trait sends into a queue-able notification and queue this extended notification in the overridden sendPasswordResetNotification of the User class.
 
 So first we create a new notification that extends the verify email notification:
 
@@ -109,7 +107,7 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 }
 ```
 
-The last thing we need to do is to add the `sendEmailVerificationNotification()` method to the User class which will override the default method that the `User` class gets from the trait to substitute our queued notification instead of the original notification.
+The last thing we need to do is to add the `sendPasswordResetNotification()` method to the User class which will override the default method that the `User` class gets from the trait to substitute our queued notification instead of the original notification.
 
 ```php
 class User
@@ -138,7 +136,7 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 
 ## Approach 2 - Queueing a job that sends the notification approach
 
-In this approach we create a queued job that we dispatch in the in the overridden sendEmailVerificationNotification of the User class. When the job is processed, it will send the original Illuminate\Auth\Notifications\VerifyEmail notification that was being sent directly from the sendEmailVerificationNotification method before.
+In this approach we create a queued job that we dispatch in the in the overridden sendPasswordResetNotification of the User class. When the job is processed, it will send the original Illuminate\Auth\Notifications\VerifyEmail notification that was being sent directly from the sendPasswordResetNotification method before.
 
 So we first need to create a job that will be queued.
 
@@ -146,7 +144,7 @@ So we first need to create a job that will be queued.
 artisan make:job QueuedVerifyEmailJob
 ```
 
-Next in the handle() method we need to copy the notification implementation that is in the original `sendEmailVerificationNotification()` method.
+Next in the handle() method we need to copy the notification implementation that is in the original `sendPasswordResetNotification()` method.
 
 ```php
 namespace App\Jobs;
@@ -159,7 +157,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use App\User;
 
-class QueuedVerifyEmailJob implements ShouldQueue
+class QueuedPasswordResetJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -181,24 +179,24 @@ class QueuedVerifyEmailJob implements ShouldQueue
 }
 ```
 
-Finally we need to override the default `sendEmailVerificationNotification()` method implementation by adding a sendEmailVerificationNotification() method directly in User class.
+Finally we need to override the default `sendPasswordResetNotification()` method implementation by adding a sendPasswordResetNotification() method directly in User class.
 In this method we dispatch the QueuedVerifyEmailJob to the queue.
 
 ```php
 class User
 {
-    public function sendEmailVerificationNotification()
+    public function sendPasswordResetNotification()
     {
         //dispactches the job to the queue passing it this User object
-         QueuedVerifyEmailJob::dispatch($this);
+         QueuedPasswordResetEmailJob::dispatch($this);
     }
 }
 ```
 
-Note that the original implementation of sendEmailVerificationNotification was slightly different then the implementation in the handle method of the  QueuedVerifyEmailJob class.
+Note that the original implementation of sendPasswordResetNotification was slightly different then the implementation in the handle method of the  QueuedVerifyEmailJob class.
 
-In the `handle` method of the job class we call `$this->user->notify` where as the original sendEmailVerificationNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
-This is because in the `MustVerifyEmail` traits implementation of the sendEmailVerificationNotification method the $this pointer references the User class that includes the trait.
+In the `handle` method of the job class we call `$this->user->notify` where as the original sendPasswordResetNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
+This is because in the `MustVerifyEmail` traits implementation of the sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
 So in the job class we we reference the User and call notify on it.
 
 ==================================
