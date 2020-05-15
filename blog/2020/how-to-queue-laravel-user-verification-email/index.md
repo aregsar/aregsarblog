@@ -38,26 +38,61 @@ public function __construct()
 
 By default Laravel triggers a notification when a user completed the registration step to send a verification email when the `Auth::routes` method has this feature enabled via the  `['verify' => true]` parameter.
 
-This notification directly sends the email as part of the web request.
-
-The default implementation of the of the sendEmailVerificationNotification() method is the code sends the verify email notification. This method is included in the User class through the xxx trait:
+This notification directly sends the email as part of the web request by calling the sendEmailVerificationNotification() method on the User class. The sendEmailVerificationNotification method is included in the User class through the extended `Illuminate\Foundation\Auth\User` class:
 
 ```php
-public function sendEmailVerificationNotification()
+namespace App;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+//we are extending the Illuminate\Foundation\Auth\User class that is aliased to Authenticatable above
+class User extends Authenticatable
 {
-    //Notifications\VerifyEmail relative to Illuminate\Auth\
-    $this->notify(new Notifications\VerifyEmail);
+    use Notifiable;
 }
 ```
 
-In order to queue the delivery of this email we can take one of two approaches:
+The `Illuminate\Foundation\Auth\User` class implements the `MustVerifyEmail` trait that in turn contains the default implementation of the sendEmailVerificationNotification method
 
-1 We can queue the notification
-2 We can dispatch a queued job that sends the notification
+```php
+class User extends Model implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    CanResetPasswordContract
+{
+    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
+}
+```
+
+Here is the default  sendEmailVerificationNotification implementation in the MustVerifyEmail trait:
+
+```php
+namespace Illuminate\Auth;
+
+use Illuminate\Auth\Notifications\VerifyEmail;
+
+trait MustVerifyEmail
+{
+
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new VerifyEmail);
+    }
+}
+```
+
+Because sendEmailVerificationNotification method is included as a trait in the extended User class, we can override its default implementation by simply adding a sendEmailVerificationNotification method in the User class with our overridden implementation that will queue the delivery of this email.
+
+Inside the overridden sendEmailVerificationNotification method we can take one of two approaches for the implementation within the sendEmailVerificationNotification method:
+
+Approach 1-We can queue the notification
+Approach 2-We can dispatch a queued job that sends the notification
 
 These approaches are shown in the next two sections.
 
-## Queuing the notification approach
+## Approach 1 - Queuing the notification approach
 
 Create a new notification that extends the verify email notification:
 
@@ -114,7 +149,7 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 }
 ```
 
-## Queueing a job that sends the notification approach
+## Approach 2 - Queueing a job that sends the notification approach
 
 First we need to create a job that will be queued.
 This job will be responsible for sending the notification via the User object that is passed to it when the job is processed.
@@ -170,7 +205,6 @@ public function sendEmailVerificationNotification()
 
 This is because the original implementation, the $this pointer was the User class in which we added the trait that has the sendEmailVerificationNotification implementation.
 That is why in the `handle` method of the job class we call `$this->user->notify` instead of `$this->notify`.
-
 
 Next we need to override the default `sendEmailVerificationNotification()` method implementation by adding a sendEmailVerificationNotification() method directly in User class.
 In this method we dispatch the QueuedVerifyEmailJob to the queue.
