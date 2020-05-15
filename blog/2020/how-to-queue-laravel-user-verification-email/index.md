@@ -94,7 +94,9 @@ These approaches are shown in the next two sections.
 
 ## Approach 1 - Queuing the notification approach
 
-Create a new notification that extends the verify email notification:
+With this approach we will extend the Illuminate\Auth\Notifications\VerifyEmail notification that the MustVerifyEmail trait sends into a queue-able notification and queue this extended notification in the overridden sendEmailVerificationNotification of the User class.
+
+So first we create a new notification that extends the verify email notification:
 
 ```bash
 artisan make:notification Auth/QueuedVerifyEmail
@@ -151,14 +153,15 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 
 ## Approach 2 - Queueing a job that sends the notification approach
 
-First we need to create a job that will be queued.
-This job will be responsible for sending the notification via the User object that is passed to it when the job is processed.
+In this approach we create a queued job that we dispatch in the in the overridden sendEmailVerificationNotification of the User class. When the job is processed, it will send the original Illuminate\Auth\Notifications\VerifyEmail notification that was being sent directly from the sendEmailVerificationNotification method before.
+
+So we first need to create a job that will be queued.
 
 ```bash
 artisan make:job QueuedVerifyEmailJob
 ```
 
-Next in the handle() method we need to copy the notification implementation that is in the original `sendEmailVerificationNotification()` method from the xxx trait included in the User class.
+Next in the handle() method we need to copy the notification implementation that is in the original `sendEmailVerificationNotification()` method.
 
 ```php
 namespace App\Jobs;
@@ -185,7 +188,7 @@ class QueuedVerifyEmailJob implements ShouldQueue
 
     public function handle()
     {
-        // This queued job sends
+        //This queued job sends
         //Illuminate\Auth\Notifications\VerifyEmail verification
         //to the user by triggering the notification
         $this->user->notify(new VerifyEmail);
@@ -193,20 +196,7 @@ class QueuedVerifyEmailJob implements ShouldQueue
 }
 ```
 
-The original implementation shown in a previous section above was slightly different as shown below:
-
-```php
-public function sendEmailVerificationNotification()
-{
-    //Notifications\VerifyEmail relative to Illuminate\Auth\
-    $this->notify(new Notifications\VerifyEmail);
-}
-```
-
-This is because the original implementation, the $this pointer was the User class in which we added the trait that has the sendEmailVerificationNotification implementation.
-That is why in the `handle` method of the job class we call `$this->user->notify` instead of `$this->notify`.
-
-Next we need to override the default `sendEmailVerificationNotification()` method implementation by adding a sendEmailVerificationNotification() method directly in User class.
+Finally we need to override the default `sendEmailVerificationNotification()` method implementation by adding a sendEmailVerificationNotification() method directly in User class.
 In this method we dispatch the QueuedVerifyEmailJob to the queue.
 
 ```php
@@ -219,3 +209,10 @@ class User
     }
 }
 ```
+
+Note that the original implementation of sendEmailVerificationNotification was slightly different then the implementation in the handle method of the  QueuedVerifyEmailJob class.
+
+In the `handle` method of the job class we call `$this->user->notify` where as the original sendEmailVerificationNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
+
+This is because in the `MustVerifyEmail` traits implementation of the sendEmailVerificationNotification method the $this pointer references the User class that includes the trait.
+So in the job class we we reference the User and call notify on it.
