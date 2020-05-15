@@ -53,15 +53,15 @@ class User extends Model implements
 Here is the default  sendPasswordResetNotification implementation in the MustVerifyEmail trait:
 
 ```php
-namespace Illuminate\Auth;
+namespace Illuminate\Auth\Passwords;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
-trait MustVerifyEmail
+trait CanResetPassword
 {
-    public function sendEmailVerificationNotification()
+    public function sendPasswordResetNotification($token)
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new ResetPasswordNotification($token));
     }
 }
 ```
@@ -187,7 +187,6 @@ In this method we dispatch the QueuedVerifyEmailJob to the queue.
 ```php
 class User extends Authenticatable
 {
-
     public function sendPasswordResetNotification($token)
     {
         //dispactches the job to the queue passing it this User object
@@ -203,79 +202,7 @@ This is because in the `CanResetPassword` traits implementation of the sendPassw
 So in the job class we we reference the User and call notify on it.
 
 ==================================
-==================================
 
 After a password is reset, the user will automatically be logged into the application and redirected to /home. You can customize the post password reset redirect location by defining a redirectTo property on the ResetPasswordController:
 
 protected $redirectTo = '/dashboard';
-=========================
-
-namespace App\Notifications;
-
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Auth\Notifications\ResetPassword;
-
-class QueuedResetPasswordNotification extends ResetPassword implements ShouldQueue
-{
-    use Queueable;
-
-    public function __construct()
-    {
-        $this->queue = 'reset';
-        //$this->connection = 'reset';
-    }
-}
-
-
-
-
-namespace App;
-
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-
-class User extends Authenticatable
-{
-    use Notifiable;
-
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new \App\Notifications\Auth\QueuedResetPasswordNotification($token));
-    }
-}
-
-===================
-
-use Illuminate\Foundation\Auth\User as Authenticatable;
-
-
-class User extends Model implements
-    AuthenticatableContract,
-    AuthorizableContract,
-    CanResetPasswordContract
-{
-    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
-}
-
---------
-
-namespace Illuminate\Auth\Passwords;
-
-use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
-
-trait CanResetPassword
-{
-   
-    /**
-     * Send the password reset notification.
-     *
-     * @param  string  $token
-     * @return void
-     */
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new ResetPasswordNotification($token));
-    }
-}
