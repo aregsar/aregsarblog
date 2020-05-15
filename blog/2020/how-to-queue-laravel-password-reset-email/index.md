@@ -38,7 +38,7 @@ class User extends Authenticatable
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `MustVerifyEmail` trait that in turn contains the default implementation of the sendPasswordResetNotification method
+The `Illuminate\Foundation\Auth\User` class implements the `CanResetPassword` trait that in turn contains the default implementation of the sendPasswordResetNotification method
 
 ```php
 class User extends Model implements
@@ -82,12 +82,12 @@ With this approach we will extend the Illuminate\Auth\Notifications\VerifyEmail 
 So first we create a new notification that extends the verify email notification:
 
 ```bash
-artisan make:notification Auth/QueuedVerifyEmail
+artisan make:notification Auth/QueuedResetPassword
 ```
 
-This command creates the class `\App\Notifications\Auth\QueuedVerifyEmail`
+This command creates the class `\App\Notifications\Auth\QueuedResetPassword`
 
-Make this class extend ` Illuminate\Auth\Notifications\VerifyEmail`
+Make this class extend ` Illuminate\Auth\Notifications\ResetPassword`
 and implement `Illuminate\Contracts\Queue\ShouldQueue`
 
 Also add the `Illuminate\Bus\Queueable` trait to the body of the class.
@@ -97,11 +97,11 @@ That is all we need to do to make a new notification based on the frameworks not
 ```php
 namespace App\Auth\Notifications;
 
-use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
+use Illuminate\Auth\Notifications\ResetPassword;
 
-class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
+class QueuedResetPassword extends ResetPassword implements ShouldQueue
 {
     use Queueable;
 }
@@ -110,38 +110,38 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 The last thing we need to do is to add the `sendPasswordResetNotification()` method to the User class which will override the default method that the `User` class gets from the trait to substitute our queued notification instead of the original notification.
 
 ```php
-class User
+class User extends Authenticatable
 {
-    public function sendEmailVerificationNotification()
+    public function sendPasswordResetNotification($token)
     {
-        $this->notify(new \App\Notifications\Auth\QueuedVerifyEmail);
+        $this->notify(new \App\Notifications\Auth\QueuedResetPassword($token));
     }
 }
 ```
 
-Optionally add a constructor to the QueuedVerifyEmail class to queue verify the notifications to a different queue and/or different connection from the default connection and queue
+Optionally add a constructor to the QueuedResetPassword class to queue verify the notifications to a different queue and/or different connection from the default connection and queue
 
 ```php
-class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
+class QueuedResetPassword extends ResetPassword implements ShouldQueue
 {
     use Queueable;
 
     public function __construct()
     {
-        $this->queue = 'verify';
-        //$this->connection = 'verify';
+        $this->queue = 'reset';
+        //$this->connection = 'reset';
     }
 }
 ```
 
 ## Approach 2 - Queueing a job that sends the notification approach
 
-In this approach we create a queued job that we dispatch in the in the overridden sendPasswordResetNotification of the User class. When the job is processed, it will send the original Illuminate\Auth\Notifications\VerifyEmail notification that was being sent directly from the sendPasswordResetNotification method before.
+In this approach we create a queued job that we dispatch in the in the overridden sendPasswordResetNotification method of the User class. When the job is processed, it will send the original Illuminate\Auth\Notifications\ResetPassword notification that was being sent directly from the sendPasswordResetNotification method before.
 
 So we first need to create a job that will be queued.
 
 ```bash
-artisan make:job QueuedVerifyEmailJob
+artisan make:job QueuedPasswordResetJob
 ```
 
 Next in the handle() method we need to copy the notification implementation that is in the original `sendPasswordResetNotification()` method.
@@ -154,7 +154,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
 use App\User;
 
 class QueuedPasswordResetJob implements ShouldQueue
@@ -162,19 +162,21 @@ class QueuedPasswordResetJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $user;
+    protected $token;
 
-    public function __construct(User $user)
+    public function __construct(User $user, $token)
     {
         //the user property passed to the constructor through the job dispatch method
         $this->user = $user;
+        $this->token = $token;
     }
 
     public function handle()
     {
         //This queued job sends
-        //Illuminate\Auth\Notifications\VerifyEmail verification
+        //Illuminate\Auth\Notifications\ResetPassword notification
         //to the user by triggering the notification
-        $this->user->notify(new VerifyEmail);
+        $this->user->notify(new ResetPassword($this->token));
     }
 }
 ```
@@ -183,20 +185,21 @@ Finally we need to override the default `sendPasswordResetNotification()` method
 In this method we dispatch the QueuedVerifyEmailJob to the queue.
 
 ```php
-class User
+class User extends Authenticatable
 {
-    public function sendPasswordResetNotification()
+
+    public function sendPasswordResetNotification($token)
     {
         //dispactches the job to the queue passing it this User object
-         QueuedPasswordResetEmailJob::dispatch($this);
+         QueuedPasswordResetJob::dispatch($this,$token);
     }
 }
 ```
 
 Note that the original implementation of sendPasswordResetNotification was slightly different then the implementation in the handle method of the  QueuedVerifyEmailJob class.
 
-In the `handle` method of the job class we call `$this->user->notify` where as the original sendPasswordResetNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
-This is because in the `MustVerifyEmail` traits implementation of the sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
+In the `handle` method of the job class we call `$this->user->notify` where as the original sendPasswordResetNotification method in the `CanResetPassword` trait calls `$this->notify`.
+This is because in the `CanResetPassword` traits implementation of the sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
 So in the job class we we reference the User and call notify on it.
 
 ==================================
