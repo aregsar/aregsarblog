@@ -6,35 +6,21 @@ May 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Sending Password Reset Email
 
-I have instructions here that sets up a mail server in a docker container and tests it by configuring the Laravel user verification email here:
-
-[Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker)
-
 In this article I will show you how to change that configuration to queue the user verification email.
 
-## Enabling Email verification
+## Enabling Password Reset
 
 I will first quickly repeat the steps required to setup a verification email.
 
-make the User class implement `MustVerifyEmail`
-
-`class User extends Authenticatable implements MustVerifyEmail`
-
-make the Auth::routes method take a `['verify' => true]` input argument
-`Auth::routes(['verify' => true]);`
-
-protect any routes that use the `auth` middleware that we want to check the authenticated user has verified their email with the `verified` middleware by adding it to the controller constructor or to the route. 
-
-Below is an example of adding it to a controller constructor. 
+make the User class implement `Illuminate\Contracts\Auth\CanResetPassword`
+The `use Illuminate\Contracts\Auth\CanResetPassword;` statement is already included in the User.php file.
+So all we have to do is add the `implements CanResetPassword` to the class declaration.
 
 ```php
-public function __construct()
-{
-    $this->middleware('auth','verified');
-}
+class User extends Authenticatable implements CanResetPassword
 ```
 
-## Queuing the verification email
+## Queuing the Password Reset email
 
 By default Laravel triggers a notification when a user completed the registration step to send a verification email when the `Auth::routes` method has this feature enabled via the  `['verify' => true]` parameter.
 
@@ -218,6 +204,11 @@ So in the job class we we reference the User and call notify on it.
 ==================================
 ==================================
 
+After a password is reset, the user will automatically be logged into the application and redirected to /home. You can customize the post password reset redirect location by defining a redirectTo property on the ResetPasswordController:
+
+protected $redirectTo = '/dashboard';
+=========================
+
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
@@ -230,8 +221,8 @@ class QueuedResetPasswordNotification extends ResetPassword implements ShouldQue
 
     public function __construct()
     {
-        $this->queue = 'verify';
-        //$this->connection = 'verify';
+        $this->queue = 'reset';
+        //$this->connection = 'reset';
     }
 }
 

@@ -16,16 +16,23 @@ In this article I will show you how to change that configuration to queue the us
 
 I will first quickly repeat the steps required to setup a verification email.
 
-make the User class implement `MustVerifyEmail`
+make the User class implement `Illuminate\Contracts\Auth\MustVerifyEmail`.
+The `use Illuminate\Contracts\Auth\MustVerifyEmail;` statement is already included in the User.php file.
+So all we have to do is add the `implements MustVerifyEmail` to the class declaration.
 
-`class User extends Authenticatable implements MustVerifyEmail`
+```php
+class User extends Authenticatable implements MustVerifyEmail
+```
 
-make the Auth::routes method take a `['verify' => true]` input argument
-`Auth::routes(['verify' => true]);`
+Next make the `Auth::routes` method take a `['verify' => true]` input argument.
 
-protect any routes that use the `auth` middleware that we want to check the authenticated user has verified their email with the `verified` middleware by adding it to the controller constructor or to the route. 
+```php
+Auth::routes(['verify' => true]);
+```
 
-Below is an example of adding it to a controller constructor. 
+Finally protect any routes that use the `auth` middleware that we want to check the authenticated user has verified their email with the `verified` middleware by adding it to the controller constructor or to the route.
+
+Below is an example of adding it to a controller constructor:
 
 ```php
 public function __construct()
