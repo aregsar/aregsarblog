@@ -2,7 +2,9 @@
 
 May 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[How To Queue Laravel Password Reset Email](https://aregsar.com/blog/2020/how-to-queue-laravel-password-reset-email)
+Also see:
+
+[How To Queue Laravel User Verification Email](https://aregsar.com/blog/2020/how-to-queue-laravel-user-verification-email)
 
 ## Sending Password Reset Email
 
@@ -50,7 +52,7 @@ class User extends Model implements
 }
 ```
 
-Here is the default  sendPasswordResetNotification implementation in the MustVerifyEmail trait:
+Here is the default  sendPasswordResetNotification implementation in the `CanResetPassword` trait:
 
 ```php
 namespace Illuminate\Auth\Passwords;
@@ -77,9 +79,9 @@ These approaches are shown in the next two sections.
 
 ## Approach 1 - Queuing the notification approach
 
-With this approach we will extend the Illuminate\Auth\Notifications\VerifyEmail notification that the MustVerifyEmail trait sends into a queue-able notification and queue this extended notification in the overridden sendPasswordResetNotification of the User class.
+With this approach we will extend the `Illuminate\Auth\Notifications\ResetPassword` notification, that the `CanResetPassword` trait sends, into a queue-able notification and queue this extended notification in the overridden `sendPasswordResetNotification` method that we add to the User class.
 
-So first we create a new notification that extends the verify email notification:
+So first we create a new notification that extends the ResetPassword notification:
 
 ```bash
 artisan make:notification Auth/QueuedResetPassword
