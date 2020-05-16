@@ -222,8 +222,9 @@ class User
 }
 ```
 
-Note that the original implementation of sendEmailVerificationNotification was slightly different then the implementation in the handle method of the  QueuedVerifyEmailJob class.
+Looking back at the QueuedVerifyEmailJob class we can see that the implementation we added to the the handle method of the QueuedVerifyEmailJob is slightly different than the original implementation in the sendEmailVerificationNotification method.
 
-In the `handle` method of the job class we call `$this->user->notify` where as the original sendEmailVerificationNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
-This is because in the `MustVerifyEmail` traits implementation of the sendEmailVerificationNotification method the $this pointer references the User class that includes the trait.
-So in the job class we we reference the User and call notify on it.
+In the handle method of the job class we call `$this->user->notify` where as the original sendEmailVerificationNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
+
+This is because in the `MustVerifyEmail` trait implementation of the original sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
+Therefor in the job class we need to reference the User and call notify on it.

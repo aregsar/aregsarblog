@@ -201,13 +201,14 @@ class User extends Authenticatable
 }
 ```
 
-Note that the original implementation of sendPasswordResetNotification was slightly different then the implementation in the handle method of the  QueuedVerifyEmailJob class.
+Looking back at the QueuedPasswordResetJob class we can see that the implementation we added to the the handle method of the QueuedPasswordResetJob is slightly different than the original implementation in the sendPasswordResetNotification method.
 
-In the `handle` method of the job class we call `$this->user->notify` where as the original sendPasswordResetNotification method in the `CanResetPassword` trait calls `$this->notify`.
-This is because in the `CanResetPassword` traits implementation of the sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
-So in the job class we we reference the User and call notify on it.
+In the handle method of the job class we call `$this->user->notify` where as the original sendPasswordResetNotification method in the `CanResetPassword` trait calls `$this->notify`.
 
-==================================
+This is because in the `CanResetPassword` trait implementation of the original sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
+Therefor in the job class we need to reference the User and call notify on it.
+
+## Customizing the redirect location after reseting password
 
 After a password is reset, the user will automatically be logged into the application and redirected to /home. You can customize the post password reset redirect location by defining a redirectTo property on the ResetPasswordController:
 
