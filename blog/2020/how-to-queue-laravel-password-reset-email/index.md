@@ -81,7 +81,7 @@ These approaches are shown in the next two sections.
 
 With this approach we will extend the `Illuminate\Auth\Notifications\ResetPassword` notification, that the `CanResetPassword` trait sends, into a queue-able notification and queue this extended notification in the overridden `sendPasswordResetNotification` method that we add to the User class.
 
-So first we create a new notification that extends the ResetPassword notification:
+So first we create a new QueuedResetPassword notification that extends the ResetPassword notification:
 
 ```bash
 artisan make:notification Auth/QueuedResetPassword
@@ -89,12 +89,14 @@ artisan make:notification Auth/QueuedResetPassword
 
 This command creates the class `\App\Notifications\Auth\QueuedResetPassword`
 
-Make this class extend ` Illuminate\Auth\Notifications\ResetPassword`
+Next we make this class extend ` Illuminate\Auth\Notifications\ResetPassword`
 and implement `Illuminate\Contracts\Queue\ShouldQueue`
 
-Also add the `Illuminate\Bus\Queueable` trait to the body of the class.
+Finally we add the `Illuminate\Bus\Queueable` trait to the body of the class.
 
 That is all we need to do to make a new notification based on the frameworks notification that is queue-able.
+
+Below is the our new QueuedResetPassword notification class:
 
 ```php
 namespace App\Auth\Notifications;
@@ -109,11 +111,12 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 }
 ```
 
-The last thing we need to do is to add the `sendPasswordResetNotification()` method to the User class which will override the default method that the `User` class gets from the trait to substitute our queued notification instead of the original notification.
+The last thing we need to do is to add the `sendPasswordResetNotification()` method to the User class which will override the default method that the User class gets from the CanResetPassword  trait of its parent User class, to substitute our new queued notification instead of the original notification.
 
 ```php
 class User extends Authenticatable
 {
+    //Overrideen sendPasswordResetNotification implementation
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new \App\Notifications\Auth\QueuedResetPassword($token));
@@ -121,7 +124,7 @@ class User extends Authenticatable
 }
 ```
 
-Optionally add a constructor to the QueuedResetPassword class to queue verify the notifications to a different queue and/or different connection from the default connection and queue
+Optionally we can add a constructor to the QueuedResetPassword class to queue the notifications to a different queue and/or different connection from the default connection and queue
 
 ```php
 class QueuedResetPassword extends ResetPassword implements ShouldQueue
