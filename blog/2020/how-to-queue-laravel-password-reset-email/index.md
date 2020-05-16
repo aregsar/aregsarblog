@@ -141,7 +141,9 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 
 ## Approach 2 - Queueing a job that sends the notification approach
 
-In this approach we create a queued job that we dispatch in the in the overridden sendPasswordResetNotification method of the User class. When the job is processed, it will send the original Illuminate\Auth\Notifications\ResetPassword notification that was being sent directly from the sendPasswordResetNotification method before.
+In this approach we create a queued job that we dispatch in the overridden sendPasswordResetNotification method of the User class.
+
+When the job is processed, it will send the original Illuminate\Auth\Notifications\ResetPassword notification that was being sent directly from the sendPasswordResetNotification method before.
 
 So we first need to create a job that will be queued.
 
@@ -149,7 +151,7 @@ So we first need to create a job that will be queued.
 artisan make:job QueuedPasswordResetJob
 ```
 
-Next in the handle() method we need to copy the notification implementation that is in the original `sendPasswordResetNotification()` method.
+Next in the handle() method we need to copy the notification sending implementation that is in the original `sendPasswordResetNotification()` method:
 
 ```php
 namespace App\Jobs;
@@ -186,8 +188,7 @@ class QueuedPasswordResetJob implements ShouldQueue
 }
 ```
 
-Finally we need to override the default `sendPasswordResetNotification()` method implementation by adding a sendPasswordResetNotification() method directly in User class.
-In this method we dispatch the QueuedVerifyEmailJob to the queue.
+Finally we need to override the default `sendPasswordResetNotification()` method implementation by adding a sendPasswordResetNotification() method directly to the User class where we will dispatch the QueuedPasswordResetJob to the queue.
 
 ```php
 class User extends Authenticatable
