@@ -210,6 +210,10 @@ Therefor in the job class we need to reference the User and call notify on it.
 
 ## Customizing the redirect location after reseting password
 
-After a password is reset, the user will automatically be logged into the application and redirected to /home. You can customize the post password reset redirect location by defining a redirectTo property on the ResetPasswordController:
+By default the user will be automatically logged in and redirected to the `/home` URL after reseting their password, to override this we can define a `redirectTo` property on the `ResetPasswordController` like so:
 
-protected $redirectTo = '/dashboard';
+```php
+protected $redirectTo = '/mynewhome';
+```
+
+This will then redirect them to the `/mynewhome` URL instead.
