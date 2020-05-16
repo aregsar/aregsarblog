@@ -1,5 +1,13 @@
 # All Posts
 
+May 16, 2020
+
+[How To Queue Laravel Password Reset Email](https://aregsar.com/blog/2020/how-to-queue-laravel-password-reset-email)
+
+May 16, 2020
+
+[How To Queue Laravel User Verification Email](https://aregsar.com/blog/2020/how-to-queue-laravel-user-verification-email)
+
 May 13, 2020
 
 [Laravel App Sending Email Using Background Job](https://aregsar.com/blog/2020/laravel-app-sending-email-using-background-job)

@@ -1,6 +1,6 @@
 # How To Queue Laravel User Verification Email
 
-May 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+May 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 Also see:
 
