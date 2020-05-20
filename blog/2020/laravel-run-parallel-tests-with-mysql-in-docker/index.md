@@ -148,4 +148,4 @@ In order to automate running the migration before running the tests in a single 
 > I have also added a setting for running unit tests with a short command.
 
 Now all we have to do to run our feature tests in parallel is to type
-xxx on the command line.
+`composer ft` on the command line.
