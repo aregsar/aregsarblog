@@ -80,6 +80,12 @@ Therefore we must use the .env.testing file to override the DB_PORT environment 
 
 Simultaneously, the phpunit testing framework will use the .env.testing file by default so that both the migrations and the tests will use the same test database.
 
+## Setting up the .env.testing file
+
+Copy the .env file to .env.testing file in the root of the project.
+
+In the .env.testing file change the DB_PORT setting value from 8001 to 8011 to connect to the test database server port running in docker running on localhost.
+
 ## Setting up phpunit to use `RefreshDatabase`
 
 So that we dont have to type `use DatabaseTransactions` in all our test classes, we can extend the base `BaseTestCase` class and add the trait there.
@@ -98,5 +104,48 @@ abstract class TestCase extends BaseTestCase
 }
 ```
 
-## Running migrations with Artisan CLI using .env.testing
+## Running migrations with Artisan using .env.testing
 
+To allow the php artisan migrate command to use the .env.testing file we must pass it as a option flag to the command:
+
+```bash
+php artisan migrate --env=testing
+```
+
+## Using Paratests to run phpunit tests in parallel
+
+To install the parallel testing package run:
+
+```bash
+composer require --dev brianium/paratest
+```
+
+To execute tests using paratest run:
+
+```bash
+paratest --processes 4 --testsuite Feature --runner WrapperRunner
+```
+
+## Automating our test setup
+
+In order to automate running the migration before running the tests in a single command we can create a composer script to run the commands in sequence:
+
+```json
+{
+    "scripts": {
+        "ft": [
+            "php artisan migrate --env=testing",
+            "./vendor/bin/paratest --processes 4 --runner WrapperRunner --testsuite Feature"
+        ],
+        "ut": [
+            "./vendor/bin/paratest --processes 4 --runner WrapperRunner --testsuite Unit"
+        ]
+
+    }
+}
+```
+
+> I have also added a setting for running unit tests with a short command.
+
+Now all we have to do to run our feature tests in parallel is to type
+xxx on the command line.
