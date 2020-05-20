@@ -66,7 +66,21 @@ DB_PORT=8001
 
 ## The RefreshDatabase trait and parallel tests
 
-In Laravel tests we use the `RefreshDatabase` trait to truncate the test database tables and apply the migrations before running tests. When connecting to in memory databases this happens before each test. However when running agains a real database with transactional capabilities, the trait only applies the migrations before running the first test and uses transactions to roll back any changes that were made during each test.
+In Laravel tests we use the `RefreshDatabase` trait to truncate the test database tables and apply the migrations before running tests. When connecting to in memory databases this happens before each test. However when running agains a real database with transactional capabilities, the trait only applies the migrations one time before running the first test and uses transactions to roll back any changes that were made during each test.
+
+When using a real database, the way the `RefreshDatabase` trait achieves this under the hood is by first, applying the `RunsMigrations` trait which is responsible for running the database migrations only once before any tests are run. Second, by applying the `UsesTransactions` trait which starts a database transaction before running each test and rolls back the transaction after the test. By rolling back the transaction, the database state goes back to the state after applying the migrations and we don't have to truncate the tables and run the migration again which reduces performance.
+
+When tests are run serially then using the `RefreshDatabase` trait works. However when test are run in parallel one or more tests will try to run the code associated with the `RunsMigrations` trait that `RefreshDatabase` uses at the same time. This will cause migrations being applied simultaneously by multiple tests, even though migrations only should run once at the start of testing.
+
+The solution to this problem is to run the migrations just once manually before running phpunit tests and using the `UsesTransactions` trait instead of the  `RefreshDatabase` trait in our tests so the tests do not run migrations. Since `RefreshDatabase` runs `UsesTransactions` after applying migrations, we are still doing exactly the same thing.
+
+Now, since we have to run the database migrations outside the tests, we can not use the phpunit.xml environment variable overrides to allow the database migrations to be applied to the test database.
+
+Therefore we must use the .env.testing file to override the DB_PORT environment variable so that we can pass the file name to the `artisan db:migrate` command so the migrations will use the overriden DB_PORT value from the .env.testing file.
+
+Simultaneously, the phpunit testing framework will use the .env.testing file by default so that both the migrations and the tests will use the same test database.
+
+## Setting up phpunit to use `RefreshDatabase`
 
 
 
