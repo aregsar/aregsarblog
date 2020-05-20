@@ -85,7 +85,7 @@ With both approaches we override the DB_PORT setting to switch the port value fr
 
 After we override the setting, the `mysql` default database connection will connect to the test database thereby running the migrations and tests against the test database.
 
-## Overriding DB_PORT setting in the phpunit.xml file
+## Approach 1 - Overriding DB_PORT setting in the phpunit.xml file
 
 The phpunit.xml file has php section where you can specify any environment settings you want to override before running tests.
 
@@ -108,15 +108,21 @@ So by adding a `<server name="DB_PORT" value="8011"/>` element we can override t
 Database 
 The overridden setting will be used when running the migrations 
 
-## overriding DB_PORT setting in .env.testing file
+## Approach 2 - Overriding DB_PORT setting in .env.testing file
 
 If we specify a .env.testing file in the root of our project, phpunit will use that file instead of the standard .env file to set the environment values for running tests.
 
-So we can override the port value by copying the .env file to a .env.testing file and change the port to 8011 in the .env.testing file.
+So we can override the port value by copying the .env file to a .env.testing file and change the port to 8011 in the .env.testing file:
 
-It important to note that the overrides section in phpunit.xml will now override the settings in the .env.testing file. So we need to remove those overrides from phpunit.xml if we do not want that. 
+```ini
+DB_PORT=8011
+```
 
 > Note: We can change other settings in the .env.testing file as well if we need to. For example we can change the cache driver to array and session driver to array for example.
+
+It important to note that the overrides section in phpunit.xml will now override the settings in the .env.testing file. So we need to remove those overrides from phpunit.xml if we do not need those overrides.
+
+It is probably a good idea to just override any settings we need to override for testing in the .env.testing file, to have all our overrides in one file.
 
 ## Choosing the approach to override the DB_PORT setting
 
