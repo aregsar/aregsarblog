@@ -131,3 +131,21 @@ The approach of using the .env.testing file is useful when we need to run tests 
 In Laravel tests we use the `RefreshDatabase` trait to migrate the database as part of the unit tests. When doing parallel testing, this approach has issues. I describe how to overcome those issues and why we need to use the .env.testing file in the post []() blog post.
 
 If you do not need to run tests in parallel, then the approach of using the phpunit.xml file is simpler as you do not need to create a new .env.testing file and have to keep the values of the un-changed settings in sync as you make changes to the standard .env file.
+
+## Setting up phpunit to use `RefreshDatabase`
+
+Finally, so that we dont have to type `use RefreshDatabase` in all our test classes, we can extend the base `BaseTestCase` class and add the trait there.
+
+Then our test classes can extend the derived TestCase class to take advantage of the RefreshDatabase trait.
+
+```php
+namespace Tests\Feature;
+
+use Tests\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+abstract class TestCase extends BaseTestCase
+{
+    use RefreshDatabase;
+}
+```

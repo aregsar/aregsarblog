@@ -82,5 +82,21 @@ Simultaneously, the phpunit testing framework will use the .env.testing file by 
 
 ## Setting up phpunit to use `RefreshDatabase`
 
+So that we dont have to type `use DatabaseTransactions` in all our test classes, we can extend the base `BaseTestCase` class and add the trait there.
 
+Then our test classes can extend the derived TestCase class to take advantage of the DatabaseTransactions trait.
+
+```php
+namespace Tests\Feature;
+
+use Tests\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+abstract class TestCase extends BaseTestCase
+{
+    use DatabaseTransactions;
+}
+```
+
+## Running migrations with Artisan CLI using .env.testing
 
