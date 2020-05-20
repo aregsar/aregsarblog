@@ -128,16 +128,6 @@ It is probably a good idea to just override any settings we need to override for
 
 The approach of using the .env.testing file is useful when we need to run tests in parallel. This is because we need to run the database migrations outside the unit tests and we need to specify the .env.testing file to be used to run the database migrations agains the test server.
 
-This will be subject of my next blog post.
+In Laravel tests we use the `RefreshDatabase` trait to migrate the database as part of the unit tests. When doing parallel testing, this approach has issues. I describe how to overcome those issues and why we need to use the .env.testing file in the post []() blog post.
 
 If you do not need to run tests in parallel, then the approach of using the phpunit.xml file is simpler as you do not need to create a new .env.testing file and have to keep the values of the un-changed settings in sync as you make changes to the standard .env file.
-
-In Laravel tests we use the `RefreshDatabase` trait to truncate the test database tables and apply the migrations before running tests. When connecting to in memory databases this happens before each test. However when running agains a real database with transactional capabilities, the trait only applies the migrations before running the first test and uses transactions to roll back any changes that were made during each test.
-
-
-
-
-
-
-
-
