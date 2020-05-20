@@ -11,9 +11,7 @@ In this article I will show you how to run phpunit tests that use a MySQL test d
 In the blog post [Laravel Feature Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-feature-tests-with-mysql-in-docker)
 I described how I use MySQL running in docker for running feature tests.
 
-
-
-Here is the docker compose file with the two MySQL services:
+Here is the docker compose file from that blog post that has a MySQL service for app development and a separate MySQL service for testing:
 
 ```yml
 version: "3.1"
@@ -53,8 +51,7 @@ services:
         - "8011:3306"
 ```
 
-
-Below are the environment variable settings in the .env file:
+Below are the environment variable settings in the .env file from the previous blog post:
 
 ```ini 
 DB_DATABASE=myapp
@@ -67,20 +64,7 @@ DB_PORT=8001
 
 > It is assumed that the Laravel application and tests are running on local host.
 
-
-
-
-
-
-
-
-
-## Choosing the approach to override the DB_PORT setting
-
-
-```ini
-DB_PORT=8011
-```
+## The RefreshDatabase trait and parallel tests
 
 In Laravel tests we use the `RefreshDatabase` trait to truncate the test database tables and apply the migrations before running tests. When connecting to in memory databases this happens before each test. However when running agains a real database with transactional capabilities, the trait only applies the migrations before running the first test and uses transactions to roll back any changes that were made during each test.
 
