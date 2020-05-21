@@ -1,5 +1,13 @@
 # All Posts
 
+May 21, 2020
+
+[Laravel Run Parallel Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker)
+
+May 21, 2020
+
+[Laravel Feature Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-feature-tests-with-mysql-in-docker)
+
 May 16, 2020
 
 [How To Queue Laravel Password Reset Email](https://aregsar.com/blog/2020/how-to-queue-laravel-password-reset-email)

@@ -1,14 +1,12 @@
 # Laravel Feature Tests With MySQL In Docker
 
-May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[Laravel Feature Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-feature-tests-with-mysql-in-docker)
+May 21, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Feature tests using a real database
 
 In this article I will show you how to use a real MySQL database server running in docker container to run your Laravel phpunit tests against.
 
-In the blog post [my laravel local docker services configuration](https://aregsar.com/blog/2020/my-laravel-local-docker-services-configuration) I described how I use MySQL running in docker for local development. 
+In the blog post [My Laravel Local Docker Services Configuration](https://aregsar.com/blog/2020/my-laravel-local-docker-services-configuration) I described how I use MySQL running in docker for local development.
 
 For testing we will set up a separate MySQL server instance running in a separate testing docker container. This way our test database will be completely separate from our development database just like how we would run separate database servers for our test, staging and production environments.
 
@@ -128,7 +126,7 @@ It is probably a good idea to just override any settings we need to override for
 
 The approach of using the .env.testing file is useful when we need to run tests in parallel. This is because we need to run the database migrations outside the unit tests and we need to specify the .env.testing file to be used to run the database migrations agains the test server.
 
-In Laravel tests we use the `RefreshDatabase` trait to migrate the database as part of the unit tests. When doing parallel testing, this approach has issues. I describe how to overcome those issues and why we need to use the .env.testing file in the post []() blog post.
+In Laravel tests we use the `RefreshDatabase` trait to migrate the database as part of the unit tests. When doing parallel testing, this approach has issues. I describe how to overcome those issues and why we need to use the .env.testing file in the post [Laravel Run Parallel Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker) blog post.
 
 If you do not need to run tests in parallel, then the approach of using the phpunit.xml file is simpler as you do not need to create a new .env.testing file and have to keep the values of the un-changed settings in sync as you make changes to the standard .env file.
 

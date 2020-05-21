@@ -1,8 +1,6 @@
-# laravel run parallel tests with mysql in docker
+# Laravel Run Parallel Tests With MySQL In Docker
 
-May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[laravel run parallel tests with mysql in docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker)
+May 21, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Parallel Feature tests using a real database
 
@@ -149,3 +147,17 @@ In order to automate running the migration before running the tests in a single 
 
 Now all we have to do to run our feature tests in parallel is to type
 `composer ft` on the command line.
+
+This way you make sure that the migrations are run for feature tests before running the rests and make the command to run the tests short and easy as well.
+
+Alternatively you could add the following aliases in your bash profile:
+
+```bash
+ft="php artisan migrate --env=testing && ./vendor/bin/paratest --processes 4 --runner WrapperRunner --testsuite Feature"
+```
+
+```bash
+ut=" ./vendor/bin/paratest --processes 4 --runner WrapperRunner --testsuite Unit"
+```
+
+Then simply type `ft` or `ut` while in the root directory of your project to run the feature or unit tests.
