@@ -2,6 +2,10 @@
 
 May 21, 2020
 
+[Laravel Feature Tests Alternative MySQL Config](https://aregsar.com/blog/2020/laravel-feature-tests-alternative-mysql-config)
+
+May 21, 2020
+
 [Laravel Run Parallel Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker)
 
 May 21, 2020

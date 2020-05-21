@@ -57,7 +57,7 @@ services:
 
 Below are the environment variable settings in the .env file:
 
-```ini 
+```ini
 DB_DATABASE=myapp
 DB_USERNAME=myapp
 DB_PASSWORD=myapp
