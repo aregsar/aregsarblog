@@ -41,19 +41,16 @@ services:
       image: mysql:8.0
       container_name: app-mysql-test
       # no volume mapping required since we dont need the data to persist after container is shut down
-      # tmpfs setting speeds up tests by using in memory persistance during tests
-      tmpfs: /var/lib/mysql
       environment:
         - MYSQL_ROOT_PASSWORD="${DB_PASSWORD}"
         # upon container first run a database with the name of MYSQL_DATABASE setting will be created
         - MYSQL_DATABASE="${DB_DATABASE}"
         - MYSQL_USER="${DB_USERNAME}"
-        - MYSQL_PASSWORD=${DB_PASSWORD}"
+        - MYSQL_PASSWORD="${DB_PASSWORD}"
       ports:
         # connect to the test server through port 8011 on localhost
         - "8011:3306"
 ```
-
 
 Below are the environment variable settings in the .env file:
 

@@ -10,7 +10,7 @@ services:
     myapp-redis:
       image: redis:alpine
       container_name: app-redis
-      command: redis-server --appendonly yes --requirepass 123456
+      command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
       volumes:
       - ./data/redis:/data
       ports:
@@ -22,11 +22,11 @@ services:
       volumes:
         - ./data/mysql:/var/lib/mysql
       environment:
-        - MYSQL_ROOT_PASSWORD=root
-        # for MYSQL_DATABASE substitute the name of the database that you want to be created
-        - MYSQL_DATABASE=myapp
-        - MYSQL_USER=root
-        - MYSQL_PASSWORD=123456
+        - MYSQL_ROOT_PASSWORD="${DB_PASSWORD}"
+        # upon container first run a database with the name of MYSQL_DATABASE setting will be created
+        - MYSQL_DATABASE="${DB_DATABASE}"
+        - MYSQL_USER="${DB_USERNAME}"
+        - MYSQL_PASSWORD="${DB_PASSWORD}"
       ports:
         - "8001:3306"
 ```
