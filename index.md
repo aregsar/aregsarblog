@@ -1,5 +1,3 @@
-#
-
 May 21, 2020
 
 [Laravel Feature Tests Alternative MySQL Config](https://aregsar.com/blog/2020/laravel-feature-tests-alternative-mysql-config)
