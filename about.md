@@ -24,7 +24,7 @@ For more info see the [TALL Stack](https://tallstack.dev/) Tailwind Alpine Larav
 + [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - incremental feature development guarded by feature tests
 + [Trunk Based Development](https://trunkbaseddevelopment.com) - continuous integration into master delivery branch
 + [No Estimates](http://ronjeffries.com/xprog/articles/the-noestimates-movement) - because working software is the primary measure of progress
-+ [Kanban](https://www.atlassian.com/agile/kanban) - Agile done right with JIT just in time work item pulling and WIP work in progress limits.
++ [Kanban](https://www.atlassian.com/agile/kanban) - Agile done right with just in time work item pulling and work in progress WIP limits
 
 ## My development tools
 
