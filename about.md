@@ -1,10 +1,10 @@
 # About Me
 
-I help development teams rapidly build and deploy robust and maintainable web application features.
+I help development teams rapidly build and deploy reliable and maintainable web applications.
 
-In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Walt Disney.
+In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Disney.
 
-I am also the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value, faster, by using [tools](https://alwaysdeployed.com/tools) that support this development process.
+I am the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value, faster, by using [tools](https://alwaysdeployed.com/tools) that support this development process.
 
 ## My rapid web development stack
 
@@ -36,10 +36,10 @@ For more info see the [TALL Stack](https://tallstack.dev/) Tailwind Alpine Larav
 
 ## Services I use
 
-+ [kanbanflow](https://kanbanflow.com/) - Kanban board with [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer.
++ [kanbanflow](https://kanbanflow.com/) - Kanban board with [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer
 + [Mailtrap](https://mailtrap.io) - Email delivery testing service
 + [Zeplin](https://zeplin.io/) -  Web design service for developer and designer collaboration
 + [DigitalOcean](https://www.digitalocean.com/) - Cloud deployment with managed MySQL database, managed Redis cluster, Managed Load Balancer and S3 compatible file storage
 + [SendGrid](https://sendgrid.com/) - Transactional Email Service
-+ [HoneyBadger](https://www.honeybadger.io/for/laravel/) - Exception Monitoring, Uptime Monitoring, scheduled tasks and background job Monitoring for Laravel
++ [HoneyBadger](https://www.honeybadger.io/for/laravel/) - Exception, uptime, scheduled task and background job monitoring for Laravel
 + [Papertrail](https://www.papertrail.com/) - Application log aggregator
