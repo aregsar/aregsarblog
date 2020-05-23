@@ -4,24 +4,28 @@ May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Creating the docker-compose file
 
-> Note if you have already a docker-compose.yml then skip to the next section.
+Create a new docker-compose.yml file in the Laravel project root directory:
+
+> Note: skip to the next section if you already have a docker-compose.yml file in the root directory
 
 ```bash
 touch docker-compose.yml
-echo `version: "3.1"' >> docker-compose.yml
-echo `services:' >> docker-compose.yml
+echo 'version: "3.1"' >> docker-compose.yml
+echo 'services:' >> docker-compose.yml
 ```
 
 ## Creating the data directory
 
-> Note if you have already a the data directory then skip to the next section.
+Create a new data directory in the Laravel project root directory:
+
+> Note: skip to the next section if you already have a data directory in the root directory
 
 ```bash
 echo '/data' >> .gitignore
 mkdir data
 ```
 
-## Adding the mysql service to docker-compose
+## Adding the Redis service to docker-compose
 
 ```yaml
   redis:
@@ -33,17 +37,6 @@ mkdir data
       ports:
         - "8002:6379"
 ```
-
-## Adding the environment variables for the redis service
-
-```ini
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=myapp
-REDIS_PORT=8002
-QUEUE_PREFIX_VERSION=V1:
-```
-
-Note: We can remove the SESSION_DRIVER, CACHE_DRIVER, QUEUE_CONNECTION keys as their values are hard coded to redis in the session, cache and queue configuration files. 
 
 ## redis connection configuration
 
@@ -110,6 +103,15 @@ We have separate connections for session, cache , queue and a default applicatio
 They all use the same redis server with their own key prefix.
 
 The the session, cache and queue configurations will use the corresponding redis connection specified here.
+
+## Adding the environment variables used by the redis connections
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=myapp
+REDIS_PORT=8002
+QUEUE_PREFIX_VERSION=V1:
+```
 
 ## redis session configuration
 
