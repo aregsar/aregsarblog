@@ -38,13 +38,13 @@ mkdir data
         - "8002:6379"
 ```
 
-## redis connection configuration
+## Redis connections configuration
 
 Below is the redis driver configuration in `config/database.php`:
 
 ```php
-  //the redis driver
-  'redis' => [
+    //the redis driver
+    'redis' => [
         //the redis client (requires installing the phpredis.so extension using pecl)
         'client' => 'phpredis',
 
@@ -94,17 +94,22 @@ Below is the redis driver configuration in `config/database.php`:
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => '0',
             //redis key prefix for this connection
-            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', 'V1:'),
+            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', ''),
         ],
     ],
 ```
 
-We have separate connections for session, cache , queue and a default application specific redis connection.
+We have separate connections for `session`, `cache` , `queue` and a `default` application specific redis connection.
+
 They all use the same redis server with their own key prefix.
 
-The the session, cache and queue configurations will use the corresponding redis connection specified here.
+The `database` key for each connection is always set to `0` to be compatible with running in a Redis cluster in production where only one database is allowed.
+
+The the session.php, cache.php and queue.php configurations will use their corresponding redis connection specified in this database.php file.
 
 ## Adding the environment variables used by the redis connections
+
+We need to add the environment variables used by the redis connections in the database.php file to the .env file.
 
 ```ini
 REDIS_HOST=127.0.0.1
@@ -113,7 +118,7 @@ REDIS_PORT=8002
 QUEUE_PREFIX_VERSION=V1:
 ```
 
-## redis session configuration
+## Redis session configuration
 
 Below is the session configuration in `config/session.php`:
 
@@ -486,7 +491,7 @@ For example below we have added the `cache2` and a `queue2` connections that con
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => '0',
             //redis key prefix for this connection
-            'prefix' => env('QUEUE_PREFIX_VERSION', 'V1:'),
+            'prefix' => env('QUEUE_PREFIX_VERSION', ''),
         ],
     ],
 ```
