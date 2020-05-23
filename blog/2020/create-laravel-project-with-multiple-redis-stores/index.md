@@ -35,20 +35,16 @@ with two out of the box connections named `default` and `cache`:
 
 Note that the `default` connection has a `database` default of `0` and the `cache` connection has a `database` default of `1` to assign separate databases to those connections that are configured to use the same Redis server.
 
-We will use the `default` connection for all in app access to Redis that directly use the Laravel `Redis` provider. 
+The `cache` connection in this `config/database.php` is set to be the default cache connection in the `config/cache.php` file.
 
-> Note: Unlike in the session,cache and queue configuration files, there is no special `default` setting in the config/database.php file that is set to the default redis connection. Instead by
-default when we use the Laravel `Redis` facade, helper or provider without specifying the connection to use, the connection that is labeled `default` will be used.
+The `default` connection will be used for all in app access to Redis that directly use the Laravel `Redis` provider.
 
-We will use the `cache` connection for all in app access to Redis that uses the Laravel `Cache` provider.
+> Note: Unlike in the cache, session and queue configuration files, there is no configuration file that has a default connection setting that is set to the `default` redis connection in config/database.php. Instead by default when we use the Laravel `Redis` facade,global helper or provider without specifying the redis connection to use, the redis connection in config/database.php that is labeled `default` will be used.
 
-We need to add two more connections named `queue` and `session` for the Laravel `Session` and `Queue` providers to use.
+We need to add two more connections named `queue` and `session` for the Laravel `Session` and `Queue` providers to use. We also need to modify the `cache` connection to use the same redis connection `database` setting as all the other redis connections. This is because redis clusters used in production do not support multiple redis databases. We also need to add a `prefix` setting to all the connections to identify each separately.
 
-We will choose database numbers that are unique for each of the redis connections. 
+For these reasone we will remove the out of box redis connections in database.php and replace them with the four connections below:
 
-> Note: A Redis server allows up to 16 unique databases
-
-The resulting final set of connections is shown below:
 
 ```bash
  'redis' => [
