@@ -168,7 +168,7 @@ We can leave the redis store connection value in `config/cache.php` as is, since
         'redis' => [
             //selects the 'redis' driver in config/database.php
             'driver' => 'redis',
-            // selects the 'cache' connection of the 'redis' driver in config/database.php
+            //selects the connection 'cache' of the 'redis' driver in config/database.php
             'connection' => 'cache',
         ],
     ],
@@ -187,11 +187,14 @@ Change the `connections` configuration in `config/queue.php` to:
 
 ```php
       'connections' => [
+        //queue connection
         'redis' => [
+            //selects the 'redis' driver in config/database.php
             'driver' => 'redis',
-            //uses queue connection of redis driver in config/database.php
+            //selects the connection 'queue' of the redis driver in config/database.php
             'connection' => 'queue',
-            'queue' => env('REDIS_QUEUE', 'default'),
+            //default queue for this 'redis' queue connection. By setting the redis key prefix.
+            'queue' => '{job}',
             'retry_after' => 90,
             'block_for' => null,
         ],
