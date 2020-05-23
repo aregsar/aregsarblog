@@ -33,141 +33,89 @@ with two out of the box connections named `default` and `cache`:
     ],
 ```
 
-Note that the `default` connection has a `database` default of `0` and the `cache` connection has a `database` default of `1` to assign separate databases to those connections that are configured to use the same Redis server.
+The `default` connection has a `database` default of `0` and the `cache` connection has a `database` default of `1` to assign separate databases to those connections that are configured to use the same Redis server.
 
 The `cache` connection in this `config/database.php` is set to be the default cache connection in the `config/cache.php` file.
 
 The `default` connection will be used for all in app access to Redis that directly use the Laravel `Redis` provider.
 
-> Note: Unlike in the cache, session and queue configuration files, there is no configuration file that has a default connection setting that is set to the `default` redis connection in config/database.php. Instead by default when we use the Laravel `Redis` facade,global helper or provider without specifying the redis connection to use, the redis connection in config/database.php that is labeled `default` will be used.
+Unlike the cache and queue configuration files, there is no configuration file that has a default connection setting that is set to the `default` redis connection in config/database.php.
+So by default when we use the Laravel `Redis` facade,global helper or provider without specifying the redis connection to use, the redis connection in config/database.php that is labeled `default` will be used.
 
 We need to add two more connections named `queue` and `session` for the Laravel `Session` and `Queue` providers to use. We also need to modify the `cache` connection to use the same redis connection `database` setting as all the other redis connections. This is because redis clusters used in production do not support multiple redis databases. We also need to add a `prefix` setting to all the connections to identify each separately.
 
-For these reasone we will remove the out of box redis connections in database.php and replace them with the four connections below:
+For these reasons we will remove the out of box redis connections in database.php and replace them with the four connections below:
 
+```php
+    //the redis driver
+    'redis' => [
+        //the redis client (requires installing the phpredis.so extension using pecl)
+        'client' => 'phpredis',
 
-```bash
- 'redis' => [
-        'client' => env('REDIS_CLIENT', 'phpredis'),
         'options' => [
+            //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
+        //connection used by the redis facade
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
+            'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'd:',
         ],
+        //connection used by the cache facade when redis cache is configured in config/cache.php
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
+            'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'c:',
         ],
-        'queue' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_QUEUE_DB', '2'),
-        ],
+        //connection used by the session when redis cache is configured in config/session.php
         'session' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
+            'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_SESSION_DB', '3'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 's:',
+        ],
+        //connection used by the queue when redis cache is configured in config/queue.php
+        'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', ''),
         ],
     ],
 ```
 
-> Note: the `database` setting for the `queue` and `session` settings is also updated to use `REDIS_QUEUE_DB` and `REDIS_SESSION_DB` environment settings accordingly
+As you can see all the `database` settings for all connections is set to 0 and we added an additional `prefix` setting for each connection, in order to separate our redis, cache, session and queue keys. Each connection prefix uses a unique letter to effectively namespace qualify the key used by the client by appending the prefix to the key.
 
-## Setting the application name prefix key
-
-> Note: This section only applies if you are using the old `predis` composer package redis client. When using the default `php-redis` php extension client, the `redis` => `options` => `prefix` key should be removed altogether.
-
-The `prefix` option appends the redis database prefix key to all redis keys used by the application:
-
-```bash
- 'redis' => [
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
-        ],
-```
-
-Change the `laravel` default to your app name.
-
-```bash
- 'redis' => [
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'MyApplication`), '_').'_database_'),
-        ],
-```
+> Note that the `redis` => `options` => `prefix` setting was removed since it only applies if we wanted to use the old `predis` composer package redis client. The `prefix` setting is not required since we are using  the default `php-redis` php extension client.
 
 ## The redis cluster setting
 
-The `cluster` setting, indicates that our Redis server connection is connecting to a self managed Redis cluster.
+The `redis` => `options` => `cluster` setting, indicates that our Redis server connection is connecting to a self managed Redis cluster.
 
-> Note: A self managed cluster connection connects to a proxy cluster manager that that manages a cluster of redis instances, without requiring the redis client to manages cluster nodes
-> If a redis cluster is not being used, this setting can be removed, however it will not effect using a standard redis instance if it remains.
+A self managed cluster connection connects to a proxy cluster manager that that manages a cluster of redis instances, without requiring the redis client to manage the cluster nodes.
 
-If we always use a managed cluster we could change the ` 'cluster' => env('REDIS_CLUSTER', 'redis')` cluster setting to the hard coded `'cluster' => 'redis'` setting
+Its important to note that clustered redis instances do not support multiple databases. They only have one database which has the default database number 0. That is why we set the `database` setting for all the connections to 0.
 
-Its important to note that clustered redis instances do not support multiple databases. They only have one database which is the default database number 0. 
-
-So in order to separate our redis, cache, session and queue keys, we need to use a different key prefix per connection:
-
-```bash
- 'redis' => [
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-        'options' => [
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
-        ],
-        'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-            'prefix' => 'D:',
-        ],
-        'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-            'prefix' => 'C:',
-        ],
-        'queue' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-            'prefix' => 'Q1:',
-        ],
-        'session' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-            'prefix' => 'S:',
-        ],
-    ],
-```
-
-As you can see all the `database` setting for all connections is set to 0 and we added an additiona `prefix` setting for each connection. Each connection prefix uses a unique letter to effectively namespace qualify the key used by the client by appending the prefix to the key.
+> Note: If a redis cluster is not being used, the `redis` => `options` => `cluster` setting can be removed, however it will not effect using a standard redis instance if it remains.
 
 ## The Redis Client
 
@@ -187,13 +135,15 @@ Also unless we rename the facade alias we need to add a
 Change the `driver` configuration in `config/session.php` to:
 
 ```php
+//selects the 'redis' driver in config/database.php
  'driver' => env('SESSION_DRIVER', 'redis'),
 ```
 
 Change the `connection` configuration in `config/session.php` to:
 
 ```php
-'connection' => env('SESSION_CONNECTION', 'session'),
+//selects the 'session' connection of the 'redis' driver in config/database.php
+'connection' => 'session',
 ```
 
 ## Configuring the Cache Configuration file to use redis
@@ -201,13 +151,14 @@ Change the `connection` configuration in `config/session.php` to:
 Change the `default` store configuration in `config/cache.php` to:
 
 ```php
+//selects the 'redis' cache store in config/cache.php
 'default' => env('CACHE_DRIVER', 'redis'),
 ```
 
 Change the `prefix` configuration in `config/cache.php` to:
 
 ```php
-  'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'MyApplication'), '_').'_cache'),
+'prefix' => '',
 ```
 
 We can leave the redis store connection value in `config/cache.php` as is, since it is set to `cache` out of the box which references the out of the box `cache` redis connection in `config/database.php`
@@ -215,8 +166,9 @@ We can leave the redis store connection value in `config/cache.php` as is, since
 ```php
     'stores' => [
         'redis' => [
+            //selects the 'redis' driver in config/database.php
             'driver' => 'redis',
-            //uses the 'cache' store
+            // selects the 'cache' connection of the 'redis' driver in config/database.php
             'connection' => 'cache',
         ],
     ],
@@ -227,7 +179,8 @@ We can leave the redis store connection value in `config/cache.php` as is, since
 Change the `default` configuration in `config/queue.php` to:
 
 ```php
-  'default' => env('QUEUE_CONNECTION', 'redis'),
+//selects the 'redis' queue connection in config/queue.php
+'default' => env('QUEUE_CONNECTION', 'redis'),
 ```
 
 Change the `connections` configuration in `config/queue.php` to:
@@ -247,12 +200,13 @@ Change the `connections` configuration in `config/queue.php` to:
 
 ## Setting up the environment variables for our configuration file to use
 
-The following environment variable need to be set to `redis`
+The following environment variable need to be set to for the Redis configuration to use.
 
 ```ini
 CACHE_DRIVER=redis
 QUEUE_CONNECTION=redis
 SESSION_DRIVER=redis
+QUEUE_PREFIX_VERSION=V1:
 ```
 
 Additionally we need to set the host and password settings. The values set below are for a local Redis instance running:
