@@ -31,7 +31,7 @@ mkdir data
   redis:
       image: redis:alpine
       container_name: myapp-redis
-      command: redis-server --appendonly yes --requirepass myapp
+      command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
       volumes:
       - ./data/redis:/data
       ports:

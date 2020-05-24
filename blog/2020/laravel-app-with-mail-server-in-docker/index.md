@@ -4,12 +4,14 @@ May 11, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Creating the docker-compose file
 
-> Note if you have already a docker-compose.yml then skip to the next section.
+Create a new docker-compose.yml file in the Laravel project root directory:
+
+> Note: skip to the next section if you already have a docker-compose.yml file in the root directory
 
 ```bash
 touch docker-compose.yml
-echo `version: "3.1"' >> docker-compose.yml
-echo `services:' >> docker-compose.yml
+echo 'version: "3.1"' >> docker-compose.yml
+echo 'services:' >> docker-compose.yml
 ```
 
 ## Adding the mysql service to docker-compose
