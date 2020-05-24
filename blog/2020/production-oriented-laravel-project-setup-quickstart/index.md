@@ -4,6 +4,15 @@ May 24, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Production Oriented Laravel Project Setup Quickstart](https://aregsar.com/blog/2020/production-oriented-laravel-project-setup-quickstart)
 
+In this article I am going to show my setup procedure to setup a new Laravel project with the following:
+
+- Authentication
+- Tailwind UI
+- Docker services for local development (mysql,redis,mailhog,elasticsearch)
+- Test MySQL database docker service for running feature tests
+- Configuration for Application, Session, Cache and Queue to use Redis locally and in production
+- script to start the docker services
+
 ## Seting up a new Laravel project
 
 First create a new project as instructed here:
@@ -79,7 +88,45 @@ services:
 
 ## Replace the .env file content
 
-TBD
+```ini
+APP_NAME=myapp
+APP_ENV=local
+APP_KEY=base64:Ht9uVlWv7mf+mZfRRjtz2RqkoZ/Dfo2dVK3pcKUBDT8=
+APP_DEBUG=true
+APP_URL=http://localhost
+
+LOG_CHANNEL=stack
+
+BROADCAST_DRIVER=log
+
+CACHE_DRIVER=redis
+
+SESSION_DRIVER=redis
+SESSION_LIFETIME=120
+
+QUEUE_CONNECTION=job
+QUEUE_PREFIX_VERSION=V1:
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=8001
+DB_DATABASE=myapp
+DB_USERNAME=myapp
+DB_PASSWORD=myapp
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=radar
+REDIS_PORT=8002
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=null
+MAIL_FROM_NAME="${APP_NAME}"
+```
 
 ## Replace config/database.php
 
