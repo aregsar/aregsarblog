@@ -17,7 +17,33 @@ In this article I am going to show my setup procedure to setup a new Laravel pro
 
 First create a new project as instructed here:
 
-[Create Laravel Project With Tailwind UI and Auth](https://aregsar.com/blog/2020/create-laravel-project-with-tailwind-ui-and-auth)
+Make sure php-redis extension is installed in your local environment.
+
+Installation instructions for php-redis extension can be found at https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown and https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster
+
+```bash
+pecl install --force redis
+pecl list
+php -m
+```
+
+```bash
+composer create-project --prefer-dist laravel/laravel myapp
+cd myapp && php artisan --version
+git init
+
+composer require laravel-frontend-presets/tailwindcss --dev
+php artisan ui tailwindcss --auth
+npm install && npm run dev
+
+git add -A
+git commit -m "first commit"
+git remote add origin git@github.com:aregsar/myapp.git
+git push -u origin master
+```
+
+Also check the extension exists at /usr/local/lib/php/pecl/20190902/redis.so and check the top of the php.ini file at /usr/local/etc/php/7.4/php.ini includes the line extension="redis.so".
+If it does not exists, make sure to add it manually so PECL or PHP detect the extension.
 
 ## Create the data directory
 
@@ -443,20 +469,41 @@ return [
 ];
 ```
 
-==========
+## Startup the containers
 
-
-running all the containers
-In the application directory, type:
+In the project root directory, type:
 
 docker-compose up -d
-All the containers should startup as can be seen by running the following command:
 
 docker ps -a
-Connecting with PHP to running MariaDb container
-Now open a new terminal window and run:
 
+check database and redis connections
+
+Run tinker:
+
+```bash
 php artisan tinker
+```
+
+Using tinker execute:
+
+```php
 DB::connection()->getPdo();
 
+Illuminate\Support\Facades\Redis::connection()->ping();
+```
+
+## Run database migrations
+
 php artisan migrate
+
+## Serve the application
+
+Serve using Laravel valet:
+
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome myapp.test
+
+Or serve using artisan
+
+php artisan serve
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8000
