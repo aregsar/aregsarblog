@@ -68,9 +68,9 @@ Next add the following content to the docker-compose.yml file
 version: "3.1"
 services:
 
-    mysqltest:
+    testmysql:
       image: mysql:8.0
-      container_name: app-mysql-test
+      container_name: app-test-mysql
       environment:
         - MYSQL_ROOT_PASSWORD="${DB_PASSWORD}"
         - MYSQL_DATABASE="${DB_DATABASE}"
@@ -105,11 +105,13 @@ services:
       image: mailhog/mailhog:latest
       container_name: app-mailhog
       ports:
-        - "8001:8025"
+        - "8003:8025"
 
     elasticsearch:
       image: elasticsearch:6.5.4
       container_name: app-elasticsearch
+    ports:
+        - "8004:8099"
 ```
 
 ## Replace the .env file content
@@ -139,6 +141,7 @@ DB_PORT=8001
 DB_DATABASE=myapp
 DB_USERNAME=myapp
 DB_PASSWORD=myapp
+TEST_DB_PORT=8011
 
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=radar
@@ -180,6 +183,26 @@ return [
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '8001'),
+            'database' => env('DB_DATABASE', 'myapp'),
+            'username' => env('DB_USERNAME', 'myapp'),
+            'password' => env('DB_PASSWORD', 'myapp'),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
+        'testmysql' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('TEST_DB_PORT', '8011'),
             'database' => env('DB_DATABASE', 'myapp'),
             'username' => env('DB_USERNAME', 'myapp'),
             'password' => env('DB_PASSWORD', 'myapp'),
@@ -471,39 +494,77 @@ return [
 
 ## Startup the containers
 
+
 In the project root directory, type:
 
+```bash
 docker-compose up -d
-
 docker ps -a
+php artisan tinker
+```
 
-check database and redis connections
+## Check database connections
 
-Run tinker:
+Start Laravel tinker to check the MySQL and Redis connections:
 
 ```bash
 php artisan tinker
 ```
 
-Using tinker execute:
+Check the default MySQL connection:
 
 ```php
 DB::connection()->getPdo();
+```
 
+Check the resdis connection:
+
+```php
 Illuminate\Support\Facades\Redis::connection()->ping();
+```
+
+Check the MySQL test database connection:
+
+```php
+DB::connection("testmysql")->getPdo();
 ```
 
 ## Run database migrations
 
+```bash
 php artisan migrate
+```
 
-## Serve the application
+To run externally migrations against the test database before running tests:
 
-Serve using Laravel valet:
+```bash
+php artisan migrate --database=testmysql
+```
 
+To run migrations using the `RefreshDatabase` trait before running tests:
+override the .env file `DB_CONNECTION` setting in phpunit.xml
+
+```xml
+<name="DB_CONNECTION" value="testmysql">
+```
+
+## Serve the application using Valet
+
+```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome myapp.test
+```
 
-Or serve using artisan
+## Serve the application using Artisan
 
+```bash
 php artisan serve
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8000
+```
+
+## Run php unit tests
+
+```bash
+phpunit
+```
+
+## Run parallel tests with Paratest package
