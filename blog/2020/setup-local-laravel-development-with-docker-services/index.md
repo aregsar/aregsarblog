@@ -19,9 +19,11 @@ for the containers.
 > Note: The `http://PhpDocker.io` service is also able to generate docker and configuration files for running `nginx` and `php-fpm` in docker containers to be able to also run the Laravel application in docker. However I don't use that feature as it eliminates a whole host of issues when developing applications locally.
 
 On PhpDocker.io select MariaDb or MySql, Redis, Elastic Search and Mailhog.
+
 Select any version of PHP which wont matter as we are going to delete the PHP related containers
-Download package from PhpDocker.io and unzip it 
-cd into it and delete the phpdocker folder 
+
+Download package from PhpDocker.io and unzip it
+cd into it and delete the phpdocker folder
 copy the docker-compose.yml file into your laravel project
 open the docker-compose.yml file.
 
@@ -79,8 +81,6 @@ services:
       volumes:
         - .:/application
         - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
-
-
 ```
 
 Remove the `webserver:` and `php-fpm:` sections
