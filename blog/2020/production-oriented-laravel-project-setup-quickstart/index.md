@@ -673,8 +673,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
 Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method  that overrides the default method that the User class inherits to the User class body.
 
-
-
 ## Run database migrations
 
 ```bash
