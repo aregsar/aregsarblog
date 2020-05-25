@@ -106,7 +106,8 @@ services:
       image: mailhog/mailhog:latest
       container_name: app-mailhog
       ports:
-        - "8003:8025"
+        - "8003:1025"
+        - "8025:8025"
 
     elasticsearch:
       image: elasticsearch:6.5.4
@@ -530,13 +531,157 @@ Check the MySQL test database connection:
 DB::connection("testmysql")->getPdo();
 ```
 
+## configure email
+
+Update the env vars for connecting to MailHog running in docker:
+
+```ini
+MAIL_MAILER=smtp
+MAIL_HOST=localhost
+MAIL_PORT=8003
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=null
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+The `config/mail.php` file is where these env vars are used:
+
+```php
+'mailers' => [
+      'smtp' => [
+          'transport' => 'smtp',
+          'host' => env('MAIL_HOST', 'localhost'),
+          'port' => env('MAIL_PORT', 8003),
+          'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+          'username' => env('MAIL_USERNAME'),
+          'password' => env('MAIL_PASSWORD'),
+          'timeout' => null,
+      ],
+],
+  'from' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@myapp.com'),
+        'name' => env('MAIL_FROM_NAME', 'Admin'),
+    ],
+```
+
+Connect to the MailHog admin dashboard using your browser:
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
+```
+
+## Queue Verification Email setup
+
+In `routes\web.php` file change:
+
+```php
+Auth::routes();
+```
+
+To:
+
+```php
+Auth::routes(['verify' => true]);
+```
+
+Run the artisan command to create a new notification to override the default Email Verification notification:
+
+```bash
+artisan make:notification Auth/QueuedVerifyEmail
+```
+
+Open the new notification class file at `App/Notifications/Auth/QueuedVerifyEmail.php` and replace its content with the following:
+
+```php
+namespace App\Notifications\Auth;
+
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
+
+class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
+{
+    use Queueable;
+
+    public function __construct()
+    {
+        //Uncomment to set custom queue for this notification
+        //$this->queue = 'mycustomequeue';
+
+        //Uncomment to set custom queue connection for this notification
+        //$this->connection = 'mycustomequeueconnection';
+    }
+}
+```
+
+Finally Replace `App\User.php` content with the following:
+
+```php
+<?php
+
+namespace App;
+
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+//class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
+{
+    use Notifiable;
+
+     /**
+     * Overrideen sendEmailVerificationNotification implementation
+     *
+     * @var array
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new App\Notifications\Auth\QueuedVerifyEmail);
+    }
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'email', 'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+}
+```
+
+Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method  that overrides the default method that the User class inherits to the User class body.
+
+
+
 ## Run database migrations
 
 ```bash
 php artisan migrate
 ```
 
-To run externally migrations against the test database before running tests:
+To run  migrations on the command line against the test database before running tests:
 
 ```bash
 php artisan migrate --database=testmysql
