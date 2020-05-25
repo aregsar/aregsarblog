@@ -56,16 +56,17 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-//we are extending the Illuminate\Foundation\Auth\User class that is aliased to Authenticatable above
-class User extends Authenticatable
+//This App\User class extends the Illuminate\Foundation\Auth\User class that is aliased to Authenticatable above
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `MustVerifyEmail` trait that in turn contains the default implementation of the sendEmailVerificationNotification method
+The `Illuminate\Foundation\Auth\User` class implements the `Illuminate\Auth\MustVerifyEmail` trait (Not to be confused with the `Illuminate\Contracts\Auth\MustVerifyEmail` contract that `App\User` needs to implement) shown here:
 
 ```php
+namespace Illuminate\Foundation\Auth;
 class User extends Model implements
     AuthenticatableContract,
     AuthorizableContract,
@@ -75,7 +76,7 @@ class User extends Model implements
 }
 ```
 
-Here is the default  sendEmailVerificationNotification implementation in the `MustVerifyEmail` trait:
+The `Illuminate\Auth\MustVerifyEmail` trait contains the default implementation of the sendEmailVerificationNotification method shown here:
 
 ```php
 namespace Illuminate\Auth;
@@ -112,7 +113,7 @@ artisan make:notification Auth/QueuedVerifyEmail
 
 This command creates the class `\App\Notifications\Auth\QueuedVerifyEmail`
 
-Next we make this class extend ` Illuminate\Auth\Notifications\VerifyEmail`
+Next we make this class extend `Illuminate\Auth\Notifications\VerifyEmail`
 and implement `Illuminate\Contracts\Queue\ShouldQueue`
 
 Finally we add the `Illuminate\Bus\Queueable` trait to the body of the class.
@@ -122,7 +123,7 @@ That is all we need to do to make a new notification based on the frameworks not
 Below is our new QueuedVerifyEmail notification class:
 
 ```php
-namespace App\Auth\Notifications;
+namespace App\Notifications\Auth;
 
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -137,8 +138,10 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 The last thing we need to do is to add the `sendEmailVerificationNotification()` method to the User class which will override the default method that the User class gets from the MustVerifyEmail trait of its parent User class, to substitute our new queued notification instead of the original notification.
 
 ```php
-class User
+class User extends Authenticatable implements MustVerifyEmail
 {
+    use Notifiable;
+
     //Overrideen sendEmailVerificationNotification implementation
     public function sendEmailVerificationNotification()
     {

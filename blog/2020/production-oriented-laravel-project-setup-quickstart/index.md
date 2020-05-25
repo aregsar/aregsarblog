@@ -4,14 +4,15 @@ May 24, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Production Oriented Laravel Project Setup Quickstart](https://aregsar.com/blog/2020/production-oriented-laravel-project-setup-quickstart)
 
-In this article I am going to show my setup procedure to setup a new Laravel project with the following:
+In this article I am going to show my setup procedure to setup a new Laravel project with the following out of the box features:
 
-- Authentication
+- User  Authentication
 - Tailwind UI
-- Docker services for local development (mysql,redis,mailhog,elasticsearch)
+- Docker services for local development (mysql, redis, mailhog, elasticsearch)
 - Test MySQL database docker service for running feature tests
 - Configuration for Application, Session, Cache and Queue to use Redis locally and in production
 - script to start the docker services
+- user verification and password reset sent as background jobs
 
 ## Seting up a new Laravel project
 
