@@ -6,13 +6,12 @@ May 24, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this article I am going to show my setup procedure to setup a new Laravel project with the following out of the box features:
 
-- User  Authentication
 - Tailwind UI
-- Docker services for local development (mysql, redis, mailhog, elasticsearch)
-- Test MySQL database docker service for running feature tests
+- User Authentication
+- Redis queued user verification and password reset with background jobs
 - Configuration for Application, Session, Cache and Queue to use Redis locally and in production
-- script to start the docker services
-- user verification and password reset sent as background jobs
+- Docker services for local development (mysql, redis, mailhog, elasticsearch)
+- Test MySQL database docker service for running feature tests against
 
 ## Seting up a new Laravel project
 
@@ -150,8 +149,8 @@ REDIS_PASSWORD=radar
 REDIS_PORT=8002
 
 MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
+MAIL_HOST=127.0.0.1
+MAIL_PORT=8003
 MAIL_USERNAME=null
 MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
@@ -494,8 +493,27 @@ return [
 ];
 ```
 
-## Startup the containers
+## Replace config/mail.php
 
+```php
+'mailers' => [
+      'smtp' => [
+          'transport' => 'smtp',
+          'host' => env('MAIL_HOST', 'localhost'),
+          'port' => env('MAIL_PORT', 8003),
+          'encryption' => env('MAIL_ENCRYPTION', 'tls'),
+          'username' => env('MAIL_USERNAME'),
+          'password' => env('MAIL_PASSWORD'),
+          'timeout' => null,
+      ],
+],
+  'from' => [
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@myapp.com'),
+        'name' => env('MAIL_FROM_NAME', 'Admin'),
+    ],
+```
+
+## Startup the containers
 
 In the project root directory, type:
 
@@ -531,40 +549,7 @@ Check the MySQL test database connection:
 DB::connection("testmysql")->getPdo();
 ```
 
-## configure email
-
-Update the env vars for connecting to MailHog running in docker:
-
-```ini
-MAIL_MAILER=smtp
-MAIL_HOST=localhost
-MAIL_PORT=8003
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS=null
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
-The `config/mail.php` file is where these env vars are used:
-
-```php
-'mailers' => [
-      'smtp' => [
-          'transport' => 'smtp',
-          'host' => env('MAIL_HOST', 'localhost'),
-          'port' => env('MAIL_PORT', 8003),
-          'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-          'username' => env('MAIL_USERNAME'),
-          'password' => env('MAIL_PASSWORD'),
-          'timeout' => null,
-      ],
-],
-  'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'admin@myapp.com'),
-        'name' => env('MAIL_FROM_NAME', 'Admin'),
-    ],
-```
+## connect to email dashboard
 
 Connect to the MailHog admin dashboard using your browser:
 
@@ -574,16 +559,18 @@ Connect to the MailHog admin dashboard using your browser:
 
 ## Queue Verification Email and Password Reset setup
 
-In `routes\web.php` file change:
+Replace the content of `routes\web.php` file with the following:
 
 ```php
-Auth::routes();
-```
+<?php
 
-To:
+use Illuminate\Support\Facades\Route;
 
-```php
+Route::get('/', 'HomeController@index')->name('home.index');
+
 Auth::routes(['verify' => true]);
+
+Route::get('/home', 'HomeController@welcome')->name('home.welcome');
 ```
 
 Run the artisan command to create a new notification to override the default Email Verification notification:
