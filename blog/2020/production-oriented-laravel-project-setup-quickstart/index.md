@@ -610,10 +610,41 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index')->name('home.index');
 
-Auth::routes(['verify' => true]);
+Auth::routes();
 
-Route::get('/home', 'HomeController@welcome')->name('home.welcome');
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/home', 'HomeController@welcome')->name('home.welcome');
+});
 ```
+
+Replace the content of `app\Http\Controllers\HomeController.php` file with the following:
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        return view('home.index');
+    }
+
+    public function welcome()
+    {
+        return view('home.welcome');
+    }
+}
+
+
+```
+
+
+==============================
 
 Run the artisan command to create a new notification to override the default Email Verification notification:
 
