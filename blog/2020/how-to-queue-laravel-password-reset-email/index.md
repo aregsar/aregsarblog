@@ -99,7 +99,7 @@ That is all we need to do to make a new notification based on the frameworks not
 Below is the our new QueuedResetPassword notification class:
 
 ```php
-namespace App\Auth\Notifications;
+namespace App\Notifications\Auth;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;

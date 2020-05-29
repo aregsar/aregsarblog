@@ -572,7 +572,7 @@ Connect to the MailHog admin dashboard using your browser:
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
 ```
 
-## Queue Verification Email setup
+## Queue Verification Email and Password Reset setup
 
 In `routes\web.php` file change:
 
@@ -616,6 +616,37 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 }
 ```
 
+Run the artisan command to create a new notification to override the default Email Verification notification:
+
+```bash
+artisan make:notification Auth/QueuedResetPassword
+```
+
+Open the new notification class file at `App/Notifications/Auth/QueuedResetPassword.php` and replace its content with the following:
+
+```php
+namespace App\Notifications\Auth;
+
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Bus\Queueable;
+
+
+class QueuedResetPassword extends ResetPassword implements ShouldQueue
+{
+    use Queueable;
+
+    public function __construct()
+    {
+        //Uncomment to set custom queue for this notification
+        //$this->queue = 'mycustomequeue';
+
+        //Uncomment to set custom queue connection for this notification
+        //$this->connection = 'mycustomequeueconnection';
+    }
+}
+```
+
 Finally Replace `App\User.php` content with the following:
 
 ```php
@@ -627,7 +658,6 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-//class User extends Authenticatable
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
@@ -635,11 +665,19 @@ class User extends Authenticatable implements MustVerifyEmail
      /**
      * Overrideen sendEmailVerificationNotification implementation
      *
-     * @var array
      */
     public function sendEmailVerificationNotification()
     {
         $this->notify(new App\Notifications\Auth\QueuedVerifyEmail);
+    }
+
+    /**
+     * Overrideen sendPasswordResetNotification implementation
+     *
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new \App\Notifications\Auth\QueuedResetPassword($token));
     }
 
     /**
@@ -671,7 +709,7 @@ class User extends Authenticatable implements MustVerifyEmail
 }
 ```
 
-Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method  that overrides the default method that the User class inherits to the User class body.
+Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method that overrides the default method that the `User` class inherits to the ``User` class body. Finally we have added added the `sendPasswordResetNotification` method that overrides the default method that the `User` class inherits to the `User` class body.
 
 ## Run database migrations
 
