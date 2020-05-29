@@ -111,7 +111,7 @@ services:
     elasticsearch:
       image: elasticsearch:6.5.4
       container_name: app-elasticsearch
-    ports:
+      ports:
         - "8004:8099"
 ```
 
