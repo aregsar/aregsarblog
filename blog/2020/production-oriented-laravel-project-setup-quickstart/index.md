@@ -599,7 +599,7 @@ Connect to the MailHog admin dashboard using your browser:
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
 ```
 
-## Queue Verification Email and Password Reset setup
+## Change the default Routs, HomeController and Views
 
 Replace the content of `routes\web.php` file with the following:
 
@@ -613,7 +613,6 @@ Route::get('/', 'HomeController@index')->name('home.index');
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-
     Route::get('/home', 'HomeController@welcome')->name('home.welcome');
 });
 ```
@@ -639,17 +638,38 @@ class HomeController extends Controller
         return view('home.welcome');
     }
 }
-
-
 ```
 
+Create a `resources\views\home` directory and the view files within:
 
-==============================
+```bash
+mkdir resources\views\home
+touch resources\views\home\index.blade.php
+touch resources\views\home\welcome.blade.php
+```
+
+Copy the content from the out of the box `resources\views\welcome.blade.php` view to `resources\views\home\index.blade.php`
+
+Copy the content from the out of the box `resources\views\home.blade.php` view to `resources\views\home\welcome.blade.php`
+
+Delete the `resources\views\welcome.blade.php` view
+
+Delete the `resources\views\home.blade.php` view
+
+In the `resources\views\home\index.blade.php` view replace `url('/home')` with `route('home.welcome')`
+
+## Queue Verification Email and Password Reset setup
 
 Run the artisan command to create a new notification to override the default Email Verification notification:
 
 ```bash
 artisan make:notification Auth/QueuedVerifyEmail
+```
+
+Run the artisan command to create a new notification to override the default Email Verification notification:
+
+```bash
+artisan make:notification Auth/QueuedResetPassword
 ```
 
 Open the new notification class file at `App/Notifications/Auth/QueuedVerifyEmail.php` and replace its content with the following:
@@ -676,11 +696,7 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 }
 ```
 
-Run the artisan command to create a new notification to override the default Email Verification notification:
 
-```bash
-artisan make:notification Auth/QueuedResetPassword
-```
 
 Open the new notification class file at `App/Notifications/Auth/QueuedResetPassword.php` and replace its content with the following:
 
