@@ -1,5 +1,27 @@
 # 76ideaz - Independent ideas from a to z
 
+//override default queue driver
+(new SomeJob)->onConnection('sync')
+
+//override default queue driver
+call dispatchNow method on Illuminate\Support\Facades\Bus
+
+//dynamically change default queue driver
+# /app/Http/Controllers/MyController.php
+public function create(Request $request, QueueManager $queueManager)
+
+    $defaultDriver = $queueManager->getDefaultDriver();
+
+    $queueManager->setDefaultDriver('sync');
+
+    //config(['queue.default'=>'sync']);//may not work
+    //$this->dispatch(new \App\Jobs\MyJob());//may not work
+    \Queue::push(new \App\Jobs\MyJob());
+
+    $queueManager->setDefaultDriver($defaultDriver);
+}
+
+
 https://www.digitalocean.com/community/tutorials/how-to-reset-your-mysql-or-mariadb-root-password
 
 
