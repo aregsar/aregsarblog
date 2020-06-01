@@ -862,6 +862,7 @@ We can use these to create our own route definitions and remove the Auth::routes
 ## Auth routes in Laravel\UI framework package
 
 In Laravel 7 the Authentication routes were moved to the `Laravel\Ui` package.
+The routes installed added when we require the package with the `--auth` flag.
 
 ```php
 <?php
