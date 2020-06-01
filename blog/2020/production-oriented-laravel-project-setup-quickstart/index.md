@@ -826,3 +826,98 @@ phpunit
 ```
 
 ## Run parallel tests with Paratest package
+
+TBD
+
+## Overriding Auth routes in Laravel framework
+
+Sometime after Laravel 5.8 the framework changed from defining the Authentication routes via an explicit Auth() method in the Illumuniate Routes.php file to using a generic callable method in the Illumuniate Routes.php file that assembles the routes using attributes passed to it. The Auth() method has since been removed.
+
+So it is not easy to track where the Auth routes are defined in the framework.
+you won't see the explicit route definition methods in the Laravel 5.8 Auth() method in `https://github.com/laravel/framework/blob/5.8/src/Illuminate/Routing/Router.php` shown below:
+
+```php
+//from https://github.com/laravel/framework/blob/5.8/src/Illuminate/Routing/Router.php
+/**
+     * Register the typical authentication routes for an application.
+     *
+     * @param  array  $options
+     * @return void
+     */
+    public function auth(array $options = [])
+    {
+        // Authentication Routes...
+        $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+        $this->post('login', 'Auth\LoginController@login');
+        $this->post('logout', 'Auth\LoginController@logout')->name('logout');
+
+        // Registration Routes...
+        if ($options['register'] ?? true) {
+            $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+            $this->post('register', 'Auth\RegisterController@register');
+        }
+
+        // Password Reset Routes...
+        if ($options['reset'] ?? true) {
+            $this->resetPassword();
+        }
+
+        // Email Verification Routes...
+        if ($options['verify'] ?? false) {
+            $this->emailVerification();
+        }
+    }
+
+    /**
+     * Register the typical reset password routes for an application.
+     *
+     * @return void
+     */
+    public function resetPassword()
+    {
+        $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+        $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+        $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+        $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+    }
+
+    /**
+     * Register the typical email verification routes for an application.
+     *
+     * @return void
+     */
+    public function emailVerification()
+    {
+        $this->get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
+        $this->get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+        $this->get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+    }
+```
+
+However for Laravel 7 we can just run the artisan command to show us the routs that are defined for authentication:
+
+
+```bash
+Aregs-MacBook-Pro:radar aregsarkissian$ php artisan route:list
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+| Domain | Method   | URI                    | Name             | Action                                                                 | Middleware   |
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+|        | GET|HEAD | /                      | home.index       | App\Http\Controllers\HomeController@index                              | web          |
+|        | GET|HEAD | api/user               |                  | Closure                                                                | api,auth:api |
+|        | GET|HEAD | demo/email             | demo.email       | App\Http\Controllers\Demo\Email                                        | web,auth     |
+|        | GET|HEAD | home                   | home.welcome     | App\Http\Controllers\HomeController@welcome                            | web,auth     |
+|        | GET|HEAD | login                  | login            | App\Http\Controllers\Auth\LoginController@showLoginForm                | web,guest    |
+|        | POST     | login                  |                  | App\Http\Controllers\Auth\LoginController@login                        | web,guest    |
+|        | POST     | logout                 | logout           | App\Http\Controllers\Auth\LoginController@logout                       | web          |
+|        | GET|HEAD | password/confirm       | password.confirm | App\Http\Controllers\Auth\ConfirmPasswordController@showConfirmForm    | web,auth     |
+|        | POST     | password/confirm       |                  | App\Http\Controllers\Auth\ConfirmPasswordController@confirm            | web,auth     |
+|        | POST     | password/email         | password.email   | App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail  | web          |
+|        | GET|HEAD | password/reset         | password.request | App\Http\Controllers\Auth\ForgotPasswordController@showLinkRequestForm | web          |
+|        | POST     | password/reset         | password.update  | App\Http\Controllers\Auth\ResetPasswordController@reset                | web          |
+|        | GET|HEAD | password/reset/{token} | password.reset   | App\Http\Controllers\Auth\ResetPasswordController@showResetForm        | web          |
+|        | GET|HEAD | register               | register         | App\Http\Controllers\Auth\RegisterController@showRegistrationForm      | web,guest    |
+|        | POST     | register               |                  | App\Http\Controllers\Auth\RegisterController@register                  | web,guest    |
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+```
+
+We can use these to create our own route definitions and remove the Auth::routes() call in our application routs file.
