@@ -829,76 +829,13 @@ phpunit
 
 TBD
 
-## Overriding Auth routes in Laravel framework
+## Inspecting the Authentication routs using artisan
 
-Sometime after Laravel 5.8 the framework changed from defining the Authentication routes via an explicit Auth() method in the Illumuniate Routes.php file to using a generic callable method in the Illumuniate Routes.php file that assembles the routes using attributes passed to it. The Auth() method has since been removed.
-
-So it is not easy to track where the Auth routes are defined in the framework.
-you won't see the explicit route definition methods in the Laravel 5.8 Auth() method in `https://github.com/laravel/framework/blob/5.8/src/Illuminate/Routing/Router.php` shown below:
-
-```php
-//from https://github.com/laravel/framework/blob/5.8/src/Illuminate/Routing/Router.php
-/**
-     * Register the typical authentication routes for an application.
-     *
-     * @param  array  $options
-     * @return void
-     */
-    public function auth(array $options = [])
-    {
-        // Authentication Routes...
-        $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
-        $this->post('login', 'Auth\LoginController@login');
-        $this->post('logout', 'Auth\LoginController@logout')->name('logout');
-
-        // Registration Routes...
-        if ($options['register'] ?? true) {
-            $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-            $this->post('register', 'Auth\RegisterController@register');
-        }
-
-        // Password Reset Routes...
-        if ($options['reset'] ?? true) {
-            $this->resetPassword();
-        }
-
-        // Email Verification Routes...
-        if ($options['verify'] ?? false) {
-            $this->emailVerification();
-        }
-    }
-
-    /**
-     * Register the typical reset password routes for an application.
-     *
-     * @return void
-     */
-    public function resetPassword()
-    {
-        $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-        $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-        $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
-        $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
-    }
-
-    /**
-     * Register the typical email verification routes for an application.
-     *
-     * @return void
-     */
-    public function emailVerification()
-    {
-        $this->get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
-        $this->get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
-        $this->get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
-    }
-```
-
-However for Laravel 7 we can just run the artisan command to show us the routs that are defined for authentication:
-
+We can also run the artisan command to show us the routs that are defined for authentication:
 
 ```bash
-Aregs-MacBook-Pro:radar aregsarkissian$ php artisan route:list
+php artisan route:list
+
 +--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
 | Domain | Method   | URI                    | Name             | Action                                                                 | Middleware   |
 +--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
@@ -921,3 +858,162 @@ Aregs-MacBook-Pro:radar aregsarkissian$ php artisan route:list
 ```
 
 We can use these to create our own route definitions and remove the Auth::routes() call in our application routs file.
+
+## Auth routes in Laravel\UI framework package
+
+In Laravel 7 the Authentication routes were moved to the `Laravel\Ui` package.
+
+```php
+<?php
+
+namespace Laravel\Ui;
+
+class AuthRouteMethods
+{
+    /**
+     * Register the typical authentication routes for an application.
+     *
+     * @param  array  $options
+     * @return void
+     */
+    public function auth()
+    {
+        return function ($options = []) {
+            // Authentication Routes...
+            $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+            $this->post('login', 'Auth\LoginController@login');
+            $this->post('logout', 'Auth\LoginController@logout')->name('logout');
+
+            // Registration Routes...
+            if ($options['register'] ?? true) {
+                $this->get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+                $this->post('register', 'Auth\RegisterController@register');
+            }
+
+            // Password Reset Routes...
+            if ($options['reset'] ?? true) {
+                $this->resetPassword();
+            }
+
+            // Password Confirmation Routes...
+            if ($options['confirm'] ??
+                class_exists($this->prependGroupNamespace('Auth\ConfirmPasswordController'))) {
+                $this->confirmPassword();
+            }
+
+            // Email Verification Routes...
+            if ($options['verify'] ?? false) {
+                $this->emailVerification();
+            }
+        };
+    }
+
+    /**
+     * Register the typical reset password routes for an application.
+     *
+     * @return void
+     */
+    public function resetPassword()
+    {
+        return function () {
+            $this->get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+            $this->post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+            $this->get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+            $this->post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+        };
+    }
+
+    /**
+     * Register the typical confirm password routes for an application.
+     *
+     * @return void
+     */
+    public function confirmPassword()
+    {
+        return function () {
+            $this->get('password/confirm', 'Auth\ConfirmPasswordController@showConfirmForm')->name('password.confirm');
+            $this->post('password/confirm', 'Auth\ConfirmPasswordController@confirm');
+        };
+    }
+
+    /**
+     * Register the typical email verification routes for an application.
+     *
+     * @return void
+     */
+    public function emailVerification()
+    {
+        return function () {
+            $this->get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
+            $this->get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
+            $this->post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+        };
+    }
+}
+```
+
+We can use these to create our own route definitions and remove the `Auth::routes()` call in our application routs file.
+
+Below I show how the routes get added to the `Illuminate\Routing\Router` class starting with the `Auth::routes()` call in `routes/web.php`.
+
+```php
+//from routes/web.php
+Illuminate\Support\Facades\Auth::routes();
+```
+
+The Auth facade calls the Router::auth() method which in turn creates the Authentication routs.
+
+```php
+class Auth extends Facade
+{
+    public static function routes(array $options = [])
+    {
+        static::$app->make('router')->auth($options);
+    }
+}
+```
+
+The `Macroable` trait adds the Authentication `auth()` method that defines the routes, to the Router class at run time.
+
+```php
+use Illuminate\Support\Traits\Macroable;
+class Router implements BindingRegistrar, RegistrarContract
+{
+    use Macroable {
+        __call as macroCall;
+    }
+}
+```
+
+```php
+trait Macroable
+{
+    protected static $macros = [];
+
+    public static function macro($name, $macro)
+    {
+        static::$macros[$name] = $macro;
+    }
+
+    /**
+     * Mix another object into the class.
+     *
+     * @param  object  $mixin
+     * @param  bool  $replace
+     */
+    public static function mixin($mixin, $replace = true)
+    {
+        $methods = (new ReflectionClass($mixin))->getMethods(
+            ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
+        );
+
+        foreach ($methods as $method) {
+            if ($replace || ! static::hasMacro($method->name)) {
+                $method->setAccessible(true);
+                static::macro($method->name, $method->invoke($mixin));
+            }
+        }
+    }
+}
+```
+
