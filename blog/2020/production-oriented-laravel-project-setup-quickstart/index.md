@@ -829,6 +829,48 @@ phpunit
 
 TBD
 
+## Sending Welcome email after email is verified
+
+Use Illuminate\Auth\Events\Verified to send a welcome email after a user verifies his or her account.
+
+`https://laracasts.com/discuss/channels/laravel/sending-a-welcome-email-after-user-verify-his-account`
+
+In App/Providers/EventServiceProvider.php add the `Verified::class` item to the `$listen` array:
+
+```php
+use Illuminate\Auth\Events\Verified;
+use App\Listeners\WelcomeMail;
+
+ protected $listen = [
+//send verification email on registration
+        Registered::class => [
+            SendEmailVerificationNotification::class,
+        ],
+//sends welcome email on verification
+        Verified::class => [
+            WelcomeMail::class,
+        ],
+    ];
+```
+
+```bash
+php artisan make:listener WelcomeMail
+```
+
+Then in generated App\Listeners\WelcomeMail.php file handle method add:
+
+```php
+use Illuminate\Auth\Events\Verified;
+
+public function handle(Verified $event)
+{
+   Mail::send('emails.welcome', $event->user, function($message) use ($event) {
+      $message->to($event->user->email);
+      $message->subject('WelcomeMail');
+    });
+ }
+```
+
 ## Inspecting the Authentication routs using artisan
 
 We can also run the artisan command to show us the routs that are defined for authentication:
