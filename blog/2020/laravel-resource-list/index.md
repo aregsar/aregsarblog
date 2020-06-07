@@ -50,6 +50,14 @@ https://codecourse.com/
 
 https://laravelcoreadventures.com
 
+https://laraveldaily.teachable.com/p/laravel-phpunit-testing-for-beginners
+
+https://confidentlaravel.com/
+
+https://course.testdrivenlaravel.com/
+
+https://adamwathan.me/refactoring-to-collections/
+
 ## Podcasts
 
 https://www.northmeetssouth.audio/
@@ -66,8 +74,6 @@ https://laracon.net/
 
 https://vegibit.com/laravel-aliases-and-contracts/
 
+https://timacdonald.me/my-feature-test-suite-setup/
 
-
-
-
-
+https://madewithlove.com/using-mysql-for-testing-on-laravel/
