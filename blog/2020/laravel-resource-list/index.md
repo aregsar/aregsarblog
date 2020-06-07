@@ -10,13 +10,15 @@ June 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 https://laravel.com/
 
+https://github.com/laravel/framework
+
+https://github.com/laravel/laravel
+
 https://laravel.com/api/7.x/index.html
 
 https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088
 
 https://tallstack.dev/
-
-https://laravelcoreadventures.com
 
 ## Blogs
 
@@ -46,6 +48,8 @@ https://laracasts.com/
 
 https://codecourse.com/
 
+https://laravelcoreadventures.com
+
 ## Podcasts
 
 https://www.northmeetssouth.audio/
@@ -58,9 +62,9 @@ https://phpugly.simplecast.com/
 
 https://laracon.net/
 
+## Concepts
 
-
-
+https://vegibit.com/laravel-aliases-and-contracts/
 
 
 
