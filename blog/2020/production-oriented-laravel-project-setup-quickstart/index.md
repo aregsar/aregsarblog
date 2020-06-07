@@ -835,6 +835,10 @@ Use Illuminate\Auth\Events\Verified to send a welcome email after a user verifie
 
 `https://laracasts.com/discuss/channels/laravel/sending-a-welcome-email-after-user-verify-his-account`
 
+`https://vegibit.com/laravel-aliases-and-contracts/`
+`composer dump-autoload`
+`php artisan config:clear`
+
 In App/Providers/EventServiceProvider.php add the `Verified::class` item to the `$listen` array:
 
 ```php
