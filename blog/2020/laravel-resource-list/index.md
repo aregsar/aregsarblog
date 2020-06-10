@@ -50,6 +50,8 @@ https://codecourse.com/
 
 https://laravelcoreadventures.com
 
+https://laravel-livewire.com/screencasts
+
 https://laraveldaily.teachable.com/p/laravel-phpunit-testing-for-beginners
 
 https://confidentlaravel.com/
@@ -60,6 +62,8 @@ https://adamwathan.me/refactoring-to-collections/
 
 ## Podcasts
 
+https://laravelpodcast.com/
+
 https://www.northmeetssouth.audio/
 
 https://www.fullstackradio.com/
@@ -69,6 +73,8 @@ https://phpugly.simplecast.com/
 ## Conferences
 
 https://laracon.net/
+
+https://laracon.eu/
 
 ## Concepts
 
