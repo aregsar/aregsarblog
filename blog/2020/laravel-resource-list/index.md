@@ -20,6 +20,8 @@ https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088
 
 https://tallstack.dev/
 
+https://www.php.net/manual/en/langref.php
+
 ## Blogs
 
 https://blog.laravel.com/
@@ -78,8 +80,16 @@ https://laracon.eu/
 
 ## Concepts
 
-https://vegibit.com/laravel-aliases-and-contracts/
+https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug/
+
+https://madewithlove.com/using-mysql-for-testing-on-laravel/
 
 https://timacdonald.me/my-feature-test-suite-setup/
 
-https://madewithlove.com/using-mysql-for-testing-on-laravel/
+https://tighten.co/blog/tidy-up-your-tests-with-class-based-model-factories/
+
+https://tighten.co/blog/dot-env-files-the-silent-killer/
+
+https://vegibit.com/laravel-aliases-and-contracts/
+
+
