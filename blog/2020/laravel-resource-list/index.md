@@ -54,6 +54,8 @@ June 12, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [https://confidentlaravel.com](https://confidentlaravel.com)
 
+[https://laravelpackage.training](https://laravelpackage.training)
+
 [https://course.testdrivenlaravel.com](https://course.testdrivenlaravel.com)
 
 [https://adamwathan.me/refactoring-to-collections](https://adamwathan.me/refactoring-to-collections)
