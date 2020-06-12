@@ -1,10 +1,6 @@
 # laravel resource list
 
-June 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[laravel resource list](https://aregsar.com/blog/2020/laravel-resource-list)
-
-> Some of the resources listed are payed
+June 12, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Guides
 
@@ -91,5 +87,3 @@ https://tighten.co/blog/tidy-up-your-tests-with-class-based-model-factories/
 https://tighten.co/blog/dot-env-files-the-silent-killer/
 
 https://vegibit.com/laravel-aliases-and-contracts/
-
-

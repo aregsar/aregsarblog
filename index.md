@@ -1,5 +1,9 @@
 # All Posts
 
+June 12, 2020
+
+[Laravel Resource List](https://aregsar.com/blog/2020/laravel-resource-list)
+
 May 21, 2020
 
 [Laravel Feature Tests Alternative MySQL Config](https://aregsar.com/blog/2020/laravel-feature-tests-alternative-mysql-config)
