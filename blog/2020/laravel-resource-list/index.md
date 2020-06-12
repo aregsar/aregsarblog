@@ -89,3 +89,5 @@ June 12, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 [https://tighten.co/blog/dot-env-files-the-silent-killer](https://tighten.co/blog/dot-env-files-the-silent-killer)
 
 [https://vegibit.com/laravel-aliases-and-contracts](https://vegibit.com/laravel-aliases-and-contracts)
+
+[https://jasonmccreary.me/articles/avoiding-inheritance-laravel](https://jasonmccreary.me/articles/avoiding-inheritance-laravel)
