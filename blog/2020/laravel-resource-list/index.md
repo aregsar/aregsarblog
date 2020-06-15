@@ -4,20 +4,34 @@ June 12, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Guides
 
+The main Laravel web site
+
 [https://laravel.com](https://laravel.com)
+
+Laravel Documentation
 
 [https://laravel.com/docs](https://laravel.com/docs)
 
+The Laravel Illuminate core framework
+
 [https://github.com/laravel/framework](https://github.com/laravel/framework)
+
+The Laravel project skeleton that requires the core framework
 
 [https://github.com/laravel/laravel](https://github.com/laravel/laravel)
 
+The Laravel framework API docs
+
 [https://laravel.com/api/7.x/index.html](https://laravel.com/api/7.x/index.html)
+
+The definitive Laravel tutorial and reference book
 
 [https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088](https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088)
 
+The Tailwind, Alpine, Live Wire, Laravel stack documentation
 [https://tallstack.dev](https://tallstack.dev)
 
+The PHP language reference
 [https://www.php.net/manual/en/langref.php](https://www.php.net/manual/en/langref.php)
 
 ## Blogs
