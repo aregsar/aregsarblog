@@ -6,6 +6,8 @@ June 12, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [https://laravel.com](https://laravel.com)
 
+[https://laravel.com/docs](https://laravel.com/docs)
+
 [https://github.com/laravel/framework](https://github.com/laravel/framework)
 
 [https://github.com/laravel/laravel](https://github.com/laravel/laravel)
