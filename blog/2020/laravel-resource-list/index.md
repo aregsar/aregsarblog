@@ -58,6 +58,8 @@ June 12, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [https://course.testdrivenlaravel.com](https://course.testdrivenlaravel.com)
 
+[https://eloquent-course.reinink.ca](https://eloquent-course.reinink.ca)
+
 [https://adamwathan.me/refactoring-to-collections](https://adamwathan.me/refactoring-to-collections)
 
 ## Podcasts
