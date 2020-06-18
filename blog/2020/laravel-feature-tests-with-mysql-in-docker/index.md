@@ -126,11 +126,11 @@ When doing parallel testing, this approach has issues. In the [Laravel Run Paral
 
 If you do not need to run tests in parallel, then the approach of using the `phpunit.xml` file overrides instead of using a separate `.env.testing` file is simpler as you do not have to keep the `.env.testing` file in sync with the changes to the `.env` file.
 
-## Setting up phpunit to use `RefreshDatabase`
+## Setting up phpunit to use `RefreshDatabase` trait
 
-Finally, so that we dont have to type `use RefreshDatabase` in all our test classes, we can extend the base `BaseTestCase` class and add the trait there.
+We need to use the `RefreshDatabase` trait in our phpunit classes so that the test database is refreshed after each test.
 
-Then our test classes can extend the derived TestCase class to take advantage of the RefreshDatabase trait.
+In order to not repeat ourselves in every test class we can extend the base `Tests\TestCase` phpunit class and add the trait there. Then our test classes can extend the derived `TestCase` class to take advantage of the `RefreshDatabase` trait.
 
 ```php
 namespace Tests\Feature;
