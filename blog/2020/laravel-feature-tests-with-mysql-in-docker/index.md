@@ -2,17 +2,15 @@
 
 May 21, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-## Feature tests using a real database
-
-In this article I will show you how to use a real MySQL database server running in docker container to run your Laravel phpunit tests against.
+## Feature tests using a production database
 
 In the blog post [My Laravel Local Docker Services Configuration](https://aregsar.com/blog/2020/my-laravel-local-docker-services-configuration) I described how I use MySQL running in docker for local development.
 
-For testing we will set up a separate MySQL server instance running in a separate testing docker container. This way our test database will be completely separate from our development database just like how we would run separate database servers for our test, staging and production environments.
+In this article I will show you how to use a MySQL test database server running in a docker container to run your Laravel phpunit tests against.
 
-To setup a new MySQL docker container we can duplicate the existing MySQL service in the docker compose file and just give it a different port mapping. So from our local host we can connect to the port mapped to the test database to run our feature tests.
+We will set up a separate MySQL server instance running in a separate docker container used for testing. This way our test database will be completely separate from our development database so that we can setup the test database with test data.
 
-> It is assumed that the Laravel application and tests are running on local host.
+To setup a new MySQL docker container we can duplicate the existing MySQL service in the docker compose file and just give it a different port mapping. So when running our phpunit tests on our local host we can connect to the port mapped to the test database.
 
 Here is the docker compose file with the two MySQL services:
 
@@ -52,7 +50,7 @@ services:
         - "8011:3306"
 ```
 
-Below are the environment variable settings in the .env file:
+And here are the related environment variable settings in the `.env` file:
 
 ```ini
 DB_DATABASE=myapp
@@ -63,8 +61,10 @@ DB_HOST=127.0.0.1
 DB_PORT=8001
 ```
 
-Note that we have just one MySQL connection named `mysql` configured in `config/database.php` file.
-This connection is the default database connection that the application, database migrations and phpunit tests all use. The default database connection is specified in the `config/database.php` file as shows below:
+Now in the in `config/database.php` file we have just one MySQL connection named `mysql`.
+This connection is the default database connection that the application and database migrations use. 
+
+The default database connection is specified in the `config/database.php` file as shows below:
 
 ```php
 'default' => env('DB_CONNECTION', 'mysql'),
@@ -76,15 +76,15 @@ During execution of feature tests we need to apply migrations to the test databa
 
 There are two approaches we can use to do so.
 
-With both approaches we override the DB_PORT setting to switch the port value from 8001 to 8011 to connect to the test database server.
+With both approaches we override the `DB_PORT` setting to switch the port value from 8001 to 8011 to connect to the test database server.
 
 After we override the setting, the `mysql` default database connection will connect to the test database thereby running the migrations and tests against the test database.
 
 ## Approach 1 - Overriding DB_PORT setting in the phpunit.xml file
 
-The phpunit.xml file has php section where you can specify any environment settings you want to override before running tests.
+The `phpunit.xml` file has a php section where you can specify any environment settings you want to override before running tests.
 
-Below is the out of the box overrides defined in phpunit.xml after a new laravel project installation:
+Below is the out of the box overrides defined in `phpunit.xml` after a new Laravel project installation:
 
 ```xml
 <php>
@@ -98,34 +98,33 @@ Below is the out of the box overrides defined in phpunit.xml after a new laravel
 </php>
 ```
 
-So by adding a `<server name="DB_PORT" value="8011"/>` element we can override the `DB_PORT` setting specified in the .env file.
+So by adding a `<server name="DB_PORT" value="8011"/>` element we can override the `DB_PORT` setting specified in the `.env` file.
 
-Database 
-The overridden setting will be used when running the migrations 
+The overridden setting will then be used when running the migrations and unit tests.
 
-## Approach 2 - Overriding DB_PORT setting in .env.testing file
+## Approach 2 - Overriding DB_PORT setting in a .env.testing file
 
-If we specify a .env.testing file in the root of our project, phpunit will use that file instead of the standard .env file to set the environment values for running tests.
+If we specify a `.env.testing` file in the root directory of our project, `phpunit` will use that file instead of the standard `.env` file to set the environment variable values when running tests.
 
-So we can override the port value by copying the .env file to a .env.testing file and change the port to 8011 in the .env.testing file:
+So we can override the port value by copying the `.env` file to a `.env.testing` file and change the `DB_PORT` value to 8011 in the `.env.testing` file:
 
 ```ini
 DB_PORT=8011
 ```
 
-> Note: We can change other settings in the .env.testing file as well if we need to. For example we can change the cache driver to array and session driver to array for example.
+> Note: We can change other settings in the `.env.testing` file as well if we need to. For example we can change the cache driver to `array` and session driver to `array` for example.
 
-It important to note that the overrides section in phpunit.xml will now override the settings in the .env.testing file. So we need to remove those overrides from phpunit.xml if we do not need those overrides.
-
-It is probably a good idea to just override any settings we need to override for testing in the .env.testing file, to have all our overrides in one file.
+It is important to note that the overrides section in `phpunit.xml` will now override the settings in the `.env.testing` file instead of the `.env` file. So we need to remove those overrides from `phpunit.xml` since we do not want them to be overriden.
 
 ## Choosing the approach to override the DB_PORT setting
 
-The approach of using the .env.testing file is useful when we need to run tests in parallel. This is because we need to run the database migrations outside the unit tests and we need to specify the .env.testing file to be used to run the database migrations agains the test server.
+The approach of using the `.env.testing` file is useful when we need to run tests in parallel. This is because we need to run the database migrations outside the unit tests and we need to specify the `.env.testing` file to be used to run the database migrations on the test database server.
 
-In Laravel tests we use the `RefreshDatabase` trait to migrate the database as part of the unit tests. When doing parallel testing, this approach has issues. I describe how to overcome those issues and why we need to use the .env.testing file in the post [Laravel Run Parallel Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker) blog post.
+In the unit test classes we use the Laravel `RefreshDatabase` trait to migrate the database as part of the unit tests.
 
-If you do not need to run tests in parallel, then the approach of using the phpunit.xml file is simpler as you do not need to create a new .env.testing file and have to keep the values of the un-changed settings in sync as you make changes to the standard .env file.
+When doing parallel testing, this approach has issues. In the [Laravel Run Parallel Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker) blog post I describe how to overcome those issues and why we need to use the `.env.testing` file.
+
+If you do not need to run tests in parallel, then the approach of using the `phpunit.xml` file overrides instead of using a separate `.env.testing` file is simpler as you do not have to keep the `.env.testing` file in sync with the changes to the `.env` file.
 
 ## Setting up phpunit to use `RefreshDatabase`
 
