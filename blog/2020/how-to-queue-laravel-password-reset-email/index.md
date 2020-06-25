@@ -2,19 +2,18 @@
 
 May 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-Also see:
+In this article I will show you how to change the out of the box Laravel configuration to queue password reset emails.
+
+For queuing User Verification Emails see:
 
 [How To Queue Laravel User Verification Email](https://aregsar.com/blog/2020/how-to-queue-laravel-user-verification-email)
 
-## Sending Password Reset Email
-
-In this article I will show you how to change that configuration to queue the user verification email.
-
 ## Enabling Password Reset
 
-I will first quickly repeat the steps required to setup a verification email.
+I will first quickly repeat the steps required to setup a password reset email:
 
-make the User class implement `Illuminate\Contracts\Auth\CanResetPassword`
+Make the User class implement the `Illuminate\Contracts\Auth\CanResetPassword` contract.
+
 The `use Illuminate\Contracts\Auth\CanResetPassword;` statement is already included in the User.php file.
 So all we have to do is add the `implements CanResetPassword` to the class declaration.
 
@@ -24,7 +23,9 @@ class User extends Authenticatable implements CanResetPassword
 
 ## Queuing the Password Reset email
 
-Normally the included password reset notification directly sends the email as part of the web request by calling the sendPasswordResetNotification() method on the User class. The sendPasswordResetNotification method is included in the User class through the extended `Illuminate\Foundation\Auth\User` class:
+Normally the included password reset notification directly sends the email as part of the password reset web request by calling the `sendPasswordResetNotification()` method on the `App\User` class.
+
+The `sendPasswordResetNotification` method is inherited by the `App\User` class from the `Illuminate\Foundation\Auth\User` class (aliased as `Authenticatable`) which the `App\User` class extends:
 
 ```php
 namespace App;
@@ -40,9 +41,11 @@ class User extends Authenticatable
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `CanResetPassword` trait that in turn contains the default implementation of the sendPasswordResetNotification method
+The `Illuminate\Foundation\Auth\User` class implements the `CanResetPassword` trait that in turn contains the default implementation of the `sendPasswordResetNotification` method:
 
 ```php
+namespace Illuminate\Foundation\Auth;
+
 class User extends Model implements
     AuthenticatableContract,
     AuthorizableContract,
@@ -52,7 +55,7 @@ class User extends Model implements
 }
 ```
 
-Here is the default  sendPasswordResetNotification implementation in the `CanResetPassword` trait:
+Here is the default `sendPasswordResetNotification` implementation in the `CanResetPassword` trait:
 
 ```php
 namespace Illuminate\Auth\Passwords;
@@ -68,35 +71,36 @@ trait CanResetPassword
 }
 ```
 
-Because sendPasswordResetNotification method is included as a trait in the extended User class, we can override its default implementation by simply adding a sendPasswordResetNotification method in the User class with our overridden implementation that will queue the delivery of this email.
+Because `sendPasswordResetNotification` method is included as a trait in the extended `Illuminate\Foundation\Auth\User` class, we can override its default implementation by simply implementing a `sendPasswordResetNotification` method in the `App\User` class with our overridden implementation that will queue the delivery of reset notification email.
 
-Inside the overridden sendPasswordResetNotification method we can take one of two approaches for the implementation within the sendPasswordResetNotification method:
+We can take one of two approaches for the implementation within the overridden `sendPasswordResetNotification` method:
 
-Approach 1-We can queue the notification
-Approach 2-We can dispatch a queued job that sends the notification
+Approach 1 - We can queue the notification
+
+Approach 2 - We can dispatch a queued job that sends the notification
 
 These approaches are shown in the next two sections.
 
 ## Approach 1 - Queuing the notification approach
 
-With this approach we will extend the `Illuminate\Auth\Notifications\ResetPassword` notification, that the `CanResetPassword` trait sends, into a queue-able notification and queue this extended notification in the overridden `sendPasswordResetNotification` method that we add to the User class.
+With this approach we will extend the `Illuminate\Auth\Notifications\ResetPassword` notification that the `CanResetPassword` trait sends, into a queue-able notification. Then we will queue this extended notification from the overridden `sendPasswordResetNotification` method implementation that we will add to the User class.
 
-So first we create a new QueuedResetPassword notification that extends the ResetPassword notification:
+So first let's create a new `QueuedResetPassword` notification that extends the `ResetPassword` notification:
 
 ```bash
 artisan make:notification Auth/QueuedResetPassword
 ```
 
-This command creates the class `\App\Notifications\Auth\QueuedResetPassword`
+This command creates the class `\App\Notifications\Auth\QueuedResetPassword`.
 
-Next we make this class extend ` Illuminate\Auth\Notifications\ResetPassword`
-and implement `Illuminate\Contracts\Queue\ShouldQueue`
+Next we make this class extend the `Illuminate\Auth\Notifications\ResetPassword` class
+and implement `Illuminate\Contracts\Queue\ShouldQueue` contract.
 
 Finally we add the `Illuminate\Bus\Queueable` trait to the body of the class.
 
-That is all we need to do to make a new notification based on the frameworks notification that is queue-able.
+That is all we need to do to make a new `QueuedResetPassword` notification that is queue-able.
 
-Below is the our new QueuedResetPassword notification class:
+Below is the our final `QueuedResetPassword` notification class:
 
 ```php
 namespace App\Notifications\Auth;
@@ -111,7 +115,7 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 }
 ```
 
-The last thing we need to do is to add the `sendPasswordResetNotification()` method to the User class which will override the default method that the User class gets from the CanResetPassword  trait of its parent User class, to substitute our new queued notification instead of the original notification.
+Now we need to add the `sendPasswordResetNotification()` method to the `App\User` class which will override the default method that it gets from the `CanResetPassword` trait of its parent class. Then we can notify the user using the `QueuedResetPassword` notification instead of the original non queued notification.
 
 ```php
 class User extends Authenticatable
@@ -124,7 +128,7 @@ class User extends Authenticatable
 }
 ```
 
-Optionally we can add a constructor to the QueuedResetPassword class to queue the notifications to a different queue and/or different connection from the default connection and queue
+Optionally we can add a constructor to the `QueuedResetPassword` class to queue the notifications to a different queue and/or different connection from the default connection and queue.
 
 ```php
 class QueuedResetPassword extends ResetPassword implements ShouldQueue
@@ -133,7 +137,10 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 
     public function __construct()
     {
-        $this->queue = 'reset';
+        //uncomment to override the queue
+        //$this->queue = 'reset';
+
+        //uncomment to override the connection
         //$this->connection = 'reset';
     }
 }
@@ -141,7 +148,7 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 
 ## Approach 2 - Queueing a job that sends the notification approach
 
-In this approach we create a queued job that we dispatch in the overridden sendPasswordResetNotification method of the User class.
+In this approach we create a queued job that we dispatch in the overridden `sendPasswordResetNotification` method of the `App\User` class.
 
 When the job is processed, it will send the original Illuminate\Auth\Notifications\ResetPassword notification that was being sent directly from the sendPasswordResetNotification method before.
 
