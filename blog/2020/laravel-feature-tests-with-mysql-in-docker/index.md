@@ -8,9 +8,9 @@ In the blog post [My Laravel Local Docker Services Configuration](https://aregsa
 
 In this article I will show you how to use a MySQL test database server running in a docker container to run your Laravel phpunit tests against.
 
-We will set up a separate MySQL server instance running in a separate docker container used for testing. This way our test database will be completely separate from our development database so that we can setup the test database with test data.
+We will set up a separate MySQL server instance used for testing that will run in its own separate docker container . This way our test database will be completely separate from our development database to avoid impacting the development database when running tests.
 
-To setup a new MySQL docker container we can duplicate the existing MySQL service in the docker compose file and just give it a different port mapping. So when running our phpunit tests on our local host we can connect to the port mapped to the test database.
+To setup a new MySQL docker container we can duplicate the existing MySQL service in the docker compose file and just give it a different port mapping.
 
 Here is the docker compose file with the two MySQL services:
 
@@ -50,7 +50,7 @@ services:
         - "8011:3306"
 ```
 
-And here are the related environment variable settings in the `.env` file:
+And here is the related environment variable settings from the `.env` file:
 
 ```ini
 DB_DATABASE=myapp
@@ -61,24 +61,32 @@ DB_HOST=127.0.0.1
 DB_PORT=8001
 ```
 
-Now in the in `config/database.php` file we have just one MySQL connection named `mysql`.
-This connection is the default database connection that the application and database migrations use. 
+Note the `DB_PORT` is currently set to the value of the development database port mapping.
+
+When we run our phpunit tests on our local host we will connect to the port mapped to the `myapp-mysql-test` test database.
+
+## Connecting to the test database
+
+If we look in the `config/database.php` file we can see that at the moment we only have one MySQL connection named `mysql`. This connection is the default database connection that the application uses and the database migrations run against.
 
 The default database connection is specified in the `config/database.php` file as shows below:
 
 ```php
-'default' => env('DB_CONNECTION', 'mysql'),
+'default' => env('DB_CONNECTION', 'mysql')
 ```
 
-## Connecting to the test database
+During execution of feature tests we need to apply migrations to the test database then run the tests against the test database by overriding the `DB_PORT` setting.
 
-During execution of feature tests we need to apply migrations to the test database then run the tests against the test database.
+During execution of feature tests when the RefreshDatabase or RunsMigrations traits are used to run database migrations the `default` connection is used.
+Also when we run php the `artisan migrate command` the `default` connection is used.
 
-There are two approaches we can use to do so.
+Similarly during our unit tests, we test application code that uses Laravels `Eloquent` ORM which uses the `default` connection.
 
-With both approaches we override the `DB_PORT` setting to switch the port value from 8001 to 8011 to connect to the test database server.
+The `default` connection is set to use the `mysql` connection which is configured to use the `DB_PORT` setting value.
 
-After we override the setting, the `mysql` default database connection will connect to the test database thereby running the migrations and tests against the test database.
+After the `DB_PORT` setting is overridden, the `mysql` default database connection will connect to the test database thereby running the migrations and tests against the test database.
+
+There are two approaches we can use run tests and migrations against the test database. Both approaches override the `DB_PORT` setting to switch the port value from `8001` to `8011` to connect to the test database server.
 
 ## Approach 1 - Overriding DB_PORT setting in the phpunit.xml file
 
@@ -112,9 +120,9 @@ So we can override the port value by copying the `.env` file to a `.env.testing`
 DB_PORT=8011
 ```
 
-> Note: We can change other settings in the `.env.testing` file as well if we need to. For example we can change the cache driver to `array` and session driver to `array` for example.
+> Note: We can change other settings in the `.env.testing` file as well if we need to. For example we can change the cache driver to `array` and session driver to `array` to test agains in memory cache and session stores.
 
-It is important to note that the overrides section in `phpunit.xml` will now override the settings in the `.env.testing` file instead of the `.env` file. So we need to remove those overrides from `phpunit.xml` since we do not want them to be overriden.
+It is important to note that the overrides section in `phpunit.xml` will now override the settings in the `.env.testing` file instead of the `.env` file. So we need to remove those overrides from `phpunit.xml` since we do not want them to be overridden.
 
 ## Choosing the approach to override the DB_PORT setting
 
