@@ -126,17 +126,19 @@ It is important to note that the overrides section in `phpunit.xml` will now ove
 
 ## Choosing the approach to override the DB_PORT setting
 
-The approach of using the `.env.testing` file is useful when we need to run tests in parallel. This is because we need to run the database migrations outside the unit tests and we need to specify the `.env.testing` file to be used to run the database migrations on the test database server.
-
-In the unit test classes we use the Laravel `RefreshDatabase` trait to migrate the database as part of the unit tests.
+Normally in the unit test classes we use the Laravel `RefreshDatabase` trait to migrate the database as part of the unit tests.
 
 When doing parallel testing, this approach has issues. In the [Laravel Run Parallel Tests With MySQL In Docker](https://aregsar.com/blog/2020/laravel-run-parallel-tests-with-mysql-in-docker) blog post I describe how to overcome those issues and why we need to use the `.env.testing` file.
 
-If you do not need to run tests in parallel, then the approach of using the `phpunit.xml` file overrides instead of using a separate `.env.testing` file is simpler as you do not have to keep the `.env.testing` file in sync with the changes to the `.env` file.
+The approach of using the `.env.testing` file is useful when we need to run tests in parallel. This is because we can not use the `RefreshDatabase` trait when running tests in parallel and therefore need to run the database migrations outside the unit tests by using the `artisan migrate` command.  
+
+For the `artisan migrate` command to be able to run against the test database we need to override the `DB_PORT` setting that the migrate command uses. We do so by passing the separate `.env.testing` file name, that overrides the `DB_PORT` setting value, as an argument to the migrate command.
+
+If you do not need to run tests in parallel, then the approach of using the `phpunit.xml` file to override the `DB_PORT` value is simpler as you would not have to keep the `.env.testing` file in sync with other changes to the `.env` file.
 
 ## Setting up phpunit to use `RefreshDatabase` trait
 
-We need to use the `RefreshDatabase` trait in our phpunit classes so that the test database is refreshed after each test.
+If we are not running tests in parallel, we need to use the `RefreshDatabase` trait in our phpunit classes so that the test database is refreshed after each test.
 
 In order to not repeat ourselves in every test class we can extend the base `Tests\TestCase` phpunit class and add the trait there. Then our test classes can extend the derived `TestCase` class to take advantage of the `RefreshDatabase` trait.
 
