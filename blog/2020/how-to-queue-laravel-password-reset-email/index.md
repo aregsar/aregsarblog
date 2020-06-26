@@ -38,13 +38,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 //we are extending the Illuminate\Foundation\Auth\User class that is aliased to Authenticatable above
-class User extends Authenticatable
+class User extends Authenticatable implements CanResetPassword
 {
     use Notifiable;
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `CanResetPassword` trait that in turn contains the default implementation of the `sendPasswordResetNotification` method:
+The `Illuminate\Foundation\Auth\User` class implements the `Illuminate\Auth\CanResetPassword` trait (Not to be confused with the `Illuminate\Contracts\Auth\CanResetPassword` contract that `App\User` needs to implement) that in turn contains the default implementation of the `sendPasswordResetNotification` method:
 
 ```php
 namespace Illuminate\Foundation\Auth;

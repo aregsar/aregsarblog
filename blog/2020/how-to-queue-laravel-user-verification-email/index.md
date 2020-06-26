@@ -50,11 +50,11 @@ use Illuminate\Notifications\Notifiable;
 //This App\User class extends the Illuminate\Foundation\Auth\User class that is aliased to Authenticatable above
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use Notifiable;
+ use Notifiable;
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `Illuminate\Auth\MustVerifyEmail` trait (Not to be confused with the `Illuminate\Contracts\Auth\MustVerifyEmail` contract that `App\User` needs to implement) shown here:
+The `Illuminate\Foundation\Auth\User` class implements the `Illuminate\Auth\MustVerifyEmail` trait (Not to be confused with the `Illuminate\Contracts\Auth\MustVerifyEmail` contract that `App\User` needs to implement) that in turn contains the default implementation of the `sendEmailVerificationNotification` method::
 
 ```php
 namespace Illuminate\Foundation\Auth;
