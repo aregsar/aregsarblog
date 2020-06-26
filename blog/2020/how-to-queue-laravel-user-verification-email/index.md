@@ -162,9 +162,9 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 
 ## Approach 2 - Queueing a job that sends the notification approach
 
-In this approach we create a queued job that we dispatch in the overridden sendEmailVerificationNotification of the User class.
+In this approach we create a queued job that we dispatch in the overridden `sendEmailVerificationNotification` method of the `App\User` class.
 
-When the job is processed, it will send the original Illuminate\Auth\Notifications\VerifyEmail notification that was being sent directly from the sendEmailVerificationNotification method before.
+When the job is processed, it will send the original `Illuminate\Auth\Notifications\VerifyEmail` notification that was being sent directly from the overridden `sendEmailVerificationNotification` method.
 
 So we first need to create a job that will be queued.
 
@@ -172,7 +172,7 @@ So we first need to create a job that will be queued.
 artisan make:job QueuedVerifyEmailJob
 ```
 
-Next in the handle() method we need to copy the notification sending implementation that is in the original `sendEmailVerificationNotification()` method:
+Next in the `handle()` method of the job we need to copy a slightly modified implementation from the original `sendEmailVerificationNotification()` method as shown below:
 
 ```php
 namespace App\Jobs;
@@ -207,7 +207,7 @@ class QueuedVerifyEmailJob implements ShouldQueue
 }
 ```
 
-Finally we need to override the default `sendEmailVerificationNotification()` method implementation by adding a sendEmailVerificationNotification() method to the User class where we will dispatch the QueuedVerifyEmailJob to the queue.
+Finally we need to override the default `sendEmailVerificationNotification()` method implementation by adding a `sendEmailVerificationNotification()` method directly to the `App\User` class where we will dispatch the `QueuedVerifyEmailJob` to the queue.
 
 ```php
 class User
