@@ -150,15 +150,15 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 
 In this approach we create a queued job that we dispatch in the overridden `sendPasswordResetNotification` method of the `App\User` class.
 
-When the job is processed, it will send the original Illuminate\Auth\Notifications\ResetPassword notification that was being sent directly from the sendPasswordResetNotification method before.
+When the job is processed, it will send the original `Illuminate\Auth\Notifications\ResetPassword` notification that was being sent directly from the overridden `sendPasswordResetNotification` method.
 
-So we first need to create a job that will be queued.
+So first we need to create a job that will be queued.
 
 ```bash
 artisan make:job QueuedPasswordResetJob
 ```
 
-Next in the handle() method we need to copy the notification sending implementation that is in the original `sendPasswordResetNotification()` method:
+Next in the `handle()` method of the job we need to copy the implementation from the original `sendPasswordResetNotification()` method:
 
 ```php
 namespace App\Jobs;
@@ -195,7 +195,7 @@ class QueuedPasswordResetJob implements ShouldQueue
 }
 ```
 
-Finally we need to override the default `sendPasswordResetNotification()` method implementation by adding a sendPasswordResetNotification() method directly to the User class where we will dispatch the QueuedPasswordResetJob to the queue.
+Finally we need to override the default `sendPasswordResetNotification()` method implementation by adding a `sendPasswordResetNotification()` method directly to the `App\User` class where we will dispatch the `QueuedPasswordResetJob` to the queue.
 
 ```php
 class User extends Authenticatable
@@ -208,11 +208,11 @@ class User extends Authenticatable
 }
 ```
 
-Looking back at the QueuedPasswordResetJob class we can see that the implementation we added to the the handle method of the QueuedPasswordResetJob is slightly different than the original implementation in the sendPasswordResetNotification method.
+Looking back at the `QueuedPasswordResetJob` class we can see that the implementation we added to its  `handle()` method is slightly different than the original implementation in the original `sendPasswordResetNotification` method.
 
-In the handle method of the job class we call `$this->user->notify` where as the original sendPasswordResetNotification method in the `CanResetPassword` trait calls `$this->notify`.
+In the `handle()` method of the job class calls `$this->user->notify` where the original `sendPasswordResetNotification` method in the `CanResetPassword` trait calls `$this->notify`.
 
-This is because in the `CanResetPassword` trait implementation of the original sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
+This is because in the `CanResetPassword` trait implementation of the original `sendPasswordResetNotification` method the `$this` pointer references the User class that includes the trait.
 Therefor in the job class we need to reference the User and call notify on it.
 
 ## Customizing the redirect location after reseting password
