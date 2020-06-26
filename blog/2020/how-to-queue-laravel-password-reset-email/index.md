@@ -10,16 +10,18 @@ For queuing User Verification Emails see:
 
 ## Enabling Password Reset
 
-I will first quickly repeat the steps required to setup a password reset email:
+I will first describe how to make the password reset feature send a non queued password reset email.
 
-Make the User class implement the `Illuminate\Contracts\Auth\CanResetPassword` contract.
-
-The `use Illuminate\Contracts\Auth\CanResetPassword;` statement is already included in the User.php file.
-So all we have to do is add the `implements CanResetPassword` to the class declaration.
+In order to that all we have to do is make the `App\User` class implement the `Illuminate\Contracts\Auth\CanResetPassword` contract.
 
 ```php
 class User extends Authenticatable implements CanResetPassword
 ```
+
+Note that the `use Illuminate\Contracts\Auth\CanResetPassword;` statement is already included in the `User.php` file.
+So all we had to do is add the `implements CanResetPassword` to the `App\User` class declaration.
+
+In the following section I will show how to queue the password reset email.
 
 ## Queuing the Password Reset email
 

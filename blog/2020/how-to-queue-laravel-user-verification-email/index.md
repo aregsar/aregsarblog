@@ -2,7 +2,9 @@
 
 May 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-Also see:
+In this article I will show you how to change the out of the box Laravel configuration to queue new user verification emails.
+
+For queuing password reset emails see:
 
 [How To Queue Laravel Password Reset Email](https://aregsar.com/blog/2020/how-to-queue-laravel-password-reset-email)
 
@@ -16,31 +18,25 @@ In this article I will show you how to change that configuration to queue the us
 
 ## Enabling Email verification
 
-I will first quickly repeat the steps required to setup a verification email.
+In this section will quickly repeat the steps required to setup the new user verification email notification.
 
-make the User class implement `Illuminate\Contracts\Auth\MustVerifyEmail`.
-The `use Illuminate\Contracts\Auth\MustVerifyEmail;` statement is already included in the User.php file.
-So all we have to do is add the `implements MustVerifyEmail` to the class declaration.
+I will first describe how to make the user registration feature flow send a non queued user verification email.
+
+In order to do that we need to first make the `App\User` class implement the `Illuminate\Contracts\Auth\MustVerifyEmail` contract.
 
 ```php
 class User extends Authenticatable implements MustVerifyEmail
 ```
 
-Next make the `Auth::routes` method take a `['verify' => true]` input argument.
+Note that the `use Illuminate\Contracts\Auth\MustVerifyEmail;` statement is already included in the `User.php` file.
+So all we had to do is add the `implements MustVerifyEmail` to the class declaration.
+
+The last step we need is to enable the sending of the verification email by the framework.
+
+To do that we need to make the `Auth::routes` method take a `['verify' => true]` input argument.
 
 ```php
 Auth::routes(['verify' => true]);
-```
-
-Finally protect any routes that use the `auth` middleware that we want to check the authenticated user has verified their email with the `verified` middleware by adding it to the controller constructor or to the route.
-
-Below is an example of adding it to a controller constructor:
-
-```php
-public function __construct()
-{
-    $this->middleware('auth','verified');
-}
 ```
 
 ## Queuing the verification email
@@ -231,3 +227,16 @@ In the handle method of the job class we call `$this->user->notify` where as the
 
 This is because in the `MustVerifyEmail` trait implementation of the original sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
 Therefor in the job class we need to reference the User and call notify on it.
+
+## Protecting routes that require verified users
+
+Finally we need to protect any routes that use the `auth` middleware that we want to check the authenticated user has verified their email with the `verified` middleware by adding it to the controller constructor or to the route.
+
+Below is an example of adding it to a controller constructor:
+
+```php
+public function __construct()
+{
+    $this->middleware('auth','verified');
+}
+```
