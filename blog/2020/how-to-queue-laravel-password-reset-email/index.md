@@ -223,4 +223,3 @@ protected $redirectTo = '/mynewhome';
 ```
 
 This will then redirect them to the `/mynewhome` URL instead.
-
