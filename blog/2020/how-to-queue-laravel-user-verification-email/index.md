@@ -95,9 +95,9 @@ These approaches are shown in the next two sections.
 
 ## Approach 1 - Queuing the notification approach
 
-With this approach we will extend the `Illuminate\Auth\Notifications\VerifyEmail` notification, that the `MustVerifyEmail` trait sends, into a queue-able notification and queue this extended notification in the overridden `sendEmailVerificationNotification` method that we add to the User class.
+With this approach we will extend the `Illuminate\Auth\Notifications\VerifyEmail` notification, that the `Illuminate\Auth\MustVerifyEmail` trait sends, into a queue-able notification and queue this extended notification in the overridden `sendEmailVerificationNotification` method that we will add to the `App\User` class.
 
-So first we create a new QueuedVerifyEmail notification that extends the VerifyEmail notification:
+So first we create, in the `\App\Notifications\Auth` directory, a new `QueuedVerifyEmail` notification that extends the `Illuminate\Auth\Notifications\VerifyEmail` notification:
 
 ```bash
 artisan make:notification Auth/QueuedVerifyEmail
@@ -105,14 +105,14 @@ artisan make:notification Auth/QueuedVerifyEmail
 
 This command creates the class `\App\Notifications\Auth\QueuedVerifyEmail`
 
-Next we make this class extend `Illuminate\Auth\Notifications\VerifyEmail`
-and implement `Illuminate\Contracts\Queue\ShouldQueue`
+Next we make this class extend the `Illuminate\Auth\Notifications\VerifyEmail` class
+and implement the `Illuminate\Contracts\Queue\ShouldQueue` contract
 
 Finally we add the `Illuminate\Bus\Queueable` trait to the body of the class.
 
-That is all we need to do to make a new notification based on the frameworks notification that is queue-able.
+That is all we need to do to make a new `QueuedVerifyEmail` notification that is queue-able.
 
-Below is our new QueuedVerifyEmail notification class:
+Below is the our final `QueuedVerifyEmail` notification class:
 
 ```php
 namespace App\Notifications\Auth;
@@ -127,7 +127,7 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 }
 ```
 
-The last thing we need to do is to add the `sendEmailVerificationNotification()` method to the User class which will override the default method that the User class gets from the MustVerifyEmail trait of its parent User class, to substitute our new queued notification instead of the original notification.
+Now we need to add the `sendEmailVerificationNotification()` method to the `App\User` class which will override the default method that it gets from the `MustVerifyEmail` trait of its parent class. Then we can notify the user using the `QueuedVerifyEmail` notification to substitute our new queued notification instead of the original notification.
 
 ```php
 class User extends Authenticatable implements MustVerifyEmail
@@ -142,7 +142,7 @@ class User extends Authenticatable implements MustVerifyEmail
 }
 ```
 
-Optionally we can add a constructor to the QueuedVerifyEmail class to queue the notifications to a different queue and/or different connection from the default connection and queue
+Optionally we can add a constructor to the `QueuedVerifyEmail` class to queue the notifications to a different queue and/or different connection from the default connection and queue.
 
 ```php
 class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
@@ -151,7 +151,10 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 
     public function __construct()
     {
-        $this->queue = 'verify';
+        //uncomment to override the queue
+        //$this->queue = 'verify';
+
+        //uncomment to override the connection
         //$this->connection = 'verify';
     }
 }
