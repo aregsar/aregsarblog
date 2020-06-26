@@ -158,7 +158,7 @@ So first we need to create a job that will be queued.
 artisan make:job QueuedPasswordResetJob
 ```
 
-Next in the `handle()` method of the job we need to copy the implementation from the original `sendPasswordResetNotification()` method:
+Next in the `handle()` method of the job we need to copy a slightly modified implementation from the original `sendPasswordResetNotification()` method as shown below:
 
 ```php
 namespace App\Jobs;
@@ -208,12 +208,11 @@ class User extends Authenticatable
 }
 ```
 
-Looking back at the `QueuedPasswordResetJob` class we can see that the implementation we added to its  `handle()` method is slightly different than the original implementation in the original `sendPasswordResetNotification` method.
+Looking back at the `QueuedPasswordResetJob` class we can see that the implementation we added to its  `handle()` method is slightly different than the implementation of the original `sendPasswordResetNotification` method.
 
-In the `handle()` method of the job class calls `$this->user->notify` where the original `sendPasswordResetNotification` method in the `CanResetPassword` trait calls `$this->notify`.
+The `handle()` method of the job class calls `$this->user->notify` where the original `sendPasswordResetNotification` method in the `CanResetPassword` trait calls `$this->notify`.
 
-This is because in the `CanResetPassword` trait implementation of the original `sendPasswordResetNotification` method the `$this` pointer references the User class that includes the trait.
-Therefor in the job class we need to reference the User and call notify on it.
+This is because in the original implementation, the `$this` pointer refers to the `App\User` class that includes the trait. But in the Job class the `$this` pointer refers to the job class so we need to reference the `user` property of the job class then call the `notify` method on the user.
 
 ## Customizing the redirect location after reseting password
 
@@ -224,3 +223,4 @@ protected $redirectTo = '/mynewhome';
 ```
 
 This will then redirect them to the `/mynewhome` URL instead.
+
