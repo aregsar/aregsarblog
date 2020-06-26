@@ -220,18 +220,17 @@ class User
 }
 ```
 
-Looking back at the QueuedVerifyEmailJob class we can see that the implementation we added to the the handle method of the QueuedVerifyEmailJob is slightly different than the original implementation in the sendEmailVerificationNotification method.
+Looking back at the `QueuedVerifyEmailJob` class we can see that the implementation we added to its  `handle()` method is slightly different than the implementation of the original `sendEmailVerificationNotification` method.
 
-In the handle method of the job class we call `$this->user->notify` where as the original sendEmailVerificationNotification method in the `MustVerifyEmail` trait calls `$this->notify`.
+The `handle()` method of the job class calls `$this->user->notify` where the original `sendEmailVerificationNotification` method in the `MustVerifyEmail` trait calls `$this->notify`.
 
-This is because in the `MustVerifyEmail` trait implementation of the original sendPasswordResetNotification method the $this pointer references the User class that includes the trait.
-Therefor in the job class we need to reference the User and call notify on it.
+This is because in the original implementation, the `$this` pointer refers to the `App\User` class that includes the trait. But in the Job class the `$this` pointer refers to the job class so we need to reference the `user` property of the job class then call the `notify` method on the user.
 
 ## Protecting routes that require verified users
 
-Finally we need to protect any routes that use the `auth` middleware that we want to check the authenticated user has verified their email with the `verified` middleware by adding it to the controller constructor or to the route.
+In order to protect routes from allowing access to users that have not verified their email we can use the `verified` middleware.
 
-Below is an example of adding it to a controller constructor:
+The example below shows that the middleware is added to the constructor of a controller. We could also apply the middleware to the routes directly instead of to the controller.
 
 ```php
 public function __construct()
@@ -239,3 +238,5 @@ public function __construct()
     $this->middleware('auth','verified');
 }
 ```
+
+It should be noted that the `verified` middleware checks and authenticated user if they have verified their email by checking the database record for the `App\User`. So if users that are not authenticated automatically are not verified.
