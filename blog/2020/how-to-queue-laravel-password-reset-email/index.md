@@ -25,7 +25,8 @@ In the following section I will show how to queue the password reset email.
 
 ## Queuing the Password Reset email
 
-Normally the included password reset notification directly sends the email as part of the password reset web request by calling the `sendPasswordResetNotification()` method on the `App\User` class.
+When enabled, the framework sends a non queued password reset notification as part of the password reset flow.
+The password reset notification sends the email by calling the `sendPasswordResetNotification()` method on the `App\User` class.
 
 The `sendPasswordResetNotification` method is inherited by the `App\User` class from the `Illuminate\Foundation\Auth\User` class (aliased as `Authenticatable`) which the `App\User` class extends:
 

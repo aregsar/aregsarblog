@@ -8,14 +8,6 @@ For queuing password reset emails see:
 
 [How To Queue Laravel Password Reset Email](https://aregsar.com/blog/2020/how-to-queue-laravel-password-reset-email)
 
-## Sending User Verification Email
-
-I have instructions here that sets up a mail server in a docker container and tests it by configuring the Laravel user verification email here:
-
-[Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker)
-
-In this article I will show you how to change that configuration to queue the user verification email.
-
 ## Enabling Email verification
 
 In this section will quickly repeat the steps required to setup the new user verification email notification.
@@ -28,10 +20,9 @@ In order to do that we need to first make the `App\User` class implement the `Il
 class User extends Authenticatable implements MustVerifyEmail
 ```
 
-Note that the `use Illuminate\Contracts\Auth\MustVerifyEmail;` statement is already included in the `User.php` file.
-So all we had to do is add the `implements MustVerifyEmail` to the class declaration.
+Note that the `use Illuminate\Contracts\Auth\MustVerifyEmail;` statement is already included in the `User.php` file. So all we had to do is add the `implements MustVerifyEmail` to the class declaration.
 
-The last step we need is to enable the sending of the verification email by the framework.
+The last thing we need to do is to enable the sending of the verification email by the framework.
 
 To do that we need to make the `Auth::routes` method take a `['verify' => true]` input argument.
 
@@ -39,11 +30,15 @@ To do that we need to make the `Auth::routes` method take a `['verify' => true]`
 Auth::routes(['verify' => true]);
 ```
 
+By default Laravel triggers a notification when a user completes the registration step to send a verification email when the `Auth::routes` method has this feature enabled via the  `['verify' => true]` parameter.
+
 ## Queuing the verification email
 
-By default Laravel triggers a notification when a user completed the registration step to send a verification email when the `Auth::routes` method has this feature enabled via the  `['verify' => true]` parameter.
+The email verification email is not queued by default and is sent as part of the registration request flow when enabled.
 
-This notification directly sends the email as part of the web request by calling the sendEmailVerificationNotification() method on the User class. The sendEmailVerificationNotification method is included in the User class through the extended `Illuminate\Foundation\Auth\User` class:
+The framework triggers a notification to send the email verification email after the user is added to the database.
+
+ The notification sends the email by calling the `sendEmailVerificationNotification()` method on the `App\User` class. The `sendEmailVerificationNotification` method is included in the `App\User` class through the `Illuminate\Foundation\Auth\User` class (aliased as `Authenticatable`) that is extended by `App\User`:
 
 ```php
 namespace App;
