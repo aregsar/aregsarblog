@@ -2,21 +2,33 @@
 
 May 13, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-In this article I will show you how we can created a background job that sends an email using the Laravel Mailable class and queue that job to send the email in the background using a Redis backed queue.
+In this article I will show you how we can create a Laravel background job that sends an email using the Mailable class.
 
-> I have covered configuring Laravel queue to use redis here [Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker). So I will not go over that part here.
+I will also show how to queue that job using a Redis backed queue to process the queued job using Laravel queue worker.
 
-> I have covered configuring a local email server in docker here [Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker). This article assumes we are using that configuration to send and view the emails.
+I have covered configuring Laravel queue to use Redis here:
 
-## Create the Html and Text blade email templates
+[Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker)
 
-Create the following blade template file:
+I have covered configuring a local email server running in a docker container here:
+
+[Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker).
+
+This article assumes we are using the configurations in the above referenced links to send and view the emails.
+
+## Creating the html text and plain text email blade templates
+
+We will create two email templates to deliver email in both Html and plain text formats.
+
+First we will create the html template by creating the following blade template file:
 
 ```bash
 touch resources/views/mails/welcomeemail.blade.php
 ```
 
-Put the following markup in welcomeemail.blade.php
+This will create the `resources/views/mails/welcomeemail.blade.php` template file.
+
+Next we will put the following html markup in `resources/views/mails/welcomeemail.blade.php` file.
 
 ```html
 <!DOCTYPE html>
@@ -30,18 +42,26 @@ Welcome to our app
 </html>
 ```
 
-Create the following blade file with only raw test inside:
+Finally we will create the plane text template by creating the following blade template file with raw text inside:
 
 ```bash
 touch resources/views/mails/welcomeemail-text.blade.php
 echo 'Welcome to our app' > resources/views/mails/welcomeemail-text.blade.php
 ```
 
+This will create the `resources/views/mails/welcomeemail-text.blade.php` plain text template file.
+
 ## Creating the Mailable
+
+Now that we have the email templates we will create the Mailable class file for our email:
 
 ```ini
 php artisan make:mail WelcomeEmail
 ```
+
+This will create the `App/Mail/welcomeemail.php` plain text template file.
+
+The artisan command will create the `App/Mail/WelcomeEmail.php` file. We need to replace the initial content of the `build()` method after we created the file, with the content of the `build()` method show below:
 
 ```php
 <?php
@@ -76,10 +96,15 @@ class WelcomeEmail extends Mailable
 
 ## Creating the Email Job
 
+Now that we have created the email templates and the Mailable class that builds the email, we will create the job that will send the Mailable.
+
 ```ini
 php artisan make:job WelcomeEmailJob
 ```
 
+This will create the `App/Jobs/WelcomeEmailJob.php` job class.
+
+Next we need to replace the implementation in the initial file with the implementation below:
 
 ```php
 <?php
@@ -115,16 +140,25 @@ class WelcomeEmailJob implements ShouldQueue
 }
 ```
 
-
 ## Dispatching the Email Job
 
-Add the following route
+Now that we have our job created, we will need to dispatch the job to the Redis queue from within a controller action.
+
+In order to do that we must first add the following route to the `routes/web.php` file:
 
 ```php
 Route::get('welcome', 'WelcomeEmailController@send');
 ```
 
-Add the following controller
+Next we can create a `WelcomeEmailController` controller class:
+
+```ini
+php artisan make:controller WelcomeEmail
+```
+
+This command will create the `WelcomeEmailController.php` file.
+
+Then we can add the following implementation in the controller file:
 
 ```php
 namespace App\Http\Controllers;
@@ -152,13 +186,20 @@ class WelcomeEmailController extends Controller
 }
 ```
 
+This implementation will send send the `WelcomeEmailJob` to our redis queue running in the docker container when the url `http://localhost/welcome` based on the route that we set up previously.
+
 ## Processing the queued emails
+
+At this point we have dispatched the job to our redis queue but have not sent the email since the job has not been processed yet.
+
+To remedy that, we can run the following artisan command to launch and run a single worker process to process jobs in the queue:
 
 ```ini
 php artisan queue:work --tries=3 --timeout=30
-
 ```
+
+The worker process that will pull the `WelcomeEmailJob` job from the queue and process it by calling its `handle()` method. The `handle` method implementation will then mail the `WelcomeEmail` email.
 
 ## Further customizations
 
-For further customizations see `https://blog.mailtrap.io/laravel-mail-queue/`
+For further customizations see `https://blog.mailtrap.io/laravel-mail-queue/`.

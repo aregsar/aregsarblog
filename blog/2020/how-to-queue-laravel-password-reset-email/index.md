@@ -221,10 +221,10 @@ This is because in the original implementation, the `$this` pointer refers to th
 
 ## Customizing the redirect location after reseting password
 
-By default the user will be automatically logged in and redirected to the `/home` URL after reseting their password, to override this we can define a `redirectTo` property on the `ResetPasswordController` like so:
+By default the user will be automatically logged in and redirected to the `/home` URL after reseting their password, to override this we can define a `redirectTo` property on the `Auth\ResetPasswordController` like so:
 
 ```php
 protected $redirectTo = '/mynewhome';
 ```
 
-This will then redirect them to the `/mynewhome` URL instead.
+This will then override and redirect them to the `/mynewhome` URL instead.
