@@ -67,7 +67,7 @@ class User extends Model implements
 }
 ```
 
-The `Illuminate\Auth\MustVerifyEmail` trait contains the default implementation of the sendEmailVerificationNotification method shown here:
+Here is the default `sendEmailVerificationNotification` implementation in the `Illuminate\Auth\MustVerifyEmail` trait:
 
 ```php
 namespace Illuminate\Auth;
@@ -83,12 +83,13 @@ trait MustVerifyEmail
 }
 ```
 
-Because sendEmailVerificationNotification method is included as a trait in the extended User class, we can override its default implementation by simply adding a sendEmailVerificationNotification method in the User class with our overridden implementation that will queue the delivery of this email.
+Because `sendEmailVerificationNotification` method is included as a trait in the extended `Illuminate\Foundation\Auth\User` class, we can override its default implementation by simply implementing a `sendEmailVerificationNotification` method in the `App\User` class with our overridden implementation that will queue the delivery of user verification notification email.
 
-Inside the overridden sendEmailVerificationNotification method we can take one of two approaches for the implementation within the sendEmailVerificationNotification method:
+We can take one of two approaches for the implementation within the overridden `sendEmailVerificationNotification` method:
 
-Approach 1-We can queue the notification
-Approach 2-We can dispatch a queued job that sends the notification
+Approach 1 - We can queue the notification
+
+Approach 2 - We can dispatch a queued job that sends the notification
 
 These approaches are shown in the next two sections.
 
