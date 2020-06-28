@@ -108,6 +108,8 @@ Now we are ready to run the MySQL container by running the following bash comman
 docker-compose up -d
 ```
 
+In the following sections, I list various ways of connecting to the MySQL server running in the container. These include connecting with command line clients, connecting from php code from within our Laravel project as well as connecting with artisan Tinker and artisan database migrations.
+
 ## Connecting using mysqlsh cli
 
 > Note: make sure no space between the -p option an password
@@ -198,15 +200,17 @@ php artisan tinker
 php artisan migrate
 ```
 
-Launch the browser
+This command will user authentication tables by running the applications existing migration files against the MySQL database.
+
+If we created the project UI using the `--auth` flag the application will contain the UI for registering a user and log in.
+
+So we should be able to run the application and launch a browser to register a user and log in.
 
 ```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome -a myapp.test
 ```
 
-> Note: I am using Laravel Valet to host Laravel applications
-
-Register a user and log in
+> Note: I am using Laravel Valet to host Laravel applications so I did not have to explicitly run the artisan serve command to serve the application.
 
 ## Persisting data between docker container runs
 
