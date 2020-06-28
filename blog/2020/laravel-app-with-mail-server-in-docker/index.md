@@ -2,11 +2,13 @@
 
 May 11, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
+In this blog post I will show you how to setup a development mail server running in a docker container to capture emails sent by your Laravel application and view those emails in a local web dashboard.
+
 ## Creating the docker-compose file
 
-Create a new docker-compose.yml file in the Laravel project root directory:
+First we will create a new `docker-compose.yml` file in the Laravel project root directory:
 
-> Note: skip to the next section if you already have a docker-compose.yml file in the root directory
+> Note: skip to the next section if you already have a `docker-compose.yml` file in the root directory
 
 ```bash
 touch docker-compose.yml
@@ -16,7 +18,7 @@ echo 'services:' >> docker-compose.yml
 
 ## Adding the mysql service to docker-compose
 
-We can use MailHog with the configuration below:
+Next we will add the following `MailHog` mail server container service to the `docker-compose.yml` file:
 
 ```yaml
     mailhog:
@@ -27,16 +29,19 @@ We can use MailHog with the configuration below:
         - "8100:8025"
 ```
 
-You will note that there are two port mappings. The mapping that is exposed on port 8003 on the local host is the mail server IMAP server port that the application dispatches emails to.
-THe other port that is exposed on the local host port 8100 is a  email dashboard http port that we can navigate to, to see and manage the emails that were received by the mailserver.
+You will note that there are two port mappings. The first port 1025 that is mapped to the localhost port 8003 on the local host is the mail server IMAP port that the application sends emails to.
 
-> Note: as configured, the emails will not be persisted across container restarts.
+The second port 8025 that is mapped to the local host port 8100 is a web dashboard http port that we can navigate to in our web browser, to see and manage the emails that were received by the mail server.
 
-You can see alternative configurations for MailCatcher or PaperCut at the end of the article.
+> Note: As configured, the emails will not be persisted across docker container restarts.
+
+You can view docker configurations for alternative to `Mailhog`, such as `MailCatcher` or `PaperCut` at the end of the article.
 
 ## Adding the environment variables for the mail service
 
-Update the env vars in .env file to:
+As a last step we will update the environment variables and configuration for our Laravel project to send emails to our local `Mailhog` server running in docker.
+
+First we will update mail server settings in the `.env` file of our Laravel project as shown below:
 
 ```ini
 MAIL_MAILER=smtp
@@ -49,7 +54,9 @@ MAIL_FROM_ADDRESS=null
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-The `config/mail.php` file is where these env vars are used:
+Note that we are using port 8003 where the mail server port is mapped to.
+
+Next we will update the `config/mail.php` file configuration as shown below:
 
 ```php
 'mailers' => [
@@ -72,45 +79,49 @@ The `config/mail.php` file is where these env vars are used:
 ## Sending new user verification emails to MailHog
 
 Laravel comes with a built in user registration and authentication system.
-By default the registration is not configured to send an email verification link before activating the user account.
 
-We will configure it to send an email verification email. Because of our email settings in the .env file, the email will be delivered to the MailHog server running in the docker container. We will be able to view the email by navigating to the the MailHog server dashboard URL.
+By default the registration is not configured to send an email verification link before activating the user account. We will configure it to send an email verification email to test our email configuration. 
 
-Before we begin we must add the appropriate UI scaffolding with the --auth flag to add the authentication controllers and routes.
+Because of our email settings in the `.env` file, the email will be delivered to the `MailHog` server running in the docker container. We will be able to view the email by navigating to the the `MailHog` server dashboard URL.
+
+Before we begin we must add the appropriate UI scaffolding to our project with the `--auth` flag to add the authentication controllers and routes.
 
 Instructions to do so can be found at [Create Laravel Project With Tailwind UI and Auth](https://aregsar.com/blog/2020/create-laravel-project-with-tailwind-ui-and-auth/)
 
+Now we are ready and we can setup email verification to send emails by following the steps below:
+
 ### Step 1: Implement the MustVerifyEmail contract
 
-Implement the MustVerifyEmail contract in the User model by opening the App/User.php file and adding `implements MustVerifyEmail` to the
-`class User extends Authenticatable` class declaration.
+Implement the MustVerifyEmail contract in the User model by opening the `App/User.php` file and adding `implements MustVerifyEmail` to the `class User extends Authenticatable` class declaration.
 
 The modified version of the class declaration should look like:
 
-`class User extends Authenticatable implements MustVerifyEmail`
+```php
+class User extends Authenticatable implements MustVerifyEmail
+```
+
+> Note the file already includes the `Illuminate\Contracts\Auth\MustVerifyEmail` namespace.
 
 ### Step 2: Add email verification routes
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-Add email verification routes by opening app/routes/web.php file and adding `['verify' => true]` parameter to the auth routes `Auth::routes();` method.
+Add email verification routes by opening the `app/routes/web.php` file and adding the `['verify' => true]` parameter to the `Auth::routes();` method.
 
 The modified version of the auth routes method should look like:
 
-`Auth::routes(['verify' => true]);`
+```php
+Auth::routes(['verify' => true]);
+```
 
 ## Step 3: Add the email verification middleware
 
-In order to make sure routes that need validated email will block access to the route if the authenticated user has not validated their email we need to add the `verified` middleware to those routes to protect them.
+> Note: This step is required to block routes to users with un-verified email. However it is not needed for testing our email configuration. So if you are just experimenting with configuring your email in the project, you can skip this section.
+
+In order to make sure routes that need validated email will block access to the route if a user has not validated their email we need to add the `verified` middleware to those routes to protect them.
 
 So in this final step we will add the middleware to the home controller
-which will check any requests to routs mapped the home controller to see if the user has verified their email. 
+which will check any requests to routs mapped the home controller and will redirect users that have not confirmed their email to a page indicating that the user is not verified with an option to resend a verification email.
 
-If not the middleware will redirect to a page indicating that the user is not verified with an option to resent a verification email.
-
-Add the `verified` middleware to the middleware in the HomeController constructor:
-
-The modified version of the constructor should look like:
+Below we have added the `verified` middleware in HomeController constructor:
 
 ```php
 public function __construct()
@@ -119,8 +130,7 @@ public function __construct()
 }
 ```
 
-> Note: In order for the `verified` middleware to take action, the auth middleware must authenticate the user so the user can be inspected to see if it is verified. So the `auth` middleware must run before the `verified` middleware. Obviously if the user is not authenticated then by default they are not verified either and they will not even get to the `verified` middleware because the `auth` middleware will redirect them to a login page.
-Also if a rout is not covered by an `auth` middleware then it makes no sense to have a `verified` because anonymous users don`t have registered email to be verified.
+Alternatively we could have added the `verified` middleware to routes in our application routes file.
 
 ## Testing the user verification email
 

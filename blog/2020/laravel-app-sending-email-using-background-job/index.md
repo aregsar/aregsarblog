@@ -203,8 +203,8 @@ php artisan queue:work --tries=3 --timeout=30
 
 The worker process will pull the `WelcomeEmailJob` job from the queue and process it by calling its `handle()` method. The `handle` method implementation will then send the `WelcomeEmail` email to the mailhog mail server running in the docker container.
 
-If we navigate to http://localhost:8003 we can see the email that was sent in the mailhog server dashboard.
+If we navigate to http://localhost:8100 we can see the email that was sent in the mailhog server dashboard.
 
 ## Further customizations
 
-For further customizations see `https://blog.mailtrap.io/laravel-mail-queue/`.
+For further customizations of the Laravel email features see `https://blog.mailtrap.io/laravel-mail-queue/`.
