@@ -214,18 +214,22 @@ So we should be able to run the application and launch a browser to register a u
 
 ## Persisting data between docker container runs
 
+To check that the database data is persisted on our local machine we need to stop then restart the containers and check if the data is still available.
+
+We can stop the contaier by running:
+
 ```bash
 docker-compose down
 ```
 
-Try connecting to mysql see failure.
+If we try to connecting to the MySQL server now we should see it fail to connect since the server is not running anymore.
 
-Bring the services back up.
+We need to check the `./data/mysql` directory where we should see the persisted database files.
+
+We can then bring the MySQL service back up by running:
 
 ```bash
 docker-compose up -d
 ```
 
-See the connection is working again
-
-Check data/mysql directory to see the persisted database files
+And now we should see that the database connection is working again and that the tables and data that we previously had in the database should still be there.
