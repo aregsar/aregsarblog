@@ -4,15 +4,15 @@ May 13, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this article I will show you how we can create a Laravel background job that sends an email using the Mailable class.
 
-I will also show how to queue that job using a Redis backed queue to process the queued job using Laravel queue worker.
+I will also show how to queue that job using a Redis backed queue and to process the queued job using a Laravel queue worker.
 
-I have covered configuring Laravel queue to use Redis here:
-
-[Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker)
-
-I have covered configuring a local email server running in a docker container here:
+Before we can queue jobs we need a mail server to test sending emails to. I have covered configuring a local email server running in a docker container here:
 
 [Laravel App With Mail Server In Docker](https://aregsar.com/blog/2020/laravel-app-with-mail-server-in-docker).
+
+Also we will need to configure our Laravel project to use redis in a docker container. I have covered that here:
+
+[Laravel App With Redis In Docker](https://aregsar.com/blog/2020/laravel-app-with-redis-in-docker)
 
 This article assumes we are using the configurations in the above referenced links to send and view the emails.
 
@@ -61,7 +61,9 @@ php artisan make:mail WelcomeEmail
 
 This will create the `App/Mail/welcomeemail.php` plain text template file.
 
-The artisan command will create the `App/Mail/WelcomeEmail.php` file. We need to replace the initial content of the `build()` method after we created the file, with the content of the `build()` method show below:
+The artisan command will create the `App/Mail/WelcomeEmail.php` file.
+
+We will need to replace the initial content of the `build()` method after we created the file, with the content of the `build()` method show below:
 
 ```php
 <?php
@@ -186,7 +188,8 @@ class WelcomeEmailController extends Controller
 }
 ```
 
-This implementation will send send the `WelcomeEmailJob` to our redis queue running in the docker container when the url `http://localhost/welcome` based on the route that we set up previously.
+When we navigate to the url `http://localhost/welcome`,
+the `WelcomeEmailController:: send` action will send the `WelcomeEmailJob` to our redis queue running in the docker container.
 
 ## Processing the queued emails
 
@@ -198,7 +201,9 @@ To remedy that, we can run the following artisan command to launch and run a sin
 php artisan queue:work --tries=3 --timeout=30
 ```
 
-The worker process that will pull the `WelcomeEmailJob` job from the queue and process it by calling its `handle()` method. The `handle` method implementation will then mail the `WelcomeEmail` email.
+The worker process will pull the `WelcomeEmailJob` job from the queue and process it by calling its `handle()` method. The `handle` method implementation will then send the `WelcomeEmail` email to the mailhog mail server running in the docker container.
+
+If we navigate to http://localhost:8003 we can see the email that was sent in the mailhog server dashboard.
 
 ## Further customizations
 
