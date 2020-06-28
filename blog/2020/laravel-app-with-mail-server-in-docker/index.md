@@ -134,15 +134,24 @@ Alternatively we could have added the `verified` middleware to routes in our app
 
 ## Testing the user verification email
 
-Run `docker-compose up -d` then startup a your Laravel project and register a user.
+To test the user verification email we first have to startup our redis and mail server containers by typing the following docker command:
 
-This should trigger a verification email, so navigate to `localhost:8100` where you should be able to open the email.
+```bash
+docker-compose up -d
+```
+
+Next we have to run our Laravel project and register new user with any arbitrary email address.
+
+This should trigger a verification email that will be sent directly as part of the registration flow.
+By default verification emails are not queued.
+
+Now we can navigate our browser to `http://localhost:8100` where you should be able to view and open the user verification email.
 
 Click the verification link, which should verify the user registration through the application showing the user as logged in.
 
 ## Using MailCatcher or PaperCut instead of MailHog server
 
-You can swap out MailHog for MailCatcher using configuration below:
+You can swap out `MailHog` for `MailCatcher` using the `docker-compose` configuration below:
 
 ```yaml
     mailcatcher:
@@ -153,7 +162,7 @@ You can swap out MailHog for MailCatcher using configuration below:
             - 8100:1080
 ```
 
-Or you can swap out MailHog for PaperCut using configuration below:
+Or you can swap out `MailHog` for `PaperCut` using the `docker-compose` configuration below:
 
 ```yaml
     papercut:
@@ -164,9 +173,9 @@ Or you can swap out MailHog for PaperCut using configuration below:
         - "8100:37408"
 ```
 
-## Using the mailtrap service instead of MailHog
+## Using the Mailtrap hosted service instead of the docker mail server
 
-If you prefer to use the Mailtrap service free tier instead of running a docker mail server, you can change the following env vars in the .env file as set below:
+If you prefer to use the [Mailtrap](https://mailtrap.io) hosted service instead of running a docker mail server, you can change the following environment variables in the `.env` file as shown below:
 
 ```ini
 MAIL_DRIVER=smtp  
@@ -177,4 +186,4 @@ MAIL_PASSWORD=<YOUR_MAILTRAP_PASSWORD>
 MAIL_ENCRYPTION=tls
 ```
 
-You will need to setup a Mailtrap.io account.
+You will need to setup a [Mailtrap](https://mailtrap.io) account.
