@@ -2,11 +2,13 @@
 
 May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
+In this article I will show you how to run a MySQL database server in a local docker container. I will also show how you can configure the container to persist the database data using docker volumes so that the data is persistent across container restarts.
+
 ## Creating the docker-compose file
 
-Create a new docker-compose.yml file in the Laravel project root directory:
-
 > Note: skip to the next section if you already have a docker-compose.yml file in the root directory
+
+In this section we will create a new `docker-compose.yml` file in the Laravel project root directory:
 
 ```bash
 touch docker-compose.yml
@@ -16,16 +18,21 @@ echo 'services:' >> docker-compose.yml
 
 ## Creating the data directory
 
-Create a new data directory in the Laravel project root directory:
-
 > Note: skip to the next section if you already have a data directory in the root directory
+
+In this section we will create a new `/data` directory in the Laravel project root directory:
 
 ```bash
 echo '/data' >> .gitignore
 mkdir data
 ```
 
+The data directory is where the MySQL data files will persist.
+Since we don't want to commit the data files to our code repository, we need to add the the directory to our .gitignore file.
+
 ## Adding the mysql service to docker-compose
+
+In this section we will add the MySQL docker compose service configuration to the `docker-compose.yml` file.
 
 ```yaml
 mysql:
@@ -42,7 +49,17 @@ mysql:
     - "8001:3306"
 ```
 
-## Adding the environment variables for the mysql service
+Note that the MySQL server port 3306 internal to the docker network is mapped to port 8001 on our localhost so that we can connect to the instance on localhost:8000.
+
+Also Note that we have docker volumes mapping that maps the docker directory `/var/lib/mysql` where MySQL stores its data to the `./data/mysql` directory in our project data directory that we created on localhost. This is how the data is persisted to our local machine.
+
+When we run the container for the first time, MySQL will automatically create a database named `myapp` since we provided the `MYSQL_DATABASE=myapp` environment variable.
+
+## Adding environment variables to connect to the mysql service
+
+In order for our application to connect to the MySQL server running in the docker container we need to configure environment variables and setup the application database connection configuration.
+
+First need to set the following environment settings in the `.env` file:
 
 ```ini
 DB_CONNECTION=mysql
@@ -53,9 +70,14 @@ DB_USERNAME=myapp
 DB_PASSWORD=myapp
 ```
 
-## Changing mysql configuration settings for the mysql service
+Next we need to update the mysql configuration settings in the `config\database.php` file:
 
 ```php
+# the default database connection setting
+'default' => env('DB_CONNECTION', 'mysql'),
+
+'connections' => [
+# the default database connection
 'mysql' => [
         'driver' => 'mysql',
         'url' => env('DATABASE_URL'),
@@ -75,9 +97,12 @@ DB_PASSWORD=myapp
             PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
         ]) : [],
     ],
+]
 ```
 
 ## Run the Docker services
+
+Now we are ready to run the MySQL container by running the following bash command:
 
 ```bash
 docker-compose up -d

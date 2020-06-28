@@ -145,7 +145,7 @@ Next we have to run our Laravel project and register new user with any arbitrary
 This should trigger a verification email that will be sent directly as part of the registration flow.
 By default verification emails are not queued.
 
-Now we can navigate our browser to `http://localhost:8100` where you should be able to view and open the user verification email.
+Now we can navigate our browser to `mailhog` dashboard at `http://localhost:8100` where you should be able to view and open the user verification email.
 
 Click the verification link, which should verify the user registration through the application showing the user as logged in.
 
