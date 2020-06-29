@@ -2,11 +2,17 @@
 
 May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
+In this blog post I will show you how to run a local Redis data store in a docker container.
+
+We will configure the Redis docker container to persist data across container restarts.
+
+We will also configure our Laravel application to use this Redis store for application data storage, for Laravel Session storage, for the Laravel Cache store and as a queue for Laravel queued jobs and queued notifications.
+
 ## Creating the docker-compose file
 
-Create a new docker-compose.yml file in the Laravel project root directory:
+> Note: skip to the next section if you already have a `docker-compose.yml` file in the root directory
 
-> Note: skip to the next section if you already have a docker-compose.yml file in the root directory
+In this section we will create a new `docker-compose.yml` file in the Laravel project root directory:
 
 ```bash
 touch docker-compose.yml
@@ -16,9 +22,9 @@ echo 'services:' >> docker-compose.yml
 
 ## Creating the data directory
 
-Create a new data directory in the Laravel project root directory:
-
 > Note: skip to the next section if you already have a data directory in the root directory
+
+To store the Redis data on our local host machine we will create a new data directory in the Laravel project root directory:
 
 ```bash
 echo '/data' >> .gitignore
@@ -26,6 +32,8 @@ mkdir data
 ```
 
 ## Adding the Redis service to docker-compose
+
+To run the Redis container we will add the following docker compose service to the `docker-compose.yml` file.
 
 ```yaml
   redis:
@@ -38,7 +46,20 @@ mkdir data
         - "8002:6379"
 ```
 
+Note that the redis port 6379 is mapped to port 8002 on our local host machine. 
+Our Laravel application running on our host machine will be configured to connect to this mapped port.
+
+Also note the `REDIS_PASSWORD` setting in the redis startup command. This setting will be defined in the applications `.env` file. Since the `docker-compose.yml` file is in the same directory as the `.env` file, it will make use of this setting.
+
+Finally note that the `--appendonly yes` in the redis startup command tells redis data to persist its data in the `/data` directory in the container. This directory is part of the default redis configuration.
+
+The docker compose volumes mapping maps the `/data` directory where redis stores its data to be mapped to the `./data/redis` directory on the host machine, allowing the data to remain across container restarts.
+
+The `/data` directory is automatically created when redis persists its data for the first time.
+
 ## Redis connections configuration
+
+In this section I will show you the application configuration required to connect to redis.
 
 Below is the redis driver configuration in `config/database.php`:
 
@@ -94,29 +115,34 @@ Below is the redis driver configuration in `config/database.php`:
             //database set to 0 since only database 0 is supported in redis cluster
             'database' => '0',
             //redis key prefix for this connection
-            'prefix' => 'q:'.env('QUEUE_PREFIX_VERSION', ''),
+            'prefix' => 'q:',
         ],
     ],
 ```
 
-We have separate connections for `session`, `cache` , `queue` and a `default` application specific redis connection.
-
-They all use the same redis server with their own key prefix.
+We have separate connections for Laravels `session`, `cache` , `queue` facades and a `default` connection for our application code to use via the Laravel `Redis` facade.
 
 The `database` key for each connection is always set to `0` to be compatible with running in a Redis cluster in production where only one database is allowed.
 
-The the session.php, cache.php and queue.php configurations will use their corresponding redis connection specified in this database.php file.
+> Note: As configured all the connections use the same redis server with their own key prefix. However each can be configured to connect to a separate `REDIS_HOST` which can be useful for scaling production systems. For example we could use a separate environment variable such as `REDIS_CACHE_HOST` instead of `REDIS_HOST` for the `cache` connection to allow the `cache` connection to connect to a separate redis server. In this scenario we could set the `prefix` to use an empty string.
+
+Once the redis connections are configured in `config/database.php` then Laravels Session, Cache and Queue facade configurations specified in the `session.php`, `cache.php` and `queue.php` files, will use their corresponding `session`,`cache` and `queue` redis connections from the `config/database.php` file to connect to the redis server.
 
 ## Adding the environment variables used by the redis connections
 
-We need to add the environment variables used by the redis connections in the database.php file to the .env file.
+As a final step for the redis connection configuration we need to add the environment variables used by the redis connections in the `config/database.php` file to the `.env` file.
 
 ```ini
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=myapp
 REDIS_PORT=8002
-QUEUE_PREFIX_VERSION=V1:
 ```
+
+Note that the `REDIS_PASSWORD` is also used in the `docker-compose.yml` file to set the password for the redis server running in docker.
+
+Also note that the `REDIS_PORT=8002` is the same port number that the redis port was mapped to in the `docker-compose.yml` file.
+
+Since we are running in our local environment the `REDIS_HOST` is set to localhost.
 
 ## Redis session configuration
 
