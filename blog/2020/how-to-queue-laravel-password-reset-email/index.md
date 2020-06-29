@@ -8,24 +8,9 @@ For queuing User Verification Emails see:
 
 [How To Queue Laravel User Verification Email](https://aregsar.com/blog/2020/how-to-queue-laravel-user-verification-email)
 
-## Enabling Password Reset
-
-I will first describe how to make the password reset feature send a non queued password reset email.
-
-In order to that all we have to do is make the `App\User` class implement the `Illuminate\Contracts\Auth\CanResetPassword` contract.
-
-```php
-class User extends Authenticatable implements CanResetPassword
-```
-
-Note that the `use Illuminate\Contracts\Auth\CanResetPassword;` statement is already included in the `User.php` file.
-So all we had to do is add the `implements CanResetPassword` to the `App\User` class declaration.
-
-In the following section I will show how to queue the password reset email.
-
 ## Queuing the Password Reset email
 
-When enabled, the framework sends a non queued password reset notification as part of the password reset flow.
+The Laravel authentication framework sends a non queued password reset notification as part of the password reset flow.
 The password reset notification sends the email by calling the `sendPasswordResetNotification()` method on the `App\User` class.
 
 The `sendPasswordResetNotification` method is inherited by the `App\User` class from the `Illuminate\Foundation\Auth\User` class (aliased as `Authenticatable`) which the `App\User` class extends:
@@ -38,13 +23,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 //we are extending the Illuminate\Foundation\Auth\User class that is aliased to Authenticatable above
-class User extends Authenticatable implements CanResetPassword
+class User extends Authenticatable
 {
     use Notifiable;
 }
 ```
 
-The `Illuminate\Foundation\Auth\User` class implements the `Illuminate\Auth\CanResetPassword` trait (Not to be confused with the `Illuminate\Contracts\Auth\CanResetPassword` contract that `App\User` needs to implement) that in turn contains the default implementation of the `sendPasswordResetNotification` method:
+The `Illuminate\Foundation\Auth\User` class implements the `Illuminate\Auth\CanResetPassword` trait that in turn contains the default implementation of the `sendPasswordResetNotification` method:
 
 ```php
 namespace Illuminate\Foundation\Auth;
@@ -208,7 +193,7 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         //dispactches the job to the queue passing it this User object
-         QueuedPasswordResetJob::dispatch($this,$token);
+        QueuedPasswordResetJob::dispatch($this,$token);
     }
 }
 ```
