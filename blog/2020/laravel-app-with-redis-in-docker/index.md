@@ -261,11 +261,16 @@ and uses the hash to put all keys with the same hash in the same bucket. See `ht
 
 ## Run the Docker services
 
+To run the redis docker container from the root directory of the application run:
+
 ```bash
 docker-compose up -d
 ```
 
-## Connecting redli CLI
+## Connecting to the redis server using the redli CLI
+
+We can connect to the redis server using the redli redis command line client.
+Once connected we can execute the ping command to see if the server responds.
 
 ```bash
 #redli -h host -a password -p port
@@ -280,9 +285,10 @@ redli -p 8002 -a mypassword
 # 127.0.0.1:8002> quit
 ```
 
-## Connecting redis-cli CLI 
+## Connecting to the redis server using redis-cli CLI 
 
-Testing redis with following commands:
+We can connect to the redis server using the standard redis command line client.
+Once connected we can execute the ping command to see if the server responds.
 
 ```bash
 redis-cli -p 8002 -a mypassword
@@ -295,17 +301,11 @@ redis-cli -p 8002 -a mypassword
 # 127.0.0.1:8002> quit
 ```
 
-## Connecting with TablePlus to running redis container
-
-Open TablePlus and create a connection with the following:
-
-click create a new connection
-select redis
-click create
-type in my_app_name for the 
-Enter the following credentials:
-
 ## Connecting with artisan
+
+We can connect to the redis server using the Laravel artisan commands.
+
+Here we are implicitly connecting to redis using the `default` connection by not specifying the connection. We are also connecting by specifying specific connections.
 
 ```bash
 php artisan tinker
@@ -316,23 +316,44 @@ php artisan tinker
 >>> Illuminate\Support\Facades\Redis::connection("queue")->ping();
 ```
 
+> Note: Even though we are using different connection names, as configured all the connections are using the same redis server instance.
+
+## Connecting with TablePlus to running redis container
+
+We can also connect to the redis server using the TablePlus data store management UI.
+
+Open TablePlus and create a connection with the following:
+
+click create a new connection
+select redis
+click create
+type in my_app_name for the application
+Enter the redis credentials and host and port number.
+Test the connection and finally connect if the test passes.
+
 ## Persisting data between docker container runs
+
+We can stop the redis server by stoping its container using the following docker compose command:
 
 ```bash
 docker-compose down
 ```
 
-Try connecting to redis see failure
+Now we can try connecting to redis and should see a failure since the server is down.
 
-Bring the services back up.
+We can bring the docker services back up again.
 
 ```bash
 docker-compose up -d
 ```
 
-See the connections are working again
+The connections to redis should be working again.
 
-Check data/redis directory to see the persisted redis files
+We can also check the `./data/redis` directory that was created by the redis server, to see the persisted redis files.
+
+If we stored data in the redis server before we shut the server down, we should see that the data still persists.
+
+The following sections show how redis is accessed from within a Laravel application.
 
 ## Using the Redis facade
 
@@ -358,7 +379,7 @@ Illuminate\Support\Facades\Redis::command('set', ['foo','bar']);
 
 ## Using the Session facade
 
-We can access session variables using the Session facade:
+We can access session variables stored in redis using the Session facade:
 
 ```php
 Illuminate\Support\Facades\Session::put('foo','bar');
@@ -410,7 +431,7 @@ Cache::store('redis')->forget('foo');
 
 ## Using the Queue facade and Queue dispatch
 
-Queue access methods use the configuration settings from `config.queue.php`:
+Queue access methods use the configuration settings from `config/queue.php`:
 
 First we need to create a Job class that can be queued for background processing. For testing we will just make the job log a message:
 
@@ -464,7 +485,7 @@ WelcomeEmailJob::dispatch()->onQueue('{high}');
 WelcomeEmailJob::dispatch()->onConnection('app')->onQueue('{high}');
 ```
 
-> Note: WelcomeEmailJob has a queue connection property that will override the default 'job' connection if set. By default `WelcomeEmailJob::dispatch()` will dispatch to the queue setting of the connection that is set to its connection property. If no connection is set to the property, then it will use the queue setting of default connection.
+> Note: WelcomeEmailJob has a queue connection property that will override the default `job` connection if set. By default `WelcomeEmailJob::dispatch()` will dispatch to the queue setting of the connection that is set to its connection property. If no connection is set to the property, then it will use the queue setting of default connection.
 
 We can now inspect the serialized job class in redis.
 
@@ -494,7 +515,7 @@ php artisan queue:work --queue={high} -- app
 
 ## Adding Additional cache stores and queue connections
 
-If we so desire, we can have additional cache and queue redis connection and stores that use different redis connections. In order to do that we can define additional redis connections in config/database.php.
+If we so desire, we can have additional cache and queue redis connection and stores that use different redis connections. In order to do that we can define additional redis connections in `config/database.php`.
 
 For example below we have added the `cache2` and a `queue2` connections that connect to a different redis server.
 
@@ -551,7 +572,7 @@ For example below we have added the `cache2` and a `queue2` connections that con
     ],
 ```
 
-Then in config/cache.php we can add a `redis2` cache store that uses the `cache2` redis connection from config/database.php:
+Then in config/cache.php we can add a `redis2` cache store that uses the `cache2` redis connection from `config/database.php`:
 
 ```php
   //use the 'redis' cache store in this file
@@ -574,7 +595,7 @@ Then in config/cache.php we can add a `redis2` cache store that uses the `cache2
    ],
 ```
 
-Also in config/queue.php we can add a `job2` queue connection that uses the `queue2` redis connection from config/database.php:
+Also in config/queue.php we can add a `job2` queue connection that uses the `queue2` redis connection from `config/database.php`:
 
 ```php
   //uses the 'job' queue connection in this file
@@ -604,4 +625,3 @@ Also in config/queue.php we can add a `job2` queue connection that uses the `que
         ],
     ],
 ```
-
