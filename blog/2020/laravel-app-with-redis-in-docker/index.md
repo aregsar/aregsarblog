@@ -146,6 +146,10 @@ Since we are running in our local environment the `REDIS_HOST` is set to localho
 
 ## Redis session configuration
 
+In this section we configure Laravel to use the `redis` driver to store session information in Redis instead of the default file based session.
+
+We also configure the Laravel session to use the `session` Redis connection configuration from the `config/database.php` file.
+
 Below is the session configuration in `config/session.php`:
 
 ```php
@@ -155,7 +159,7 @@ Below is the session configuration in `config/session.php`:
 'connection' => 'session',
 ```
 
-Then add set the SESSION_DRIVER in .env file to redis
+We also need to set the `SESSION_DRIVER` in `.env` file to `redis`.
 
 ```ini
 SESSION_DRIVER=redis
@@ -163,13 +167,20 @@ SESSION_DRIVER=redis
 
 ## redis cache configuration
 
+In this section we configure Laravel to use the `redis` driver to cache data in Redis.
+
+We also configure the Laravel session to use the `cache` Redis connection configuration from the `config/database.php` file.
+
+Note that unlike the Laravel session that only has one session store, the Laravel cache can have multiple cache stores so we have a `default` setting that has a value that selects the store to be used as the default store.
+In the configuration below we have only specified a single cache store named `redis` so the `default` store value is set to that store. The store itself specifies what driver and what connection to use from the `config/database.php` file.
+
 Below is the cache configuration in `config/cache.php`:
 
 ```php
   //use the 'redis' cache store in this file
   'default' => env('CACHE_DRIVER', 'redis'),
   'stores' => [
-    //this is the 'redis' cache connection
+    //this is the 'redis' cache store
     'redis' => [
                 //uses the redis driver from config/database.php
                 'driver' => 'redis',
@@ -181,7 +192,9 @@ Below is the cache configuration in `config/cache.php`:
   'prefix' => '',
 ```
 
-Then add set the CACHE_DRIVER in .env file to redis
+> Note: By adding more connections in the `config/database.php` file pointing to separate redis servers, we could add additional cache stores in the `config/cache.php` configuration and set the store `connection` to the new connections from the `config/database.php` file. This will be useful for scaling the app in production.
+
+We also need to set the CACHE_DRIVER in `.env` file to `redis`.
 
 ```ini
 CACHE_DRIVER=redis
@@ -189,11 +202,25 @@ CACHE_DRIVER=redis
 
 ## redis queue configuration
 
+In this section we configure Laravel to use the `redis` driver to queue jobs and notifications using Redis.
+
+We also configure the Laravel session to use the `queue` Redis connection configuration from the `config/database.php` file.
+
+Note that unlike the Laravel session that only has one session store, the Laravel queue can have multiple queue stores (which are actually labeled `connections`). So we have a `default` setting that has a value that selects the store/connection to be used as the default store/connection.
+
+In the configuration below we have specified two queue store/connections named `job` and `app`. We have set the `default` store\connection value to the `job` store/connection.
+The store/connection itself specifies what `driver` and what `connection` to use from the `config/database.php` file.
+Additionally the store/connection specifies a default `queue` name to be used in addition to the `connection`.
+For instance the `job` store/connection specifies the `{job}` as the default queue name to be used when queueing jobs. Similarly the the `app` store/connection specifies the `{app}` as the queue name as its default queue.
+The queue name is used as a prefix to the redis key used to store the queued item. This prefix is distinct from the queue prefix specified in the `config/database.php` file and will be prepended to that prefix.
+
+
 Below is the queue configuration in `config/queue.php`:
 
 ```php
   //uses the 'job' queue connection in this file
   'default' => env('QUEUE_CONNECTION', 'job'),
+  //this is a misnomer, it should actually be named `stores` as it is in the cache config in `config/cache.php`
   'connections' => [
         //this is the 'job' queue connection
         'job' => [
@@ -220,15 +247,18 @@ Below is the queue configuration in `config/queue.php`:
     ],
 ```
 
-Then add set the QUEUE_CONNECTION in .env file to job
+We also need to set the `QUEUE_CONNECTION` in `.env` file to `job` to select the default store/connection as the `job` store/connection.
 
 ```ini
 QUEUE_CONNECTION=job
 ```
 
+> The `job` and `app` store/connections use the same `redis` connection from the `config/database.php` file thus using the same redis server. However we could use separate redis servers for each if we define additional redis connections in the `config/database.php` file and use those as separate redis connections for each cache store/connection. This will be useful when scaling your application in production.
+
+>The store/connection set to the `default` is used by default by the queue facade and job dispatch classes without having to be explicitly named in our code. The non default store/connections need to be explicitly specified.
+
 > Note that the queue names are wrapped in brackets. This ensures that when using a redis cluster, redis hashes the name
 and uses the hash to put all keys with the same hash in the same bucket. See `https://redis.io/topics/cluster-spec#keys-hash-tags`
-> Note: The job and app queues  use the same redis connection. The job connection is used when using the queued job dispatch and the queue facade without specifying a connection name
 
 ## Run the Docker services
 
