@@ -214,7 +214,6 @@ Additionally the store/connection specifies a default `queue` name to be used in
 For instance the `job` store/connection specifies the `{job}` as the default queue name to be used when queueing jobs. Similarly the the `app` store/connection specifies the `{app}` as the queue name as its default queue.
 The queue name is used as a prefix to the redis key used to store the queued item. This prefix is distinct from the queue prefix specified in the `config/database.php` file and will be prepended to that prefix.
 
-
 Below is the queue configuration in `config/queue.php`:
 
 ```php
@@ -606,15 +605,3 @@ Also in config/queue.php we can add a `job2` queue connection that uses the `que
     ],
 ```
 
-## Scaling out redis in production
-
-The configuration used in this article uses a single redis server with database set to 0 so the same configuration can be used in production redis cluster.
-Multiple redis connections are confgured in config/database.php each with a unique redis key prefix to differentiate between redis keys written by the session vs cache and queue facades. All the connections use the same host and port therbye using the same redis server.
-
-This makes it easy to scale out these connections by assigning a different redis server for each connection.  
-So sessions would have their own redis server and the default cache store will have its own redis server and the default queue will have its own redis server. 
-We can even scale this out further by adding more cache stores and queue connections each with their own additional redis connection that uses a different redis server. 
-
-Also In this scenario instead of each queue connection using other named queues in addition to their default queue, they could just use a separate queue connection with its own default queue instead of the named queue.
-
-Queue workers can also we scaled by running them with the queue connection flag specifying the queue they need to service.
