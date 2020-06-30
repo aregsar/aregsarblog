@@ -55,7 +55,23 @@ REDIS_PORT=8000
 REDIS_PASSWORD=123456
 ```
 
-> Note that the `docker-compose.yml` file will read the `REDIS_PASSWORD` value from the .env file
+Note that the `docker-compose.yml` file will read the `REDIS_PASSWORD` value from the .env file.
+
+Also the `redis` connection setting within the `config/database.php` loads the database credentials using the REDIS_HOST, REDIS_PORT and REDIS_PASSWORD environment settings in the `.env` file.
+
+For reference this is a sample redis connection configuration from the `config/database.php` file:
+
+```php
+    'redis' => [
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => '0',
+            'prefix' => '',
+        ],
+```
 
 ## Environment Variables for the MySql server container
 
@@ -79,7 +95,7 @@ DB_CONNECTION=mysql
 
 Note the `mysql` connection setting within the `config/database.php` loads the database credentials using the DB_DATABASE, DB_USERNAMRE and DB_PASSWORD environment settings in the `.env` file
 
-For reference this is the mysql connection in the `config/database.php` file:
+For reference this is a sample mysql connection connection in the `config/database.php` file:
 
 ```php
  'mysql' => [
