@@ -4,12 +4,16 @@ May 5, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## install the mysql CLI
 
+The standard command line interface to connect to MySQL server.
+
 ```bash
 brew install mysql
 echo 'export PATH=/usr/local/mysql/bin:$PATH' >> ~/.bash_profile
 ```
 
-## install the mysqlsh
+## install the mysqlsh CLI
+
+An alternative command line interface to connect to MySQL server.
 
 ```bash
 wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.0.20-macos10.15-x86-64bit.tar.gz
@@ -19,7 +23,7 @@ ln -s ~/mysql-shell-8.0.20-macos10.15-x86-64bit/bin/mysqlsh /usr/local/bin/
 
 ## Connect to a mysql server using mysql CLI
 
-Below are commands to connect to mysql with various combinations of command line arguments:
+Below are commands to connect to MySQL server with various combinations of command line arguments:
 
 ```bash
 #must have no space between -p and PASSWORD
@@ -40,7 +44,7 @@ mysql
 
 By default, MySQL server always installs and enables SSL configuration:
 
-`https://scalegrid.io/blog/configuring-and-managing-ssl-on-your-mysql-server/`
+[configuring-and-managing-ssl-on-your-mysql-server](https://scalegrid.io/blog/configuring-and-managing-ssl-on-your-mysql-server)
 
 Clients can choose to connect with or without SSL as the server allows both types of connections.
 
@@ -62,7 +66,9 @@ mysqlsh --sql -h 127.0.0.1 -P 3306 -u myname -pmypassword -D mydb
 
 ## Database information
 
-Show connection stats (mysql cli only):
+Once connected to the MySQL server we can issue the following basic commands:
+
+Show connection stats (this command only works with mysql CLI):
 
 ```bash
 mysql> status
@@ -94,6 +100,8 @@ mysql> show tables;
 
 ## Create a User
 
+Additional commands for creating a database user:
+
 ```bash
 #create a user on any IP with no password
 mysql> CREATE USER 'appuser'@'%';
@@ -103,21 +111,18 @@ mysql> CREATE USER 'appuser'@'%' IDENTIFIED BY 'mypassword';
 mysql> CREATE USER 'appuser'@'localhost' IDENTIFIED BY 'mypassword';
 ```
 
-## Create a database
+## Creating a database
+
+Commands for creating a database and granting access permissions for a database to a user:
 
 ```bash
 mysql> CREATE DATABASE appdb;
-```
-
-## Grant access permissions for a database to a user
-
-```bash
 mysql> GRANT ALL ON appdb.* TO 'appuser'@'%';
 mysql> GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'%';
 mysql> GRANT ALL PRIVILEGES ON appdb.* TO 'appuser'@'localhost';
 ```
 
-## Droping a Database
+Dropping the Database:
 
 ```bash
 mysql> DROP DATABASE appdb;
@@ -125,8 +130,8 @@ mysql> DROP DATABASE appdb;
 
 ## Reference links
 
-`https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04`
+[how-to-connect-to-managed-database-ubuntu-18-04](https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04)
 
-`https://www.digitalocean.com/docs/databases/mysql/how-to/connect/`
+[how-to-connect-to-mysql](https://www.digitalocean.com/docs/databases/mysql/how-to/connect)
 
-`https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-install-starting.html`
+[mysql-shell-install](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-shell-install-starting.html)
