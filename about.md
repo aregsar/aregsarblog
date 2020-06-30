@@ -52,4 +52,5 @@ My development stack embraces the [boring stack](https://mcfunley.com/choose-bor
 
 + PHP, Composer, Laravel Valet, NodeJS and Yarn installed on my MacBook Pro.
 + MySQL, Redis, ElasticSearch and MailHog running in separate Docker containers via Docker Compose.
-+ I keep my PHP version updated via Homebrew and NodeJS version updated via the `nvm` node version manager
+
+I keep my PHP version updated via Homebrew and NodeJS version updated via the `nvm` node version manager.
