@@ -40,9 +40,15 @@ Finally tell valet to use the latest upgraded php
 valet use php
 ```
 
-Now we can go into the directory that hosts our Laravel project directories and run `valet part` to re-register our sites and we can verify that the `~/.config/valet/config.json` file lists the directory that hosts the Laravel projects.
+Now we can go into the directory that hosts our Laravel project directories and run `valet park` to re-register our sites and we can verify that the `~/.config/valet/config.json` file lists the directory that hosts the Laravel projects.
 
-To list all linked projects type:
+Link projects:
+
+```bash
+valet park
+```
+
+List all linked projects:
 
 ```bash
 valet links
