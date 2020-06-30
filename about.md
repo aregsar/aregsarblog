@@ -1,6 +1,6 @@
 # About Me
 
-I help development teams rapidly build and deploy reliable and maintainable web applications.
+Hi, My name is Areg and I help development teams rapidly build and deploy reliable and maintainable web applications.
 
 In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Disney.
 
