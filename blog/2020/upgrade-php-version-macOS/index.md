@@ -16,7 +16,7 @@ Then upgrade PHP to the latest version
 brew upgrade php
 ```
 
-Make sure to source your bash profile or relaunch the terminal for the update to the $PATH variable to take effect
+Make sure to source your bash profile or relaunch the terminal for the update to the $PATH variable to take effect.
 
 Sourcing the bash profile
 
@@ -24,7 +24,7 @@ Sourcing the bash profile
 source ~/.profile
 ```
 
-> Note: The reason we need to source the bas profile is to ensure the $PATH variable has the `/usr/local/bin` path before the `/usr/bin` path. This is because the symlink to the current php version is in `/usr/local/bin` which needs to override the default macOS installed PHP version symlink in `/usr/bin`
+> Note: The reason we need to source the bash profile is to ensure the $PATH variable has the `/usr/local/bin` path before the `/usr/bin` path. This is because the symlink to the current php version is in `/usr/local/bin` which needs to override the default macOS installed PHP version symlink in `/usr/bin`
 
 Now we can check the current PHP version
 
@@ -35,7 +35,8 @@ php -v
 ## Switching current PHP version
 
 We can switch between multiple installed PHP versions globally
-Assuming we have both php@7.4 and php@7.3 installed and assuming the current version of php is set to php@7.4, we can switch to php@7.3
+
+Assuming we have both php@7.4 and php@7.3 installed and assuming the current version of php is set to php@7.4, we can switch to php@7.3 like so:
 
 ```bash
 brew unlink php && brew link --force --overwrite php@7.3
@@ -49,7 +50,7 @@ To switch back simply change the version number in the command:
 brew unlink php && brew link --force --overwrite php@7.4
 ```
 
-I added the following function to my bash profile to easily switch to a version.
+I added the following function to my bash profile to easily switch to a specific PHP version.
 
 ```bash
 phpver() {
