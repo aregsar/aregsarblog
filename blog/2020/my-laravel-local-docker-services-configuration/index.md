@@ -2,7 +2,7 @@
 
 April 29, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-To run the MySql and Redis servers for your local Laravel project environment to connect to, add the following `docker-compose.yml` file to the root of your Laravel project:
+To run MySql and Redis servers for your local Laravel project development environment, add the following `docker-compose.yml` file to the root of your Laravel project:
 
 ```yaml
 version: "3.1"
@@ -31,11 +31,17 @@ services:
         - "8001:3306"
 ```
 
-> Note: the `redis-server –appendonly yes` command overrides the redis-server command with no arguments that the standard `redis:alpine` container runs. This allows us to persist the redis data using a docker volume mapping.
+> Note: the `redis-server –appendonly yes` command overrides the redis-server command with no arguments that the standard `redis:alpine` container runs. This allows us to persist the redis data using a docker volume mapping by configuring redis to asynchronously backup its in memory data to disk.
 
-If we look at the standard mysql and redis dockerfiles we can see that there is a VOLUME defined that sets the mysql data directory to `/var/lib/mysql` and the redis data directory to `/data` in the container. By default when the container runs for the first time that volume is created within the container and the mysql and redis data files are persisted in those volume directories. By mapping the redis container `/data` directory to our docker host machine directory `./data/redis` and mapping the mysql container `/var/lib/mysql` directory to the host machine `./data/mysql` directory we can persist that data across docker container runs.
+If we look at the Alpine MySQL dockerfile in docker hub we can see that there is a `VOLUME` defined that sets the mysql data directory to `/var/lib/mysql` in the container.
+By default when the container runs for the first time, the `VOLUME` defined in the dockerfile is created within the container and the mysql data files are persisted volume directory.
+By mapping the mysql container `/var/lib/mysql` directory to the host machine `./data/mysql` directory we can persist that data across docker container runs.
 
-> Note: the host machine `./data/redis` and `./data/mysql` volumes will be created within the Laravel project directory that contains the docket-compose.yml file when we run the `docker-compose up -d` command
+Similarly, if we look at the Alpine Redis dockerfile in docker hub we can see that there is a `VOLUME` defined that sets the redis data directory to `/data` in the container.
+By default when the container runs for the first time, the `VOLUME` defined in the dockerfile is created within the container and the redis data files are persisted volume directory.
+By mapping the redis container `/data` directory to our docker host machine `./data/redis` directory we can persist that data across docker container runs.
+
+> Note: the host machines `./data/redis` and `./data/mysql` volumes will be created within the Laravel project directory that contains the `docket-compose.yml` file when we run the `docker-compose up -d` command.
 
 ## Environment Variables for the Redis server container
 
@@ -48,6 +54,8 @@ REDIS_HOST=127.0.0.1
 REDIS_PORT=8000
 REDIS_PASSWORD=123456
 ```
+
+> Note that the `docker-compose.yml` file will read the `REDIS_PASSWORD` value from the .env file
 
 ## Environment Variables for the MySql server container
 
@@ -69,11 +77,9 @@ DB_PASSWORD=123456
 DB_CONNECTION=mysql
 ```
 
-> Note the `mysql` connection setting within the `config/database.php` loads the database credentials using the DB_DATABASE, DB_USERNAMRE and DB_PASSWORD environment settings in the `.env` file
+Note the `mysql` connection setting within the `config/database.php` loads the database credentials using the DB_DATABASE, DB_USERNAMRE and DB_PASSWORD environment settings in the `.env` file
 
-## The Laravel MySql configuration setting
-
-For reference this is the mysql connection in the `config/database.php` file
+For reference this is the mysql connection in the `config/database.php` file:
 
 ```php
  'mysql' => [
