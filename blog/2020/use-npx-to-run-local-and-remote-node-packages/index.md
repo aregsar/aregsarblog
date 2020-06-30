@@ -29,7 +29,7 @@ npx jest
 ## Use NPX to run a remote package
 
 In fact we don't even have to install a node package to be able to run it.
-npx will temporarily can run the remote package without installing it
+npx can run the remote package without installing it, by temporarily downloading, running then removing the package.
 
 ```bash
 #if create-react-app is not installed localy, the latest remote version is used
