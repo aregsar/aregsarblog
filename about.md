@@ -6,7 +6,9 @@ In the past I have developed mission critical software for organizations as dive
 
 I am the author of the [Always Deployed Manifesto](https://alwaysdeployed.com) and [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) web application development and deployment methodologies that help developers provide continuous customer value, faster, by using [tools](https://alwaysdeployed.com/tools) that support this development process.
 
-## My rapid web development stack
+## My rapid application development stack
+
+My web development stack is focused on building server side `HTML` rendered [Majestic Monolith](https://m.signalvnoise.com/the-majestic-monolith) web apps.
 
 + [Laravel](https://laravel.com) - Rapid Application Development PHP web framework
 + [livewire](https://laravel-livewire.com) - Laravel Javascript framework for rendering server side components
@@ -43,3 +45,11 @@ For more info see the [TALL Stack](https://tallstack.dev/) Tailwind Alpine Larav
 + [SendGrid](https://sendgrid.com/) - Transactional Email Service
 + [HoneyBadger](https://www.honeybadger.io/for/laravel/) - Exception, uptime, scheduled task and background job monitoring for Laravel
 + [Papertrail](https://www.papertrail.com/) - Application log aggregator
+
+## My Laravel development setup
+
+My development stack embraces the [boring stack](https://mcfunley.com/choose-boring-technology) and [12 factore apps](https://12factor.net) philosophies as much possible.
+
++ PHP, Composer, Laravel Valet, NodeJS and Yarn installed on my MacBook Pro.
++ MySQL, Redis, ElasticSearch and MailHog running in separate Docker containers via Docker Compose.
++ I keep my PHP version updated via Homebrew and NodeJS version updated via the `nvm` node version manager
