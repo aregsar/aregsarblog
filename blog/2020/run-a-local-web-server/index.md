@@ -72,14 +72,12 @@ parcel index.html -p 5000
 
 ## Testing the local web server
 
-Add index.html file in the directory that you run the local server
-
-and add the following html content into it.
+Add index.html file in the directory that you run the local server and add the following html content into it:
 
 ```html
 <html>
 <body>
-  <script src="./index.js"></script>
+Hello
 </body>
 </html>
 ```
@@ -91,4 +89,6 @@ touch index.html
 echo '<html><body>Hello</body></html>' > index.html
 ```
 
-Now run any of the server execution script mentioned in this article to serve up the file.
+Now run any of the server execution scripts mentioned in this article to serve up `index.html` the file.
+
+Navigate your browser to `http://localhost/index.html` to view the file.

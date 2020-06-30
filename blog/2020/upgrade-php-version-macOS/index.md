@@ -63,4 +63,5 @@ Now I can simply type `phpver 7.4` to set my php version to php@7.4
 ## Install PECL libraries
 
 Follow instructions here to add php extension libraries:
-`https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl/`
+
+[installing-homebrew-php-extensions-with-pecl](https://grrr.tech/posts/installing-homebrew-php-extensions-with-pecl)
