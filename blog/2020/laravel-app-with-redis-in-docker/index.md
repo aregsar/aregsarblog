@@ -515,9 +515,11 @@ php artisan queue:work --queue={high} -- app
 
 ## Adding Additional cache stores and queue connections
 
-If we so desire, we can have additional cache and queue redis connection and stores that use different redis connections. In order to do that we can define additional redis connections in `config/database.php`.
+If we so desire, we can have additional cache and queue redis store/connections that use different redis connections from `config/database.php`.
 
-For example below we have added the `cache2` and a `queue2` connections that connect to a different redis server.
+In order to do that we can define additional redis connections in `config/database.php` then configure cache and queue store/connections in `config/cache.php` and `config/queue.php` to use those redis connections.
+
+For example below we have added the `cache2` and a `queue2` connections in `config/database.php` that connect to a different redis server.
 
 ```php
   //the redis driver
@@ -572,7 +574,7 @@ For example below we have added the `cache2` and a `queue2` connections that con
     ],
 ```
 
-Then in config/cache.php we can add a `redis2` cache store that uses the `cache2` redis connection from `config/database.php`:
+Then in `config/cache.php` we can add a `redis2` cache store that uses the `cache2` redis connection from `config/database.php`:
 
 ```php
   //use the 'redis' cache store in this file
@@ -595,7 +597,7 @@ Then in config/cache.php we can add a `redis2` cache store that uses the `cache2
    ],
 ```
 
-Also in config/queue.php we can add a `job2` queue connection that uses the `queue2` redis connection from `config/database.php`:
+Also in `config/queue.php` we can add a `job2` queue connection that uses the `queue2` redis connection from `config/database.php`:
 
 ```php
   //uses the 'job' queue connection in this file
@@ -625,3 +627,5 @@ Also in config/queue.php we can add a `job2` queue connection that uses the `que
         ],
     ],
 ```
+
+As we have seen Laravels Redis configuration structure allows us considerable flexibility in how we cab scale our redis usage.
