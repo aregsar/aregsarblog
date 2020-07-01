@@ -8,7 +8,10 @@ This post contains all the configuration changes required to use Redis for Larav
 
 Below is how the `redis` database driver is configured in `config/database.php`
 
-```bash
+```php
+//the redis client (requires installing the phpredis.so extension using pecl)
+ 'client' => 'phpredis',
+
  'redis' => [
         'client' => env('REDIS_CLIENT', 'phpredis'),
         'options' => [
@@ -53,13 +56,15 @@ Below is how the `redis` database driver is configured in `config/database.php`
 
 The `.env` file in the project root contains the environment variable settings for the `config/database.php` configuration file.
 
-Below are the settings used for my development environment that connect to a local docker container running a Redis service. The `REDIS_PASSWORD` is also used by the docker compose file that runs the Redis serveic.
+Below are the settings used for my development environment that connect to a local docker container running a Redis service exposed on port 8002 on my localhost. 
 
 ```ini
 REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
-REDIS_PASSWORD=null
+REDIS_PORT=8002
+REDIS_PASSWORD=mypassword
 ```
+
+The `REDIS_PASSWORD` setting is also used by the docker compose file that runs the Redis service.
 
 ## Digitalocean Redis environment settings
 
@@ -78,8 +83,15 @@ REDIS_PASSWORD=<your_redis_password>
 The following is the Laravel session configured in the config/session.php configuration file to use redis
 
 ```php
-    'driver' => env('SESSION_DRIVER', 'redis'),
+    'driver' => env('SESSION_DRIVER', 'file'),
     'connection' => 'session',
+    'files' => storage_path('framework/sessions'),
+```
+
+The .env file explicitly specifies the default session as using the `redis` driver defined in config/database.php . If this setting is omitted, the session will work using the `file` driver saving sessions in the storage_path.
+
+```ini
+SESSION_DRIVER=redis
 ```
 
 ## Laravel cache configuration to use Redis
@@ -88,18 +100,29 @@ The following is the Laravel cache configured in the config/cache.php configurat
 
 ```php
    #select the `redis` cache connection in `connections` setting below
-  'default' => env('CACHE_DRIVER', 'redis'),
+   #The name CACHE_DRIVER is a misnomer as it actually refers to the cache store
+  'default' => env('CACHE_DRIVER', 'file'),
 
   'stores' => [
     'redis' => [
             'driver' => 'redis',
             'connection' => 'cache',
         ],
+    'file' => [
+            'driver' => 'file',
+            'path' => storage_path('framework/cache/data'),
+        ],
   ],
 
   # redis cache key prefix (used to segment between multiple apps)
-  # remove this key if we never share a redis server between apps
-  'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
+  # set to empty string since I never share a redis server between apps
+  'prefix' => '',
+```
+
+The .env file explicitly specifies the default cache store `redis` to use which in turn uses the `redis` driver defined in config/database.php. If this setting is omitted, the cache will work using the `file` store which uses the `file` driver saving sessions in the storage_path.
+
+```ini
+CACHE_DRIVER=redis
 ```
 
 ## Laravel queue configuration to use Redis
@@ -107,7 +130,7 @@ The following is the Laravel cache configured in the config/cache.php configurat
 The following is the Laravel queue configured in the config/queue.php configuration file to use redis
 
 ```php
-  #select the `redis` queue connection in `connections` setting below
+  #select the queue connection in `connections` setting below
   'default' => env('QUEUE_CONNECTION', 'sync'),
 
   'connections' => [
@@ -143,6 +166,12 @@ The following is the Laravel queue configured in the config/queue.php configurat
 ],
 ```
 
+The .env file explicitly specifies the default queue connection `job` to use which in turn uses the `redis` driver defined in config/database.php. If this setting is omitted, the queue will work using the `sync` connection which uses the `sync` driver.
+
+```ini
+QUEUE_CONNECTION=job
+```
+
 ## Redis Cluster Queue key hash tags
 
 > Note: TBD This may only apply when using client controlled clustering
@@ -160,16 +189,3 @@ If your Redis queue connection uses a Redis Cluster, your queue names must conta
 
 The brackets `{default}` are required for redis to set the hash tag.
 
-## The complete .env environment file settings
-
-```ini
-CACHE_DRIVER=redis
-
-SESSION_DRIVER=redis
-
-QUEUE_CONNECTION=job
-
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=radar
-REDIS_PORT=8002
-```
