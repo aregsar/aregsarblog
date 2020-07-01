@@ -9,14 +9,17 @@ This post contains all the configuration changes required to use Redis for Larav
 Below is how the `redis` database driver is configured in `config/database.php`
 
 ```php
-//the redis client (requires installing the phpredis.so extension using pecl)
+ //the redis client (requires installing the phpredis.so extension using pecl)
  'client' => 'phpredis',
 
+ //the redis driver
  'redis' => [
         'client' => env('REDIS_CLIENT', 'phpredis'),
         'options' => [
             'cluster' => 'redis',
         ],
+        //the `default` connection of the redis driver
+        //Note: The Laravel Redis facade is hard coded to use this connection unless its connection is explicitly specified
         'default' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
@@ -24,6 +27,7 @@ Below is how the `redis` database driver is configured in `config/database.php`
             'database' => '0',
             `prefix` => `d:`
         ],
+        //the `cache` connection of the redis driver
         'cache' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
@@ -31,6 +35,7 @@ Below is how the `redis` database driver is configured in `config/database.php`
             'database' => '0',
             `prefix` => `c:`
         ],
+        //the `queue` connection of the redis driver
         'queue' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
@@ -38,6 +43,7 @@ Below is how the `redis` database driver is configured in `config/database.php`
             'database' => '0',
             `prefix` => 'q:',
         ],
+        //the `session` connection of the redis driver
         'session' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
@@ -52,7 +58,7 @@ Below is how the `redis` database driver is configured in `config/database.php`
 
 > Note: the `prefix` setting is used instead of using different `database` number to be able to segment the keys. In production I use a managed redis cluster which does not support multiple databases so I avoid using more than one database in the redis server.
 
-## Redis configuration environment variable settings 
+## Redis configuration environment variable settings
 
 The `.env` file in the project root contains the environment variable settings for the `config/database.php` configuration file.
 
@@ -84,11 +90,13 @@ The following is the Laravel session configured in the config/session.php config
 
 ```php
     'driver' => env('SESSION_DRIVER', 'file'),
+    //the `session` connection of the redis driver from config/database.php file
     'connection' => 'session',
     'files' => storage_path('framework/sessions'),
 ```
 
-The .env file explicitly specifies the default session as using the `redis` driver defined in config/database.php . If this setting is omitted, the session will work using the `file` driver saving sessions in the storage_path.
+The `SESSION_DRIVER` setting in the  `.env` file explicitly specifies that the `redis` driver defined in config/database.php is used as the session driver.
+If this setting is omitted, the session will work using the `file` driver saving sessions in the storage_path.
 
 ```ini
 SESSION_DRIVER=redis
@@ -99,7 +107,7 @@ SESSION_DRIVER=redis
 The following is the Laravel cache configured in the config/cache.php configuration file to use redis
 
 ```php
-   #select the `redis` cache connection in `connections` setting below
+   #select the cache store from the `stores` setting below to be the default cache store
    #The name CACHE_DRIVER is a misnomer as it actually refers to the cache store
   'default' => env('CACHE_DRIVER', 'file'),
 
@@ -119,7 +127,7 @@ The following is the Laravel cache configured in the config/cache.php configurat
   'prefix' => '',
 ```
 
-The .env file explicitly specifies the default cache store `redis` to use which in turn uses the `redis` driver defined in config/database.php. If this setting is omitted, the cache will work using the `file` store which uses the `file` driver saving sessions in the storage_path.
+The `CACHE_DRIVER` setting in the `.env` file explicitly specifies the default cache store `redis` to use which in turn uses the `redis` driver defined in config/database.php. If this setting is omitted, the cache will work using the `file` store which uses the `file` driver saving sessions in the storage_path.
 
 ```ini
 CACHE_DRIVER=redis
@@ -130,7 +138,7 @@ CACHE_DRIVER=redis
 The following is the Laravel queue configured in the config/queue.php configuration file to use redis
 
 ```php
-  #select the queue connection in `connections` setting below
+  #select the queue connection from the `connections` setting below to be the default cache store 
   'default' => env('QUEUE_CONNECTION', 'sync'),
 
   'connections' => [
@@ -166,7 +174,7 @@ The following is the Laravel queue configured in the config/queue.php configurat
 ],
 ```
 
-The .env file explicitly specifies the default queue connection `job` to use which in turn uses the `redis` driver defined in config/database.php. If this setting is omitted, the queue will work using the `sync` connection which uses the `sync` driver.
+The `QUEUE_CONNECTION` setting in the `.env` file explicitly specifies the default queue connection `job` to use which in turn uses the `redis` driver defined in config/database.php. If this setting is omitted, the queue will work using the `sync` connection which uses the `sync` driver.
 
 ```ini
 QUEUE_CONNECTION=job
@@ -188,4 +196,3 @@ If your Redis queue connection uses a Redis Cluster, your queue names must conta
 ],
 
 The brackets `{default}` are required for redis to set the hash tag.
-
