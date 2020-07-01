@@ -2,13 +2,11 @@
 
 April 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-This post contains all the configuration changes required to use Redis for Laravel application session, cache and queue services in addition to directly accessing Redis for application specific use cases.
+This post contains all the configuration changes required to use Redis for Laravel application session, cache and queue services in addition to directly accessing Redis for application specific use cases using the Redis facade.
 
-## config/database.php configuration file
+## The Laravel Redis configuration
 
 Below is how the `redis` database driver is configured in `config/database.php`
-
-> Note: I run a Redis as docker service and configure the REDIS_HOST, REDIS_PORT and REDIS_PASSWORD `.env` file keys used in the `config/database.php` configuration file to connect to a running instance of Redis that persists its data on the local host that is running the container.
 
 ```bash
  'redis' => [
@@ -35,7 +33,7 @@ Below is how the `redis` database driver is configured in `config/database.php`
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => '0',
-            `prefix` => env('REDIS_QUEUE_PREFIX', 'q0:'),
+            `prefix` => 'q:',
         ],
         'session' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -49,10 +47,13 @@ Below is how the `redis` database driver is configured in `config/database.php`
     ],
 ```
 
-> Note: REDIS_QUEUE_PREFIX env setting is not hardcoded and only specified in production to allow production deployment to switch queue for new deployments with serialized model changes
-> Note: `prefix` setting is used instead of using different database number to be able to segment the keys when used with a managed redis cluster which does not support multiple databases. Also `prefix` prefixes keys for the app that uses this configuration. Cache and queue clients that use these redis connections may also specify an application level prefix to segment cache keys between different applications using the same redis server.
+> Note: the `prefix` setting is used instead of using different `database` number to be able to segment the keys. In production I use a managed redis cluster which does not support multiple databases so I avoid using more than one database in the redis server.
 
-## Local environment variable settings for config/database.php configuration file
+## Redis configuration environment variable settings 
+
+The `.env` file in the project root contains the environment variable settings for the `config/database.php` configuration file.
+
+Below are the settings used for my development environment that connect to a local docker container running a Redis service. The `REDIS_PASSWORD` is also used by the docker compose file that runs the Redis serveic.
 
 ```ini
 REDIS_HOST=127.0.0.1
@@ -60,7 +61,9 @@ REDIS_PORT=6379
 REDIS_PASSWORD=null
 ```
 
-## Digitalocean Managed Redis Cluster environment variable settings
+## Digitalocean Redis environment settings
+
+The following `.env` file environment settings are used to connect to a Digitalocean Managed Redis cluster:
 
 ```ini
 REDIS_HOST=tls://<your_redis_host>.db.ondigitalocean.com
@@ -70,20 +73,22 @@ REDIS_PASSWORD=<your_redis_password>
 
 > Note: the `tls:` scheme and TLS protocol port number is used since managed Redis only supports TLS connections
 
-## Redis enabled config/session.php configuration file
+## Laravel session configuration to use Redis
+
+The following is the Laravel session configured in the config/session.php configuration file to use redis
 
 ```php
-    'driver' => 'redis',
+    'driver' => env('SESSION_DRIVER', 'redis'),
     'connection' => 'session',
 ```
 
-Remove all keys in `.env` file that are prefixed by `SESSION_`
+## Laravel cache configuration to use Redis
 
-## Redis enabled config/cache.php configuration file
+The following is the Laravel cache configured in the config/cache.php configuration file to use redis
 
 ```php
    #select the `redis` cache connection in `connections` setting below
-  'default' => `redis`,
+  'default' => env('CACHE_DRIVER', 'redis'),
 
   'stores' => [
     'redis' => [
@@ -97,29 +102,46 @@ Remove all keys in `.env` file that are prefixed by `SESSION_`
   'prefix' => Str::slug(env('APP_NAME', 'myapp'), '_').'_cache',
 ```
 
-Remove all keys in `.env` file that are prefixed by `CACHE_`
+## Laravel queue configuration to use Redis
 
-## Redis enabled config/queue.php configuration file
+The following is the Laravel queue configured in the config/queue.php configuration file to use redis
 
 ```php
   #select the `redis` queue connection in `connections` setting below
-  'default' => 'redis',
+  'default' => env('QUEUE_CONNECTION', 'sync'),
 
   'connections' => [
-        'redis' => [
+
+        'sync' => [
+            'driver' => 'sync',
+        ],
+
+        //this is the 'job' queue connection
+        'job' => [
+            //uses the redis driver from config/database.php
             'driver' => 'redis',
+            //uses the 'queue' connection from the redis driver in config/database.php
             'connection' => 'queue',
+            //this is the redis queue key default prefix that is applied when using this 'job' connection. It can be overriden by explicitly passing the queue name.
+            'queue' => '{job}',
             'retry_after' => 90,
             'block_for' => null,
-            # redis queue key prefix (used to segment between multiple apps)
-            # remove this key if we never share a redis server between apps
-            # key must be wrapped in brackets for redis cluster(Note: TBD This may only apply when using client controlled clustering)
-            'queue' => '{myapp}',
         ],
-    ],
-```
+        //this is the 'app' queue connection
+        'app' => [
+            //uses the redis driver from config/database.php
+            'driver' => 'redis',
+            //uses the 'queue' connection from the redis driver in config/database.php
+            'connection' => 'queue',
+            //this is the redis queue key default prefix that is applied when using this 'app' connection.It can be overriden by explicitly passing the queue name.
+            'queue' => '{app}',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
 
-Remove all keys in `.env` file that are prefixed by `QUEUE_`
+    ],
+],
+```
 
 ## Redis Cluster Queue key hash tags
 
@@ -135,3 +157,19 @@ If your Redis queue connection uses a Redis Cluster, your queue names must conta
     'queue' => '{default}',
     'retry_after' => 90,
 ],
+
+The brackets `{default}` are required for redis to set the hash tag.
+
+## The complete .env environment file settings
+
+```ini
+CACHE_DRIVER=redis
+
+SESSION_DRIVER=redis
+
+QUEUE_CONNECTION=job
+
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=radar
+REDIS_PORT=8002
+```
