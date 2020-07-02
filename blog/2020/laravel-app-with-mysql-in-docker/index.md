@@ -108,6 +108,12 @@ Now we are ready to run the MySQL container by running the following bash comman
 docker-compose up -d
 ```
 
+All the containers should startup as can be seen by running the following command:
+
+```bash
+docker ps -a
+```
+
 In the following sections, I list various ways of connecting to the MySQL server running in the container. These include connecting with command line clients, connecting from php code from within our Laravel project as well as connecting with artisan Tinker and artisan database migrations.
 
 ## Connecting using mysqlsh cli
@@ -137,6 +143,29 @@ sudo mysql -h localhost -P 8001 -u myapp -pmyapp myapp
 ```
 
 > Note you may be asked to type in your macOS password to execute the command
+
+## Connecting with TablePlus to running mysql container
+
+Open TablePlus and create a connection with the following:
+
+click create a new connection
+select MySQL database option
+click create
+type in `myapp` for the connection name
+
+Enter the following credentials from the `.env` file:
+
+```ini
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=8001
+DB_DATABASE=myapp
+DB_USERNAME=myapp
+DB_PASSWORD=myapp
+```
+
+click on the test button to test connection
+click connect button to connect to MySQL running in the container
 
 ## databases view as root user
 
@@ -233,3 +262,27 @@ docker-compose up -d
 ```
 
 And now we should see that the database connection is working again and that the tables and data that we previously had in the database should still be there.
+
+## Executing and Testing the MySQL the container from the command line
+
+```bash
+#run mariadb container and run the mysql cli in the running container
+docker-compose exec mysql mysql -u myapp -p myapp
+# will display my_app_name database that was created upon starting the mysql service
+show databases;
+```
+
+While mysql container is running cd into your laravel app that is configured to connect to the mysql instance running on this localhost container.
+
+Now open a new terminal window and run:
+
+```bash
+php artisan tinker
+DB::connection()->getPdo();
+```
+
+You should see the connection info.
+
+Switch to the terminal window where the mysql container is running and type `exit` to exit the mysql cli and consequently stop the running container.
+
+If this was the first time running the mysql container, back in the project root terminal window cd into the `./data/mysql/` directory to see the saved database files.
