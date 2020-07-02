@@ -62,7 +62,7 @@ Below is how the `redis` database driver is configured in `config/database.php`
 
 The `.env` file in the project root contains the environment variable settings for the `config/database.php` configuration file.
 
-Below are the settings used for my development environment that connect to a local docker container running a Redis service exposed on port 8002 on my localhost. 
+Below are the settings used for my development environment that connect to a local docker container running a Redis service exposed on port 8002 on my localhost.
 
 ```ini
 REDIS_HOST=127.0.0.1
@@ -196,3 +196,42 @@ If your Redis queue connection uses a Redis Cluster, your queue names must conta
 ],
 
 The brackets `{default}` are required for redis to set the hash tag.
+
+## Connecting with PHP to running redis container
+
+```bash
+php artisan tinker
+Redis::connection()->ping();
+```
+
+## Connecting with TablePlus to running redis container
+
+Open TablePlus and create a connection with the following:
+
+click create a new connection
+select redis
+click create
+type in my_app_name for the connection name
+
+Enter the following credentials:
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PORT=8002
+REDIS_PASSWORD=mypassword
+#REDIS_PASSWORD=null if we ommit the --requirepass flag for the redis command
+```
+
+## location of redis and mysql data and config files within container
+
+```bash
+#show redis.conf file location
+redis-cli -p 8002 info | grep 'config_file'
+# on macOS
+# /usr/local/etc/redis.conf
+
+#show file directory in redis.conf file
+cat /usr/local/etc/redis.conf | grep "dir "
+# on macOS
+# /usr/local/var/db/redis/
+```

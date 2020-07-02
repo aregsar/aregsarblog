@@ -116,3 +116,10 @@ OK
 > keys *
 >
 ```
+
+## Useful links
+
+[How to Connect to Redis Database Clusters with redli](https://www.digitalocean.com/docs/databases/redis/how-to/connect)
+
+[redli](https://github.com/IBM-Cloud/redli)
+
