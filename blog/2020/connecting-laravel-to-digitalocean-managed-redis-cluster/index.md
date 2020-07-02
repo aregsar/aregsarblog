@@ -2,7 +2,7 @@
 
 April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-This post is means as a quick list reference or links and commands to connecting to the Digitalocean managed Redis database.
+This post is means as a quick list reference of links and commands for connecting to the Digitalocean managed Redis database.
 
 ## Laravel environment settings
 
