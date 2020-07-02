@@ -56,10 +56,6 @@ April 28, 2020
 
 [My Laravel Redis Configuration](https://aregsar.com/blog/2020/my-laravel-redis-configuration)
 
-April 23, 2020
-
-[Setup Local Laravel Development With Docker Services](https://aregsar.com/blog/2020/setup-local-laravel-development-with-docker-services)
-
 April 20, 2020
 
 [Connecting Laravel To Digitalocean Managed Redis Cluster](https://aregsar.com/blog/2020/connecting-laravel-to-digitalocean-managed-redis-cluster)

@@ -54,6 +54,17 @@ echo '/data' >> .gitignore
 mkdir data
 ```
 
+## Setup Local Laravel Development With Docker Services
+
+I run the following services in individual Docker containers to support local Laravel application development:
+
++ MySQL database
++ Redis used for session, cache and queued job storage
++ MailHog Mail server to capture emails and view in dashboard
++ Elastic Search
+
+> Note: Except for MailHog, these are the same services I use in production to maintain dev/prod parity
+
 ## Create the docker-compose file
 
 Create a new docker-compose.yml file in the Laravel project root directory:
