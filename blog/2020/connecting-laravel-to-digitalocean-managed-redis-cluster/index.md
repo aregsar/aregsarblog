@@ -2,7 +2,7 @@
 
 April 20, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-This post is means as a quick list reference of links and commands for connecting to the Digitalocean managed Redis database.
+This post is meant as a quick list reference of links and commands for connecting to the DigitalOcean managed Redis database.
 
 ## Laravel environment settings
 
@@ -28,7 +28,7 @@ Test the connection by adding the following to any Laravel route or controller a
 
 The default Redis command line client, redis-cli does not support SSL So Digitalocean recommends using the redli client that natively supports TLS connection required by the managed Redis database.
 
-Instructions for using the Redli Redis client listed at [how-to-connect-to-managed-database-ubuntu-18-04](https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04)
+Instructions for using the Redli Redis client are listed at [how-to-connect-to-managed-database-ubuntu-18-04](https://www.digitalocean.com/community/tutorials/how-to-connect-to-managed-database-ubuntu-18-04)
 
 You can check out more info about the Redis redli CLI here:
 
