@@ -2,7 +2,7 @@
 
 April 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed for newer versions of Laravel
 
 In this article I will show you how to convert the Laravel Cache configuration to use Redis.
 
@@ -71,10 +71,13 @@ The annotated snippets from  both `config/cache.php` and `config/database.php` s
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
+            'database' => '0',
+            'prefix'=>'c:'
         ],
     ],
 ```
+
+> Note that the `cache` connection in `config/database.php` always uses a value of `0` for its `database` setting since redis clusters only support a single database per redis server. In order to differentiate between redis keys for queue items vs other types of items, we use a key prefix specified by the additional `prefix` setting.
 
 ## Changing the default Laravel facade/provider cache driver to use Redis
 

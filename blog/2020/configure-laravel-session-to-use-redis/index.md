@@ -30,7 +30,6 @@ This changes the default value to use the `'redis'` driver defined in `config/da
 
 We also need need to change the 'driver' setting the `SESSION_DRIVER=file` in the .env file to `SESSION_DRIVER=redis`. This sets the SESSION_DRIVER environment variable setting to the `'redis'` driver defined in `config/database.php`.
 
-
 ## The Redis connection used by Laravel Session
 
 The `config/session.php` file also has a `'connection'` setting that selects which Redis driver `connection` the session should use, when the session is set to use the `redis` driver.
