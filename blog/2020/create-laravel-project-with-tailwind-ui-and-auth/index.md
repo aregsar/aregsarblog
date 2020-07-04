@@ -37,7 +37,7 @@ npm install && npm run dev
 
 ## Using the Bootstrap alternative to tailwind
 
-You can use Bootsrap UI with Authentication Scaffolding instead of the previous steps:
+You can use Bootstrap UI with Authentication Scaffolding instead of the previous steps:
 
 ```bash
 composer require laravel/ui
@@ -47,17 +47,19 @@ npm install && npm run dev
 
 ## Running database migrations to add authentication
 
-Before running the migrations we need to create a `myapp` database using your favorite database manager CLI or GUI. I use TablePlus `https://tableplus.com/` to add a database named `myapp`.
+Before running the migrations we need to create a `myapp` database using your favorite database manager CLI or GUI. I used TablePlus `https://tableplus.com/` to add a database named `myapp`.
 
 Next we need to add the database user and password settings to `.env`.
 Assuming we created a database with default settings:
 
+```ini
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=myapp
 DB_USERNAME=root
 DB_PASSWORD=
+```
 
 Open `.env` file
 
@@ -105,17 +107,13 @@ Migrated:  2019_08_19_000000_create_failed_jobs_table (0.01 seconds)
 
 ## Serving the site
 
-Serve using Laravel valet:
+If we are serving the app using Laravel valet, we can navigate with our browser to `myapp.test`:
 
 ```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome myapp.test
 ```
 
-Or serve using artisan
-
-```bash
-php artisan serve
-```
+If we are serve using `php artisan serve` we can navigate with our browser to `localhost:8000`:
 
 ```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8000
@@ -123,7 +121,7 @@ php artisan serve
 
 ## Tailwind configuration files
 
-In tailwind.config.js preset added
+Finally, below is the content of the `tailwind.config.js` that we need to have to use tailwind.
 
 ```js
 module.exports = {
