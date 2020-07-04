@@ -48,7 +48,7 @@ In other words the `redis` store setting in `config/cache.php` has a `driver` se
 The annotated snippets from  both `config/cache.php` and `config/database.php` shown below should clarify what I have just described above:
 
 ```php
-// config/cache.php
+ // config/cache.php
  'default' => env('CACHE_DRIVER', 'redis'),
  'stores' => [
         // This is the redis store driver
@@ -120,7 +120,7 @@ We can additional cache `redis` stores in `config/cache.php` that are configured
 Below is an example of adding a `redis2` store to `config/cache.php` that references a `cache2` redis connection added to the `redis` driver in `config/database.php`:
 
 ```php
-// config/cache.php
+ // config/cache.php
  'stores' => [
         'redis' => [
             // uses the redis driver defined in config/database.php
