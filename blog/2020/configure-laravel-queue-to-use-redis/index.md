@@ -2,27 +2,24 @@
 
 April 17, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed for newer versions of Laravel 
 
-In this article I will show you how to convert the Laravel Queue configuration to use Redis to queue background jobs.
+In this article I will show you how to change the out of the box Laravel Queue configuration that uses the sync driver to instead use Redis as the queue driver for background jobs.
 
-By default Laravel queue facade\provider is configured to use a `sync` driver for synchronously executing queued jobs. This will not be work in a production environment when jobs need to be queued to a data store to be picked up and executed in the background.
+By default Laravel queue facade\provider is configured to use a `sync` driver for synchronously executing queued jobs.
+
+This will not work in a production environment when jobs need to be queued to a data store to be picked up and executed in the background.
+
+Also we may want to run feature tests against the same setup as we have in production.
 
 ## The queue facade/provider configuration
 
-The file `config/queue.php` contains multiple queue connections specified in the `connections` setting. The file also contains a `default` connection setting for the queue that is set to the `sync` connection via the out of the box `QUEUE_CONNECTION` .env file setting and the default second parameter of the env() function.
-
-The `sync` connection has a `driver` setting of `sync` indicating that the queue will operate synchronously, immediately executing any queued jobs.
-
-There is also a `redis` connection. This connection has a `driver` setting that is set to the `redis` driver. This `redis` driver is defined in the `config/database.php` file.
-The `redis` connection also has a `connection` setting set to `default`. This `default` connection is also defined in the `config/database.php` file as one of the connections of the `redis` driver.
+Below are annotated snippets of the out of the box Laravel queue configuration and database configuration files:
 
 From `config/queue.php` file:
 
 ```php
-// selects default sync connection from connections array in this file
-// by using the QUEUE_CONNECTION=sync in the .env file or by removing QUEUE_CONNECTION=sync from the .env file
-
+// selects default sync connection from connections array in this file by using the QUEUE_CONNECTION=sync in the .env file or by removing QUEUE_CONNECTION=sync from the .env file
  'default' => env('QUEUE_CONNECTION', 'sync'),
 
  'connections' => [
@@ -49,21 +46,13 @@ From `config/database.php` file:
 
 ```php
     'redis' => [
-        #out of the box 'default' redis connection
+        //out of the box 'default' redis connection
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
-        ],
-
-        'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
     ],
@@ -83,7 +72,7 @@ We want to change the `QUEUE_CONNECTION` in the `.env` file from `QUEUE_CONNECTI
 
 ## changing the default redis connection to use a different cache store
 
-The `redis` connection in `config/queue.php` file has a  `'connection' => 'default'` setting that selects the `default` connection of the `redis` driver defined in `config/database.php`.
+The `redis` connection in `config/queue.php` file has a `'connection' => 'default'` setting that selects the `default` connection of the `redis` driver defined in `config/database.php`.
 
 We can change this so that the queue connection in `config/queue.php` can use a separate redis driver connection that we can add to `config/database.php`.
 
@@ -132,12 +121,13 @@ From `config/database.php` file:
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             // uses a separate database for the queue
-            'database' => env('REDIS_CACHE_DB', '2'),
+            'database' => '0',
+            'prefix' => 'q:'
         ],
     ],
 ```
 
-> Note that the `queue` connection in `config/database.php` uses a value of `2` for its `database` setting to indicate a different Redis database. Otherwise there would be no point for adding this new connection
+> Note that the `queue` connection in `config/database.php` always uses a value of `0` for its `database` setting since redis clusters only support a single database per redis server. In order to differentiate between redis keys for queue items vs other types of items, we use a key prefix specified by the additional `prefix` setting.
 
 ## Using the Laravel default queue connection
 
