@@ -27,7 +27,11 @@ By default Laravel uses the file driver to store session data on the server. Thi
 Here is the default setting in config/session.php:
 
 ```php
+    //selects a driver from the config/session.php file
     'driver' => env('SESSION_DRIVER', 'file'),
+    //if redis is selected as the driver then selects the redis driver
+    //connection from the config/session.php file
+    'connection' => env('SESSION_CONNECTION', null),
 ```
 
 ## Setting the Laravel session driver
@@ -38,36 +42,21 @@ We can change the default Laravel session store configuration to use the Redis k
 SESSION_DRIVER=redis
 ```
 
-This changes the default value to use the `'redis'` driver defined in `config/database.php`.
+This changes the default value to use the `redis` driver defined in `config/database.php`.
 
-Note: We want to keep the value of the default parameter passed to env() helper to `file` so that we will be able to remove the `SESSION_DRIVER` variable from the .env file if we need the session to use files for development testing.
+## Setting the redis session connection
 
-```php
-    'driver' => env('SESSION_DRIVER', 'file'),
-```
+By default Laravel does not include the `SESSION_CONNECTION` setting in the .env file.
 
-## The Redis connection used by the Laravel Session
+This means that if we set the  Laravel session driver to use redis we should also add the `SESSION_CONNECTION` setting to the .env file to explicitly set the redis driver connection that the redis driver should use.
 
-The `config/session.php` file also has a `'connection'` setting. 
+The redis driver connections are specified in the `config/database.php` file.
 
-This setting selects the Redis driver `connection` from the `config/database.php` that the `redis` session driver should use.
+If we do not explicitly set the `SESSION_CONNECTION` setting then the `default` redis connection from the `config/database.php` file will be used by default because the second parameter to `env('SESSION_CONNECTION', null)` helper is null.
 
-```php
-    // uses the 'cache' configuration of the 'redis' driver in config/database.php
-    // add SESSION_CONNECTION=default or SESSION_CONNECTION=cache to .env
-    // don't know if null parameter defaults to 'default' connection if SESSION_CONNECTION is not specified
-    'connection' => env('SESSION_CONNECTION', null),
-```
+I like to add a separate connection for the session in the `config/database.php` file and explicitly set the `SESSION_CONNECTION` to this connection.
 
-By default the `SESSION_CONNECTION` environment variable setting is not defined in `.env` file. Also the default parameter value for the `'connection'` setting in `config/session.php` is null. So by default `'connection'` is set to null causing the `'default'` connection of the `'redis'` driver in `config/database.php` to be selected as the session connection by the Laravel session provider\facade.
-
-## Explicitly configuring the session redis connection
-
-Instead of allowing the session connection to use the default redis connection, I like to be more explicit.
-
-The following steps set the session connection to a completely separate redis connection added to `config/database.php`.
-
-First add a new connection named `session` to the available redis connections inside the `redis` driver section in `config/database.php`:
+To do so we first add a new connection named `session` to the available redis connections inside the `redis` driver section in `config/database.php`:
 
 ```bash
 'redis' => [
@@ -76,27 +65,16 @@ First add a new connection named `session` to the available redis connections in
                 'host' => env('REDIS_HOST', '127.0.0.1'),
                 'password' => env('REDIS_PASSWORD', null),
                 'port' => env('REDIS_PORT', '6379'),
-                'database' => env('REDIS_CACHE_DB', '3'),
+                'database' => '0',
+                'prefix' => 's:'
     ],
 ],
 ```
 
-The new connection is named `session` and its `database` setting is set to `3` to use a different redis database then the redis database used by default connection since they both use the same redis server settings.
+> Note that the `session` connection in `config/database.php` always uses a value of `0` for its `database` setting since redis clusters only support a single database per redis server. In order to differentiate between redis keys for session items vs other types of items, we use a key prefix specified by the additional `prefix` setting.
 
-Next remove default the `SESSION_CONNECTION=file` setting from the `.env` file because it will not be used.
+Now we can update the .env file to use this connection by adding the following `SESSION_CONNECTION` setting:
 
-Finally in `config/session.php` I changed the default connection parameter from `null` to `'session'` :
-
-```php
-    'connection' => env('SESSION_CONNECTION', 'session' ),
+```ini
+SESSION_CONNECTION=session
 ```
-
-This sets the default value to the new `session` connection added to `config/database.php`.
-
-Alternatively in `config/session.php` you can hard code the session driver `connection` to `session`:
-
-```php
-    'connection' => 'session',
-```
-
-This sets the value to directly to the new `session` connection added to `config/database.php`.

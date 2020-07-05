@@ -82,12 +82,6 @@ We can change the default Laravel queue store configuration to use the Redis key
 QUEUE_CONNECTION=redis
 ```
 
-Note: We don't want to hard code the `default` setting to `redis` and we want to keep the value of the default parameter passed to env() to `sync` so that we will be able to remove the `QUEUE_CONNECTION` variable from the .env file if we need the queue to operate synchronously for development testing.
-
-```php
-'default' => env('QUEUE_CONNECTION', 'file'),
-```
-
 ## changing the default redis connection to use a different cache store
 
 The `redis` connection in `config/queue.php` file has a `'connection' => 'default'` setting that selects the `default` connection of the `redis` driver defined in `config/database.php`.

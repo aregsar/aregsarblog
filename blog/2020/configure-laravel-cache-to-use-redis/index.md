@@ -78,12 +78,6 @@ To let the Laravel cache facade\provider use Redis by default we need to change 
 CACHE_DRIVER=redis
 ```
 
-Note: We don't want to hard code the `default` setting to `redis` and we want to keep the value of the default parameter passed to env() to `file` so that we will be able to remove the `CACHE_DRIVER` variable from the .env file if we need the cache to use files for development testing.
-
-```php
- 'default' => env('CACHE_DRIVER', 'redis'),
-```
-
 ## Using the default Laravel cache store
 
 The snippet below uses the default cache store specified in `config/cache.php`:
