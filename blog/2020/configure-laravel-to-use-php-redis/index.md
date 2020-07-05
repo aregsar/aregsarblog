@@ -3,7 +3,26 @@
 April 10, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel
-> Prerequisite: must have PHP and PECL installed. The MacOS Hombrew PHP installation installs PECL as well. On Ubuntu you need to install PECL separately using apt package manager. You can find Ubuntu install instructions and link to instructions for connecting to the DigitalOcean redis cluster at the end of the article.
+
+This post is part of a series of posts listed below that show how to setup your Laravel project to use Redis:
+
+[Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis)
+
+[Configure Laravel Session To Use Redis](https://aregsar.com/blog/2020/configure-laravel-session-to-use-redis)
+
+[Configure Laravel Cache To Use Redis](https://aregsar.com/blog/2020/configure-laravel-cache-to-use-redis)
+
+[Configure Laravel Queue To Use Redis](https://aregsar.com/blog/2020/configure-laravel-queue-to-use-redis)
+
+[My Laravel Redis Configuration](https://aregsar.com/blog/2020/my-laravel-redis-configuration)
+
+[Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
+
+In this article I will show you how to setup the PHP REDIS driver so that your Laravel Project will be able to connect to Redis servers using the officially recommended configuration
+
+## Prerequisites
+
+You must have PHP and PECL installed. The MacOS Hombrew PHP installation installs PECL as well. On Ubuntu you need to install PECL separately using apt package manager. You can find Ubuntu install instructions and link to instructions for connecting to the DigitalOcean redis cluster at the end of the article.
 > You might find the redis-cli cli docs at `https://redis.io/topics/rediscli` useful for working with Redis. Alternatively Medis `http://getmedis.com/` app and `https://tableplus.com/blog/2018/06/best-redis-gui-client-tableplus.html` are nice GUI redis clients for working with redis data.
 
 ## Default Redis driver in Laravel 7

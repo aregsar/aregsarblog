@@ -4,6 +4,20 @@ April 14, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Note: These are installation instructions for Laravel 7. The post will get updated as needed for newer versions of Laravel
 
+This post is part of a series of posts listed below that show how to setup your Laravel project to use Redis:
+
+[Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis)
+
+[Configure Laravel Session To Use Redis](https://aregsar.com/blog/2020/configure-laravel-session-to-use-redis)
+
+[Configure Laravel Cache To Use Redis](https://aregsar.com/blog/2020/configure-laravel-cache-to-use-redis)
+
+[Configure Laravel Queue To Use Redis](https://aregsar.com/blog/2020/configure-laravel-queue-to-use-redis)
+
+[My Laravel Redis Configuration](https://aregsar.com/blog/2020/my-laravel-redis-configuration)
+
+[Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
+
 In this article I will show you how to convert the Laravel Cache configuration to use Redis.
 
 By default Laravel uses the file driver to cache data. This will not be performant for high traffic sites.

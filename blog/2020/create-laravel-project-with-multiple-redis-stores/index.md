@@ -2,9 +2,9 @@
 
 April 18, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-In this article I will show how to create a production oriented redis configuration. The configuration will work locally and with standard or clustered Redis servers in production. 
+In this article I will show how to create a production oriented redis configuration. The configuration will work locally and with standard or clustered Redis servers in production.
 
-The configuration will use separate connections each with their own  unique prefixes for session, cache , queue and application connections to distinguish between items stored for different purposes.
+The configuration will use separate connections each with their own unique prefixes for session, cache , queue and application connections to distinguish between items stored for different purposes.
 
 Also the configuration with separate connections, will be ready to scale to separate Redis server instances in production for the session, cache, queue and application in the future, simply by changing the connection parameters.
 
