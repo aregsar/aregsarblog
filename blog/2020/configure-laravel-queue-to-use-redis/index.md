@@ -16,7 +16,7 @@ Also we may want to run feature tests against the same setup as we have in produ
 
 Below are annotated snippets of the out of the box Laravel queue configuration and database configuration files:
 
-From `config/queue.php` file:
+The Laravel cache configuration file `config/queue.php` has a list of connections as defined by the `connections` setting:
 
 ```php
 // selects default sync connection from connections array in this file by using the QUEUE_CONNECTION=sync in the .env file or by removing QUEUE_CONNECTION=sync from the .env file
@@ -34,13 +34,15 @@ From `config/queue.php` file:
             // hard coded 'default' connection from 'redis' driver connection in config/database.php
             'connection' => 'default',
             // queue name that is set to `default` since no REDIS_QUEUE setting is defined in .env file
-            // this name will be used as a Redis key prefix so we can have different queues with the same Redis connection (no need to change this setting)
+            // this name will be used as a Redis key prefix so we can have different queues with the same Redis connection
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
         ],
 ]
 ```
+
+The `redis` store has a `driver` setting in `config/queue.php` which corresponds to the `redis` driver in the `config/database.php` file. The `redis` store also has a `connection` setting in `config/queue.php` which corresponds to the `default` connection of the `redis` driver in the `config/database.php` file.
 
 From `config/database.php` file:
 
@@ -60,15 +62,17 @@ From `config/database.php` file:
 
 ## changing the default Laravel Queue connection to use Redis
 
-We can change the default Laravel queue store configuration to use the Redis key value store for its queue by changing the `default` setting specified in the `config/queue.php` configuration file shown below:
+We can change the default Laravel queue store configuration to use the Redis key value store for its queue by changing the `default` setting specified in the `config/queue.php` configuration file shown below by setting the `QUEUE_CONNECTION` variable in the .env  file to `redis`:
 
-```php
-'default' => env('QUEUE_CONNECTION', 'sync'),
+```ini
+QUEUE_CONNECTION=redis
 ```
 
-We want to change the `QUEUE_CONNECTION` in the `.env` file from `QUEUE_CONNECTION=sync` to `QUEUE_CONNECTION=redis` to set the `default` setting to use the `redis` connection defined in `config/queue.php`.
+Note: We don't want to hard code the `default` setting to `redis` and we want to keep the value of the default parameter passed to env() to `sync` so that we will be able to remove the `QUEUE_CONNECTION` variable from the .env file if we need the queue to operate synchronously for development testing.
 
-> Note: We don't want to hard code the `default` setting to `redis` and we want to keep the value of the default parameter passed to env() to `sync` so that we will be able to remove the `QUEUE_CONNECTION` variable from the .env file if we need the queue to operate synchronously for development testing.
+```php
+'default' => env('QUEUE_CONNECTION', 'file'),
+```
 
 ## changing the default redis connection to use a different cache store
 
@@ -141,7 +145,7 @@ Queue::push(new InvoiceEmail($order));
 
 We can explicitly selecting a queue connection specified in `config/queue.php` by the queue connection name that we like to use.
 
-This will override the default queue connection set to the `default` setting.
+This will override the default queue connection set to the `default` setting in `config/queue.php`.
 
 ```php
 $connection = Queue::connection('redis2')->push(new InvoiceEmail($order));
@@ -160,7 +164,7 @@ Both above use the default queue for the connection they are using, which is spe
 
 We can override the default queue of the queue connection that is used by the facade by explicitly passing in a queue name.
 
-The code below names the queue explicitly but uses the default connection setting in config/queue.php. 
+The code below names the queue explicitly but uses the default connection setting in config/queue.php.
 
 ```php
 Queue::pushOn('email', new InvoiceEmail($order));
