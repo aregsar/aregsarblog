@@ -18,15 +18,11 @@ This post is part of a series of posts listed below that show how to setup your 
 
 [Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
 
-
-
 In this article I will show you how to convert the Laravel Session configuration to use Redis.
 
+## The session configuration
+
 By default Laravel uses the file driver to store session data on the server. This will not be performant for high traffic sites.
-
-## Setting the Laravel session driver
-
-We can change the default Laravel session store configuration to use the Redis key value store for its session by changing the 'driver' setting in the `config/session.php` configuration file.
 
 Here is the default setting in config/session.php:
 
@@ -34,19 +30,27 @@ Here is the default setting in config/session.php:
     'driver' => env('SESSION_DRIVER', 'file'),
 ```
 
-First you can change the default setting parameter from `file` to `redis`.
+## Setting the Laravel session driver
 
-```php
-    'driver' => env('SESSION_DRIVER', 'redis'),
+We can change the default Laravel session store configuration to use the Redis key value store for its session by changing the 'driver' setting in the `config/session.php` configuration file by setting the `SESSION_DRIVER` variable in the .env  file to `redis`:
+
+```ini
+SESSION_DRIVER=redis
 ```
 
 This changes the default value to use the `'redis'` driver defined in `config/database.php`.
 
-We also need need to change the 'driver' setting the `SESSION_DRIVER=file` in the .env file to `SESSION_DRIVER=redis`. This sets the SESSION_DRIVER environment variable setting to the `'redis'` driver defined in `config/database.php`.
+Note: We want to keep the value of the default parameter passed to env() helper to `file` so that we will be able to remove the `SESSION_DRIVER` variable from the .env file if we need the session to use files for development testing.
 
-## The Redis connection used by Laravel Session
+```php
+    'driver' => env('SESSION_DRIVER', 'file'),
+```
 
-The `config/session.php` file also has a `'connection'` setting that selects which Redis driver `connection` the session should use, when the session is set to use the `redis` driver.
+## The Redis connection used by the Laravel Session
+
+The `config/session.php` file also has a `'connection'` setting. 
+
+This setting selects the Redis driver `connection` from the `config/database.php` that the `redis` session driver should use.
 
 ```php
     // uses the 'cache' configuration of the 'redis' driver in config/database.php
@@ -54,8 +58,6 @@ The `config/session.php` file also has a `'connection'` setting that selects whi
     // don't know if null parameter defaults to 'default' connection if SESSION_CONNECTION is not specified
     'connection' => env('SESSION_CONNECTION', null),
 ```
-
-The connection value comes from one of the Redis driver connection names defined in `config/database.php`.
 
 By default the `SESSION_CONNECTION` environment variable setting is not defined in `.env` file. Also the default parameter value for the `'connection'` setting in `config/session.php` is null. So by default `'connection'` is set to null causing the `'default'` connection of the `'redis'` driver in `config/database.php` to be selected as the session connection by the Laravel session provider\facade.
 
