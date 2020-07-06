@@ -329,81 +329,6 @@ public function redisTest()
 
 Visit the `/redis` path to see the result.
 
-## Setting the redis database in redis connections settings
-
-Each Redis server you configure a connection for in the config file will have its own unique set of host and port settings. However multiple connections can be configured to connect to the same Redis server but using a different database.
-
-The database value must be an integer between 0 and 15 because Redis supports only up to 16  databases. The connection string to redis will include the database as a path segment `redis://host:port/database` e.g. `redis://localhost:6379/0`
-
-Here is the default out of the box connections configured in `config/database.php`:
-
-```bash
-'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '0'),
-        ],
-'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-        ],
-```
-
-You can see that for laravel specifies `default` connection that defaults the database value to 0 and a `cache` connection that defaults the database value to 1.
-This works because the common REDIS_CACHE_DB env key used for both connection databases is not specified by default in the .env file.
-
-> Note: Alternatively we could change the env key name to 'REDIS_CACHE_DB_DEFAULT' for he 'default' connection database and 'REDIS_CACHE_DB_CACHE' for the 'cache' connection database and add them to the .env file as REDIS_CACHE_DB_DEFAULT=0 and REDIS_CACHE_DB_CACHE=1.
-
-By using a unique database number for each connection, the `'default'` connection with database 0 can be used for the Redis provider/facade that the application uses to directly work with the Redis data store and the `'cache'` connection with database 1 can be used by the Laravel Cache facade for caching data.
-
-We can acheive this separation by configuring The Laravel Cache provider/facade to use the `'redis'` driver with the `'cache'` connection.
-
-In this way both the default and cache connections can use the same DigitalOcean clustered server but store their data in separate databases.
-
-In my apps I like to also add two other Redis driver connections with separate databases each for the Laravel Session and Queue Facades to use.
-
-```bash
-'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '0'),
-        ],
-'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-        ],
-
-'queue' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_QUEUE_DB', '2'),
-        ],
-
-'session' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_SESSION_DB', '3'),
-        ],
-```
-
-> Note: the `database` setting for the `queue` and `session` settings is also updated to use `REDIS_QUEUE_DB` and `REDIS_SESSION_DB` environment settings accordingly
-
-In separate articles I will show how to configure the Laravel Session, Cache and Queue to use the redis driver with specific redis connections.
-
 ## Setting per connection key prefix when using the PhpRedis driver
 
 According to Laravel 7 docs PhpRedis also supports the following additional connection parameters: prefix, persistent, read_timeout and timeout
@@ -416,15 +341,16 @@ Below I have added a data key prefix to the 'cache' connection while the 'defaul
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '0'),
+            'database' => `0`,
+            'prefix' => 'd:'
         ],
 'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-            'prefix' => 'cache:'
+            'database' => `0`,
+            'prefix' => 'c:'
         ],
 ```
 
@@ -434,7 +360,7 @@ With this configuration, all keys used by the Laravel application when using the
 
 ## Setting the key prefix if using the predis driver
 
-If we change the default redis driver to use the old predis driver per connection key prefix setting does not work.
+If we change the default redis driver to use the old `predis` driver the per connection key prefix setting does not work.
 
 For predis we can only set a common prefix inside the 'options' setting::
 
@@ -445,3 +371,9 @@ For predis we can only set a common prefix inside the 'options' setting::
 ```
 
 The default out of the box .env file does not contain REDIS_PREFIX key so the second parameter of the env() function specifies a prefix using the APP_NAME. You can remover the out of the box prefix setting if you don't want a prefix.
+
+## The redis connections settings
+
+Each Redis connection in the config file will have its own set of host and port settings. All the connections can be configured to connect to the same Redis server or they can individually be configured to connect to separate Redis servers.
+
+In separate articles I will show how to configure the Laravel Session, Cache and Queue to use the redis driver with separate redis connections for each.
