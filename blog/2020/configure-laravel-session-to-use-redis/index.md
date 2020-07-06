@@ -2,7 +2,7 @@
 
 April 13, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel 
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed for newer versions of Laravel 
 
 This post is part of a series of posts listed below that show how to setup your Laravel project to use Redis:
 
@@ -32,6 +32,7 @@ Here is the default setting in config/session.php:
     //if redis is selected as the driver then selects the redis driver
     //connection from the config/session.php file
     'connection' => env('SESSION_CONNECTION', null),
+    'files' => storage_path('framework/sessions'),
 ```
 
 ## Setting the Laravel session driver
@@ -77,4 +78,11 @@ Now we can update the .env file to use this connection by adding the following `
 
 ```ini
 SESSION_CONNECTION=session
+```
+
+An alternative to adding the `SESSION_CONNECTION` setting would be just to hard code the connection in the `config/session.php` file:
+
+```php
+    'driver' => env('SESSION_DRIVER', 'file'),
+    'connection' => 'session',
 ```

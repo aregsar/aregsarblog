@@ -2,7 +2,7 @@
 
 April 10, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-> Note: These are installation instructions for Laravel 7. The post will get updated as needed newer versions of Laravel
+> Note: These are installation instructions for Laravel 7. The post will get updated as needed for newer versions of Laravel
 
 This post is part of a series of posts listed below that show how to setup your Laravel project to use Redis:
 
@@ -18,27 +18,34 @@ This post is part of a series of posts listed below that show how to setup your 
 
 [Create Laravel Project With Multiple Redis Stores](https://aregsar.com/blog/2020/create-laravel-project-with-multiple-redis-stores)
 
-In this article I will show you how to setup the PHP REDIS driver so that your Laravel Project will be able to connect to Redis servers using the officially recommended configuration
+In this article I will show you how to setup the PHP REDIS driver so that your Laravel Project will be able to connect to Redis servers using the officially recommended configuration.
 
 ## Prerequisites
 
-You must have PHP and PECL installed. The MacOS Hombrew PHP installation installs PECL as well. On Ubuntu you need to install PECL separately using apt package manager. You can find Ubuntu install instructions and link to instructions for connecting to the DigitalOcean redis cluster at the end of the article.
+You must have PHP and PECL installed. When you install PHP on MacOS via Homebrew, PECL will be included.
+
+On Ubuntu you need to install PECL separately using apt package manager. You can find PECL installation instructions for Ubuntu at the end of the article.
+
 > You might find the redis-cli cli docs at `https://redis.io/topics/rediscli` useful for working with Redis. Alternatively Medis `http://getmedis.com/` app and `https://tableplus.com/blog/2018/06/best-redis-gui-client-tableplus.html` are nice GUI redis clients for working with redis data.
 
 ## Default Redis driver in Laravel 7
 
-As of Laravel 7 the framework comes preconfigured to use the phpredis driver instead of the old predis driver.
+As of Laravel 7 the framework comes preconfigured to use the `phpredis` driver instead of the old `predis` driver.
 
-The Laravel docs suggest that future versions of the framework may not support predis because the package does not seem to be maintained any longer.
+> Note: `phpredis` is a PHP extension installed using PECL whereas `predis` is a Composer package installed using Composer.
 
-If you still prefer to use the old predis driver you can do so by first installing the predis package via composer:
+The Laravel docs suggest that future versions of the framework may not support `predis` because the package does not seem to be maintained any longer.
+
+If you still prefer to use the old `predis` driver you can do so by first installing the predis package via composer:
 `composer install predis/predis`
 
-Then changing the default Laravel setting defined in `config/redis.php` from `'client' => 'phpredis'` to `'client' => 'predis'`
+Then change the default Laravel setting defined in `config/redis.php` from `'client' => 'phpredis'` to `'client' => 'predis'`.
 
-One advantage of using the default `phpredis` client is that is a native php extension which performs much better under heavy loads.
+One advantage of using the preconfigured `phpredis` client is that it is a native php extension which performs much better under heavy loads.
 
-To use the default `phpredis` client you need to perform the additional step of installing the `phpredis` php extension. The steps to do so for MacOS and Ubuntu are detailed below
+To use the preconfigured `phpredis` client you need to perform the additional step of installing the `phpredis` php extension using PECL.
+
+The steps to do so for MacOS and Ubuntu are detailed below
 
 ## Install Php Redis extension on MacOS
 
@@ -46,22 +53,23 @@ To use the default `phpredis` client you need to perform the additional step of 
 pecl install --force redis
 ```
 
-> Note: The --force flag makes sure the extension is added regardless of any caching settings.
+> Note: The --force flag makes sure the extension is added regardless of any cached settings that may prevent installation.
 
-Check PECL if it can detect the extension:
+List installed PHP extensions using PECL to verify installation:
 
 ```bash
 pecl list
 ```
 
-You should see:
+You should see the following extension listed:
 
 ```bash
 redis     5.2.1   stable
 ```
 
 Even though the `redis` extension is listed it might still not be detected by PHP.
-To make sure we need to check with PHP itself:
+
+To verify that the extension is detected by our PHP installation, we can list the PHP extensions using the PHP CLI:
 
 ```bash
 php -m
@@ -69,15 +77,16 @@ php -m
 
 Make sure `redis` is included in the output list of PHP installed extensions.
 
-Also check the extension exists at `/usr/local/lib/php/pecl/20190902/redis.so` and check the top of the `php.ini` file at `/usr/local/etc/php/7.4/php.ini` includes the line `extension="redis.so"`.
+Also check that the extension file `redis.so` exists at the PECL extensions directory for your installation. On my Mac I checked that `/usr/local/lib/php/pecl/20190902/redis.so` exists.
 
-If it does not exists, make sure to add it manually so  PECL or PHP detect the extension.
+Finally check that the `php.ini` file for your php installation
+includes the line `extension="redis.so"`. On my Mac I checked that the `/usr/local/etc/php/7.4/php.ini` file contained the line `extension="redis.so"`.
 
-> Note: The path of `php.ini` file may be different your PHP installation.
+If for some reason the line `extension="redis.so"` does not exists, make sure to add it manually to `php.ini` file so that PECL and PHP detect the extension.
 
 ## Install Php Redis extension on Ubuntu
 
-> Installation instructions for php-redis extension can be found at `https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown` and `https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster`. The steps are detailed at the end of the article.
+> Installation instructions for php-redis extension on ubuntu can be found at `https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown` and `https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster`. The steps are detailed at the end of the article.
 
 ## The Redis database driver configuration
 
