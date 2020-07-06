@@ -331,9 +331,9 @@ Visit the `/redis` path to see the result.
 
 ## Setting per connection key prefix when using the PhpRedis driver
 
-According to Laravel 7 docs PhpRedis also supports the following additional connection parameters: prefix, persistent, read_timeout and timeout
+According to Laravel 7 docs the `PhpRedis` driver also supports the following additional connection parameters: `prefix`, `persistent`, `read_timeout` and `timeout`
 
-Below I have added a data key prefix to the 'cache' connection while the 'default' connection does not use a prefix.
+Below I have added the `prefix` setting to the `cache` and `default` connections while changing both connections to use the same `database` setting:
 
 ```bash
 'default' => [
@@ -354,15 +354,15 @@ Below I have added a data key prefix to the 'cache' connection while the 'defaul
         ],
 ```
 
-With this configuration, all keys used by the Laravel application when using the `'cache'` connection will have the prefix `cache:` prepended to the key string.
-
-> Note: Instead of using databases to segment your redis data based on the connection database setting you can make all connections use the same database with each connection setting its own unique key prefix.
+With this configuration Laravel will add the `d:` prefix to the redis key value when the application connects to redis using the `default` connection and will add the `c:` prefix when connecting using the `cache` connection.
 
 ## Setting the key prefix if using the predis driver
 
-If we change the default redis driver to use the old `predis` driver the per connection key prefix setting does not work.
+the per connection key prefix setting mentioned in the previous setting will not work if we change the out of the box redis driver to use the old Composer based `predis` driver.
 
-For predis we can only set a common prefix inside the 'options' setting::
+When using the old `predis` driver we can only set a common prefix for all connections.
+
+The common prefix setting is part of the `options` setting as shown below:
 
 ```bash
 'options' => [
@@ -370,7 +370,9 @@ For predis we can only set a common prefix inside the 'options' setting::
         ],
 ```
 
-The default out of the box .env file does not contain REDIS_PREFIX key so the second parameter of the env() function specifies a prefix using the APP_NAME. You can remover the out of the box prefix setting if you don't want a prefix.
+This configuration exists for the out of the box installation but is not being used since the out of the box configuration used the `phpredis` driver.
+
+To avoid confusion with the per connection prefix setting, I generally remove the common `prefix` setting from the `options` setting when using the `phpredis` driver.
 
 ## The redis connections settings
 
