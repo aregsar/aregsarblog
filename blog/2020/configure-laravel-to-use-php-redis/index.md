@@ -127,37 +127,23 @@ The out of the box Redis driver configuration is shown below:
     ],
 ```
 
-The redis driver has a `client` setting `'client' => env('REDIS_CLIENT', 'phpredis')` that represents the php client that it uses to connect to the Redis server.
+The driver has a `client` setting `'client' => env('REDIS_CLIENT', 'phpredis')` that represents the php client that it uses to connect to the Redis server.
 
 By default the client is set to `phpredis` so it will use the `phpredis` php extension to connect to Redis.
 
 > As mentioned at the beginning of the article you can set the client to `predis` instead `phpredis` so it will use the `predis` composer package to connect to the Redis server instead.
 
-## The Redis configuration connections
-
-The redis configuration shown in the previous section specifies two Redis connections named `default` and `cache`.
-
-The `'default'` redis connection is used by the Laravel Redis facade by default.
-
-The Laravel Redis facade can use any of the other named connections such as the `cache` connection by explicitly referencing the connection by connection name.
-
-You can add as many connections with different connection settings as you need to the redis driver.
-
-Also both connections use the same connection settings except for the `database`. So they are connecting to the same redis server instance, but each uses a different database on that instance.
-
-> Note: Since Redis clusters do not support more than one database for the cluster, we will change this configuration to always use database number 0 and use an additional setting labeled `prefix` to segment redis keys based on usage type.
-
-Examples of using both the default connection and named connections are shown in the following sections.
-
 ## Avoiding namespace conflicts when using the default phpredis client
 
-There is one downside of using the default `'phpredis'` Redis client. The downside is that you will not be able to use the default Laravel Redis facade alias specified in the `config/app.php` file within your application unless it is renamed.
+There is one downside of using the default `'phpredis'` Redis client. 
+
+The downside is that you will not be able to use the default Laravel `Redis` facade `alias` specified in the `config/app.php` file within your application, unless it is renamed.
 
 This is because the `phpredis` extension has a class named `Redis` that conflicts with the `Redis` facade class name.
 
-If you choose not to rename the alias, then you need to use the `Redis` facade class directly using the full facade class namespace.
+If we choose not to rename the alias when using the `Redis` facade in our application code, we must either fully qualify the class name with the class namespace or import the namespace.
 
-To use the `Redis` facade in our application code we must either fully qualify the class name with the class namespace or import the namespace into the file where we use the facade class. Both of these cases is demonstrated below:
+Both of these cases are demonstrated below:
 
 ```php
 # fully namespace qualified class name
@@ -172,9 +158,11 @@ use Illuminate\Support\Facades\Redis;
 Redis::connection()->ping();
 ```
 
-Alternatively, as mentioned before you can rename the Redis facade alias in `config/app.php` file so that it will not conflict with the class name defined by the `phpredis` extension:
+## Renaming the Redis facade alias
 
-The original alias name `Redis` specified in `config/app.php` as shown here:
+As mentioned in previous section you can rename the `Redis` facade alias in `config/app.php` file so that it will not conflict with the same class name defined by the `phpredis` extension:
+
+The out of the box alias name `Redis` specified in `config/app.php` is shown below:
 
 ```php
 aliases' => [
@@ -182,7 +170,7 @@ aliases' => [
 ]
 ```
 
-As an example I have changed the name to `ZRedis`:
+As an example I have changed the alias name to `ZRedis` below:
 
 ```php
 aliases' => [
@@ -190,17 +178,35 @@ aliases' => [
 ]
 ```
 
-So now you can use it without requiring a namespace:
+So now you can use the `Redis` facade without importing its namespace:
 
 ```php
-ZRedis::connection()->ping();
+\ZRedis::connection()->ping();
 ```
+
+## The Redis configuration connections
+
+The out of the box redis configuration  specifies two Redis connections named `default` and `cache`.
+
+The `default` redis connection is used by the Laravel `Redis` facade by default.
+
+The Laravel Redis facade can use any of the other named connections such as the `cache` connection by explicitly referencing the connection by the connection name.
+
+You can add as many connections with different connection settings as you need to the redis driver as long as each has a unique name.
+
+Both the `default` and `cache` connections use the same connection settings except for the `database` setting. So they are connecting to the same redis server instance, but each uses a different database on that instance.
+
+> Note: Since Redis clusters do not support more than one database for the cluster, we will change this configuration to always use database number 0 and use an additional setting labeled `prefix` to segment redis keys based on usage type.
+
+Examples of using both the default connection and named connections are shown in the following sections.
 
 ## Connecting to Redis using default and explicit connections
 
-When using the redis facade, if no connection is explicitly specified, then the facade uses the `default` connection configuration of the `'redis'` driver.
+When using the redis facade, if no connection is explicitly specified, then the facade uses the `default` connection configuration of the `redis` driver.
 
-Here the default connection is used:
+Below are examples of using the default and named connections:
+
+Here the default connection from `config/database.php` is used:
 
 ```php
 Illuminate\Support\Facades\Redis::set('name', 'Taylor');
@@ -212,7 +218,7 @@ Here also the default connection is used:
 Illuminate\Support\Facades\Redis::connection()->set('name', 'Taylor');
 ```
 
-But here the `'cache'` connection from `config/database.php` is used:
+But here the `cache` connection from `config/database.php` is used:
 
 ```php
 Illuminate\Support\Facades\Redis::connection('cache')->set('name', 'Taylor');
