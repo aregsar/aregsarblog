@@ -131,6 +131,12 @@ The driver has a `client` setting `'client' => env('REDIS_CLIENT', 'phpredis')` 
 
 By default the client is set to `phpredis` so it will use the `phpredis` php extension to connect to Redis.
 
+I generally hard code the client configuration to `phpredis` since it does not change often:
+
+```php
+'client' => 'phpredis',
+```
+
 > As mentioned at the beginning of the article you can set the client to `predis` instead `phpredis` so it will use the `predis` composer package to connect to the Redis server instead.
 
 ## Avoiding namespace conflicts when using the default phpredis client
@@ -226,21 +232,21 @@ Illuminate\Support\Facades\Redis::connection('cache')->set('name', 'Taylor');
 
 ## Configuring Laravel to use a managed Redis cluster
 
-While you could add your own redis cluster configuration in the Clusters section of the `'redis'` driver, I like using a managed cluster. 
-
 In order to use a managed cluster you only need to add the line `'cluster' => env('REDIS_CLUSTER', 'redis')` to the 'options' array in the `'redis'` driver in `config/database.php` shown below:
 
-```bash
+```php
 'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
         ],
 ```
 
-The line `'cluster' => env('REDIS_CLUSTER', 'redis')` tells the framework to use the default clustering capability of a managed `redis` cluster.
+> Note: This is included in the out of the box Laravel installation and has no impact if you are not using a managed cluster.
+
+The line `'cluster' => env('REDIS_CLUSTER', 'redis')` tells the framework to use the default clustering capability of a managed Redis server cluster.
 
 > Note: the default value of `redis` for the second argument is used because the default `.env` file does not contain a `REDIS_CLUSTER` environment setting. If you define this variable in the `.env` file, you must set its value to `redis` to tell the framework to use a managed cluster.
 
-Since I am always using the DigitalOcean Redis cluster, I just hard code this value in `config/database.php` to `'cluster' => 'redis'`:
+Since I am always using the DigitalOcean Redis cluster, I just hard code this value in `config/database.php` as shown:
 
 ```php
 'options' => [
@@ -248,8 +254,9 @@ Since I am always using the DigitalOcean Redis cluster, I just hard code this va
     ],
 ```
 
-Instructions to setup Laravel for connecting with the DigitalO cean managed Redis cluster can be found at:
-`https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster`
+## Installing the phpredis driver on a DigitalOcean Ubuntu VPS
+
+Instructions to setup Laravel for connecting with the DigitalOcean managed Redis cluster can be found at [how-to-setup-laravel-with-digitalocean-managed-redis-cluster](https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster).
 
 I have outlined the steps from the article to install the PECL `phpredis` extension on Ubuntu below:
 
@@ -275,9 +282,11 @@ Restart PHP-FPM:
 sudo systemctl restart php7.4-fpm.service
 ```
 
-> Note: I am using PHP version 7.4, adjust version as needed as long is it is 7.2 or above
+> Note: I am using PHP version 7.4, adjust version as needed. As long is it is version 7.2 or above, these instructions should work
 
-Open the .env file and add the Redis Cluster Credentials:
+## Configuration settings to use the DigitalOcean Redis cluster
+
+Open the Laravel project `.env` file and add the Redis Cluster Credentials:
 
 ```ini
 REDIS_HOST=tls://your_redis_host.db.ondigitalocean.com
@@ -287,7 +296,15 @@ REDIS_PORT=25061
 
 > Note: We need use the `tls://` part before the name of the Redis cluster
 
-An now we can test the connections add the following route to a new controller that you can add named `RedisController`:
+We can test the connections by adding a controller and a route to connect to the Redis cluster from our application.
+
+First add a controller named `RedisController` to the project.
+
+```bash
+php artisan make:controller RedisController
+```
+
+Next add the following route to the `routes\web.php` file
 
 ```php
 Route::get('/redis', 'RedisController@redisTest');
