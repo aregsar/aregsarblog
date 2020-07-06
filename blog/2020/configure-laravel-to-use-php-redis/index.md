@@ -86,7 +86,7 @@ If for some reason the line `extension="redis.so"` does not exists, make sure to
 
 ## Install Php Redis extension on Ubuntu
 
-> Installation instructions for php-redis extension on ubuntu can be found at `https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown` and `https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster`. The steps are detailed at the end of the article.
+> Installation instructions for php-redis extension on ubuntu can be found at [install-php-redis-extension-on-ubuntu](https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown) and [how-to-setup-laravel-with-digitalocean-managed-redis-cluster](https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster). The steps are detailed at the end of the article.
 
 ## The Redis database driver configuration
 
@@ -94,11 +94,9 @@ The Laravel redis configuration is specified in the `config/database.php` file.
 
 The `config/database.php` file has a list of drivers.
 
-This list has driver configurations for all types of data stores used within a Laravel application.
+This list has driver configurations for all types of data stores used within a Laravel application. For instance it contains a driver named `redis` for Redis data stores and a driver named `connections` for SQL databases.
 
-For instance driver named 'redis' for Redis data stores and a driver named 'connections' for SQL databases.
-
-So the Redis driver configuration is specified by the `'redis'` key in the file as shown below:
+The out of the box Redis driver configuration is shown below:
 
 ```php
 'redis' => [
@@ -118,7 +116,7 @@ So the Redis driver configuration is specified by the `'redis'` key in the file 
             'database' => env('REDIS_DB', '0'),
         ],
 
-        #cache connection
+        # cache connection
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -129,22 +127,25 @@ So the Redis driver configuration is specified by the `'redis'` key in the file 
     ],
 ```
 
-Some drivers like the 'redis' driver can have a 'client' setting `'client' => env('REDIS_CLIENT', 'phpredis'),` that represents the php client that it uses to connect.
+The redis driver has a `client` setting `'client' => env('REDIS_CLIENT', 'phpredis')` that represents the php client that it uses to connect to the Redis server.
 
-By default the client is set to `phpredis` to use the `phpredis` php extension to connect to Redis.
+By default the client is set to `phpredis` so it will use the `phpredis` php extension to connect to Redis.
 
-As mentioned at the beginning of the article you can also set the client to or `predis` to use the `predis` composer package to connect to Redis.
+> As mentioned at the beginning of the article you can set the client to `predis` instead `phpredis` so it will use the `predis` composer package to connect to the Redis server instead.
 
-Each driver can have one or more connections. Each connection represents the connection settings for the particular type of database that the driver supports.
+## The Redis configuration connections
 
-So for example `'redis'` driver has the `'default'` and `'cache'` connections included by default and
-the `'connections'` database driver has `'sqlite'` and `'mysql'` connections among others that are included by default.
+The redis configuration shown in the previous section specifies two Redis connections named `default` and `cache`.
 
-You can add as many connections with different connection settings as you need to each driver.
+The `'default'` redis connection is used by the Laravel Redis facade by default.
 
-The `'default'` redis connection is used by the Laravel Redis facade by default. 
+The Laravel Redis facade can use any of the other named connections such as the `cache` connection by explicitly referencing the connection by connection name.
 
-The Laravel Redis facade can use any of the `'redis'` connections by explicitly referencing the connection by connection name.
+You can add as many connections with different connection settings as you need to the redis driver.
+
+Also both connections use the same connection settings except for the `database`. So they are connecting to the same redis server instance, but each uses a different database on that instance.
+
+> Note: Since Redis clusters do not support more than one database for the cluster, we will change this configuration to always use database number 0 and use an additional setting labeled `prefix` to segment redis keys based on usage type.
 
 Examples of using both the default connection and named connections are shown in the following sections.
 
