@@ -171,23 +171,30 @@ So we can set it to the new `session` connection that we added to `config/sessio
 'connection' => 'session',
 ```
 
-==================================
 ## Configuring the Cache Configuration file to use redis
 
-Change the `default` store configuration in `config/cache.php` to:
+The `config/cache.php` configuration file specifies one or more stores that the Laravel cache service can use.
+
+The `default` configuration in `config/cache.php` selects the default cache store to use by the Laravel cache service.
+
+Each cache store specifies the driver to use for that store.
+
+> Note: Unlike the Laravel session that can only have one store to use per application. The cache and queue can have more than one store and so must select a default store to use. This is why for the session we specify the driver to use directly at the top level of the configuration file. Whereas for the cache and queue we need to specify the driver to use at the cache store level
+
+The out of the box cache configuration file `config/session.php` defaults to the file store, storing each cached object in a file.
 
 ```php
 //selects the 'redis' cache store in config/cache.php
 'default' => env('CACHE_DRIVER', 'file'),
 ```
 
-Change the `prefix` configuration in `config/cache.php` to:
+To make the default store select the `redis` store we need to update the `.env` file setting:
 
-```php
-'prefix' => '',
+```ini
+SESSION_DRIVER=redis
 ```
 
-We can leave the redis store connection value in `config/cache.php` as is, since it is set to `cache` out of the box which references the out of the box `cache` redis connection in `config/database.php`
+We can set the `redis` store `driver` to `redis` to make the store use the `redis` driver from `config/database.php`. We can then set the `connection` to `cache` to make the store use the `cache` redis connection from `config/database.php`.
 
 ```php
     'stores' => [
@@ -199,6 +206,16 @@ We can leave the redis store connection value in `config/cache.php` as is, since
         ],
     ],
 ```
+
+Also we can change the `prefix` configuration setting in `config/cache.php` as shown:
+
+```php
+'prefix' => '',
+```
+
+This prefix setting is not used with the redis driver so it is safe to set it to empty string.
+
+=======================================================
 
 ## Configuring the Queue Configuration file to use redis
 
@@ -621,4 +638,3 @@ public function redisTest()
     }
 }
 ```
-
