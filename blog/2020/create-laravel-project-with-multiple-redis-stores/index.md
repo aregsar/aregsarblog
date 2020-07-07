@@ -129,7 +129,6 @@ Its important to note that clustered Redis instances do not support multiple dat
 
 > Note: If a Redis cluster is not being used, the `'redis' => ['options' => [ 'cluster' => env('REDIS_CLUSTER', 'redis'),]]` setting can be removed, however it will not effect using a standard redis instance if it remains.
 
-=============================
 ## The Redis Client
 
 The default out of the box Laravel configuration is configured to use the Php Redis extension.
@@ -138,34 +137,48 @@ The default out of the box Laravel configuration is configured to use the Php Re
 
 For that to work we need to make sure the Php Redis extension is installed.
 
-The instructions for doing so are here: `put link here`
+The instructions for doing so are at [Configure Laravel To Use Php Redis](https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis)
 
-Also unless we rename the facade alias we need to add a 
-`use Illuminate\Support\Facades\Redis;` statement in the file we use the `Redis` facade in.
+Also when using the `Redis` facade class, unless we rename the facade alias as shown in the post from the link above, we need to use the fully qualified class name `Illuminate\Support\Facades\Redis`.
+
+## The session, cache and queue configuration files
+
+The Laravel session, cache and queue each have their own individual configuration files that specify which driver and driver connection from the `config/database.php` file to use.
+
+In the following sections I show how to configure each to use the `redis` driver and which `redis` driver connection to use as their default redis connection.
 
 ## Configuring the Session Configuration file to use redis
 
-Change the `driver` configuration in `config/session.php` to:
+The `driver` configuration in `config/session.php` selects the driver to use for the Laravel session.
 
 ```php
-//selects the 'redis' driver in config/database.php
- 'driver' => env('SESSION_DRIVER', 'redis'),
+//will select the 'redis' driver in config/database.php. defaults to the file driver
+ 'driver' => env('SESSION_DRIVER', 'file'),
 ```
 
-Change the `connection` configuration in `config/session.php` to:
+To make the driver select the `redis` driver we need to update the `.env` file setting:
+
+```ini
+SESSION_DRIVER=redis
+```
+
+Once we are using the `redis` driver, we can use the `connection` setting in `config/session.php` to select the default redis connection from the `config/session.php` to use.
+
+So we can set it to the new `session` connection that we added to `config/session.php`:
 
 ```php
 //selects the 'session' connection of the 'redis' driver in config/database.php
 'connection' => 'session',
 ```
 
+==================================
 ## Configuring the Cache Configuration file to use redis
 
 Change the `default` store configuration in `config/cache.php` to:
 
 ```php
 //selects the 'redis' cache store in config/cache.php
-'default' => env('CACHE_DRIVER', 'redis'),
+'default' => env('CACHE_DRIVER', 'file'),
 ```
 
 Change the `prefix` configuration in `config/cache.php` to:
