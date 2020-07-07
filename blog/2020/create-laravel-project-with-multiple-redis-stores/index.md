@@ -2,15 +2,15 @@
 
 April 18, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-In this article I will show how to create a production oriented redis configuration. The configuration will work locally and with standard or clustered Redis servers in production.
+In this article I will show how to create a production oriented Redis configuration in Laravel. 
 
-The configuration will use separate connections each with their own unique prefixes for session, cache , queue and application connections to distinguish between items stored for different purposes.
+The configuration will work locally and with standard or clustered Redis servers in production.
 
-Also the configuration with separate connections, will be ready to scale to separate Redis server instances in production for the session, cache, queue and application in the future, simply by changing the connection parameters.
+The configuration will configure separate redis connections for the Laravel session, cache, queue and application. In development all the connections will point to the same Redis server but will distinguish between objects stored by each connection by configuring a unique prefix for each connection. 
 
-## Configuring individual redis database connections in config/database.php
+This same configuration can be used in production using a single Redis server. However it allows scaling the application to use separate Redis servers by making each connection connect to a different Redis server and even by adding more connections to split the Laravel cache and/or queue into separate caches and/or queues.
 
-This section I will show how to configure a separate connection for each of the Redis, Session, Cache and Queue providers used in a Laravel application.
+## The out of the box connection configuration
 
 When we create a new Laravel project, the `config/database.php` file will contain two out of the box redis connections named `default` and `cache`:
 
@@ -38,19 +38,23 @@ When we create a new Laravel project, the `config/database.php` file will contai
     ],
 ```
 
-The `default` connection has a `database` default of `0` and the `cache` connection has a `database` default of `1` to assign separate databases to those connections that are configured to use the same Redis server.
+Both connections are configured to use the same Redis server.
 
-The `cache` connection in this `config/database.php` is set to be the default cache connection in the `config/cache.php` file.
+The `default` connection has a `database` default of `0` and the `cache` connection has a `database` default of `1` assigning separate databases to each connection.
 
-The `default` connection will be used for all in app access to Redis that directly use the Laravel `Redis` provider.
+> When we change this configuration we will make all connections use database 0 because Redis clusters do not support more than one database.
 
-Unlike the cache and queue configuration files, there is no configuration file that has a default connection setting that is set to the `default` redis connection in config/database.php.
+The `default` connection will be used by default to access Redis when using the Laravel `Redis` provider in the application. By default when we use the Laravel `Redis` facade or helper without specifying the redis connection to use, the redis connection that is labeled `default` in `config/database.php` will be used.
 
-So by default when we use the Laravel `Redis` facade,global helper or provider without specifying the redis connection to use, the redis connection in config/database.php that is labeled `default` will be used.
+## Reconfiguring Redis with separate connections
 
-We need to add two more connections named `queue` and `session` for the Laravel `Session` and `Queue` providers to use. We also need to modify the `cache` connection to use the same redis connection `database` setting as all the other redis connections. This is because redis clusters used in production do not support multiple redis databases. We also need to add a `prefix` setting to all the connections to identify each separately.
+We want to configure connections for the Laravel `session`, `cache` and `queue` in `config/database.php`. In addition we want to have a separate connection for the application to use via the `Redis` facade.
 
-For these reasons we will remove the out of box redis connections in database.php and replace them with the four connections below:
+We will keep the `default` connection for our application to use and we will keep the `cache` connection for the Laravel cache service to use. However we will change their configuration to use the same database and add a unique `prefix` setting to each.
+
+We will also add two more connections named `queue` and `session` for the Laravel Session and Queue services to use. We will use the same database setting as all other connections for these and we will give them a each unique `prefix` setting.
+
+The modified configuration in `config/database.php` looks like:
 
 ```php
     //the redis driver
@@ -109,20 +113,23 @@ For these reasons we will remove the out of box redis connections in database.ph
     ],
 ```
 
-As you can see all the `database` settings for all connections is set to 0 and we added an additional `prefix` setting for each connection, in order to separate our redis, cache, session and queue keys. Each connection prefix uses a unique letter to effectively namespace qualify the key used by the client by appending the prefix to the key.
+As you can see all the `database` settings for all connections is set to 0 and we added an additional `prefix` setting for each connection, in order to separate our redis, cache, session and queue keys.
 
-> Note that the `redis` => `options` => `prefix` setting was removed since it only applies if we wanted to use the old `predis` composer package redis client. The `prefix` setting is not required since we are using  the default `php-redis` php extension client.
+Each connection prefix uses a unique letter to effectively namespace qualify the key used by the redis client by prepending the prefix to the key.
+
+> Note that the `'redis' => ['options' => [ 'prefix' => ...]]` setting in the out of the box `config/database.php` was removed since it only applies if we want to use the old `predis` composer package redis client.
 
 ## The redis cluster setting
 
-The `redis` => `options` => `cluster` setting, indicates that our Redis server connection is connecting to a self managed Redis cluster.
+The `'redis' => ['options' => [ 'cluster' => env('REDIS_CLUSTER', 'redis'),]]` setting, indicates that our Redis server connection is connecting to a self managed Redis cluster.
 
-A self managed cluster connection connects to a proxy cluster manager that that manages a cluster of redis instances, without requiring the redis client to manage the cluster nodes.
+A self managed cluster connection connects to a cluster manager proxy that manages a cluster of Redis server instances, without requiring the redis client to manage the cluster nodes.
 
-Its important to note that clustered redis instances do not support multiple databases. They only have one database which has the default database number 0. That is why we set the `database` setting for all the connections to 0.
+Its important to note that clustered Redis instances do not support multiple databases. They can only have one database which has the default database number 0. That is why we set the `database` setting for all the connections to 0.
 
-> Note: If a redis cluster is not being used, the `redis` => `options` => `cluster` setting can be removed, however it will not effect using a standard redis instance if it remains.
+> Note: If a Redis cluster is not being used, the `'redis' => ['options' => [ 'cluster' => env('REDIS_CLUSTER', 'redis'),]]` setting can be removed, however it will not effect using a standard redis instance if it remains.
 
+=============================
 ## The Redis Client
 
 The default out of the box Laravel configuration is configured to use the Php Redis extension.
