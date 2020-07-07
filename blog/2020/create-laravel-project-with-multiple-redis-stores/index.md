@@ -141,6 +141,26 @@ The instructions for doing so are at [Configure Laravel To Use Php Redis](https:
 
 Also when using the `Redis` facade class, unless we rename the facade alias as shown in the post from the link above, we need to use the fully qualified class name `Illuminate\Support\Facades\Redis`.
 
+## Setting up the environment variables for our configuration file to use
+
+We need to set the host and password settings used by the redis connection configuration in `config/database.php` file.
+
+The values set below in `.env` file are for a local Redis instance running:
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+```
+
+For Digitalocean Redis cluster production environment we need to change the values to:
+
+```ini
+REDIS_HOST=tls://<your_redis_host>.db.ondigitalocean.com
+REDIS_PASSWORD=<your_redis_password>
+REDIS_PORT=25061
+```
+
 ## The session, cache and queue configuration files
 
 The Laravel session, cache and queue each have their own individual configuration files that specify which driver and driver connection from the `config/database.php` file to use.
@@ -223,7 +243,11 @@ Change the `default` configuration in `config/queue.php` to:
 
 ```php
 //selects the 'redis' queue connection in config/queue.php
-'default' => env('QUEUE_CONNECTION', 'redis'),
+'default' => env('QUEUE_CONNECTION', 'sync'),
+```
+
+```ini
+QUEUE_CONNECTION=redis
 ```
 
 Change the `connections` configuration in `config/queue.php` to:
@@ -242,33 +266,6 @@ Change the `connections` configuration in `config/queue.php` to:
             'block_for' => null,
         ],
     ],
-```
-
-## Setting up the environment variables for our configuration file to use
-
-The following environment variable need to be set to for the Redis configuration to use.
-
-```ini
-CACHE_DRIVER=redis
-QUEUE_CONNECTION=redis
-SESSION_DRIVER=redis
-QUEUE_PREFIX_VERSION=V1:
-```
-
-Additionally we need to set the host and password settings. The values set below are for a local Redis instance running:
-
-```ini
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-```
-
-And these are Digitalocean Redis cluster settings:
-
-```ini
-REDIS_HOST=tls://<your_redis_host>.db.ondigitalocean.com
-REDIS_PASSWORD=<your_redis_password>
-REDIS_PORT=25061
 ```
 
 ## The final redis configuration
