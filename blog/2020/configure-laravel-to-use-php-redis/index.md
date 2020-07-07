@@ -376,6 +376,4 @@ To avoid confusion with the per connection prefix setting, I generally remove th
 
 ## The redis connections settings
 
-Each Redis connection in the config file will have its own set of host and port settings. All the connections can be configured to connect to the same Redis server or they can individually be configured to connect to separate Redis servers.
-
-In separate articles I will show how to configure the Laravel Session, Cache and Queue to use the redis driver with separate redis connections for each.
+Each Redis connection in the config file will have its own set of Redis server host and port settings. All the connections can be configured to connect to the same Redis server or they can individually be configured to connect to separate Redis servers.

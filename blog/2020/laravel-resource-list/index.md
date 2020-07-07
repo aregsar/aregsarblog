@@ -20,6 +20,10 @@ The Laravel project skeleton that requires the core framework
 
 [https://github.com/laravel/laravel](https://github.com/laravel/laravel)
 
+Laravel Valet repo
+
+[https://github.com/laravel/valet](https://github.com/laravel/valet)
+
 The Laravel framework API docs
 
 [https://laravel.com/api/7.x/index.html](https://laravel.com/api/7.x/index.html)
@@ -58,6 +62,8 @@ The PHP language reference
 
 ## Screencasts
 
+Screencasts and video courses for everything from Laravel internals, projects, testing and package development:
+
 [https://laracasts.com](https://laracasts.com)
 
 [https://codecourse.com](https://codecourse.com)
@@ -70,11 +76,15 @@ The PHP language reference
 
 [https://confidentlaravel.com](https://confidentlaravel.com)
 
-[https://laravelpackage.training](https://laravelpackage.training)
-
 [https://course.testdrivenlaravel.com](https://course.testdrivenlaravel.com)
 
 [https://eloquent-course.reinink.ca](https://eloquent-course.reinink.ca)
+
+[https://phppackagedevelopment.com](https://phppackagedevelopment.com)
+
+[https://laravelpackage.training](https://laravelpackage.training)
+
+[https://saasadventure.io/laravel-spark](https://saasadventure.io/laravel-spark)
 
 [https://adamwathan.me/refactoring-to-collections](https://adamwathan.me/refactoring-to-collections)
 
@@ -109,3 +119,5 @@ The PHP language reference
 [https://vegibit.com/laravel-aliases-and-contracts](https://vegibit.com/laravel-aliases-and-contracts)
 
 [https://jasonmccreary.me/articles/avoiding-inheritance-laravel](https://jasonmccreary.me/articles/avoiding-inheritance-laravel)
+
+[https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications](https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications)
