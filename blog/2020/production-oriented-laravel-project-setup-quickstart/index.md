@@ -1020,22 +1020,24 @@ It all starts with the `Auth::routes()` call in `routes/web.php`:
 Illuminate\Support\Facades\Auth::routes();
 ```
 
-The Auth facade in `routes/web.php` calls the `Router::auth()` method which in turn creates the Authentication routs.
+The Auth facade in `routes/web.php` calls the Illuminate `Router` service classes `auth()` method which in turn creates the Authentication routs.
 
 ```php
 class Auth extends Facade
 {
     public static function routes(array $options = [])
     {
-        //calls the Router::auth() method
+        //calls the Illuminate Router service class auth() method
         static::$app->make('router')->auth($options);
     }
 }
 ```
 
-The `Router::auth()` method ends up calling the auth(),resetPassword(),confirmPassword(), emailVerification() methods of the `AuthRouteMethods` class from the `Laravel\Ui` package. Those methods all return a function that when invoked will register the routs. Each of the methods returns a function that when invoked will register the routs for a specific authentication feature.
+The `auth()` method of the `Router` class ends up calling the `auth()`,`resetPassword()`,`confirmPassword()` and `emailVerification()` methods of the `AuthRouteMethods` class from the `Laravel\Ui` package. Those methods all return a function that when invoked will register the routs. Each of the methods returns a function that when invoked will register the routs for a specific authentication feature.
 
-The `Macroable` trait adds the Authentication `auth()` method that defines the routes, to the `Router` class at run time.
+> Note: the emailVerification() method of the `AuthRouteMethods` class will only be called if we pass the `['verified' => true]` option to `routes` method of the `Auth` facade class in `routes/web.php` that trickles down to the authentication route registration functions defined in `AuthRouteMethods` class
+
+If we look at the source code of the Illuminate `Router` service class we don't see an `auth()` method. This is because the `auth()` method of the `AuthRouteMethods` class from the `Laravel\Ui` package is added dynamically to the `Router` class using the `Macroable` at run time.
 
 ```php
 use Illuminate\Support\Traits\Macroable;
