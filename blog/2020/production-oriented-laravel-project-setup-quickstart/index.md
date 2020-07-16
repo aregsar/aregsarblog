@@ -6,14 +6,13 @@ May 24, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this article I am going to show my setup procedure to setup a new Laravel project with the following out of the box features:
 
-- Tailwind UI
-- User Authentication
-- Redis queued user verification and password reset with background jobs
-- Configuration for Application, Session, Cache and Queue to use Redis locally and in production
-- Docker services for local development (mysql, redis, mailhog, elasticsearch)
-- Test MySQL database docker service for running feature tests against
+- Tailwind UI and User Authentication
+- MySQL, Redis, Mailhog, Elasticsearch Docker services for local development using docker-compose with persistent MySQL and Redis data volumes.
+- Configuration for Application, Session, Cache and Queue to use Redis locally same as production configuration
+- queued user verification and password reset using background jobs
+- Additional MySQL test database Docker service for running feature tests
 
-## Seting up a new Laravel project
+## Setting up a new Laravel project
 
 First create a new project as instructed here:
 
@@ -916,7 +915,7 @@ php artisan route:list
 
 We can use these to create our own route definitions and remove the Auth::routes() call in our application routs file.
 
-## Auth routes in Laravel\UI framework package
+## Auth routes in Laravel\UI framework composer package
 
 In Laravel 7 the Authentication routes were moved to the `Laravel\Ui` package.
 The routes installed added when we require the package with the `--auth` flag.
@@ -1012,26 +1011,31 @@ class AuthRouteMethods
 
 We can use these to create our own route definitions and remove the `Auth::routes()` call in our application routs file.
 
-Below I show how the routes get added to the `Illuminate\Routing\Router` class starting with the `Auth::routes()` call in `routes/web.php`.
+Below I show how the routes from the installed `Laravel\Ui` package get added to the `Illuminate\Routing\Router` class.
+
+It all starts with the `Auth::routes()` call in `routes/web.php`:
 
 ```php
 //from routes/web.php
 Illuminate\Support\Facades\Auth::routes();
 ```
 
-The Auth facade calls the Router::auth() method which in turn creates the Authentication routs.
+The Auth facade in `routes/web.php` calls the `Router::auth()` method which in turn creates the Authentication routs.
 
 ```php
 class Auth extends Facade
 {
     public static function routes(array $options = [])
     {
+        //calls the Router::auth() method
         static::$app->make('router')->auth($options);
     }
 }
 ```
 
-The `Macroable` trait adds the Authentication `auth()` method that defines the routes, to the Router class at run time.
+The `Router::auth()` method ends up calling the auth(),resetPassword(),confirmPassword(), emailVerification() methods of the `AuthRouteMethods` class from the `Laravel\Ui` package. Those methods all return a function that when invoked will register the routs. Each of the methods returns a function that when invoked will register the routs for a specific authentication feature.
+
+The `Macroable` trait adds the Authentication `auth()` method that defines the routes, to the `Router` class at run time.
 
 ```php
 use Illuminate\Support\Traits\Macroable;
@@ -1074,4 +1078,3 @@ trait Macroable
     }
 }
 ```
-
