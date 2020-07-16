@@ -49,10 +49,21 @@ class Request extends Facade
 }
 ```
 
+As you can see it only contains the required overridden implementation of `getFacadeAccessor`.
+
+So when for example the `Request::flush()` method is called on the Request facade there is no implementation for that method.
+
+In this scenario, the static `__callStatic` method of its extended `Facade` class will be called.
+
+The `Facade` class and the effect of the `__callStatic` method call are covered in the next section.
+
+> Note: The comments at the top of the facade class will have a list of methods that you can call on that facade class. The comments also list the service class that will be resolved that those methods are defined in. As an example the listed `flush()` method is one of the methods that we can call on the Request facade and we can see that the Request facade resolves the `Illuminate\Http\Request` service class that defines the `flush()` method
 
 ## The Illuminate\Support\Facades\Facade base class
 
 The base `Illuminate\Support\Facades\Facade` class that the `Request` facade extends is where the service class associated with the facade is resolved and its method invoked.
+
+The class is shown below:
 
 ```php
 namespace Illuminate\Support\Facades;
@@ -119,9 +130,19 @@ abstract class Facade
 }
 ```
 
-The base Facade class has a default implementation of `protected static function getFacadeAccessor()` method that is overriden by every facade class that extends it.
+As we detailed in the previous section the `__callStatic` method is called when we call the `Request::flush()` method. When this method is called the action method name `flush` is passed to it as the first parameter. If the flush method had parameters, then those parameters would have been passed as the second parameter of the  `__callStatic` method. But in this case the second parameter will be null or empty.
 
-The Request facade overrides this method that simply return the string `request`. This string is that same as the string used to register an alias for the Request service class with the application container.
+The `__callStatic` method first calls the `static::getFacadeRoot()` method of the base facade class to resolve the instance of the actual `Request` service class that implements the `flush` method.
+
+Then once it has the instance, it calls the `flush` method on the instance by calling `$instance->$method(...$args)` which uses the method parameter `$method` to call the `flush` method passing in any argument if they exist by passing in the `$args` parameter passed to `__callStatic`.
+
+## How getFacadeRoot resolves the service class
+
+When the `__callStatic` method calls the `static::getFacadeRoot()` the `Request` service class is resolved. The way that happens is described below:
+
+The base Facade class has a default implementation of `protected static function getFacadeAccessor()` method that is overridden by every facade class that extends it.
+
+The `Request` facade overrides this method that simply return the string `request`. This string is that same as the string used to register an alias for the Request service class with the application container.
 
 The `getFacadeRoot()` method of the Facade class calls the `static::resolveFacadeInstance` method of the Facade class passing the method the result of the call to the `static::getFacadeAccessor` method of the facade class.
 
