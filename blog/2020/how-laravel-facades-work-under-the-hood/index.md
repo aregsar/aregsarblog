@@ -150,4 +150,12 @@ In other words, the `static::resolveFacadeInstance` method of the facade class i
 
 So the `protected static function resolveFacadeInstance($name)` is called with the `$name` parameter value of `request`.
 
-Inside the method, one of the methods that resolve the `Request` service class is called.
+Inside the method, the `return static::$resolvedInstance[$name] = static::$app[$name];` line is executed that resolves the `Request` service class and return the instance.
+
+That line does two things. First it calls `static::$app[$name]` to resolve the instance from the `static::$app` container using the `$name` string parameter which in this case is `request`.
+
+Then it sets the resolved instance of the `Request` service class to the `static::$resolvedInstance[$name]` array so that the next time the facade tries to access the `Request` service class it can short cut return it using the previous `return static::$resolvedInstance[$name]` line if it exists in the array.
+
+Finally the resolved instance in `static::$resolvedInstance[$name]` is returned.
+
+> Note: sometimes we already have access to a resolved instance of the service class. This instance is passed as the $name parameter to resolveFacadeInstance so it is simply returned via the line return $name; at the top of the resolveFacadeInstance method
