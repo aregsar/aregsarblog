@@ -182,12 +182,10 @@ To make the driver select the `redis` driver we need to update the `.env` file s
 SESSION_DRIVER=redis
 ```
 
-Once we are using the `redis` driver, we can use the `connection` setting in `config/session.php` to select the default redis connection from the `config/session.php` to use.
-
-So we can set it to the new `session` connection that we added to `config/session.php`:
+Once we are using the `redis` driver, we can set the `connection` setting in `config/session.php` to the the `session` redis connection that we added to the `redis` driver in `config/database.php`:
 
 ```php
-//selects the 'session' connection of the 'redis' driver in config/database.php
+//sets the 'connection' to the 'session' connection of the 'redis' driver in config/database.php
 'connection' => 'session',
 ```
 
@@ -201,20 +199,22 @@ Each cache store specifies the driver to use for that store.
 
 > Note: Unlike the Laravel session that can only have one store to use per application. The cache and queue can have more than one store and so must select a default store to use. This is why for the session we specify the driver to use directly at the top level of the configuration file. Whereas for the cache and queue we need to specify the driver to use at the cache store level
 
-The out of the box cache configuration file `config/session.php` defaults to the file store, storing each cached object in a file.
+The out of the box cache configuration file `config/cache.php` defaults to the file store, storing each cached object in a file.
 
 ```php
 //selects the 'redis' cache store in config/cache.php
 'default' => env('CACHE_DRIVER', 'file'),
 ```
 
-To make the default store select the `redis` store we need to update the `.env` file setting:
+To make the default store select the `redis` store from the `stores` configuration in `config/cache.php` we need to update the `.env` file setting:
 
 ```ini
-SESSION_DRIVER=redis
+CACHE_DRIVER=redis
 ```
 
-We can set the `redis` store `driver` to `redis` to make the store use the `redis` driver from `config/database.php`. We can then set the `connection` to `cache` to make the store use the `cache` redis connection from `config/database.php`.
+Now that we are using the `redis` store, we can set the `redis` store `driver` to `redis` to make the `redis` store use the `redis` driver from `config/database.php`.
+
+We need to also set the `redis` store `connection` to the `cache` redis connection that we added to the `redis` driver in `config/database.php`:
 
 ```php
     'stores' => [
@@ -245,6 +245,8 @@ Change the `default` configuration in `config/queue.php` to:
 //selects the 'redis' queue connection in config/queue.php
 'default' => env('QUEUE_CONNECTION', 'sync'),
 ```
+
+To make the default queue connection select the `redis` store we need to update the `.env` file setting:
 
 ```ini
 QUEUE_CONNECTION=redis
