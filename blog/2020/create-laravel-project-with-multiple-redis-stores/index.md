@@ -117,6 +117,8 @@ As you can see all the `database` settings for all connections is set to 0 and w
 
 Each connection prefix uses a unique letter to effectively namespace qualify the key used by the redis client by prepending the prefix to the key.
 
+The queue connections prefix appends a `QUEUE_PREFIX_VERSION` environment setting if it exists in the `.env` file. This is useful during immutable deployment of new versions of an application where each new version can use its own queue prefix so the old versions of the queue workers can be removed after the new versions of the queue workers have been deployed and after the old queue items that use the old prefix have been processed.
+
 > Note that the `'redis' => ['options' => [ 'prefix' => ...]]` setting in the out of the box `config/database.php` was removed since it only applies if we want to use the old `predis` composer package redis client.
 
 ## The redis cluster setting
