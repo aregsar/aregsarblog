@@ -159,3 +159,20 @@ Then it sets the resolved instance of the `Request` service class to the `static
 Finally the resolved instance in `static::$resolvedInstance[$name]` is returned.
 
 > Note: sometimes we already have access to a resolved instance of the service class. This instance is passed as the $name parameter to resolveFacadeInstance so it is simply returned via the line return $name; at the top of the resolveFacadeInstance method
+
+===============
+
+```php
+namespace Illuminate\Support\Facades;
+
+abstract class Facade
+{
+
+    protected static $app;
+
+    public static function setFacadeApplication($app)
+    {
+        static::$app = $app;
+    }
+}
+```

@@ -15,8 +15,7 @@ php artisan ui tailwindcss --auth
 After running this command we will find the authentication route registration functions in the `Laravel\Ui\AuthRouteMethods` class in the `Laravel\Ui` package under the `vendors` directory.
 
 ```php
-<?php
-
+//from vendor/laravel/ui package
 namespace Laravel\Ui;
 
 class AuthRouteMethods
@@ -134,8 +133,10 @@ The `auth()` method of the `Illuminate\Routing\Router` class will end up calling
 If we look at the source code of the `Illuminate\Routing\Router` service class we don't see an `auth()` method. This is because the `auth()` method is added dynamically to the `Illuminate\Routing\Router` class using the dynamic `__call` method that is called whenever we call a instance method on a class that does not have the called method implemented.
 
 ```php
-namespace Illuminate\Routing
+namespace Illuminate\Routing;
+
 use Illuminate\Support\Traits\Macroable;
+
 class Router implements BindingRegistrar, RegistrarContract
 {
     use Macroable {
@@ -155,6 +156,7 @@ class Router implements BindingRegistrar, RegistrarContract
         return (new RouteRegistrar($this))->attribute($method, $parameters[0]);
     }
 }
+
 ```
 
 ## Inspecting the Authentication routs using artisan
@@ -187,3 +189,130 @@ The command will show the route listing below:
 |        | POST     | register               |                  | App\Http\Controllers\Auth\RegisterController@register                  | web,guest    |
 +--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
 ```
+
+## Laravel UI package
+
+The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class implemented in the core Laravel framework.
+
+```php
+//in vendor/laravel/ui package
+namespace Laravel\Ui;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+
+class UiServiceProvider extends ServiceProvider
+{
+
+    public function boot()
+    {
+        //The mixin method called on the Route facade
+        //uses the Route facade to return an instance of the Router class
+        //from the application container via dynamic __call
+        //then calls mixin method on the Router instance which is
+        //actually a call to the static mixin method of the Macroable trait of 
+        //the Router class 
+        //the mixin method calls each method of the AuthRouteMethods
+        //instance given to the mixin method and puts the closure function
+        //returned from each method in the macros hash array using the name of
+        //the method that returns the closue as the hash key
+        Route::mixin(new AuthRouteMethods);
+    }
+}
+```
+
+```php
+namespace Illuminate\Support\Facades;
+class Route extends Facade
+{
+
+    protected static function getFacadeAccessor()
+    {
+        return 'router';
+    }
+}
+```
+
+```php
+namespace Illuminate\Filesystem;
+
+use Illuminate\Support\Traits\Macroable;
+
+class Filesystem
+{
+    use Macroable;
+}
+```
+
+```php
+namespace Illuminate\Support\Traits;
+
+trait Macroable
+{
+
+    protected static $macros = [];
+
+
+    public static function macro($name, $macro)
+    {
+        static::$macros[$name] = $macro;
+    }
+
+  
+    public static function mixin($mixin, $replace = true)
+    {
+        $methods = (new ReflectionClass($mixin))->getMethods(
+            ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
+        );
+
+        foreach ($methods as $method) {
+            if ($replace || ! static::hasMacro($method->name)) {
+                $method->setAccessible(true);
+                static::macro($method->name, $method->invoke($mixin));
+            }
+        }
+    }
+
+    public static function hasMacro($name)
+    {
+        return isset(static::$macros[$name]);
+    }
+
+    public static function __callStatic($method, $parameters)
+    {
+        if (! static::hasMacro($method)) {
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
+        }
+
+        $macro = static::$macros[$method];
+
+        if ($macro instanceof Closure) {
+            return call_user_func_array(Closure::bind($macro, null, static::class), $parameters);
+        }
+
+        return $macro(...$parameters);
+    }
+
+    public function __call($method, $parameters)
+    {
+        if (! static::hasMacro($method)) {
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
+        }
+
+        $macro = static::$macros[$method];
+
+        if ($macro instanceof Closure) {
+            return call_user_func_array($macro->bindTo($this, static::class), $parameters);
+        }
+
+        return $macro(...$parameters);
+    }
+}
+```
+
+
+
