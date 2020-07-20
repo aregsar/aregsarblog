@@ -1,9 +1,5 @@
 # All Posts
 
-July 16, 2020
-
-[Laravel 7 Auth Route Registration Under The Hood](https://aregsar.com/blog/2020/laravel-7-auth-route-registration-under-the-hood)
-
 June 12, 2020
 
 [Laravel Resource List](https://aregsar.com/blog/2020/laravel-resource-list)

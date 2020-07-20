@@ -2,6 +2,10 @@
 
 July 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
+July 16, 2020
+
+[Laravel 7 Auth Route Registration Under The Hood](https://aregsar.com/blog/2020/laravel-7-auth-route-registration-under-the-hood)
+
 ## Authentication routes in Laravel\UI package
 
 In Laravel 7 the authentication routes were moved to the `Laravel\Ui` package.
