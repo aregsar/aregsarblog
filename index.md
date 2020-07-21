@@ -1,5 +1,9 @@
 # All Posts
 
+July 21, 2020
+
+[How Laravel Facades Work Under The Hood](https://aregsar.com/blog/2020/how-laravel-facades-work-under-the-hood)
+
 June 12, 2020
 
 [Laravel Resource List](https://aregsar.com/blog/2020/laravel-resource-list)

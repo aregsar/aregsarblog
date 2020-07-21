@@ -1,10 +1,6 @@
 # How Laravel Facades Work Under The Hood
 
-July 17, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-July 16, 2020
-
-[How Laravel Facades Work Under The Hood](https://aregsar.com/blog/2020/how-laravel-facades-work-under-the-hood)
+July 21, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Laravel Facade classes
 
@@ -144,25 +140,25 @@ Once the `Illuminate\Http\Request` instance is returned, the `__callStatic` meth
 
 As we saw in the previous section, when the `__callStatic` method calls the `static::getFacadeRoot()` of the base `Illuminate\Support\Facades\Facade` class, the `Illuminate\Http\Request` service class is resolved. The way that happens is described below:
 
-The `static::getFacadeRoot()` method of the base Facade class calls the `static::resolveFacadeInstance` method of the base Facade class passing the method the result of the call to the `static::getFacadeAccessor` method of the facade class.
+The `static::getFacadeRoot()` method of the base Facade class calls the `static::resolveFacadeInstance` method of the base Facade class passing to the method the result of the call to the `static::getFacadeAccessor` method.
 
-In other words `static::getFacadeRoot()` first calls `static::getFacadeAccessor`, then calls `static::resolveFacadeInstance` passing to it the resulting string returned by `static::getFacadeAccessor`.
+In other words `static::getFacadeRoot()` first calls `static::getFacadeAccessor`, then calls `static::resolveFacadeInstance` passing to it the resulting string returned by the `static::getFacadeAccessor` call.
 
 The base `Illuminate\Support\Facades\Facade` class has a default implementation of `protected static function getFacadeAccessor()` method that is overridden by every facade class that extends it.
 
-The `Illuminate\Support\Facades\Request` facade overrides this method that simply returns the string `request`.
+The `Illuminate\Support\Facades\Request` facade, that extends the base Facade class, overrides this method. The overridden implementation simply returns the string `'request'`.
 
-So when `static::getFacadeRoot()` calls `static::getFacadeAccessor`, it is actually calling the extended 
-`Illuminate\Support\Facades\Request` facade implementation of `static::getFacadeAccessor` which returns the string `request`.
+So when the base Facade class `static::getFacadeRoot()` method calls `static::getFacadeAccessor`, it is actually calling the
+`Illuminate\Support\Facades\Request` facade's overridden implementation of `static::getFacadeAccessor` which returns the string `'request'`.
 
-This `request` string is the same string as the string used to register an alias for the `Illuminate\Http\Request` service class with the application container. 
+This `'request'` string is the same string as the string used to register an alias for the `Illuminate\Http\Request` service class with the application container.
 
-You can see this string listed in the Facade list mappings for the `Request` facade in the Laravel Facade documentation [https://laravel.com/docs/7.x/facades#facade-class-reference](https://laravel.com/docs/7.x/facades#facade-class-reference) I mentioned previously.
+You can see this string listed in the Facade list mappings for the `Request` facade in the Laravel Facade documentation [https://laravel.com/docs/7.x/facades#facade-class-reference](https://laravel.com/docs/7.x/facades#facade-class-reference) that I previously mentioned.
 
-So in the end the `static::resolveFacadeInstance` method of the facade class is invoked by `static::getFacadeRoot()` and passed in as its argument the `request` string returned by the overridden `static::getFacadeAccessor` method .
+So in the end the `static::resolveFacadeInstance` method of the base Facade class is invoked by `static::getFacadeRoot()` and passed in as its argument the `'request'` string returned by the overridden `static::getFacadeAccessor` method .
 
-Inside the method, the `return static::$resolvedInstance[$name] = static::$app[$name];` line is executed. This line resolves the `Illuminate\Http\Request` service class from the `static::$app` container using the `request` string passed in as the `$name` parameter. It sets the resolved instance into the `static::$resolvedInstance` array using the same `$name` parameter then returns the resolved instance.
+Inside the method, the `return static::$resolvedInstance[$name] = static::$app[$name];` line is executed. This line resolves the `Illuminate\Http\Request` service class from the `static::$app` container using the `'request'` string passed in as the `$name` parameter. It sets the resolved instance into the `static::$resolvedInstance` array using the same `$name` parameter then returns the resolved instance.
 
 > Note: sometimes we already have access to a resolved instance of the service class. This instance is passed as the $name parameter to resolveFacadeInstance so it is simply returned via the line return $name; at the top of the resolveFacadeInstance method
 
-As stated in the previous section, once the instance is returned, method called on the facade is called on the instance, returning any result.
+As stated in the previous section, once the instance is returned, the `flush` method called on the facade is called on the instance.
