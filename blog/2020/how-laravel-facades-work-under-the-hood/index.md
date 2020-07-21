@@ -8,21 +8,34 @@ July 16, 2020
 
 ## Laravel Facade classes
 
-The Laravel Facade classed are static wrapper around the framework `service class` instances resolved out of the Laravel container.
+The Laravel Facade classes are static wrappers around the framework service class instances resolved out of the Laravel container.
 
-Laravel services classes are registered with the Laravel container to be resolved and used by the application during request execution by calling the methods on the resolved instances.
+Framework service classes are the classes that provide core framework features such as routing and caching. Facade classes give us a convenient way to access methods of these service classes using static class method semantics.
 
-While these services can be resolved directly out of the container a more convenient approach is to directly call the methods that we would call on the resolved instance, directly on the facade class as a static method call.
-
-Under the hood the call to the static facade method will resolve the  service class instance that is registered with the facade and call the same method on the resolved instance of the service class.
+Even though the method calls on the Facade classes appear to be static methods, they are actually dynamic methods that resolve, from the container, an instance of a service class that actually implements the method. Then the method is called on the resolved instance of the service class.
 
 ## Facade service class registration
 
-Every facade class must implement the `getFacadeAccessor` method. This method will register a key string that is used to resolve the service class instance associated with the facade, from the Laravel container.
+Every facade class must implement the `getFacadeAccessor` method. This method will return a key string that will be used to resolve, from the container, the service class instance associated with the facade.
 
-This key string can be the fully namespace qualified name of service class or contract that we want to resolve from the container or can be an alias string that is registered with the container for that service class.
+This key string can be the fully namespace qualified name of service class that we want to resolve from the container, can be the fully namespace qualified name of the contract interface that the service class implements or can be an alias string, for the service class, called `Service Container Binding` key.
 
-The important thing to note is that in order for the service to be able to be resolved, the framework must have registered the service that needs to be resolved using the key string that we specify in the facade `getFacadeAccessor` method.
+The important thing to note is that in order for the service to be able to be resolved, the framework must have registered the service that needs to be resolved using the key string that we return from the facade `getFacadeAccessor` method.
+
+The list of fully namespace qualified class name and alias key mappings for Laravel Facade classes can be found in the Laravel Facades documentation at [https://laravel.com/docs/7.x/facades](https://laravel.com/docs/7.x/facades)
+
+As an example I am showing two of these mappings from the documentation below:
+
+Facade  Class                               Service Container Binding
+
+App	    Illuminate\Foundation\Application	app
+Auth	Illuminate\Auth\AuthManager	        auth
+
+Here the App and Auth facade classes are shown.
+
+As we can see the `App` facade  resolves an instance of `Illuminate\Foundation\Application` service class.
+
+There is also a Service Container Binding alias called `app` registered with the container for that service class. Therefore the `getFacadeAccessor` method of the `App` facade class returns the string `app` which will be used to resolve the `Illuminate\Foundation\Application` service class out of the container.
 
 ## The Request facade
 
