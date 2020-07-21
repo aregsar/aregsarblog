@@ -155,7 +155,7 @@ This `'request'` string is the same string as the string used to register an ali
 
 You can see this string listed in the Facade list mappings for the `Request` facade in the Laravel Facade documentation [https://laravel.com/docs/7.x/facades#facade-class-reference](https://laravel.com/docs/7.x/facades#facade-class-reference) that I previously mentioned.
 
-So in the end the `static::resolveFacadeInstance` method of the base Facade class is invoked by `static::getFacadeRoot()` and passed in as its argument the `'request'` string returned by the overridden `static::getFacadeAccessor` method .
+So to reiterate, the `static::getFacadeRoot()` of the base Facade class calls the overridden `static::getFacadeAccessor` method of the `Illuminate\Support\Facades\Request` class that returns the string `'request'` that the `static::getFacadeRoot()` method then passes to the `static::resolveFacadeInstance` method of the base Facade class.
 
 Inside the method, the `return static::$resolvedInstance[$name] = static::$app[$name];` line is executed. This line resolves the `Illuminate\Http\Request` service class from the `static::$app` container using the `'request'` string passed in as the `$name` parameter. It sets the resolved instance into the `static::$resolvedInstance` array using the same `$name` parameter then returns the resolved instance.
 
