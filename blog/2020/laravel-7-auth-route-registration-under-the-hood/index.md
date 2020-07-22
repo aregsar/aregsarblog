@@ -108,11 +108,132 @@ class AuthRouteMethods
 
 > Note: We can copy the routes registered in these functions to create our own route definitions directly in the `routes/web.php` file and remove the `Auth::routes()` call in the `routes/web.php` file. This way all our routes will be in the our application and not in the framework code.
 
+## Inspecting the Authentication routs using artisan
+
+We can also run the artisan command to show us the routs that are defined for authentication:
+
+```bash
+php artisan route:list
+```
+
+The command will show the route listing below:
+
+```bash
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+| Domain | Method   | URI                    | Name             | Action                                                                 | Middleware   |
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+|        | GET|HEAD | /                      | home.index       | App\Http\Controllers\HomeController@index                              | web          |
+|        | GET|HEAD | api/user               |                  | Closure                                                                | api,auth:api |
+|        | GET|HEAD | home                   | home.welcome     | App\Http\Controllers\HomeController@welcome                            | web,auth     |
+|        | GET|HEAD | login                  | login            | App\Http\Controllers\Auth\LoginController@showLoginForm                | web,guest    |
+|        | POST     | login                  |                  | App\Http\Controllers\Auth\LoginController@login                        | web,guest    |
+|        | POST     | logout                 | logout           | App\Http\Controllers\Auth\LoginController@logout                       | web          |
+|        | GET|HEAD | password/confirm       | password.confirm | App\Http\Controllers\Auth\ConfirmPasswordController@showConfirmForm    | web,auth     |
+|        | POST     | password/confirm       |                  | App\Http\Controllers\Auth\ConfirmPasswordController@confirm            | web,auth     |
+|        | POST     | password/email         | password.email   | App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail  | web          |
+|        | GET|HEAD | password/reset         | password.request | App\Http\Controllers\Auth\ForgotPasswordController@showLinkRequestForm | web          |
+|        | POST     | password/reset         | password.update  | App\Http\Controllers\Auth\ResetPasswordController@reset                | web          |
+|        | GET|HEAD | password/reset/{token} | password.reset   | App\Http\Controllers\Auth\ResetPasswordController@showResetForm        | web          |
+|        | GET|HEAD | register               | register         | App\Http\Controllers\Auth\RegisterController@showRegistrationForm      | web,guest    |
+|        | POST     | register               |                  | App\Http\Controllers\Auth\RegisterController@register                  | web,guest    |
++--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
+```
+
+## Laravel UI package
+
 The Routes registration methods in the `AuthRouteMethods` class from the installed `Laravel\Ui` package are mixed into `Illuminate\Routing\Router` class by the boot method of the `UiServiceProvider` class of the`Laravel\Ui` package.
+
+Below I show how the routes from the installed `Laravel\Ui` package get added to the `Illuminate\Routing\Router` class by the `UiServiceProvider` class of the `Laravel\Ui` package.
+
+The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class implemented in the core Laravel framework.
+
+I have annotated the `Illuminate\Support\Facades\Route::mixin()` Facade call that indicates how the AuthRouteMethods class methods are ultimately mixed into the `Illuminate\Routing\Router` class service class.
+
+You will need an understanding of how facades work under the hood to see how calling `Illuminate\Support\Facades\Route::mixin()` ends up calling the `Illuminate\Routing\Router::mixin()` instance method.
+
+I have detailed how Facades work under the hood here []()
+
+```php
+//in vendor/laravel/ui package
+namespace Laravel\Ui;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+
+class UiServiceProvider extends ServiceProvider
+{
+
+    public function boot()
+    {
+        //The  Route::mixin() method called on the Route facade
+        //causes a call to the  static __call method of the Route facade
+        //because a mixin() method does not exist on the Route Facade class
+        //the __call method gets an instance of the Router service class
+        //from the application container
+        //then calls mixin() method on the Router service class instance which is
+        //actually a call to the static mixin() method of the Macroable trait of
+        //the Router service class.(Note: in PHP a static method of a class can be called by an instance
+        //of the class)
+        //the mixin() method of the Macroable trait then calls each method of the AuthRouteMethods
+        //instance given to the mixin method (using reflection) and puts the closure function
+        //returned from each method in the macros hash array using the name of
+        //the method that returns the closue as the hash key
+        Route::mixin(new AuthRouteMethods);
+    }
+}
+```
+
+Here is the `Illuminate\Support\Facades\Route` Facade `getFacadeAccessor()` implementation that returns the alias string `router` that is used to get an instance of `Illuminate\Routing\Router` class from that application container
+
+```php
+namespace Illuminate\Support\Facades;
+class Route extends Facade
+{
+    protected static function getFacadeAccessor()
+    {
+        return 'router';
+    }
+}
+```
+
+```php
+namespace Illuminate\Support\Traits;
+
+trait Macroable
+{
+    protected static $macros = [];
+
+    public static function mixin($mixin, $replace = true)
+    {
+        //get all the methods of the `AuthRouteMethods` class of the `Laravel\Ui` package
+        $methods = (new ReflectionClass($mixin))->getMethods(
+            ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
+        );
+
+        foreach ($methods as $method) {
+            if ($replace || ! static::hasMacro($method->name)) {
+                $method->setAccessible(true);
+                //call each of the methods in $methods and put the closure function returned 
+                //from that method into the $macros array.
+                static::macro($method->name, $method->invoke($mixin));
+            }
+        }
+    }
+
+    public static function macro($name, $macro)
+    {
+        static::$macros[$name] = $macro;
+    }
+}
+```
 
 ## Registering the authentication routes installed by the Laravel UI package
 
-Below I show how the `Illuminate\Routing\Router` class mixed in route registration methods are used to register authentication routes with our application.
+Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when UiServiceProvider::boot() method is invoked.
+
+The second part is the actual execution of the mixed in `Illuminate\Routing\Router` class authentication route methods to register the authentication routes. This happens when the `Auth::routes()` is called in the `routing/web.php` file.
+
+Below I show how the `Illuminate\Routing\Router` class's mixed in route registration methods are used to register authentication routes with our application.
 
 It all starts with the `Auth::routes()` call in `routes/web.php`:
 
@@ -212,157 +333,6 @@ trait Macroable
 
 The auth method calls the other closure functions installed into the macros array by the Laravel UI package provider boot method.
 Note that we call `$macro->bindTo($this, static::class)` before calling the auth() closure so that the `$this` pointer in the closure references the `Illuminate\Routing\Router` class so when the `auth()` method calls the other route registration methods, it re-enters this __call method and finds each of those other closures from the Laravel UI package that were added to the macros array and calls them.
-
-## Inspecting the Authentication routs using artisan
-
-We can also run the artisan command to show us the routs that are defined for authentication:
-
-```bash
-php artisan route:list
-```
-
-The command will show the route listing below:
-
-```bash
-+--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
-| Domain | Method   | URI                    | Name             | Action                                                                 | Middleware   |
-+--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
-|        | GET|HEAD | /                      | home.index       | App\Http\Controllers\HomeController@index                              | web          |
-|        | GET|HEAD | api/user               |                  | Closure                                                                | api,auth:api |
-|        | GET|HEAD | home                   | home.welcome     | App\Http\Controllers\HomeController@welcome                            | web,auth     |
-|        | GET|HEAD | login                  | login            | App\Http\Controllers\Auth\LoginController@showLoginForm                | web,guest    |
-|        | POST     | login                  |                  | App\Http\Controllers\Auth\LoginController@login                        | web,guest    |
-|        | POST     | logout                 | logout           | App\Http\Controllers\Auth\LoginController@logout                       | web          |
-|        | GET|HEAD | password/confirm       | password.confirm | App\Http\Controllers\Auth\ConfirmPasswordController@showConfirmForm    | web,auth     |
-|        | POST     | password/confirm       |                  | App\Http\Controllers\Auth\ConfirmPasswordController@confirm            | web,auth     |
-|        | POST     | password/email         | password.email   | App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail  | web          |
-|        | GET|HEAD | password/reset         | password.request | App\Http\Controllers\Auth\ForgotPasswordController@showLinkRequestForm | web          |
-|        | POST     | password/reset         | password.update  | App\Http\Controllers\Auth\ResetPasswordController@reset                | web          |
-|        | GET|HEAD | password/reset/{token} | password.reset   | App\Http\Controllers\Auth\ResetPasswordController@showResetForm        | web          |
-|        | GET|HEAD | register               | register         | App\Http\Controllers\Auth\RegisterController@showRegistrationForm      | web,guest    |
-|        | POST     | register               |                  | App\Http\Controllers\Auth\RegisterController@register                  | web,guest    |
-+--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
-```
-
-## Laravel UI package
-
-Below I show how the routes from the installed `Laravel\Ui` package get added to the `Illuminate\Routing\Router` class by the `UiServiceProvider` class of the `Laravel\Ui` package.
-
-The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class implemented in the core Laravel framework.
-
-I have annotated the `Illuminate\Support\Facades\Route::mixin()` Facade call that indicates how the AuthRouteMethods class methods are ultimately mixed into the `Illuminate\Routing\Router` class service class.
-
-You will need an understanding of how facades work under the hood to see how calling `Illuminate\Support\Facades\Route::mixin()` ends up calling the `Illuminate\Routing\Router::mixin()` instance method.
-
-I have detailed how Facades work under the hood here []()
-
-```php
-//in vendor/laravel/ui package
-namespace Laravel\Ui;
-
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\ServiceProvider;
-
-class UiServiceProvider extends ServiceProvider
-{
-
-    public function boot()
-    {
-        //The  Route::mixin() method called on the Route facade
-        //causes a call to the  static __call method of the Route facade
-        //because a mixin() method does not exist on the Route Facade class
-        //the __call method gets an instance of the Router service class
-        //from the application container
-        //then calls mixin() method on the Router service class instance which is
-        //actually a call to the static mixin() method of the Macroable trait of
-        //the Router service class.(Note: in PHP a static method of a class can be called by an instance
-        //of the class)
-        //the mixin() method of the Macroable trait then calls each method of the AuthRouteMethods
-        //instance given to the mixin method (using reflection) and puts the closure function
-        //returned from each method in the macros hash array using the name of
-        //the method that returns the closue as the hash key
-        Route::mixin(new AuthRouteMethods);
-    }
-}
-```
-
-Here is the `Illuminate\Support\Facades\Route` Facade `getFacadeAccessor()` implementation that returns the alias string `router` that is used to get an instance of `Illuminate\Routing\Router` class from that application container
-
-```php
-namespace Illuminate\Support\Facades;
-class Route extends Facade
-{
-
-    protected static function getFacadeAccessor()
-    {
-        return 'router';
-    }
-}
-```
-
-```php
-namespace Illuminate\Support\Traits;
-
-trait Macroable
-{
-    protected static $macros = [];
-
-    public static function mixin($mixin, $replace = true)
-    {
-        $methods = (new ReflectionClass($mixin))->getMethods(
-            ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
-        );
-
-        foreach ($methods as $method) {
-            if ($replace || ! static::hasMacro($method->name)) {
-                $method->setAccessible(true);
-                static::macro($method->name, $method->invoke($mixin));
-            }
-        }
-    }
-
-    public static function macro($name, $macro)
-    {
-        static::$macros[$name] = $macro;
-    }
-}
-```
-
-## How Auth routes are bootstrapped
-
-Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when UiServiceProvider::boot() method is invoked.
-
-The second part is the actual execution of the mixed in `Illuminate\Routing\Router` class authentication route methods to register the authentication routes. This happens when the `Auth::routes()` is called in the `routing/web.php` file.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-=======================================================================
-```php
-namespace Illuminate\Filesystem;
-
-use Illuminate\Support\Traits\Macroable;
-
-class Filesystem
-{
-    use Macroable;
-}
-```
 
 ## The full Macroable trait implementation
 
