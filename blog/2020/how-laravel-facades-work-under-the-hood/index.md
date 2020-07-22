@@ -162,3 +162,6 @@ Inside the method, the `return static::$resolvedInstance[$name] = static::$app[$
 > Note: sometimes we already have access to a resolved instance of the service class. This instance is passed as the $name parameter to resolveFacadeInstance so it is simply returned via the line return $name; at the top of the resolveFacadeInstance method
 
 As stated in the previous section, once the instance is returned, the `flush` method called on the facade is called on the instance.
+
+> A note on the alias string returned by getFacadeAccessor. This is the string used to bind an alias for the Illuminate\Http\Request service class in the Laravel container. So that it can be resolved out of the container using that alias string. That is not to be confused with Facade alias strings that are short strings mapped to Facade classes so that a Facade class can be referenced using its alias string instead of requiring the fully  namespace qualified Facade class name.
+
