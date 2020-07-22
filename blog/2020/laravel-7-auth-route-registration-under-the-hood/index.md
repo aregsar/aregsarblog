@@ -119,7 +119,7 @@ It all starts with the `Auth::routes()` call in `routes/web.php`:
 Illuminate\Support\Facades\Auth::routes();
 ```
 
-The Auth facade in `routes/web.php` calls the `Illuminate\Routing\Router` service classes `auth()` method which in turn creates the Authentication routs.
+The Auth facade in `routes/web.php` calls the `Illuminate\Routing\Router` service class `auth()` method which in turn creates the Authentication routs.
 
 ```php
 class Auth extends Facade
@@ -132,11 +132,10 @@ class Auth extends Facade
 }
 ```
 
-The `auth()` method of the `Illuminate\Routing\Router` class will end up calling the `auth()`,`resetPassword()`,`confirmPassword()` and `emailVerification()` methods of the `Laravel\Ui\AuthRouteMethods` class from the `Laravel\Ui` package. Those methods all return a function that when invoked will register the routs. Each of the methods returns a function that when invoked will register the routs for a specific authentication feature.
+Since `Illuminate\Routing\Router` class does not have an `auth()` method, the __call method of the 
+`Illuminate\Routing\Router` instance is called instead. This method checks to see if an `auth()` method exists in its `macros` array that it inherits from its `Macroable` trait. If it exists, which it should since it was added to the `macros` array by the Laravel\UI packege provider, then the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called.
 
-> Note: the emailVerification() method of the `Laravel\Ui\AuthRouteMethods` class will only be called if we pass the `['verified' => true]` option to `routes` method of the `Auth` facade class in `routes/web.php` that trickles down to the authentication route registration functions defined in `Laravel\Ui\AuthRouteMethods` class
-
-If we look at the source code of the `Illuminate\Routing\Router` service class we don't see an `auth()` method. This is because the `auth()` method is added dynamically to the `Illuminate\Routing\Router` class using the dynamic `__call` method that is called whenever we call a instance method on a class that does not have the called method implemented.
+> Note: Actually the `macroCall` method is just an alias for the _call instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below.
 
 ```php
 namespace Illuminate\Routing;
@@ -151,7 +150,7 @@ class Router implements BindingRegistrar, RegistrarContract
         __call as macroCall;
     }
 
-    //when we call an Router instance method that does not exist, this method is called instead of
+    //when we call a Router instance method that does not exist, this method is called instead of
     //the __call method of the Macroable trait included above. This is because this method hides the
     //__call method of the included Macroable trait.
     //That is why we changed the __call method name of the Macroable trait to macroCall
@@ -346,3 +345,4 @@ trait Macroable
     }
 }
 ```
+
