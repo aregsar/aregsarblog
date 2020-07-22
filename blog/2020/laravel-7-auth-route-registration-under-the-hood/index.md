@@ -108,7 +108,9 @@ class AuthRouteMethods
 
 > Note: We can copy the routes registered in these functions to create our own route definitions directly in the `routes/web.php` file and remove the `Auth::routes()` call in the `routes/web.php` file. This way all our routes will be in the our application and not in the framework code.
 
-Below I show how the routes from the installed `Laravel\Ui` package get added to the `Illuminate\Routing\Router` class by the framework.
+The Routes registration methods in the `AuthRouteMethods` class from the installed `Laravel\Ui` package are mixed into `Illuminate\Routing\Router` class by the boot method of the `UiServiceProvider` class of the`Laravel\Ui` package.
+
+Below I show how the `Illuminate\Routing\Router` class mixed in route registration methods are used to register authentication routes with our application.
 
 It all starts with the `Auth::routes()` call in `routes/web.php`:
 
@@ -203,6 +205,8 @@ The command will show the route listing below:
 ```
 
 ## Laravel UI package
+
+Below I show how the routes from the installed `Laravel\Ui` package get added to the `Illuminate\Routing\Router` class by the `UiServiceProvider` class of the `Laravel\Ui` package.
 
 The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class implemented in the core Laravel framework.
 
