@@ -143,7 +143,7 @@ I have annotated the `Illuminate\Support\Facades\Route::mixin()` Facade call tha
 
 You will need an understanding of how facades work under the hood to see how calling `Illuminate\Support\Facades\Route::mixin()` ends up calling the `Illuminate\Routing\Router::mixin()` instance method.
 
-I have detailed how Facades work under the hood here []()
+I have detailed how Facades work under the hood at [How Laravel Facades Work Under The Hood](https://aregsar.com/blog/2020/how-laravel-facades-work-under-the-hood)
 
 ```php
 //in vendor/laravel/ui package
