@@ -6,6 +6,16 @@ July 16, 2020
 
 [Laravel 7 Auth Route Registration Under The Hood](https://aregsar.com/blog/2020/laravel-7-auth-route-registration-under-the-hood)
 
+Starts with the auth call on the router class instance
+It does not have that method
+So it calls the dynamic call instance method
+Call method calls the auth method of the ui package authroutes class auth method
+That was plugged into the router class using the macroable trait
+To understand how this happens we first need a detour
+First we have to know about dynamic missing method call static and instance
+Then learn about facades
+Then about macroable
+
 ## Authentication routes in Laravel\UI package
 
 In Laravel 7 the authentication routes were moved to the `Laravel\Ui` package.
@@ -18,18 +28,22 @@ php artisan ui tailwindcss --auth
 
 After running this command we will find the authentication route registration functions in the `Laravel\Ui\AuthRouteMethods` class in the `Laravel\Ui` package under the `vendors` directory.
 
+Below I have annotated the `auth()` entry point method for auth route registration in the `AuthRouteMethods` class:
+
 ```php
 //from vendor/laravel/ui package
 namespace Laravel\Ui;
 
 class AuthRouteMethods
 {
-    /**
-     * Register the typical authentication routes for an application.
-     *
-     * @param  array  $options
-     * @return void
-     */
+    //This is the method that is eventually called starting from the
+    //Auth::routes() call in routes/web.php
+    //It first registers the login/logout routes
+    //Next it registers the resgiter route. (This can be turned off via options flag)
+    //It in turn calls the resetPassword and confirmPassword methods by default to 
+    //register routes for those features. (Each of these calls can be turned off via options flag)
+    //Finally it calls the emailVerification method only if it is explicitly turned on via options flag
+    //to register email verification routes
     public function auth()
     {
         return function ($options = []) {
@@ -51,6 +65,7 @@ class AuthRouteMethods
 
             // Password Confirmation Routes...
             if ($options['confirm'] ??
+                //call confirmPassword to register routes only if Auth\ConfirmPasswordController exists
                 class_exists($this->prependGroupNamespace('Auth\ConfirmPasswordController'))) {
                 $this->confirmPassword();
             }
@@ -62,11 +77,6 @@ class AuthRouteMethods
         };
     }
 
-    /**
-     * Register the typical reset password routes for an application.
-     *
-     * @return void
-     */
     public function resetPassword()
     {
         return function () {
@@ -77,11 +87,6 @@ class AuthRouteMethods
         };
     }
 
-    /**
-     * Register the typical confirm password routes for an application.
-     *
-     * @return void
-     */
     public function confirmPassword()
     {
         return function () {
@@ -90,11 +95,6 @@ class AuthRouteMethods
         };
     }
 
-    /**
-     * Register the typical email verification routes for an application.
-     *
-     * @return void
-     */
     public function emailVerification()
     {
         return function () {
@@ -144,12 +144,20 @@ use Illuminate\Support\Traits\Macroable;
 class Router implements BindingRegistrar, RegistrarContract
 {
     use Macroable {
+        //overrides the __call method name inside the Macroable trait to macroCall
+        //so that it does not conflict with the __call method name inside this Router class
         __call as macroCall;
     }
 
+    //when we call an Router instance method that does not exist, this method is called instead of
+    //the __call method of the Macroable trait included above. This is because this method hides the
+    //__call method of the included Macroable trait. 
+    //That is why we changed the __call method name of the Macroable trait to macroCall
     public function __call($method, $parameters)
     {
         if (static::hasMacro($method)) {
+            //actually calls the __call method of the Macroable trait because we overrode
+            //__call as macroCall in the Macroable trait included above
             return $this->macroCall($method, $parameters);
         }
 
@@ -210,14 +218,16 @@ class UiServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        //The mixin method called on the Route facade
-        //uses the Route facade to return an instance of the Router class
-        //from the application container via dynamic __call
-        //then calls mixin method on the Router instance which is
-        //actually a call to the static mixin method of the Macroable trait of 
-        //the Router class 
-        //the mixin method calls each method of the AuthRouteMethods
-        //instance given to the mixin method and puts the closure function
+        //The  Route::mixin() method called on the Route facade
+        //causes a call to the  static __call method of the Route facade
+        //because a mixin() method does not exist on the Route Facade class
+        //the __call method gets an instance of the Router service class
+        //from the application container
+        //then calls mixin() method on the Router service class instance which is
+        //actually a call to the static mixin method of the Macroable trait of
+        //the Router service class.
+        //the mixin() method of the Macroable trait then calls each method of the AuthRouteMethods
+        //instance given to the mixin method (using reflection) and puts the closure function
         //returned from each method in the macros hash array using the name of
         //the method that returns the closue as the hash key
         Route::mixin(new AuthRouteMethods);
