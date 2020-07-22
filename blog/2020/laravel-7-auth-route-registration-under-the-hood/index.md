@@ -206,6 +206,12 @@ The command will show the route listing below:
 
 The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class implemented in the core Laravel framework.
 
+I have annotated the `Illuminate\Support\Facades\Route::mixin()` Facade call that indicates how the AuthRouteMethods class methods are ultimately mixed into the `Illuminate\Routing\Router` class service class.
+
+You will need an understanding of how facades work under the hood to see how calling `Illuminate\Support\Facades\Route::mixin()` ends up calling the `Illuminate\Routing\Router::mixin()` instance method.
+
+I have detailed how Facades work under the hood here []()
+
 ```php
 //in vendor/laravel/ui package
 namespace Laravel\Ui;
@@ -236,6 +242,8 @@ class UiServiceProvider extends ServiceProvider
 }
 ```
 
+Here is the `Illuminate\Support\Facades\Route` Facade `getFacadeAccessor()` implementation that returns the alias string `router` that is used to get an instance of `Illuminate\Routing\Router` class from that application container
+
 ```php
 namespace Illuminate\Support\Facades;
 class Route extends Facade
@@ -247,6 +255,12 @@ class Route extends Facade
     }
 }
 ```
+
+## How Auth routes are bootstrapped
+
+Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when UiServiceProvider::boot() method is invoked.
+
+The second part is the actual execution of the mixed in `Illuminate\Routing\Router` class authentication route methods to register the authentication routes. This happens when the `Auth::routes()` is called in the `routing/web.php` file.
 
 ```php
 namespace Illuminate\Filesystem;
@@ -328,6 +342,3 @@ trait Macroable
     }
 }
 ```
-
-
-
