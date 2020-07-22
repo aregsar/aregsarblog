@@ -151,7 +151,7 @@ class Router implements BindingRegistrar, RegistrarContract
 
     //when we call an Router instance method that does not exist, this method is called instead of
     //the __call method of the Macroable trait included above. This is because this method hides the
-    //__call method of the included Macroable trait. 
+    //__call method of the included Macroable trait.
     //That is why we changed the __call method name of the Macroable trait to macroCall
     public function __call($method, $parameters)
     {
@@ -224,8 +224,9 @@ class UiServiceProvider extends ServiceProvider
         //the __call method gets an instance of the Router service class
         //from the application container
         //then calls mixin() method on the Router service class instance which is
-        //actually a call to the static mixin method of the Macroable trait of
-        //the Router service class.
+        //actually a call to the static mixin() method of the Macroable trait of
+        //the Router service class.(Note: in PHP a static method of a class can be called by an instance
+        //of the class)
         //the mixin() method of the Macroable trait then calls each method of the AuthRouteMethods
         //instance given to the mixin method (using reflection) and puts the closure function
         //returned from each method in the macros hash array using the name of
