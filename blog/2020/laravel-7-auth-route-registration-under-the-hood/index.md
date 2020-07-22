@@ -6,15 +6,7 @@ July 16, 2020
 
 [Laravel 7 Auth Route Registration Under The Hood](https://aregsar.com/blog/2020/laravel-7-auth-route-registration-under-the-hood)
 
-Starts with the auth call on the router class instance
-It does not have that method
-So it calls the dynamic call instance method
-Call method calls the auth method of the ui package authroutes class auth method
-That was plugged into the router class using the macroable trait
-To understand how this happens we first need a detour
-First we have to know about dynamic missing method call static and instance
-Then learn about facades
-Then about macroable
+
 
 ## Authentication routes in Laravel\UI package
 
@@ -255,7 +247,21 @@ class Auth extends Facade
 }
 ```
 
-Since `Illuminate\Routing\Router` class does not have an `auth()` method, the __call method of the 
+==================
+
+Starts with the auth call on the router class instance
+It does not have that method
+So it calls the dynamic call instance method
+Call method calls the auth method of the ui package AuthRouteMethods class auth method
+That was plugged into the router class using the macroable trait
+To understand how this happens we first need a detour
+First we have to know about dynamic missing method call static and instance
+Then learn about facades
+Then about macroable
+
+==================
+
+Since `Illuminate\Routing\Router` class does not have an `auth()` method, the __call method of the
 `Illuminate\Routing\Router` instance is called instead. This method checks to see if an `auth()` method exists in its `macros` array that it inherits from its `Macroable` trait. If it exists, which it should since it was added to the `macros` array by the Laravel\UI packege provider, then the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called.
 
 > Note: Actually the `macroCall` method is just an alias for the _call instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below.
