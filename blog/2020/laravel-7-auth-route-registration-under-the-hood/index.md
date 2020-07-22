@@ -110,6 +110,8 @@ class AuthRouteMethods
 
 The Routes registration methods in the `AuthRouteMethods` class from the installed `Laravel\Ui` package are mixed into `Illuminate\Routing\Router` class by the boot method of the `UiServiceProvider` class of the`Laravel\Ui` package.
 
+## Registering the authentication routes installed by the Laravel UI package
+
 Below I show how the `Illuminate\Routing\Router` class mixed in route registration methods are used to register authentication routes with our application.
 
 It all starts with the `Auth::routes()` call in `routes/web.php`:
@@ -169,8 +171,47 @@ class Router implements BindingRegistrar, RegistrarContract
         return (new RouteRegistrar($this))->attribute($method, $parameters[0]);
     }
 }
-
 ```
+
+Below I show how the __call method of the Macroable calls the installed `auth()` closure function installed by the Laravel UI package provider. 
+
+```php
+namespace Illuminate\Support\Traits;
+
+trait Macroable
+{
+
+    protected static $macros = [];
+
+    public static function hasMacro($name)
+    {
+        return isset(static::$macros[$name]);
+    }
+
+
+    public function __call($method, $parameters)
+    {
+        if (! static::hasMacro($method)) {
+            throw new BadMethodCallException(sprintf(
+                'Method %s::%s does not exist.', static::class, $method
+            ));
+        }
+
+        //$method is the method name string `auth`
+        //$macro is the auth() closure that was added to the macros array by the Laravel UI package
+        $macro = static::$macros[$method];
+
+        if ($macro instanceof Closure) {
+            return call_user_func_array($macro->bindTo($this, static::class), $parameters);
+        }
+
+        return $macro(...$parameters);
+    }
+}
+```
+
+The auth method calls the other closure functions installed into the macros array by the Laravel UI package provider boot method.
+Note that we call `$macro->bindTo($this, static::class)` before calling the auth() closure so that the `$this` pointer in the closure references the `Illuminate\Routing\Router` class so when the `auth()` method calls the other route registration methods, it re-enters this __call method and finds each of those other closures from the Laravel UI package that were added to the macros array and calls them.
 
 ## Inspecting the Authentication routs using artisan
 
@@ -259,12 +300,59 @@ class Route extends Facade
 }
 ```
 
+```php
+namespace Illuminate\Support\Traits;
+
+trait Macroable
+{
+    protected static $macros = [];
+
+    public static function mixin($mixin, $replace = true)
+    {
+        $methods = (new ReflectionClass($mixin))->getMethods(
+            ReflectionMethod::IS_PUBLIC | ReflectionMethod::IS_PROTECTED
+        );
+
+        foreach ($methods as $method) {
+            if ($replace || ! static::hasMacro($method->name)) {
+                $method->setAccessible(true);
+                static::macro($method->name, $method->invoke($mixin));
+            }
+        }
+    }
+
+    public static function macro($name, $macro)
+    {
+        static::$macros[$name] = $macro;
+    }
+}
+```
+
 ## How Auth routes are bootstrapped
 
 Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when UiServiceProvider::boot() method is invoked.
 
 The second part is the actual execution of the mixed in `Illuminate\Routing\Router` class authentication route methods to register the authentication routes. This happens when the `Auth::routes()` is called in the `routing/web.php` file.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=======================================================================
 ```php
 namespace Illuminate\Filesystem;
 
@@ -275,6 +363,8 @@ class Filesystem
     use Macroable;
 }
 ```
+
+## The full Macroable trait implementation
 
 ```php
 namespace Illuminate\Support\Traits;
@@ -345,4 +435,3 @@ trait Macroable
     }
 }
 ```
-
