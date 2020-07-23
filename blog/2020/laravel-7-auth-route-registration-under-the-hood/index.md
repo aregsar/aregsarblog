@@ -137,7 +137,7 @@ The Routes registration methods in the `AuthRouteMethods` class from the install
 
 Below I show how the routes from the installed `Laravel\Ui` package get added to the `Illuminate\Routing\Router` class by the `UiServiceProvider` class of the `Laravel\Ui` package.
 
-The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class implemented in the core Laravel framework.
+The code below from the installed `Laravel\Ui` package shows how the `mixin` method of the `Illuminate\Support\Traits\Macroable` trait included in the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to ultimately mix in the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `Illuminate\Routing\Router` class of the core Laravel framework.
 
 I have annotated the `Illuminate\Support\Facades\Route::mixin()` Facade call that indicates how the AuthRouteMethods class methods are ultimately mixed into the `Illuminate\Routing\Router` class service class.
 
@@ -234,7 +234,8 @@ It all starts with the `Auth::routes()` call in `routes/web.php`:
 Illuminate\Support\Facades\Auth::routes();
 ```
 
-The Auth facade in `routes/web.php` calls the `Illuminate\Routing\Router` service class `auth()` method which in turn creates the Authentication routs.
+That call is a call to the `Auth` facade class `Auth::routes` method.
+The `Auth::routes` method then calls the `Illuminate\Routing\Router` service class instance `auth()` method which in ultimately creates the Authentication routs.
 
 ```php
 class Auth extends Facade
@@ -247,24 +248,12 @@ class Auth extends Facade
 }
 ```
 
-==================
+Since the `Illuminate\Routing\Router` class does not define an `auth()` method, the `__call` method of the `Illuminate\Routing\Router` instance is called instead.
+This method checks to see if an `auth()` method exists, in its `$macros` array that it inherits from its `Macroable` trait.
+It finds that it does exists because it was added to the `macros` array from the `AuthRouteMethods` class from the Laravel UI packege by the Laravel UI packege provider as described in the previous sections.
+Since the `auth()` method exists the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called.
 
-Starts with the auth call on the router class instance
-It does not have that method
-So it calls the dynamic call instance method
-Call method calls the auth method of the ui package AuthRouteMethods class auth method
-That was plugged into the router class using the macroable trait
-To understand how this happens we first need a detour
-First we have to know about dynamic missing method call static and instance
-Then learn about facades
-Then about macroable
-
-==================
-
-Since `Illuminate\Routing\Router` class does not have an `auth()` method, the __call method of the
-`Illuminate\Routing\Router` instance is called instead. This method checks to see if an `auth()` method exists in its `macros` array that it inherits from its `Macroable` trait. If it exists, which it should since it was added to the `macros` array by the Laravel\UI packege provider, then the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called.
-
-> Note: Actually the `macroCall` method is just an alias for the _call instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below.
+Actually the `macroCall` method is just an alias for the `__call` instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below:
 
 ```php
 namespace Illuminate\Routing;
@@ -300,7 +289,9 @@ class Router implements BindingRegistrar, RegistrarContract
 }
 ```
 
-Below I show how the __call method of the Macroable calls the installed `auth()` closure function installed by the Laravel UI package provider. 
+So the `$this->macroCall($method, $parameters)` is actually calling the `__call` method implemented in the `Macroable` trait. The call passes along the `auth` string as method name.
+
+Below I show how the `__call` method of the `Macroable` trait uses the passed in arguments to call the installed `auth()` closure function installed by the Laravel UI package provider.
 
 ```php
 namespace Illuminate\Support\Traits;
@@ -337,12 +328,13 @@ trait Macroable
 }
 ```
 
-The auth method calls the other closure functions installed into the macros array by the Laravel UI package provider boot method.
+Once the `auth` method is called, its code then calls the other closure functions installed into the macros array by the Laravel UI package provider boot method.
+
 Note that we call `$macro->bindTo($this, static::class)` before calling the auth() closure so that the `$this` pointer in the closure references the `Illuminate\Routing\Router` class so when the `auth()` method calls the other route registration methods, it re-enters this __call method and finds each of those other closures from the Laravel UI package that were added to the macros array and calls them.
 
 ## The full Macroable trait implementation
 
-It is useful in general to understand how the Laravel Macroable trait allows application and package developers to add additional callable methods to existing framework classes. This allows us to extend the functionality of the existing classes by using third party packages or adding custom application code.
+It is useful in general to understand how the Laravel `Macroable` trait allows application and package developers to add additional callable methods to existing framework classes. This allows us to extend the functionality of the existing classes by using third party packages or adding custom application code.
 
 Most core framework classes already include the `Macroable` trait allowing us to easily add methods to them. However we are not limited to framework classes. We can add the capability of extending an existing class with additional methods by adding the `Macroable` trait to it. In fact framework classes that do not implement the trait can be extended so that we can include the trait in the extended class.
 
@@ -363,8 +355,9 @@ The first way is by calling the `macro($name, $macro)` method added by the trait
 
 The second way to add methods to the class that implements the trait is to define a separate class that defines one or more methods that each return a closure. The name of the method in this class will be used as the key in the $macros array and the closure the method returns will be the corresponding closure that is added to $macros array.
 The trait adds a `mixin($mixin, $replace = true)` method that allows us to mix in all the closures returned by the methods of this separate class into the $macros array.
+
 The way this method works is that we pass it the string name of the class that has the closures we want to add to as the first argument. The method then uses reflection to get all the methods in the class, use the name of the methods as the keys and call the methods to return the closures that it will add to the array using the matching key.
-The method also takes a second boolean argument that indicates whether it should replace any existing closures already in the array with the same key. This will make the method be able dynamically change the closures in the array.
+The method also takes a second boolean argument that indicates whether it should replace any existing closures with the same key already in the $macros array.
 
 ```php
 namespace Illuminate\Support\Traits;
