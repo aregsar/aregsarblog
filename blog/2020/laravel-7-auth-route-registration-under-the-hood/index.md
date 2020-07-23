@@ -328,9 +328,14 @@ trait Macroable
 }
 ```
 
-Once the `auth` method is called, its code then calls the other closure functions installed into the macros array by the Laravel UI package provider boot method.
+As we can see the `$macro = static::$macros[$method]` first gets the closure function for the `auth` key and sets it to the `$macro` variable.
+Then the `call_user_func_array` function calls the closure by passing it the `$macro` closure and the `$parameters` array of parameters if any. You will notice that before the `$macro` closure is passed to `call_user_func_array` the `bindTo($this, static::class)` method is called on it. This is so that the `$this` pointer used inside any closure is bound to the class instance that the method is called on.
+So the method `$macro->bindTo($this, static::class)` is called before calling the `auth` closure so that the `$this` pointer in the closure references the `Illuminate\Routing\Router` class.
 
-Note that we call `$macro->bindTo($this, static::class)` before calling the auth() closure so that the `$this` pointer in the closure references the `Illuminate\Routing\Router` class so when the `auth()` method calls the other route registration methods, it re-enters this __call method and finds each of those other closures from the Laravel UI package that were added to the macros array and calls them.
+Once the `auth` closure is called, its code then calls the other closure functions
+`resetPassword`,`confirmPassword`,`emailVerification` (as shown previously in the `AuthRouteMethods::auth` method) that were added into the macros array by the Laravel UI package provider boot method.
+
+So when the `auth` closure calls the other route registration methods using the `$this` pointer that was bound to the `Illuminate\Routing\Router` class, it re-enters this __call method and finds each of those other closures from the Laravel UI package that were added to the macros array and calls them.
 
 ## The full Macroable trait implementation
 
