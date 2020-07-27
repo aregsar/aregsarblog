@@ -386,51 +386,20 @@ However we are not limited to framework classes. We can add the capability of ex
 
 Also, framework classes that do not implement the `Macroable` trait can be extended so that we can include the `Macroable` trait in the extended class.
 
-The way the `Macroable` trait works is that when included in a class, it adds a static `$macros` hash array to the class. The `Macroable` trait also adds the `__call` and  `__callStatic` dynamic call methods to the class.
-
-Closure functions can be added to the `$macros` hash array using the function name as the array item key.
-These functions are the additional methods we want to add to the class. The functions are usually added to the `$macros` hash array in a Laravel provider boot method by calling the `static function macro($name, $macro)` method also provided by the `Macroable` trait.
-
-When we call an instance method on the class that includes the `Macroable` trait and that method does not exist on the class, then the `__call` method will be called with the method name and arguments. The `__call` method will use the method name to retrieve the closure function from the `$macros` array if it exists. Then it will bind the closure to the class instance that the method was called on. It does this so that the `$this` pointer used within the closure function body references the class instance. 
-After binding the closure, it will invoke the closure to execute the method call.
-
-When we call a static method on the class that includes the `Macroable` trait and that method does not exist the `__callStatic` method is called and it also retrieves a closure corresponding to the method name from the `$macros` array, if it exists, then invokes the closure. The difference between `__callStatic` and `__call` methods of the `Macroable` trait is that the `__callStatic` method does not bind to the `$this` pointer since it was triggered by a static method call which has no `$this` pointer.
-
-I explained above how the trait invokes closures from the `$macros` array but how do the closures get into the array in the first place?
-
-Well there are two ways that the trait allows us to add the additional methods that we want to be able to call on the class that includes the trait.
-
-The first way is by directly calling the `macro($name, $macro)` method of the `Macroable` trait.
-
-We can call this method and pass the name of the method we want to add as a string and also passing in the closure that we want to be invoked when this method is called on the class.
-
-Note that there is no way to specify if the closure we are adding should be called as a static or instance method. If the method is called on an instance of the class that includes the `Macroable` trait then the closure will be called as an instance method. If the method is called as a static method on the class then the closure will be called as a static method.
-
-The second way to add methods to the class that implements the trait is to define a separate class that defines one or more methods that each return a closure. The name of the method in this class will be used as the key in the `$macros` array and the closure the method returns will be the corresponding closure that is added to `$macros` array.
-The `Macroable` trait has a `mixin($mixin, $replace = true)` method that allows us to mix in all the closures returned by the methods of this separate class into the `$macros` array.
-
-The way the `mixin` method works is that we pass it the string name of the class that has the closures we want to add, as the first argument to the  `mixin` method.
-
-The method then uses reflection to get all the methods in the class,
-It then iterates over all the methods, calling the `macro($name, $macro)` method for each method in the iteration. It uses the name of each method as the `$name` argument and calls the method to return the closures that it passes as the `$macro` argument.
-
-The `mixin` method also takes a second boolean argument that indicates whether it should replace any existing closures that have the same key that are already in the `$macros` array.
+Below I list the full Laravel 7 `Macroable` trait source:
 
 ```php
 namespace Illuminate\Support\Traits;
 
 trait Macroable
 {
-
     protected static $macros = [];
-
 
     public static function macro($name, $macro)
     {
         static::$macros[$name] = $macro;
     }
 
-  
     public static function mixin($mixin, $replace = true)
     {
         $methods = (new ReflectionClass($mixin))->getMethods(
@@ -485,3 +454,33 @@ trait Macroable
     }
 }
 ```
+
+The way the `Macroable` trait works is that when included in a class, it adds a static `$macros` hash array to the class. The `Macroable` trait also adds the `__call` and  `__callStatic` dynamic call methods to the class.
+
+Closure functions can be added to the `$macros` hash array using the function name as the array item key.
+These functions are the additional methods we want to add to the class. The functions are usually added to the `$macros` hash array in a Laravel provider boot method by calling the `static function macro($name, $macro)` method also provided by the `Macroable` trait.
+
+When we call an instance method on the class that includes the `Macroable` trait and that method does not exist on the class, then the `__call` method will be called with the method name and arguments. The `__call` method will use the method name to retrieve the closure function from the `$macros` array if it exists. Then it will bind the closure to the class instance that the method was called on. It does this so that the `$this` pointer used within the closure function body references the class instance. 
+After binding the closure, it will invoke the closure to execute the method call.
+
+When we call a static method on the class that includes the `Macroable` trait and that method does not exist the `__callStatic` method is called and it also retrieves a closure corresponding to the method name from the `$macros` array, if it exists, then invokes the closure. The difference between `__callStatic` and `__call` methods of the `Macroable` trait is that the `__callStatic` method does not bind to the `$this` pointer since it was triggered by a static method call which has no `$this` pointer.
+
+I explained above how the trait invokes closures from the `$macros` array but how do the closures get into the array in the first place?
+
+Well there are two ways that the trait allows us to add the additional methods that we want to be able to call on the class that includes the trait.
+
+The first way is by directly calling the `macro($name, $macro)` method of the `Macroable` trait.
+
+We can call this method and pass the name of the method we want to add as a string and also passing in the closure that we want to be invoked when this method is called on the class.
+
+Note that there is no way to specify if the closure we are adding should be called as a static or instance method. If the method is called on an instance of the class that includes the `Macroable` trait then the closure will be called as an instance method. If the method is called as a static method on the class then the closure will be called as a static method.
+
+The second way to add methods to the class that implements the trait is to define a separate class that defines one or more methods that each return a closure. The name of the method in this class will be used as the key in the `$macros` array and the closure the method returns will be the corresponding closure that is added to `$macros` array.
+The `Macroable` trait has a `mixin($mixin, $replace = true)` method that allows us to mix in all the closures returned by the methods of this separate class into the `$macros` array.
+
+The way the `mixin` method works is that we pass it the string name of the class that has the closures we want to add, as the first argument to the  `mixin` method.
+
+The method then uses reflection to get all the methods in the class,
+It then iterates over all the methods, calling the `macro($name, $macro)` method for each method in the iteration. It uses the name of each method as the `$name` argument and calls the method to return the closures that it passes as the `$macro` argument.
+
+The `mixin` method also takes a second boolean argument that indicates whether it should replace any existing closures that have the same key that are already in the `$macros` array.
