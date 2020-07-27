@@ -14,7 +14,7 @@ The routes are added when we run the artisan ui command to configure one of the 
 php artisan ui tailwindcss --auth
 ```
 
-After running this command we will find the authentication route registration functions in the `Laravel\Ui\AuthRouteMethods` class in the `Laravel\Ui` package under the `vendors` directory.
+After running this command you will find the authentication route registration functions in the `Laravel\Ui\AuthRouteMethods` class in the `Laravel\Ui` package in the `vendors` directory.
 
 Below I have annotated the `auth()` entry point method for auth route registration in the `AuthRouteMethods` class:
 
@@ -25,10 +25,10 @@ namespace Laravel\Ui;
 class AuthRouteMethods
 {
     //This is the method that is eventually called starting from the
-    //Auth::routes() call in routes/web.php
+    //Auth::routes() call in routes/web.php file
     //It first registers the login/logout routes
     //Next it registers the resgiter route. (This can be turned off via options flag)
-    //It in turn calls the resetPassword and confirmPassword methods by default to 
+    //Then in turn calls the resetPassword and confirmPassword methods by default to
     //register routes for those features. (Each of these calls can be turned off via options flag)
     //Finally it calls the emailVerification method only if it is explicitly turned on via options flag
     //to register email verification routes
@@ -94,17 +94,17 @@ class AuthRouteMethods
 }
 ```
 
-> Note: We can copy the routes registered in these functions to create our own route definitions directly in the `routes/web.php` file and remove the `Auth::routes()` call in the `routes/web.php` file. This way all our routes will be in the our application and not in the framework code.
+> Note: We can copy the routes definitions from these functions and paste them directly into our `routes/web.php` file to create our own route definitions directly in the `routes/web.php` file. Then we can remove the `Auth::routes()` call from the `routes/web.php` file. This way all our routes will be in our application and not burried deep in the Laravel framework code.
 
 ## Inspecting the Authentication routs using artisan
 
-We can also run the artisan command to show us the routs that are defined for authentication:
+We can run the artisan command below to show us the routs that are defined for our application:
 
 ```bash
 php artisan route:list
 ```
 
-The command will show the route listing below:
+If we used the `--auth` flag when we ran the `php artisan ui` command, the `php artisan route:list` command will show the route listing below:
 
 ```bash
 +--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
@@ -126,6 +126,8 @@ The command will show the route listing below:
 |        | POST     | register               |                  | App\Http\Controllers\Auth\RegisterController@register                  | web,guest    |
 +--------+----------+------------------------+------------------+------------------------------------------------------------------------+--------------+
 ```
+
+As you can see the authentication routes are listed.
 
 ## Laravel UI package
 
