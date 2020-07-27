@@ -203,8 +203,8 @@ trait Macroable
         foreach ($methods as $method) {
             if ($replace || ! static::hasMacro($method->name)) {
                 $method->setAccessible(true);
-                //call each of the methods in $methods and put the closure function returned 
-                //from that method into the $macros array.
+                //call each of the methods in $methods and put the closure function returned
+                //from that method into the $macros array
                 static::macro($method->name, $method->invoke($mixin));
             }
         }
@@ -219,7 +219,7 @@ trait Macroable
 
 ## Registering the authentication routes installed by the Laravel UI package
 
-Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when UiServiceProvider::boot() method is invoked.
+Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when `UiServiceProvider::boot()` method is invoked.
 
 The second part is the actual execution of the mixed in `Illuminate\Routing\Router` class authentication route methods to register the authentication routes. This happens when the `Auth::routes()` is called in the `routing/web.php` file.
 
@@ -248,7 +248,9 @@ class Auth extends Facade
 
 Since the `Illuminate\Routing\Router` class does not define an `auth()` method, the `__call` method of the `Illuminate\Routing\Router` instance is called instead.
 This method checks to see if an `auth()` method exists, in its `$macros` array that it inherits from its `Macroable` trait.
-It finds that it does exists because it was added to the `macros` array from the `AuthRouteMethods` class from the Laravel UI packege by the Laravel UI packege provider as described in the previous sections.
+
+It finds that it does exists because it was added to the `macros` array from the `AuthRouteMethods` class from the Laravel UI package by the Laravel UI package provider as described in the previous sections.
+
 Since the `auth()` method exists the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called.
 
 Actually the `macroCall` method is just an alias for the `__call` instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below:
