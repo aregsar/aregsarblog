@@ -2,13 +2,9 @@
 
 July 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-July 16, 2020
+In this post I detail how the Laravel authentication routes are installed using the `Laravel\Ui` package and how installing the package adds configures the authentication routes using the Laravel `Macroable` trait facilities.
 
-[Laravel 7 Auth Route Registration Under The Hood](https://aregsar.com/blog/2020/laravel-7-auth-route-registration-under-the-hood)
-
-
-
-## Authentication routes in Laravel\UI package
+## Authentication routes in Laravel UI package
 
 In Laravel 7 the authentication routes were moved to the `Laravel\Ui` package.
 
