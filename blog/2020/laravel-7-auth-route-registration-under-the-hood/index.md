@@ -157,10 +157,10 @@ class UiServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        //The Route::mixin() method is called on the Route facade by 
-        //The Route::mixin() method called on the Route facade
-        //causes a call to the  static __call method of the Route facade,
-        //because a mixin() method does not exist on the Route Facade class.
+
+        //The Route::mixin() method is called on the Route facade.
+        //The mixin method call causes a call to the  static __call method of the Route facade,
+        //because a mixin method does not exist on the Route Facade class.
         //The __call method gets an instance of the Router service class
         //from the application container
         //then calls the mixin() method on the Router service class instance, which is
