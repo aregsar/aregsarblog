@@ -137,13 +137,13 @@ Below I show how these routes registration methods get added to the `Illuminate\
 
 The Laravel framework's `Illuminate\Routing\Router` class includes the Laravel `Illuminate\Support\Traits\Macroable` trait. The trait adds a `mixin` method to the `Illuminate\Routing\Router` class. The `Macroable` also adds a `$macros` hash array to `Illuminate\Routing\Router` class.
 
-The code below, from the installed `Laravel\Ui` package, shows how the `mixin` method added to the `Illuminate\Routing\Router` class is called through the `Illuminate\Support\Facades\Route` facade to add the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `$macros` array of the `Illuminate\Routing\Router` class.
-
-I have annotated the `Illuminate\Support\Facades\Route::mixin()` Facade call to show how the `AuthRouteMethods` class methods are ultimately added into the `Illuminate\Routing\Router` service class `$macros` array.
+The code below, from the installed `Laravel\Ui` package, shows how the `mixin` method added to the `Illuminate\Routing\Router` class is called through a call to a `mixin` method on the `Illuminate\Support\Facades\Route` facade to add the route registration methods implemented in the `AuthRouteMethods` class of the `Laravel\Ui` package into the `$macros` array of the `Illuminate\Routing\Router` class.
 
 You will need an understanding of how facades work under the hood to see how calling `Illuminate\Support\Facades\Route::mixin()` ends up calling the `Illuminate\Routing\Router::mixin()` instance method.
 
 I have detailed how Facades work under the hood at [How Laravel Facades Work Under The Hood](https://aregsar.com/blog/2020/how-laravel-facades-work-under-the-hood)
+
+Below is the annotated `boot` method call of the `UiServiceProvider` class in the `Laravel\Ui` package that starts off the process of adding in the route registration methods from the package:
 
 ```php
 //in vendor/laravel/ui package
@@ -157,17 +157,18 @@ class UiServiceProvider extends ServiceProvider
 
     public function boot()
     {
-
         //The Route::mixin() method is called on the Route facade.
         //The mixin method call causes a call to the  static __call method of the Route facade,
         //because a mixin method does not exist on the Route Facade class.
+        //
         //The __call method gets an instance of the Router service class
         //from the application container
         //then calls the mixin() method on the Router service class instance, which is
         //actually a call to the static mixin() method of the Macroable trait of
         //the Router service class.(Note: in PHP a static method of a class can be called by an instance
         //of the class)
-        //the mixin() method of the Macroable trait first uses reflection to get all methods of
+        //
+        //The mixin() method of the Macroable trait first uses reflection to get all methods of
         //the AuthRouteMethods class instance passed to it, then iterates through all the methods, calling each method and puting the closure function
         //returned from the method in the $macros hash array using the name of
         //the method as the hash key and the closure function returned by the method as the value
@@ -176,7 +177,9 @@ class UiServiceProvider extends ServiceProvider
 }
 ```
 
-Here is the `Illuminate\Support\Facades\Route` Facade `getFacadeAccessor()` implementation that returns the alias string `router` that is used to get an instance of `Illuminate\Routing\Router` class from the application container:
+The boot method calls the `mixin` method of the `Illuminate\Support\Facades\Route` Facade.
+
+Here is the `Illuminate\Support\Facades\Route` Facade `getFacadeAccessor()` implementation that returns the alias string `router`:
 
 ```php
 namespace Illuminate\Support\Facades;
@@ -188,6 +191,8 @@ class Route extends Facade
     }
 }
 ```
+
+The base Facade class calls the `getFacadeAccessor()` method and uses the returned `router` string to get an instance of `Illuminate\Routing\Router` class from the application container. Then it calls the `mixin` method that was called on the facade, on the `Illuminate\Routing\Router` class instance.
 
 Here is the `mixin` and `macro` methods of the `Illuminate\Support\Traits\Macroable` trait used by the `Illuminate\Routing\Router` service class:
 
@@ -221,6 +226,8 @@ trait Macroable
     }
 }
 ```
+
+The `mixin` method uses the `macro` method to add the route registration closure functions to the `$macros` hash array.
 
 ## Registering the authentication routes installed by the Laravel UI package
 
