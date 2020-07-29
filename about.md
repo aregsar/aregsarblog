@@ -47,7 +47,7 @@ For more info see the [TALL Stack](https://tallstack.dev/) (Tailwind Alpine Lara
 + [Papertrail](https://www.papertrail.com/) - Application log aggregator
 + [Cloudinary](https://cloudinary.com/) - Media file hosting and CDN service
 + [Amazon S3](https://aws.amazon.com/s3/) - AWS Cloud Media file hosting
-+ [Cloudflare](cloudflare.com) - CDN for Amazon S3
++ [Cloudflare](https://cloudflare.com) - CDN front for Amazon S3
 
 ## My Laravel development setup
 
