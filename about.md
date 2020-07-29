@@ -1,6 +1,6 @@
 # About Me
 
-Hi, My name is Areg and I help development teams rapidly build and deploy reliable and maintainable web applications.
+Hi, my name is Areg and I help development teams rapidly build and deploy reliable and maintainable web applications.
 
 In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Disney.
 
@@ -18,7 +18,7 @@ My web development stack is focused on building server side `HTML` rendered [Maj
 + [Turbolinks](https://github.com/turbolinks/turbolinks) - Framework for Ajax loaded html pages
 + [IntercoolerJS](https://intercoolerjs.org/) - Framework for Ajax loaded html fragments
 
-For more info see the [TALL Stack](https://tallstack.dev/) Tailwind Alpine Laravel Livewire
+For more info see the [TALL Stack](https://tallstack.dev/) (Tailwind Alpine Laravel Livewire)
 
 ## My lean development process
 
@@ -26,7 +26,7 @@ For more info see the [TALL Stack](https://tallstack.dev/) Tailwind Alpine Larav
 + [Endpoint Driven Development](https://alwaysdeployed.com/endpoint-driven-development) - incremental feature development guarded by feature tests
 + [Trunk Based Development](https://trunkbaseddevelopment.com) - continuous integration into master delivery branch
 + [No Estimates](http://ronjeffries.com/xprog/articles/the-noestimates-movement) - because working software is the primary measure of progress
-+ [Kanban](https://www.atlassian.com/agile/kanban) - Agile done right with just in time work item pulling and work in progress WIP limits
++ [Kanban](https://www.atlassian.com/agile/kanban) - Agile done right with just in time work item pulling and work in progress (WIP) limits
 
 ## My development tools
 
@@ -41,16 +41,15 @@ For more info see the [TALL Stack](https://tallstack.dev/) Tailwind Alpine Larav
 + [kanbanflow](https://kanbanflow.com/) - Kanban board with [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer
 + [Mailtrap](https://mailtrap.io) - Email delivery testing service
 + [Zeplin](https://zeplin.io/) -  Web design service for developer and designer collaboration
-+ [DigitalOcean](https://www.digitalocean.com/) - Cloud deployment with managed MySQL database, managed Redis cluster, Managed Load Balancer and S3 compatible file storage
++ [DigitalOcean](https://www.digitalocean.com/) - Cloud deployment with managed MySQL database, managed Redis cluster and Managed Load Balancer
 + [SendGrid](https://sendgrid.com/) - Transactional Email Service
 + [HoneyBadger](https://www.honeybadger.io/for/laravel/) - Exception, uptime, scheduled task and background job monitoring for Laravel
 + [Papertrail](https://www.papertrail.com/) - Application log aggregator
 
 ## My Laravel development setup
 
-My development stack embraces the [boring stack](https://mcfunley.com/choose-boring-technology) and [12 factore apps](https://12factor.net) philosophies as much possible.
+My development stack embraces the [boring stack](https://mcfunley.com/choose-boring-technology) and [12 factore apps](https://12factor.net) philosophies as much as possible.
 
-+ PHP, Composer, Laravel Valet, NodeJS and Yarn installed on my MacBook Pro.
-+ MySQL, Redis, ElasticSearch and MailHog running in separate Docker containers via Docker Compose.
-
-I keep my PHP version updated via Homebrew and NodeJS version updated via the `nvm` node version manager.
++ PHP, Composer, Laravel Valet installed on host machine.
++ MySQL, Redis, ElasticSearch and MailHog running in Docker containers via Docker Compose.
++ NodeJS installed on host machine via node version manager (nvm)
