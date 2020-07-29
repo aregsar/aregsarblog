@@ -34,7 +34,7 @@ For more info see the [TALL Stack](https://tallstack.dev/) (Tailwind Alpine Lara
 + [ngrok](https://ngrok.com/) - Secure public URLs for local webhook testing
 + [VSCode](https://code.visualstudio.com/) - Lightweight editor and IDE
 + [PHPStorm](https://www.jetbrains.com/phpstorm/) - Powerful PHP IDE
-+ [TablePlus](https://tableplus.com/) - Database management GUI for MySQL,  Redis and more
++ [TablePlus](https://tableplus.com/) - Database management GUI for MySQL, Redis and more
 
 ## Services I use
 
@@ -45,6 +45,9 @@ For more info see the [TALL Stack](https://tallstack.dev/) (Tailwind Alpine Lara
 + [SendGrid](https://sendgrid.com/) - Transactional Email Service
 + [HoneyBadger](https://www.honeybadger.io/for/laravel/) - Exception, uptime, scheduled task and background job monitoring for Laravel
 + [Papertrail](https://www.papertrail.com/) - Application log aggregator
++ [Cloudinary](https://cloudinary.com/) - Media file hosting and CDN service
++ [Amazon S3](https://aws.amazon.com/s3/) - AWS Cloud Media file hosting
++ [Cloudflare](cloudflare.com) - CDN for Amazon S3
 
 ## My Laravel development setup
 
