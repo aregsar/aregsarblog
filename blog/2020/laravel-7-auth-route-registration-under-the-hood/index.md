@@ -360,15 +360,15 @@ Once the closure is called, it calls the `resetPassword`,`confirmPassword`,`emai
 
 Since the $this pointer was bound to the `Illuminate\Routing\Router` class, these methods are called on the `Illuminate\Routing\Router` class.
 
-Because the `Illuminate\Routing\Router` class does not have these methods either, just like it did not have the initial `auth` method that was called on it, the dynamic `_call` method of the `Illuminate\Routing\Router` class is called instead.
+Because the `Illuminate\Routing\Router` class does not have these methods either, just like it did not have the initial `auth` method that was called on it, the dynamic `__call` method of the `Illuminate\Routing\Router` class is called instead.
 
-This time the `resetPassword`,`confirmPassword`,`emailVerification` method names are passed in as an argument when each of them is called from the `auth` closure.
+However this time the `resetPassword`,`confirmPassword`,`emailVerification` method names are passed in as an argument when each of them is called from the `auth` closure.
 
-The passed in method name is ultimately used as the key to get the closure associated with that method from the `Illuminate\Routing\Router::$macros` array, bind that closure to the `Illuminate\Routing\Router` class and then call the closure just like was done for the closure associated with the `auth` key.
+The passed in method name is ultimately used as the key to get the closure associated with that method from the `Illuminate\Routing\Router::$macros` array, then bind that closure to the `Illuminate\Routing\Router` class and then call the closure just like was done for the closure associated with the `auth` method name.
 
-Below am showing an abbreviated version of the `AuthRouteMethods` class of the `Laravel\UI` package that provided the closures that were added to the `$macros` array.
+Below I am showing an abbreviated version of the `AuthRouteMethods` class of the `Laravel\UI` package that provided the closures that were added to the `Illuminate\Routing\Router::$macros` array.
 
-I have annotated it to illustrate how the `$this` pointer binding works.
+I have annotated it to illustrate how the `$this` pointer binding works when a method of the class is called from within a closure returned from the another method of the class.
 
 ```php
 class AuthRouteMethods
@@ -379,7 +379,7 @@ class AuthRouteMethods
         //This is the closure added to the $macros array that corresponds to `auth` string key
         return function ($options = []) {
 
-            //using the $this pointer bound to `Illuminate\Routing\Router` instance 
+            //using the $this pointer bound to `Illuminate\Routing\Router` instance
             //to call the `get` method defined in `Illuminate\Routing\Router`
             $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
   
@@ -406,11 +406,13 @@ class AuthRouteMethods
 }
 ```
 
-I am only showing the auth and resetPassword methods of AuthRouteMethods class and I am only showing the call to the resetPassword from inside the closure returned by the auth method.
+I am only showing the `auth` and `resetPassword` methods of `AuthRouteMethods` class and I am only showing the call to the `resetPassword` from inside the closure returned by the `auth` method.
 
-So we can see that `AuthRouteMethods::auth` method returns a closure that calls the resetPassword method.
+We can see that the `AuthRouteMethods::auth` method returns a closure that calls `$this->resetPassword()`.
 
-When the `auth` closure calls the other route registration methods using the `$this` pointer that was bound to the `Illuminate\Routing\Router` class, it re-enters the `__call` of the `Macroable` trait method and finds each of those other closures from the `Laravel\UI` package `AuthRouteMethods` class that were added to the `$macros` array and calls them.
+When the `auth` closure calls the other route registration methods using the `$this` pointer that was bound the closure to the `Illuminate\Routing\Router` class, it re-enters the `__call` of the `Macroable` trait method and finds each of those other closures from the `Laravel\UI` package `AuthRouteMethods` class that were added to the `$macros` array, binds them to the `Illuminate\Routing\Router` class and then calls them.
+
+So in the specific case of `auth` closure calling `$this->resetPassword()`, because `resetPassword` does not exist on the `Illuminate\Routing\Router` class, ultimately the `__call` method of the `Macroable` trait method is called with the `resetPassword` string passed to it as the key for the associated closure to call.
 
 ## The full Macroable trait implementation
 
