@@ -231,13 +231,13 @@ The `mixin` method uses the `macro` method to add the route registration closure
 
 ## Registering the authentication routes installed by the Laravel UI package
 
-Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup auth routes for your application that happens when `UiServiceProvider::boot()` method is invoked.
+Mixing in the authentication routes from the UI package into the `Illuminate\Routing\Router` class is only the first part to setup authentication routes for your application. That first part happens when the `UiServiceProvider::boot()` method of the `Laravel\Ui` package is invoked.
 
-The second part is the actual execution of the mixed in `Illuminate\Routing\Router` class authentication route methods to register the authentication routes. This happens when the `Auth::routes()` is called in the `routing/web.php` file.
+The second part is the actual execution of the closure functions that were added to the `Illuminate\Routing\Router`class `$macros` array to register the authentication routes. This second part happens when the `Auth::routes()` method is called in the `routing/web.php` file.
 
-Below I show how the `Illuminate\Routing\Router` class's mixed in route registration methods are used to register authentication routes with our application.
+Below I show how the route registration methods in `Illuminate\Routing\Router::$macros` are used to register authentication routes with our application.
 
-It all starts with the `Auth::routes()` call in `routes/web.php`:
+It all starts with the `Auth::routes()` call:
 
 ```php
 //from routes/web.php
@@ -245,7 +245,7 @@ Illuminate\Support\Facades\Auth::routes();
 ```
 
 That call is a call to the `Auth` facade class `Auth::routes` method.
-The `Auth::routes` method then calls the `Illuminate\Routing\Router` service class instance `auth()` method which in ultimately creates the Authentication routs.
+The `Auth::routes` method gets an instance of the `Illuminate\Routing\Router` service class from the application container and calls the `auth()` method on that instance as shown below:
 
 ```php
 class Auth extends Facade
@@ -259,13 +259,16 @@ class Auth extends Facade
 ```
 
 Since the `Illuminate\Routing\Router` class does not define an `auth()` method, the `__call` method of the `Illuminate\Routing\Router` instance is called instead.
-This method checks to see if an `auth()` method exists, in its `$macros` array that it inherits from its `Macroable` trait.
 
-It finds that it does exists because it was added to the `macros` array from the `AuthRouteMethods` class from the Laravel UI package by the Laravel UI package provider as described in the previous sections.
+> Note: `Illuminate\Routing\Router` defines a __call method which is a dynamically invoked method when we call a method that does not exist on a class that defines the _call method.
 
-Since the `auth()` method exists the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called.
+The `_call` method uses the `auth` method name as the key to check to see if an closure exists, in the `$macros` array that the `Illuminate\Routing\Router::$macros` class inherited from its `Macroable` trait.
 
-Actually the `macroCall` method is just an alias for the `__call` instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below:
+We saw that in part one of this process, the closure returned from the `Auth` method of the `AuthRouteMethods` class in the `Laravel\UI` package was added to the `$macros` array using the `Auth` method as the key.
+
+This means that the closure exists in the `macros` array and since it exists, the `$this->macroCall($method, $parameters)` method, inherited from its `Macroable` trait, is called passing along `auth` method name string that was passed to the `Illuminate\Routing\Router::_call` method as the `$method` argument of `macroCall`.
+
+The `macroCall` method is just an alias for the `__call` instance method of the `Macroable` class. The alias is declared inline in the `use Macroable{__call as macroCall;}` trait statement in the `Illuminate\Routing\Router` class shown below:
 
 ```php
 namespace Illuminate\Routing;
@@ -301,9 +304,9 @@ class Router implements BindingRegistrar, RegistrarContract
 }
 ```
 
-So the `$this->macroCall($method, $parameters)` is actually calling the `__call` method implemented in the `Macroable` trait. The call passes along the `auth` string as method name.
+So the `$this->macroCall($method, $parameters)` is actually calling the `Macroable::__call` method implemented in the base `Macroable` trait and the `Macroable::__call` method is passed in the `auth` string as method name.
 
-Below I show how the `__call` method of the `Macroable` trait uses the passed in arguments to call the installed `auth()` closure function installed by the Laravel UI package provider.
+Below I show how the `__call` method of the `Macroable` trait uses the passed in arguments to call the installed `auth()` closure function installed by the Laravel UI package.
 
 ```php
 namespace Illuminate\Support\Traits;
