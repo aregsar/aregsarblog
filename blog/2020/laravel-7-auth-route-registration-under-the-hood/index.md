@@ -357,19 +357,22 @@ In other words the method `$macro->bindTo($this, static::class)` is called so th
 
 So the `call_user_func_array` calls the bound `$macro` closure that is passed to it to register all the authentication routes.
 
-Once the closure is called, it calls the `resetPassword`,`confirmPassword`,`emailVerification` methods of the `AuthRouteMethods` class using the `$this` pointer.
+The called closure then calls the `resetPassword`,`confirmPassword`,`emailVerification` methods using the `$this` pointer. Since the `$this` pointer was bound to the `Illuminate\Routing\Router` class, these methods are called on the `Illuminate\Routing\Router` class.
 
-Since the $this pointer was bound to the `Illuminate\Routing\Router` class, these methods are called on the `Illuminate\Routing\Router` class.
+The `Illuminate\Routing\Router` class does not implement these methods either, just like it did not implement the initial `auth` method that was called on it.
+So the dynamic `__call` method of the `Illuminate\Routing\Router` class is called instead when each of the `resetPassword`,`confirmPassword`,`emailVerification` methods are called.
 
-Because the `Illuminate\Routing\Router` class does not have these methods either, just like it did not have the initial `auth` method that was called on it, the dynamic `__call` method of the `Illuminate\Routing\Router` class is called instead.
+For each of the `resetPassword`,`confirmPassword`,`emailVerification` method calls we go through the same flow of calling `__call` method, that we went through when the `auth` method was called on the `Illuminate\Routing\Router` class.
 
-However this time the `resetPassword`,`confirmPassword`,`emailVerification` method names are passed in as an argument when each of them is called from the `auth` closure.
+The only difference is that for each of these methods their respective `resetPassword`,`confirmPassword`,`emailVerification` method name is passed in as the argument to the `__call` method, when each of them is called from the `auth` closure.
 
 The passed in method name is ultimately used as the key to get the closure associated with that method from the `Illuminate\Routing\Router::$macros` array, then bind that closure to the `Illuminate\Routing\Router` class and then call the closure just like was done for the closure associated with the `auth` method name.
 
+Ultimately, each of the closures that are called registers routes that are added to our application.
+
 Below I am showing an abbreviated version of the `AuthRouteMethods` class of the `Laravel\UI` package that provided the closures that were added to the `Illuminate\Routing\Router::$macros` array.
 
-I have annotated it to illustrate how the `$this` pointer binding works when a method of the class is called from within a closure returned from the another method of the class.
+I have annotated it to illustrate how the `$this` pointer binding works when a method of the `AuthRouteMethods` class is called from within a closure returned from another method of the `AuthRouteMethods` class.
 
 ```php
 class AuthRouteMethods
