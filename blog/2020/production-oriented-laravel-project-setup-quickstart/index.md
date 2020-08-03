@@ -709,18 +709,12 @@ Delete the `resources\views\home.blade.php` view
 
 In the `resources\views\home\index.blade.php` view replace `url('/home')` with `route('home.welcome')`
 
-## Queue Verification Email and Password Reset setup
+## Queue Verification Email
 
 Run the artisan command to create a new notification to override the default Email Verification notification:
 
 ```bash
 artisan make:notification Auth/QueuedVerifyEmail
-```
-
-Run the artisan command to create a new notification to override the default Email Verification notification:
-
-```bash
-artisan make:notification Auth/QueuedResetPassword
 ```
 
 Open the new notification class file at `App/Notifications/Auth/QueuedVerifyEmail.php` and replace its content with the following:
@@ -747,7 +741,42 @@ class QueuedVerifyEmail extends VerifyEmail implements ShouldQueue
 }
 ```
 
+In `App\User.php`:
 
+Replace:
+
+```php
+class User extends Authenticatable
+```
+
+with:
+
+```php
+class User extends Authenticatable implements MustVerifyEmail
+```
+
+Then add the following method to the `User` class:
+
+```php
+     /**
+     * Overrideen sendEmailVerificationNotification implementation
+     *
+     */
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new App\Notifications\Auth\QueuedVerifyEmail);
+    }
+```
+
+Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method that overrides the default method that the `User` class inherits to the `User` class body.
+
+## Queue Password Reset setup
+
+Run the artisan command to create a new notification to override the default Email Verification notification:
+
+```bash
+artisan make:notification Auth/QueuedResetPassword
+```
 
 Open the new notification class file at `App/Notifications/Auth/QueuedResetPassword.php` and replace its content with the following:
 
@@ -757,7 +786,6 @@ namespace App\Notifications\Auth;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
-
 
 class QueuedResetPassword extends ResetPassword implements ShouldQueue
 {
@@ -774,31 +802,10 @@ class QueuedResetPassword extends ResetPassword implements ShouldQueue
 }
 ```
 
-Finally Replace `App\User.php` content with the following:
+In `App\User.php` add the following method to the `User` class:
 
 ```php
-<?php
-
-namespace App;
-
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-
-class User extends Authenticatable implements MustVerifyEmail
-{
-    use Notifiable;
-
      /**
-     * Overrideen sendEmailVerificationNotification implementation
-     *
-     */
-    public function sendEmailVerificationNotification()
-    {
-        $this->notify(new App\Notifications\Auth\QueuedVerifyEmail);
-    }
-
-    /**
      * Overrideen sendPasswordResetNotification implementation
      *
      */
@@ -806,37 +813,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new \App\Notifications\Auth\QueuedResetPassword($token));
     }
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-}
 ```
 
-Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method that overrides the default method that the `User` class inherits to the ``User` class body. Finally we have added added the `sendPasswordResetNotification` method that overrides the default method that the `User` class inherits to the `User` class body.
+Here we have added added the `sendPasswordResetNotification` method that overrides the default method that the `User` class inherits to the `User` class body.
 
 ## Sending Welcome email after email is verified
 
