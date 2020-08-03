@@ -12,43 +12,47 @@ In this article I am going to show my setup procedure to setup a new Laravel pro
 - queued user verification and password reset using background jobs
 - Additional MySQL test database Docker service for running feature tests
 
-## Setting up a new Laravel project
-
-First create a new project as instructed here:
-
-Make sure php-redis extension is installed in your local environment.
-
-Installation instructions for php-redis extension can be found at https://github.com/phpredis/phpredis/blob/develop/INSTALL.markdown and https://www.digitalocean.com/community/questions/how-to-setup-laravel-with-digitalocean-managed-redis-cluster
+## Install php-redis extension
 
 ```bash
 pecl install --force redis
+#make sure pecl shows the extension is installed
 pecl list
+#make sure php shows the extension is installed
 php -m
 ```
 
+Check that the  `/usr/local/lib/php/pecl/20190902/redis.so` extension file exists.
+Check that the `/usr/local/etc/php/7.4/php.ini` file includes the line `extension="redis.so"`.
+
+## Create new Laravel project
+
 ```bash
 composer create-project --prefer-dist laravel/laravel myapp
-cd myapp && php artisan --version
-git init
-
+cd myapp
 composer require laravel-frontend-presets/tailwindcss --dev
 php artisan ui tailwindcss --auth
 npm install && npm run dev
+#composer dump-autoload
+#php artisan config:clear
+```
 
+## Add project to github (optional)
+
+```bash
+git init
 git add -A
 git commit -m "first commit"
 git remote add origin git@github.com:aregsar/myapp.git
 git push -u origin master
 ```
 
-Also check the extension exists at /usr/local/lib/php/pecl/20190902/redis.so and check the top of the php.ini file at /usr/local/etc/php/7.4/php.ini includes the line extension="redis.so".
-If it does not exists, make sure to add it manually so PECL or PHP detect the extension.
-
 ## Create the data directory
 
 Create a new data directory in the Laravel project root directory:
 
 ```bash
+# make sure git ignores the data directory
 echo '/data' >> .gitignore
 mkdir data
 ```
@@ -64,7 +68,7 @@ I run the following services in individual Docker containers to support local La
 
 > Note: Except for MailHog, these are the same services I use in production to maintain dev/prod parity
 
-## Create the docker-compose file
+### Create the docker-compose file
 
 Create a new docker-compose.yml file in the Laravel project root directory:
 
@@ -125,7 +129,7 @@ services:
         - "8004:8099"
 ```
 
-## Replace the .env file content
+### Replace the .env file content
 
 ```ini
 APP_NAME=myapp
@@ -168,7 +172,7 @@ MAIL_FROM_ADDRESS=null
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-## Replace config/database.php
+### Replace config/database.php
 
 ```php
 <?php
@@ -317,7 +321,7 @@ return [
 ];
 ```
 
-## Replace config/cache.php
+### Replace config/cache.php
 
 ```php
 <?php
@@ -388,7 +392,7 @@ return [
 ];
 ```
 
-## Replace config/session.php
+### Replace config/session.php
 
 ```php
 <?php
@@ -432,7 +436,7 @@ return [
 ];
 ```
 
-## Replace config/queue.php
+### Replace config/queue.php
 
 ```php
 <?php
@@ -503,7 +507,7 @@ return [
 ];
 ```
 
-## Replace config/mail.php
+### Replace config/mail.php
 
 ```php
 <?php
@@ -563,50 +567,6 @@ return [
         ],
     ],
 ];
-```
-
-## Startup the containers
-
-In the project root directory, type:
-
-```bash
-docker-compose up -d
-docker ps -a
-php artisan tinker
-```
-
-## Check database connections
-
-Start Laravel tinker to check the MySQL and Redis connections:
-
-```bash
-php artisan tinker
-```
-
-Check the default MySQL connection:
-
-```php
-DB::connection()->getPdo();
-```
-
-Check the resdis connection:
-
-```php
-Illuminate\Support\Facades\Redis::connection()->ping();
-```
-
-Check the MySQL test database connection:
-
-```php
-DB::connection("testmysql")->getPdo();
-```
-
-## connect to email dashboard
-
-Connect to the MailHog admin dashboard using your browser:
-
-```bash
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
 ```
 
 ## Change the default Routs, HomeController and Views
@@ -879,9 +839,54 @@ public function handle(Verified $event)
  }
 ```
 
-`https://laracasts.com/discuss/channels/laravel/sending-a-welcome-email-after-user-verify-his-account`
 
-`https://vegibit.com/laravel-aliases-and-contracts/`
 
-`composer dump-autoload`
-`php artisan config:clear`
+=====================
+
+## testing the app
+
+### Startup the containers
+
+In the project root directory, type:
+
+```bash
+docker-compose up -d
+docker ps -a
+php artisan tinker
+```
+
+### Check database connections
+
+Start Laravel tinker to check the MySQL and Redis connections:
+
+```bash
+php artisan tinker
+```
+
+Check the default MySQL connection:
+
+```php
+DB::connection()->getPdo();
+```
+
+Check the resdis connection:
+
+```php
+Illuminate\Support\Facades\Redis::connection()->ping();
+```
+
+Check the MySQL test database connection:
+
+```php
+DB::connection("testmysql")->getPdo();
+```
+
+### connect to email dashboard
+
+Connect to the MailHog admin dashboard using your browser:
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
+```
+
+
