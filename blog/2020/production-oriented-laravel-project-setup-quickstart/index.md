@@ -588,15 +588,55 @@ return [
 
 ### Run database migrations
 
-After setting up docker compose and configuration files to use docker, run the database migrations
+After setting up docker compose and configuration files to use docker, startup the containers:
 
-First startup the containers:
+startup the containers:
 
 ```bash
 docker-compose up -d
 ```
 
-Then run migrations in a new terminal window:
+In a new terminal type:
+
+```bash
+docker ps -a
+```
+
+### Startup the docker containers
+
+Start Laravel tinker to check the MySQL connections:
+
+```bash
+php artisan tinker
+```
+
+Check the default MySQL connection:
+
+```php
+DB::connection()->getPdo();
+```
+
+### Check the resdis connection
+
+Start Laravel tinker to check the Redis connections:
+
+```bash
+php artisan tinker
+```
+
+```php
+Illuminate\Support\Facades\Redis::connection()->ping();
+```
+
+Check the MySQL test database connection:
+
+```php
+DB::connection("testmysql")->getPdo();
+```
+
+### Run database migrations
+
+Run migrations in a new terminal window:
 
 ```bash
 php artisan migrate
@@ -838,49 +878,9 @@ public function handle(Verified $event)
  }
 ```
 
-
-
 ## testing the app
 
-### Startup the containers
-
-In the project root directory, type:
-
-```bash
-docker-compose up -d
-docker ps -a
-php artisan tinker
-```
-
-### Check database connections
-
-Start Laravel tinker to check the MySQL and Redis connections:
-
-```bash
-php artisan tinker
-```
-
-Check the default MySQL connection:
-
-```php
-DB::connection()->getPdo();
-```
-
-Check the resdis connection:
-
-```php
-Illuminate\Support\Facades\Redis::connection()->ping();
-```
-
-Check the MySQL test database connection:
-
-```php
-DB::connection("testmysql")->getPdo();
-```
-
-
-
-## Migrations when not using parallel tests
+### Migrations when not using parallel tests
 
 To run migrations using the `RefreshDatabase` trait before running tests:
 override the .env file `DB_CONNECTION` setting in phpunit.xml
@@ -889,7 +889,7 @@ override the .env file `DB_CONNECTION` setting in phpunit.xml
 <name="DB_CONNECTION" value="testmysql">
 ```
 
-### Run php unit tests
+### Run php unit
 
 ```bash
 phpunit
@@ -906,4 +906,3 @@ To run  migrations on the command line against the test database before running 
 ```bash
 php artisan migrate --database=testmysql
 ```
-
