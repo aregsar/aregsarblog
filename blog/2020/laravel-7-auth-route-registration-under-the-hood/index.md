@@ -412,15 +412,11 @@ class AuthRouteMethods
 
 In the snipped above, I am only showing the `auth` and `resetPassword` methods of `AuthRouteMethods` class and I am only showing the call to the `resetPassword` from inside the closure returned by the `auth` method.
 
-We can see that the `AuthRouteMethods::auth` method returns a closure that calls `$this->resetPassword()`.
+We can see that the `AuthRouteMethods::auth` method returns a closure that calls `$this->resetPassword()`. This is the `auth` closure, returned by the `AuthRouteMethods::auth` method and added to the `$macros` array, that is calling the `AuthRouteMethods::resetPassword` route registration method, using the `$this` pointer that references the `Illuminate\Routing\Router` class that was bound to the closure.
 
-The `auth` closure returned by the `AuthRouteMethods::auth` method calls the other route registration methods, using the `$this` pointer that references the `Illuminate\Routing\Router` class that was bound to the closure.
+Because `resetPassword` does not exist on the `Illuminate\Routing\Router` class,when the `auth` closure calls `$this->resetPassword()`,  ultimately the `__call` method of the `Macroable` trait method is called with the `resetPassword` string passed to it as the key in the the `$macros` array for the associated closure to call. In the `__call` method it finds the `resetPassword` closure added to the `$macros` array from the `AuthRouteMethods` class of the `Laravel\UI` package, binds it to the `Illuminate\Routing\Router` class and then calls it to register the `resetPassword` routes with the application.
 
-The call to the route registration methods re-enter the `__call` method of the `Macroable` trait and finds each of those other closures from the `Laravel\UI` package `AuthRouteMethods` class that were added to the `$macros` array, binds them to the `Illuminate\Routing\Router` class and then calls them.
-
-So in the specific case of `auth` closure calling `$this->resetPassword()`, because `resetPassword` does not exist on the `Illuminate\Routing\Router` class, ultimately the `__call` method of the `Macroable` trait method is called with the `resetPassword` string passed to it as the key for the associated closure to call.
-
-Also note that since the `$this` pointer in all the closures is bound to the `Illuminate\Routing\Router` class, use the `$this` pointer to directly call the Router classes own route mapping methods, such as the call to `$this->get('login', 'Auth\LoginController@showLoginForm')->name('login');` used within the `auth` closure function.
+Also note that since the `$this` pointer in all the closures is bound to the `Illuminate\Routing\Router` class, the `$this` pointer is also used to directly call the `Illuminate\Routing\Router` class's own route mapping methods, such as the call to `$this->get('login', 'Auth\LoginController@showLoginForm')->name('login');` used within the `auth` closure function.
 
 ## The full Macroable trait implementation
 
