@@ -4,6 +4,8 @@ May 24, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Production Oriented Laravel Project Setup Quickstart](https://aregsar.com/blog/2020/production-oriented-laravel-project-setup-quickstart)
 
+## Create Laravel Project
+
 In this article I am going to show my setup procedure to setup a new Laravel project with the following out of the box features:
 
 - Tailwind UI and User Authentication
@@ -12,7 +14,7 @@ In this article I am going to show my setup procedure to setup a new Laravel pro
 - queued user verification and password reset using background jobs
 - Additional MySQL test database Docker service for running feature tests
 
-## Install php-redis extension
+### Install php-redis extension
 
 ```bash
 pecl install --force redis
@@ -25,7 +27,7 @@ php -m
 Check that the  `/usr/local/lib/php/pecl/20190902/redis.so` extension file exists.
 Check that the `/usr/local/etc/php/7.4/php.ini` file includes the line `extension="redis.so"`.
 
-## Create new Laravel project
+### Create new Laravel project
 
 ```bash
 composer create-project --prefer-dist laravel/laravel myapp
@@ -37,7 +39,7 @@ npm install && npm run dev
 #php artisan config:clear
 ```
 
-## Add project to github (optional)
+### Add project to github (optional)
 
 ```bash
 git init
@@ -47,7 +49,7 @@ git remote add origin git@github.com:aregsar/myapp.git
 git push -u origin master
 ```
 
-## Create the data directory
+### Create the data directory
 
 Create a new data directory in the Laravel project root directory:
 
@@ -56,6 +58,21 @@ Create a new data directory in the Laravel project root directory:
 echo '/data' >> .gitignore
 mkdir data
 ```
+
+### Serve the application using Valet
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome myapp.test
+```
+
+### Serve the application using Artisan
+
+```bash
+php artisan serve
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8000
+```
+
+
 
 ## Setup Local Laravel Development With Docker Services
 
@@ -569,6 +586,30 @@ return [
 ];
 ```
 
+### Run database migrations
+
+After setting up docker compose and configuration files to use docker, run the database migrations
+
+First startup the containers:
+
+```bash
+docker-compose up -d
+```
+
+Then run migrations in a new terminal window:
+
+```bash
+php artisan migrate
+```
+
+### connect to email dashboard
+
+Connect to the MailHog admin dashboard using your browser:
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
+```
+
 ## Change the default Routs, HomeController and Views
 
 Replace the content of `routes\web.php` file with the following:
@@ -757,48 +798,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
 Here we have added the `implements MustVerifyEmail` to the `class User extends Authenticatable` class definition and we have also added the `sendEmailVerificationNotification` method that overrides the default method that the `User` class inherits to the ``User` class body. Finally we have added added the `sendPasswordResetNotification` method that overrides the default method that the `User` class inherits to the `User` class body.
 
-## Run database migrations
-
-```bash
-php artisan migrate
-```
-
-To run  migrations on the command line against the test database before running tests:
-
-```bash
-php artisan migrate --database=testmysql
-```
-
-To run migrations using the `RefreshDatabase` trait before running tests:
-override the .env file `DB_CONNECTION` setting in phpunit.xml
-
-```xml
-<name="DB_CONNECTION" value="testmysql">
-```
-
-## Serve the application using Valet
-
-```bash
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome myapp.test
-```
-
-## Serve the application using Artisan
-
-```bash
-php artisan serve
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8000
-```
-
-## Run php unit tests
-
-```bash
-phpunit
-```
-
-## Run parallel tests with Paratest package
-
-TBD
-
 ## Sending Welcome email after email is verified
 
 Use Illuminate\Auth\Events\Verified to send a welcome email after a user verifies his or her account.
@@ -841,8 +840,6 @@ public function handle(Verified $event)
 
 
 
-=====================
-
 ## testing the app
 
 ### Startup the containers
@@ -881,12 +878,32 @@ Check the MySQL test database connection:
 DB::connection("testmysql")->getPdo();
 ```
 
-### connect to email dashboard
 
-Connect to the MailHog admin dashboard using your browser:
 
-```bash
-/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome localhost:8025
+## Migrations when not using parallel tests
+
+To run migrations using the `RefreshDatabase` trait before running tests:
+override the .env file `DB_CONNECTION` setting in phpunit.xml
+
+```xml
+<name="DB_CONNECTION" value="testmysql">
 ```
 
+### Run php unit tests
+
+```bash
+phpunit
+```
+
+### Run parallel tests with Paratest package
+
+TBD
+
+### Migrations when using parallel tests
+
+To run  migrations on the command line against the test database before running tests:
+
+```bash
+php artisan migrate --database=testmysql
+```
 
