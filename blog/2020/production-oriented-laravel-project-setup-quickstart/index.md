@@ -885,3 +885,38 @@ To run  migrations on the command line against the test database before running 
 ```bash
 php artisan migrate --database=testmysql
 ```
+
+## Production Build 
+
+When we build our application for production deployment we need to do some optimizations.
+
+First we need to only install our non development dependancies and optimize the class autoloader map:
+
+```bash
+composer install --optimize-autoloader --no-dev
+```
+
+Second we need to cache our configuration, routes and views
+
+```bash
+php artisan view:cache
+php artisan route:cache
+php artisan config:cache
+```
+
+Third we need to publish our assets to the public folder so that they can be directly served by the Nginx server.
+Note that we need to run this command on our build server or dev machine that has the node development dependancies. 
+Once published we can copy the files to our build
+
+```bash
+#build assets for production and publish them to public folder
+npm run production
+```
+
+Fourth only install
+```bash
+#only install non development dependancies
+npm install --only=prod
+#build assets for production and publish them to public folder
+npm run production
+```
