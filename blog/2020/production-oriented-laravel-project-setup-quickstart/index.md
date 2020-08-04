@@ -886,37 +886,49 @@ To run  migrations on the command line against the test database before running 
 php artisan migrate --database=testmysql
 ```
 
-## Production Build 
+## Production Build
 
 When we build our application for production deployment we need to do some optimizations.
 
-First we need to only install our non development dependancies and optimize the class autoloader map:
+First we need to only install our non development dependancies and optimize the class autoloader:
 
 ```bash
 composer install --optimize-autoloader --no-dev
 ```
 
-Second we need to cache our configuration, routes and views
+Note that we need to run this command on our build server or dev machine, then copy the vendor directory to the production image or server.
+
+Second we need to cache our configuration, routes and views:
 
 ```bash
-php artisan view:cache
-php artisan route:cache
 php artisan config:cache
+php artisan route:cache
+php artisan view:cache
 ```
 
-Third we need to publish our assets to the public folder so that they can be directly served by the Nginx server.
-Note that we need to run this command on our build server or dev machine that has the node development dependancies. 
-Once published we can copy the files to our build
+Note that we need to run this command on our build server or dev machine, then copy the storage directory to the production image or server.
+
+Third we need to publish our assets to the public folder so that they can be directly served by the `Nginx`:
 
 ```bash
+#install all dependancies including dev dependancies
+npm install
 #build assets for production and publish them to public folder
 npm run production
 ```
 
-Fourth only install
+Note that we need to run this command on our build server or dev machine that has the node development dependancies.
+Once published we can copy the `public` folder containing our published files to our production image or server.
+
+Fourth only install production `npm` dependancies:
+
+> This is only required if there are `node_module` packages that need to be deployed to production
+
 ```bash
+#nuke the nodel_modules
+rm -rf node_modules
 #only install non development dependancies
 npm install --only=prod
-#build assets for production and publish them to public folder
-npm run production
 ```
+
+Note that we need to run this command on our build server or dev machine, then copy the `node_modules` to our production image or server.
