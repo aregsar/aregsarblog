@@ -893,7 +893,7 @@ When we build our application for production deployment we need to do some optim
 First we need to only install our non development dependancies and optimize the class autoloader:
 
 ```bash
-composer install --optimize-autoloader --no-dev
+composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 ```
 
 Note that we need to run this command on our build server or dev machine, then copy the vendor directory to the production image or server.
@@ -932,3 +932,9 @@ npm install --only=prod
 ```
 
 Note that we need to run this command on our build server or dev machine, then copy the `node_modules` to our production image or server.
+
+Fifth run database migration:
+
+```bash
+php artisan migration:run --force
+```
