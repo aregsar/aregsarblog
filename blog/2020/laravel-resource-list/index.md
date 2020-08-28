@@ -117,7 +117,7 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 [https://laracon.eu](https://laracon.eu)
 
-## Concepts
+## Select Articles
 
 [https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug](https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug)
 
