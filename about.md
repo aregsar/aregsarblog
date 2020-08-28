@@ -17,8 +17,9 @@ My web development stack is focused on building server side `HTML` rendered [Maj
 + [StimulusJS](https://stimulusjs.org) - MVC framework for organizing client side Javascript
 + [Turbolinks](https://github.com/turbolinks/turbolinks) - Framework for Ajax loaded html pages
 + [IntercoolerJS](https://intercoolerjs.org/) - Framework for Ajax loaded html fragments
++ [htmx](https://htmx.org) - Html attribute based framework similar to IntercoolerJS
 
-For more info see the [TALL Stack](https://tallstack.dev/) (Tailwind Alpine Laravel Livewire)
+For more info, also see the [TALL Stack](https://tallstack.dev/) (Tailwind Alpine Laravel Livewire)
 
 ## My lean development process
 

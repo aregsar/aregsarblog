@@ -35,7 +35,20 @@ The definitive Laravel tutorial and reference book
 The Tailwind, Alpine, Live Wire, Laravel stack documentation
 [https://tallstack.dev](https://tallstack.dev)
 
+Comprehensive Laravel package development resource
+
+[https://laravelpackage.com](https://laravelpackage.com)
+
+Tool for managing docker services for local development
+
+[https://github.com/tightenco/takeout](https://github.com/tightenco/takeout)
+
+Boilerplate Laravel project with advanced features
+
+[https://github.com/rappasoft/laravel-boilerplate](https://github.com/rappasoft/laravel-boilerplate)
+
 The PHP language reference
+
 [https://www.php.net/manual/en/langref.php](https://www.php.net/manual/en/langref.php)
 
 ## Blogs
@@ -121,3 +134,9 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 [https://jasonmccreary.me/articles/avoiding-inheritance-laravel](https://jasonmccreary.me/articles/avoiding-inheritance-laravel)
 
 [https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications](https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications)
+
+[https://laravel-news.com/laravel-auth-tips](https://laravel-news.com/laravel-auth-tips)
+
+[https://laravel-news.com/building-package-installers](https://laravel-news.com/building-package-installers)
+
+[https://laravel-news.com/xdebug-info-panel](https://laravel-news.com/xdebug-info-panel)
