@@ -32,8 +32,12 @@ The definitive Laravel tutorial and reference book
 
 [https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088](https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088)
 
-The Tailwind, Alpine, Live Wire, Laravel stack documentation
+The Tailwind, Alpine, Live Wire, Laravel (TALL) stack documentation
 [https://tallstack.dev](https://tallstack.dev)
+
+Laravel Blade view components for the TALL stack
+
+[https://blade-ui-kit.com](https://blade-ui-kit.com)
 
 Comprehensive Laravel package development resource
 
@@ -46,6 +50,10 @@ Tool for managing docker services for local development
 Boilerplate Laravel project with advanced features
 
 [https://github.com/rappasoft/laravel-boilerplate](https://github.com/rappasoft/laravel-boilerplate)
+
+Open source Laravel CMS
+
+[https://github.com/statamic/statamic](https://github.com/statamic/statamic)
 
 The PHP language reference
 
