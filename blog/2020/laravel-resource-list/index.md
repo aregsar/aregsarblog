@@ -55,6 +55,7 @@ The PHP language reference
 ## TALL stack
 
 The Tailwind, Alpine, Live Wire, Laravel (TALL) stack documentation
+
 [https://tallstack.dev](https://tallstack.dev)
 
 Laravel Blade view components for the TALL stack
@@ -65,13 +66,9 @@ Laravel 8 Jetstream TALL stack boilerplate with advanced features
 
 [https://github.com/laravel/jetstream](https://github.com/laravel/jetstream)
 
-Laravel Installer Jetstream support
-
 [laravel installer jetstream support](https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack)
 
-Laracasts episode on Laravel 8 Jetstream scaffolding
-
-[Laravel 8 Jetstream setup](https://laracasts.com/series/whats-new-in-laravel-8/episodes/1)
+[Laracasts episode on Laravel 8 Jetstream setup](https://laracasts.com/series/whats-new-in-laravel-8/episodes/1)
 
 ## Blogs
 
