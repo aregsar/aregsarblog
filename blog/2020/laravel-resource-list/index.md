@@ -161,3 +161,5 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 [https://laravel-news.com/building-package-installers](https://laravel-news.com/building-package-installers)
 
 [https://laravel-news.com/xdebug-info-panel](https://laravel-news.com/xdebug-info-panel)
+
+[https://laravel-news.com/bash-aliases](https://laravel-news.com/bash-aliases)
