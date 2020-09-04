@@ -16,7 +16,7 @@ The Laravel Illuminate core framework
 
 [https://github.com/laravel/framework](https://github.com/laravel/framework)
 
-The Laravel project skeleton that requires the core framework
+The Laravel project skeleton that includes the core framework
 
 [https://github.com/laravel/laravel](https://github.com/laravel/laravel)
 
@@ -31,13 +31,6 @@ The Laravel framework API docs
 The definitive Laravel tutorial and reference book
 
 [https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088](https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088)
-
-The Tailwind, Alpine, Live Wire, Laravel (TALL) stack documentation
-[https://tallstack.dev](https://tallstack.dev)
-
-Laravel Blade view components for the TALL stack
-
-[https://blade-ui-kit.com](https://blade-ui-kit.com)
 
 Comprehensive Laravel package development resource
 
@@ -58,6 +51,27 @@ Open source Laravel CMS
 The PHP language reference
 
 [https://www.php.net/manual/en/langref.php](https://www.php.net/manual/en/langref.php)
+
+## TALL stack
+
+The Tailwind, Alpine, Live Wire, Laravel (TALL) stack documentation
+[https://tallstack.dev](https://tallstack.dev)
+
+Laravel Blade view components for the TALL stack
+
+[https://blade-ui-kit.com](https://blade-ui-kit.com)
+
+Laravel 8 Jetstream TALL stack boilerplate with advanced features
+
+[https://github.com/laravel/jetstream](https://github.com/laravel/jetstream)
+
+Laravel Installer Jetstream support
+
+[laravel installer jetstream support](https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack)
+
+Laracasts episode on Laravel 8 Jetstream scaffolding
+
+[Laravel 8 Jetstream setup](https://laracasts.com/series/whats-new-in-laravel-8/episodes/1)
 
 ## Blogs
 
