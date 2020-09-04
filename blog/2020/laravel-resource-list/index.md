@@ -120,6 +120,8 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 [https://adamwathan.me/refactoring-to-collections](https://adamwathan.me/refactoring-to-collections)
 
+[Laravel meetup videos](https://www.youtube.com/watch?v=ajDwUNfKu48)
+
 ## Podcasts
 
 [https://laravelpodcast.com](https://laravelpodcast.com)
