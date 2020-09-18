@@ -129,6 +129,7 @@ Then I add the following override settings to the `settings.json` file:
 
 	
 	"workbench.editor.showTabs": true,
+	"workbench.editor.tabSizing": "shrink",//fit
 	"workbench.editor.enablePreview": false ,
 	"workbench.editor.enablePreviewFromQuickOpen": false,
 	"workbench.editor.openPositioning": "left",
