@@ -1,5 +1,9 @@
 # All Posts
 
+September 28, 2020
+
+[My Visual Studio Code Setup](https://aregsar.com/blog/2020/my-visual-studio-code-setup)
+
 July 16, 2020
 
 [Laravel 7 Auth Route Registration Under The Hood](https://aregsar.com/blog/2020/laravel-7-auth-route-registration-under-the-hood)

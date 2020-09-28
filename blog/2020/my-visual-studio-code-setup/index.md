@@ -1,8 +1,6 @@
 # My Visual Studio Code Setup
 
-September 17, 2020 by [Areg Sarkissian](https://aregsar.com/about)
-
-[My Visual Studio Code Setup](https://aregsar.com/blog/2020/my-visual-studio-code-setup)
+September 28, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I will describe how I customize and use the Visual Studio Code (VSCode) editor for a more productive development experience.
 
@@ -303,3 +301,5 @@ Prettier
 [annoying-things-in-vs-code-you-can-fix](https://calebporzio.com/6-annoying-things-in-vs-code-you-can-fix-right-now)
 
 [vs-code-extensions](https://dev.vamsirao.com/vs-code-extensions)
+
+[visual-studio-code-for-php-developers](https://laracasts.com/series/visual-studio-code-for-php-developers)
