@@ -98,8 +98,6 @@ cmd+sh+x to open the extensions panel then toggle focus if pressed again (closes
 ctrl+sh+g to open the git source control panel then toggle focus if pressed again (closes the current open panel)
 cmd+b to close and open the last selected panel
 
-
-
 ### Overriding default settings
 
 To override the vscode default settings, I select `cmd+sh+p` keys then type in the text `settings` in the search box.
@@ -109,64 +107,64 @@ Then I add the following override settings to the `settings.json` file:
 
 ```json
 {
- "window.zoomLevel": 3,
-	"window.title": "${rootPath}${separator}${activeEditorMedium}",
-	"window.newWindowDimensions": "offset",
-	"window.titleSeparator": " — ",
-	//hide the minimap
-	"editor.minimap.enabled": false,
+    "window.zoomLevel": 3,
+    "window.title": "${rootPath}${separator}${activeEditorMedium}",
+    "window.newWindowDimensions": "offset",
+    "window.titleSeparator": " — ",
+    //hide the minimap
+    "editor.minimap.enabled": false,
     "editor.renderWhitespace": "all",
-	"editor.lineNumbers": "on",
-	"editor.formatOnSave": true,
-	"editor.formatOnPaste": true,
-	"editor.folding": false,
-	"editor.snippetSuggestions": "top",
-	"editor.gotoLocation.multipleDeclarations": "goto",
-	"editor.gotoLocation.multipleDefinitions": "goto",
-	"editor.gotoLocation.multipleImplementations": "goto",
-	"editor.gotoLocation.multipleReferences": "goto",
-	"editor.gotoLocation.multipleTypeDefinitions": "goto",
-	"workbench.editor.showTabs": true,
-	"workbench.editor.tabSizing": "shrink",//fit
-	"workbench.editor.enablePreview": false ,
-	"workbench.editor.enablePreviewFromQuickOpen": false,
-	"workbench.editor.openPositioning": "left",
-	"workbench.editor.highlightModifiedTabs": true,
-	"zenMode.hideActivityBar": true,
-	"zenMode.hideStatusBar": true,
-	"zenMode.hideTabs": true,
-	"zenMode.silentNotifications": true,
-	"zenMode.hideLineNumbers": false,
-	"zenMode.fullScreen": false,
+    "editor.lineNumbers": "on",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.folding": false,
+    "editor.snippetSuggestions": "top",
+    "editor.gotoLocation.multipleDeclarations": "goto",
+    "editor.gotoLocation.multipleDefinitions": "goto",
+    "editor.gotoLocation.multipleImplementations": "goto",
+    "editor.gotoLocation.multipleReferences": "goto",
+    "editor.gotoLocation.multipleTypeDefinitions": "goto",
+    "workbench.editor.showTabs": true,
+    "workbench.editor.tabSizing": "shrink",//fit
+    "workbench.editor.enablePreview": false ,
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "workbench.editor.openPositioning": "left",
+    "workbench.editor.highlightModifiedTabs": true,
+    "zenMode.hideActivityBar": true,
+    "zenMode.hideStatusBar": true,
+    "zenMode.hideTabs": true,
+    "zenMode.silentNotifications": true,
+    "zenMode.hideLineNumbers": false,
+    "zenMode.fullScreen": false,
     "diffEditor.renderSideBySide": true,
-	"breadcrumbs.enabled": false,
-	"files.trimFinalNewlines": true,
-	//will trim on file save
-	"files.trimTrailingWhitespace": true,
-	//exclude settings for files listed in file explorer and included in global search
+    "breadcrumbs.enabled": false,
+    "files.trimFinalNewlines": true,
+    //will trim on file save
+    "files.trimTrailingWhitespace": true,
+    //exclude settings for files listed in file explorer and included in global search
     //overrides project .gitignore settings
-	"files.exclude": {
-		"**/.git": true,
-		"**/.svn": true,
-		"**/.hg": true,
-		"**/CVS": true,
-		"**/.DS_Store": true
-	},
-	// Controls whether to use global `.gitignore` and `.ignore` files when searching for files.
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true
+    },
+    // Controls whether to use global `.gitignore` and `.ignore` files when searching for files.
     "search.useGlobalIgnoreFiles": false,
     // Controls whether to use `.gitignore` and `.ignore` files when searching for files.
     "search.useIgnoreFiles": true,
-	//Inherits all glob patterns from the `files.exclude` setting.
-	//overrides .gitignore settings
-	//vendor setting is added to override .gitignore vendor setting
-	"search.exclude": {
-"**/node_modules": true,
- "**/bower_components": true,
- "**/*.code-search": true,
- //added this to include vendor in directories to search
- "**/vendor": false
- },
-}
+    //Inherits all glob patterns from the `files.exclude` setting.
+    //overrides .gitignore settings
+    //vendor setting is added to override .gitignore vendor setting
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true,
+        //added this to include vendor in directories to search
+        "**/vendor": false
+    },
+    }
 ```
 
 ### Overriding keyboard shortcuts

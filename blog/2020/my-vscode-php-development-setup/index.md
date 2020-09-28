@@ -26,7 +26,7 @@ Firts isstall the xdebug php extension.
 
 I run php 7.4 on my mac so for me the command to install the latest xdebug php extension is:
 
-`pecl install xdebug --force`
+`pecl install --force xdebug`
 
 After that locate your php.ini file by typing:
 
@@ -52,8 +52,8 @@ Next open your shell configuration file which, for me is the `.zshrc` file, and 
 
 `export XDEBUG_CONFIG="idekey=VSCODE"`
 
-With the above setup and with the vscode `PHP Debug` extension installed, open vscode from within your project then open the vscode debug panel by pressing `cmd+sh+d` keyboard shortcut. 
-In the debug panel select `PHP` from the environment setting in the panels command bar. 
+With the above setup and with the vscode `PHP Debug` extension installed, open vscode from within your project then open the vscode debug panel by pressing `cmd+sh+d` keyboard shortcut.
+In the debug panel select `PHP` from the environment setting in the panels command bar.
 This will add `launch.json` debugging configuration to your vscode project.
 
 Now you are ready to add breakpoints to your project files and debug your application.
@@ -62,7 +62,7 @@ Now you are ready to add breakpoints to your project files and debug your applic
 
 To run your phpunit tests from within vscode, open the terminal by selecting the `ctrl+backtick` keyboard shortcut then type in `phpunit` in the terminal window to execute the tests.
 
-If you have the `Better PHPUnit` vscode extension installed, you can click in the test class or test methods in your phpunit test files and execute specific tests by typing `phpunit` in the command panel. 
+If you have the `Better PHPUnit` vscode extension installed, you can click in the test class or test methods in your phpunit test files and execute specific tests by typing `phpunit` in the command panel.
 The command panel is accessible via the `cmd+sh+p` keyboard shortcut.
 
 Alternatively you can use the `Better PHPUnit` extensions keyboard shortcuts to run tests.
@@ -73,12 +73,3 @@ I changed the `run` shortcut to `cmd+t` and the `run previous` to `cmd+sh+t`.
 
 With these shortcuts, you can click in a test class or test method and select `cmd+t` to run the corresponding test.
 If you navigate cursor to another location you can alway select `cmd+sh+t` to rerun the last test that you ran without having to go back and click in that class or method.
-
-
-
-
-
-
-
-
-
