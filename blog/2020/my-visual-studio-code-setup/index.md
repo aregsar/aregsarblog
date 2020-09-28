@@ -9,9 +9,7 @@ In this post I will describe how I customize and use visual studio code (vscode)
 Most of my setup is based on excellent blog posts by others on this topic, so credit goes to them.
 I will list links to those articles at the end of this post.
 
-
 Before I go through my setup, it will help to detail how vscode settings and keyboard shortcuts work, which I will describe in the next section.
-
 
 ## VSCode settings files
 
@@ -28,7 +26,7 @@ Also when we change settings using the vscode menu, vscode adds the setting we c
 
 Finally there is a per workspace\project folder `settings.json` file that can override both the `Global` and `User` settings files.
 
-> A workspace is the root directory in the vscode explorer which is the directory from which vscode is launched. For exampe if we `cd` into a directory named `~/MyProject` and type `code .` in that directory to launch vscode, then our workspace becomes the `~/MyProject` directory.
+> A workspace is the root directory in the vscode explorer which is the directory from which vscode is launched. For example if we `cd` into a directory named `~/MyProject` and type `code .` in that directory to launch vscode, then our workspace becomes the `~/MyProject` directory.
 
 The way that the per workspace settings work is that first we add a `.vscode/settings.json` file to our project directory. Then we can add settings to this file to override the Global or User settings in the same way that we added settings to the User setting.json file mentioned above.
 
@@ -100,6 +98,8 @@ cmd+sh+x to open the extensions panel then toggle focus if pressed again (closes
 ctrl+sh+g to open the git source control panel then toggle focus if pressed again (closes the current open panel)
 cmd+b to close and open the last selected panel
 
+
+
 ### Overriding default settings
 
 To override the vscode default settings, I select `cmd+sh+p` keys then type in the text `settings` in the search box.
@@ -107,10 +107,9 @@ This brings up the `Preferreces: Open Settings (JSON)` selection, which I select
 
 Then I add the following override settings to the `settings.json` file:
 
-
 ```json
 {
-	"window.zoomLevel": 3,
+ "window.zoomLevel": 3,
 	"window.title": "${rootPath}${separator}${activeEditorMedium}",
 	"window.newWindowDimensions": "offset",
 	"window.titleSeparator": " — ",
@@ -161,12 +160,12 @@ Then I add the following override settings to the `settings.json` file:
 	//overrides .gitignore settings
 	//vendor setting is added to override .gitignore vendor setting
 	"search.exclude": {
-		"**/node_modules": true,
-		"**/bower_components": true,
-		"**/*.code-search": true,
-		//added this to include vendor in directories to search
-		"**/vendor": false
-	},
+"**/node_modules": true,
+ "**/bower_components": true,
+ "**/*.code-search": true,
+ //added this to include vendor in directories to search
+ "**/vendor": false
+ },
 }
 ```
 
@@ -189,46 +188,52 @@ For everyday use, the following keyboard shortcuts can be a boost to your produc
 
 These were mentioned previously, but I'll list them here again.
 
-launch file explorer panel / toggle focus when panel is open
-cmd+sh+e
-launch debugger panel / toggle focus when panel is open
-cmd+sh+d
-launch git panel / toggle focus when panel is open
-ctl+sh+g
-launch extensions panel / toggle focus when panel is open
-cmd+sh+x
-
-toggle current side panel
+Open\Close toggle current side panel
 cmd+b
+
+Open file explorer panel / toggle focus when panel is open
+cmd+sh+e
+(use cmd+b to close panel)
+
+Open debugger panel / toggle focus when panel is open
+cmd+sh+d
+(use cmd+b to close panel)
+
+Open git panel / toggle focus when panel is open
+ctrl+sh+g
+(use cmd+b to close panel)
+
+Open extensions panel / toggle focus when panel is open
+cmd+sh+x
+(use cmd+b to close panel)
 
 ## Shortcuts for opening\closing bottom panels
 
-> Note: search panel was moved from side panel to bottom panel
-
-open search in files
-cmd+sh+f
-
-open\toggle terminal panel
-ctrl+`
-
-toggle current bottom panel
+Open\Close toggle current tab of bottom panel
 cmd+j
 
+Open\Close toggle terminal tab in bottom panel
+ctrl+` (ctrl+backtick)
 
-## Shortcust for navigation dropdowns
+Open search in files tab in bottom panel
+cmd+sh+f
+(use cmd+j to close panel)
 
-open search for files by name dropdown
+> Note: The 'search in files' panel tab was dragged from its default side panel location to the bottom panel
+
+## Shortcuts for navigation drop downs
+
+Open 'search for files' by name dropdown
 cmd+p
 
-Open Command Palette dropdown
+Open 'Command Palette' dropdown
 cmd+sh+p
 
-> Tip: If you open the `search for files` dropdown with `cmd+p` by mistake, you can easily switch it to the `command pallete` drop down by simply typing in the `>` character in the text box. Conversly if you open the `command pallete` drop down with `cmp+sh+p` by mistake, you can easily switch it to the `search for files` drop down by simply removing the `>` character that is in the search box by default.
-
+> Tip: If you open the `search for files` dropdown with `cmd+p`, you can easily switch it to the `command pallete` drop down by simply typing in the `>` character in the text box. Conversely, if you open the `command pallete` drop down with `cmp+sh+p`, you can easily switch it to the `search for files` drop down by simply removing the `>` character that will be in the search box by default.
 
 ## Other useful shortcuts
 
-toggle comment line
+toggle comment line(s)
 cmd+/
 
 Find in current File
@@ -243,5 +248,43 @@ cmd+s
 Save all modified files
 cmd+opt+s
 
-Save current file as
-cmd+ctrl+s
+Open VSCode configuration settings UI
+cmd+, (cmd+comma)
+
+## Extensions
+
+Spell Right
+by Bartosz Antosik
+
+markdownlint
+by David Anson
+
+Github Markdown Preview
+by Matt Biener
+
+Docker
+by Microsoft
+
+PHP Intelephense
+by Ben Mewburn
+
+PHP Debug
+by Felix Becker
+
+Better PHPUnit
+by calebporzio
+
+C#
+by Microsoft
+
+C# Extensiions
+by jchannon
+
+Azurite
+by Microsoft
+
+Python
+by Microsoft
+
+flask-snippets
+by cstrap
