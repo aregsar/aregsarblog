@@ -4,50 +4,57 @@ September 17, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [My Visual Studio Code Setup](https://aregsar.com/blog/2020/my-visual-studio-code-setup)
 
-In this post I will describe how I customize and use visual studio code (VSCode) editor for more productive development experience.
+In this post I will describe how I customize and use the Visual Studio Code (VSCode) editor for a more productive development experience.
 
-Most of my setup is based on excellent blog posts by others on this topic, so credit goes to them.
-I will list links to those articles at the end of this post.
+Most of my setup is based on excellent resources by others on this topic. I will provide links to those resources at the end of this post.
 
-Before I go through my setup, it will help to detail how VSCode settings and keyboard shortcuts work, which I will describe in the next section.
+Before I go through my setup, it will help to detail how VSCode settings and keyboard shortcuts are configured, which I will describe in the following sections.
 
 ## VSCode settings files
 
-All of VSCode configurable settings for the editor are listed in a `defaultSetttings.json` file. This is the VSCode global settings file. This file is readonly and can not be directly modified.
+The default VSCode settings are listed in a `defaultSetttings.json` file. This file is readonly and can not be directly modified.
 
-The settings in the `defaultSetttings.json` file can be overridden by settings in a `settings.json` file.
+The settings in the `defaultSetttings.json` file can be overridden by user settings in a `settings.json` file.
 This is a VSCode `User` settings file that is located at `~/Library/Application Support/Code/User/settings.json` on my MacBook.
 
-> On a Mac, all user setting files are located in the `~/Library/Application Support/Code/User/` directory.
+> On a Mac, all VSCode user configuration files are located in the `~/Library/Application Support/Code/User/` directory.
 
 To override a setting from the `defaultSetttings.json` file, all we need to do is manually copy that setting into our `settings.json` file and set its value to what we want.
 
-Also when we change settings using the VSCode menu, VSCode adds the setting we changed to the `settings.json` file with the changed value. After that, any time we update the setting using the VSCode menu, VSCode will update the value of the setting in the `settings.json` file. We always have the option of opening up the JSON file and updating it manually.
+Also, when we change settings using the VSCode menu, VSCode adds the setting we changed to the `settings.json` file with the changed value. After that, any time we update the setting using the VSCode menu, VSCode will update the value of the setting in the `settings.json` file. Conversely, opening up the `settings.json` file and updating a setting manually, will get reflected in the VSCode menu.
 
-Finally there is a per workspace\project folder `settings.json` file that can override both the `Global` and `User` settings files.
+There can also be a per `workspace` directory `settings.json` file that can override both the `Global` (defaultSettings.json) and `User`(settings.json) file settings.
 
 > A workspace is the root directory in the VSCode explorer which is the directory from which VSCode is launched. For example if we `cd` into a directory named `~/MyProject` and type `code .` in that directory to launch VSCode, then our workspace becomes the `~/MyProject` directory.
 
-The way that the per workspace settings work is that first we add a `.VSCode/settings.json` file to our project directory. Then we can add settings to this file to override the Global or User settings in the same way that we added settings to the User setting.json file mentioned above.
+To configure per workspace settings, first add a `.VSCode/settings.json` file to your project directory. Then add settings to this file to override the `Global` or `User` settings in the same way that we added settings to the `User` setting.json file to override the `Global` defaultSettings.json file.
 
 ## VSCode keyboard shortcut settings files
 
-The VSCode keyboard shortcut settings work in a similar way as the editor settings work.
+The VSCode keyboard shortcut settings work in a similar way as the VSCode editor settings.
 
-There is a global `defaultKeyboardSettings.json` file located in the VSCode installation location.
+There is a global `defaultKeyboardSettings.json` file located in the VSCode installation location that is readonly.
 There is a user `keyboardSettings.json` file located at `~/Library/Application Support/Code/User/keyboardSettings.json` that we can add settings into, to override the settings in `defaultKeyboardSettings.json`.
+
+> There is no per workspace keyboard shortcut settings file.
 
 ## Accessing the JSON settings files
 
-To open the JSON settings files use the `cmd+sh+p` keyboard shortcut to open the global command palette dropdown and type `settings` in the search box. This will show options for selecting settings files, that have the text `(JSON)` in their description. Select the `defaultSetttings.json` or `setttings.json` option to open the respective settings file.
+Now that we know how to configure settings using the VSCode JSON settings files, I will describe how to access those files to make your changes.
 
-Use the `defaultSetttings.json` file settings as a reference to copy and add settings you want to modify, to the `setttings.json` file.
+To open the JSON settings files use the `cmd+sh+p` keyboard shortcut to open the global command palette dropdown and type the word `settings` in the search box. This will show options for selecting settings files that have the text `(JSON)` in their description.
 
-Similarly, to open the keyboard shortcut settings files, type `keyboard` in the global command palette. This will show options for selecting keyboard settings files, that have the text `(JSON)` in their description. Select the `defaultKeyboardSetttings.json` or `keyboardSetttings.json` option to open the respective settings file.
+Select the `defaultSetttings.json` or `setttings.json` option to open the respective settings file.
+Use the `defaultSetttings.json` file settings as a reference to copy settings you want to modify to the `setttings.json` file.
+
+Similarly, to open the keyboard shortcut settings files, type the word `keyboard` in the global command palette. This will show options for selecting keyboard settings files, that have the text `(JSON)` in their description.
+
+Select the `defaultKeyboardSetttings.json` or `keyboardSetttings.json` option to open the respective settings file.
+Use the `defaultKeyboardSetttings.json` file settings as a reference to copy settings you want to modify to the `keyboardSetttings.json` file.
 
 ## Steps to setup my VSCode preferences
 
-In each of the following sections I show how to customize a particular section of the editor
+In each of the following sections I show how I customize a particular section of the editor
 
 ### Moving search results panel from side panel to bottom panel
 
@@ -55,15 +62,15 @@ The first thing I do after installing VSCode is move the location of the search 
 
 Unfortunately there is no settings option to change the location so we must resort to dragging the search icon from the side panel activity bar to the bottom panel tab area.
 
-If the bottom panel is not visible select `cmd+j` keyboard shortcut to open it.
+> If the bottom panel is not visible select `cmd+j` keyboard shortcut to open it.
 
 After moving the search panel to the bottom panel, set its tab position in the bottom panel tab area by sliding the search tab to your desired position.
 
-> Note: There may be a `search.location` setting in the `defaultKeyboardSetttings.json` but it is deprecated and the comments suggest using drag and drop to change the search location.
+> Note: There may be a `search.location` setting in the `defaultSetttings.json` but it is deprecated and the related comments in the settings file suggest using drag and drop to change the file search panel location.
 
 ### Moving and hiding file explorer side panel sections
 
-Open the file explorer side panel the file explorer activity bar icon or by pressing the `cmd+sh+e` keyboard shortcut.
+Open the file explorer side panel using the file explorer activity bar icon or by pressing the `cmd+sh+e` keyboard shortcut.
 
 Collapse all the sections in the explorer side panel.
 
@@ -71,7 +78,7 @@ Drag the `open editors` section, in the file explorer side panel, down to the la
 
 > Note: The `files` section in the file explorer panel is not labeled `files`. It actually shows the name of the workspace directory that VSCode was launched from on the section label.
 
-Now when the `open editors` section is open, it won't move the `files` section that was below it, up and down as you open and close files or as you collapse/expand the `open editors` section.
+Now whenever the `open editors` section is open, it won't move the `files` section that used to be located below it, up and down as you open and close files or as you collapse/expand the `open editors` section.
 
 After this I actually like to hide all the sections except the `files` and `timelines` sections.
 
@@ -85,9 +92,9 @@ Right click on status bar to popup a context menu that will allow you to hide th
 Alternatively select `view > appearance > show status bar` to uncheck the status bar menu item.
 
 Right click on activity bar to popup a context menu that will allow you to hide the activity bar.
-Alternatively select `view > appearance > show activity bar` to uncheck the status bar menu item.
+Alternatively select `view > appearance > show activity bar` to uncheck the activity bar menu item.
 
-> Note: By hiding the activity bar, you will be forced to use the view menu or keyboard shortcuts to open the side panels.
+> Note: By hiding the activity bar, you will be forced to use the VSCOde view menu or keyboard shortcuts to open the side panels.
 > See the section `Shortcuts for opening\closing activity side panels` below for the keyboard shortcuts to open, close and toggle commonly used side panels.
 
 ### Overriding VSCode default settings
@@ -105,6 +112,10 @@ Then I add the following override settings to the `settings.json` file:
   "window.titleSeparator": " — ",
   //hide the minimap
   "editor.minimap.enabled": false,
+  //disable vscode from overriding editor.insertSpaces and editor.tabSize settings
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 4,
   "editor.renderWhitespace": "all",
   "editor.lineNumbers": "on",
   "editor.formatOnSave": true,
@@ -153,7 +164,7 @@ Then I add the following override settings to the `settings.json` file:
     "**/node_modules": true,
     "**/bower_components": true,
     "**/*.code-search": true,
-    //added this to include vendor in directories to search
+    //added this to include the .gitignore 'vendor' directories in directories to search
     "**/vendor": false
   }
 }
@@ -168,126 +179,127 @@ You can configure keyboard shortcuts by adding settings to the `keyboardSettings
 
 ## Commonly used keyboard shortcuts
 
-For everyday use, the keyboard shortcuts listed in the following sections can boost to your productivity.
+For everyday use, the keyboard shortcuts listed in the following sections can boost your productivity.
 
 ### Shortcuts for opening\closing activity side panels
 
-These were mentioned previously, but I'll list them here again.
-
-Open\Close toggle current selected side panel
-cmd+b
+Open\Close toggle last selected side panel
+`cmd+b`
 
 Open file explorer panel / toggle focus when panel is open (closes the current open panel)
-cmd+sh+e
+`cmd+sh+e`
 (use cmd+b to close panel)
 
 Open debugger panel / toggle focus when panel is open (closes the current open panel)
-cmd+sh+d
+`cmd+sh+d`
 (use cmd+b to close panel)
 
 Open git panel / toggle focus when panel is open (closes the current open panel)
-ctrl+sh+g
+`ctrl+sh+g`
 (use cmd+b to close panel)
 
 Open extensions panel / toggle focus when panel is open (closes the current open panel)
-cmd+sh+x
+`cmd+sh+x`
 (use cmd+b to close panel)
 
 ### Shortcuts for opening\closing bottom panels
 
 Open\Close toggle current tab of bottom panel
-cmd+j
+`cmd+j`
 
 Open\Close toggle terminal tab in bottom panel
-ctrl+` (ctrl+backtick)
+'ctrl+`' (ctrl+backtick)
 
 Open search in files tab in bottom panel
-cmd+sh+f
-(use cmd+j to close panel)
+`cmd+sh+f`
+(use `cmd+j` to close panel)
 
 > Note: The 'search in files' panel tab was dragged from its default side panel location to the bottom panel
 
 ### Shortcuts for navigation drop downs
 
 Open 'search for files' by name dropdown
-cmd+p
+`cmd+p`
 
 Open 'Command Palette' dropdown
-cmd+sh+p
+`cmd+sh+p`
 
 > Tip: If you open the `search for files` dropdown with `cmd+p`, you can easily switch it to the `command pallete` drop down by simply typing in the `>` character in the text box. Conversely, if you open the `command pallete` drop down with `cmp+sh+p`, you can easily switch it to the `search for files` drop down by simply removing the `>` character that will be in the search box by default.
 
 ### Other useful shortcuts
 
 toggle comment line(s)
-cmd+/
+`cmd+/`
 
 Find in current File
-cmd+f
+`cmd+f`
 
 close current file
-cmd+w
+`cmd+w`
 
 Save current file
-cmd+s
+`cmd+s`
 
 Save all modified files
-cmd+opt+s
+`cmd+opt+s`
 
 Open VSCode configuration settings UI
-cmd+, (cmd+comma)
+`cmd+,` (cmd+comma)
+
+Close various panels
+`esc`
 
 ## Extensions
 
-Spell Right
+`Spell Right`
 by Bartosz Antosik
 
-markdownlint
+`markdownlint`
 by David Anson
 
-Github Markdown Preview
+`Github Markdown Preview`
 by Matt Biener
 
-Docker
+`Docker`
 by Microsoft
 
-PHP Intelephense
+`PHP Intelephense`
 by Ben Mewburn
 
-PHP Debug
+`PHP Debug`
 by Felix Becker
 
-Better PHPUnit
+`Better PHPUnit`
 by calebporzio
 
-C#
+`C#`
 by Microsoft
 
-C# Extensiions
+`C# Extensiions`
 by jchannon
 
-Azurite
+`Azurite`
 by Microsoft
 
-Python
+`Python`
 by Microsoft
 
-flask-snippets
+`flask-snippets`
 by cstrap
 
-Bracket Pair Colorizer 2
+`Bracket Pair Colorizer 2`
 by CoenraadS
 
-Peacock
+`Peacock`
 by John Papa
 
-Prettier - Code formatter
+`Prettier - Code formatter`
 Prettier
 
 ## References
 
-https://medium.com/swlh/15-visual-studio-code-shortcuts-you-should-know-ea1b4166f69f
+[visual-studio-code-shortcuts-you-should-know](https://medium.com/swlh/15-visual-studio-code-shortcuts-you-should-know-ea1b4166f69f)
 
-https://calebporzio.com/6-annoying-things-in-vs-code-you-can-fix-right-now
+[annoying-things-in-vs-code-you-can-fix](https://calebporzio.com/6-annoying-things-in-vs-code-you-can-fix-right-now)
 
-https://dev.vamsirao.com/vs-code-extensions
+[vs-code-extensions](https://dev.vamsirao.com/vs-code-extensions)
