@@ -1,5 +1,9 @@
 # All Posts
 
+September 30, 2020
+
+[How To Create New Laravel 8 Project](https://aregsar.com/blog/2020/how-to-create-new-laravel-8-project)
+
 September 28, 2020
 
 [My Visual Studio Code Setup](https://aregsar.com/blog/2020/my-visual-studio-code-setup)

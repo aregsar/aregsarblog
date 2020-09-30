@@ -2,8 +2,6 @@
 
 September 29, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[How To Create New Laravel 8 Project](https://aregsar.com/blog/2020/how-to-create-new-laravel-8-project)
-
 In this post I will show two ways in which you can create a new Laravel 8 project.
 
 > It is assumed that you already have PHP and Composer installed. I have posts how to get them both installed on this blog.
@@ -79,27 +77,30 @@ php artisan serve
 
 Navigate to localhost:8000 to see the Laravel home page.
 
-## Insalling Laravel Jetstream using the Laravel CLI
+## Installing Laravel Jetstream using the Laravel CLI
 
 One of the reasons that you may use the Laravel CLI to create a new Laravel project instead of the composer
 create-project command, is to use the installer to also create scaffolding for a new project.
 
 For example we can use the installer to create a new Laravel Jetstream project which creates a new Laravel project with
-scaffolding that uses the [TALL](https://laravel-news.com/updating-the-laravel-installer) stack.
+scaffolding that uses the [TALL Stack](https://tallstack.dev) or [InertiaJS](https://inertiajs.com) and can optionally
+include `teams` functionality.
 
 To do so we can use variations of the new project command:
 
 ```bash
-# create a new Laravel jetstream project (defaults to livewire)
+# create a new Laravel jetstream project
 laravel new blog --jet
 #create a new Laravel jetstream project using the livewire stack
 laravel new blog --jet --stack=livewire
 #create a new Laravel jetstream project using the livewire stack and teams functionality
-laravel new blog --jet --stack=livewire --teams
-# create a new Laravel jetstream project that uses the inertia stack (alternative to TALL stack)
-laravel new blog --jet --stack=inertia
+laravel new blog --jet --stack=inertia --teams
 ```
+
+You will be prompted to select the `stack` and `teams` options, when not specified as command line options.
 
 ## Resources
 
 https://laravel-news.com/updating-the-laravel-installer
+
+https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack
