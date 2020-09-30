@@ -67,6 +67,8 @@ After the project is created, you can build the assets and run the application t
 
 ```bash
 cd blog
+#show framework version
+php artisan -V
 #install node modules
 npm install
 #build public/app.js and public/css.js from the resources directory.

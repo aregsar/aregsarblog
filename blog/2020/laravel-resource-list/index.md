@@ -26,7 +26,7 @@ Laravel Valet repo
 
 The Laravel framework API docs
 
-[https://laravel.com/api/7.x/index.html](https://laravel.com/api/7.x/index.html)
+[https://laravel.com/api/8.x/index.html](https://laravel.com/api/7.x/index.html)
 
 The definitive Laravel tutorial and reference book
 
@@ -40,21 +40,27 @@ Tool for managing docker services for local development
 
 [https://github.com/tightenco/takeout](https://github.com/tightenco/takeout)
 
-Boilerplate Laravel project with advanced features
-
-[https://github.com/rappasoft/laravel-boilerplate](https://github.com/rappasoft/laravel-boilerplate)
-
-Open source Laravel CMS
-
-[https://github.com/statamic/statamic](https://github.com/statamic/statamic)
-
 The PHP language reference
 
 [https://www.php.net/manual/en/langref.php](https://www.php.net/manual/en/langref.php)
 
+## Boilerplates
+
+Boilerplate Laravel project with advanced features
+
+[https://github.com/rappasoft/laravel-boilerplate](https://github.com/rappasoft/laravel-boilerplate)
+
+Statamic open source Laravel CMS
+
+[https://github.com/statamic/statamic](https://github.com/statamic/statamic)
+
+Blade UI kit example project
+
+[https://github.com/blade-ui-kit/blade-ui-kit-example](https://github.com/blade-ui-kit/blade-ui-kit-example)
+
 ## TALL stack
 
-The Tailwind, Alpine, Live Wire, Laravel (TALL) stack documentation
+The Tailwind, Alpine, Livewire, Laravel (TALL) stack documentation
 
 [https://tallstack.dev](https://tallstack.dev)
 
@@ -64,11 +70,11 @@ Laravel Blade view components for the TALL stack
 
 Laravel 8 Jetstream TALL stack boilerplate with advanced features
 
+[https://jetstream.laravel.com](https://jetstream.laravel.com)
+
 [https://github.com/laravel/jetstream](https://github.com/laravel/jetstream)
 
 [laravel installer jetstream support](https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack)
-
-[Laracasts episode on Laravel 8 Jetstream setup](https://laracasts.com/series/whats-new-in-laravel-8/episodes/1)
 
 ## Blogs
 
@@ -100,6 +106,8 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 [https://codecourse.com](https://codecourse.com)
 
+[https://meetup.laravel.com](https://meetup.laravel.com)
+
 [https://laravelcoreadventures.com](https://laravelcoreadventures.com)
 
 [https://laravel-livewire.com/screencasts](https://laravel-livewire.com/screencasts)
@@ -119,8 +127,6 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 [https://saasadventure.io/laravel-spark](https://saasadventure.io/laravel-spark)
 
 [https://adamwathan.me/refactoring-to-collections](https://adamwathan.me/refactoring-to-collections)
-
-[Laravel meetup videos](https://www.youtube.com/watch?v=ajDwUNfKu48)
 
 ## Podcasts
 
@@ -163,3 +169,5 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 [https://laravel-news.com/xdebug-info-panel](https://laravel-news.com/xdebug-info-panel)
 
 [https://laravel-news.com/bash-aliases](https://laravel-news.com/bash-aliases)
+
+[https://laravel-news.com/laravel-time-traveling](https://laravel-news.com/laravel-time-traveling)
