@@ -10,56 +10,34 @@ In this post I will show two ways in which you can create a new Laravel 8 projec
 
 ## Using Composer Create Project command
 
-The easiest way to create a basic Laravel application is the composer create-project command.
+The easiest way to create a basic Laravel application is using the composer create-project command.
 
 ```bash
 composer create-project --prefer-dist laravel/laravel blog
 ```
 
-This will create a new project, named `blog`, in the current directory.
-It will use the latest version of the `laravel/laravel` composer package.
+This will create a new project named `blog`, using the latest `laravel/framework` composer package version, in the current directory.
 
-To use a different version of the composer package we just add the package version:
+## Using the Laravel CLI
 
-```bash
-composer create-project --prefer-dist laravel/laravel:8.* blog
-```
+We can also install the the Laravel CLI and use it to create a new Laravel project.
 
-This will create a project with the latest version of Laravel 8.
-
-After the project is installed you can build the assets and run the application to ensure a successful installation.
-
-```bash
-cd blog
-#install npm modules
-npm install
-#build public/app.js and public/css.js from the resources directory.
-npm run dev
-#serve the application on localhost:8000
-php artisan serve
-```
-
-Navigate to localhost:8000 to see the Laravel home page.
-
-## Using the Laravel Installer CLI
-
-First we need to install the latest version of the Laravel installer:
+First we need use composer to globally install the latest version of the Laravel installer:
 
 ```bash
 #uninstall current installed version if any
-#(optional - has no effect if there is'nt an installed version)
 composer global remove laravel/installer
 #install the latest version of the installer
 composer global require laravel/installer
 ```
 
-Check the installed version:
+Check the installer version:
 
 ```bash
 laravel --version
 ```
 
-The installer is installed globally in my MacBook `~/.composer` directory.
+The installer is installed globally in my MacBooks `~/.composer` directory.
 
 I can see it installed by dumping the content of the `~/.composer/composer.json` file:
 
@@ -72,7 +50,6 @@ We can see the `laravel/installer` dependency along with its version.
 ```json
 {
   "require": {
-    "laravel/valet": "^2.11",
     "laravel/installer": "^4.0"
   }
 }
@@ -84,13 +61,15 @@ Now that the installer is installed, we can create a new Laravel project by runn
 laravel new blog
 ```
 
-This will create a project with the latest version of Laravel 8.
+This will create a new project named `blog`, using the latest `laravel/framework` composer package version, in the current directory.
 
-After the project is installed you can build the assets and run the application to ensure a successful installation.
+## Building assets and running the project
+
+After the project is created, you can build the assets and run the application to ensure a successful installation.
 
 ```bash
 cd blog
-#install npm modules
+#install node modules
 npm install
 #build public/app.js and public/css.js from the resources directory.
 npm run dev
@@ -100,12 +79,12 @@ php artisan serve
 
 Navigate to localhost:8000 to see the Laravel home page.
 
-## Insalling Laravel Jetstream using the Laravel installer
+## Insalling Laravel Jetstream using the Laravel CLI
 
-One of the reasons that you may use the laravel installer to create a new Laravel project instead of the composer
-create-project command is to use the installer to also create scaffolding for a new project.
+One of the reasons that you may use the Laravel CLI to create a new Laravel project instead of the composer
+create-project command, is to use the installer to also create scaffolding for a new project.
 
-For example we can use the installer to create a new Laravel Jetstream project which creatres a new Laravel project with
+For example we can use the installer to create a new Laravel Jetstream project which creates a new Laravel project with
 scaffolding that uses the [TALL](https://laravel-news.com/updating-the-laravel-installer) stack.
 
 To do so we can use variations of the new project command:
