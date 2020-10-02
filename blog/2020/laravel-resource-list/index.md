@@ -28,6 +28,10 @@ The Laravel framework API docs
 
 [https://laravel.com/api/8.x/index.html](https://laravel.com/api/7.x/index.html)
 
+Laravel Facacde class reference
+
+[https://laravel.com/docs/8.x/facades#facade-class-reference](https://laravel.com/docs/8.x/facades#facade-class-reference)
+
 The definitive Laravel tutorial and reference book
 
 [https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088](https://www.amazon.com/Laravel-Up-Running-Matt-Stauffer/dp/1491936088)
@@ -73,6 +77,8 @@ Laravel 8 Jetstream TALL stack boilerplate with advanced features
 [https://jetstream.laravel.com](https://jetstream.laravel.com)
 
 [https://github.com/laravel/jetstream](https://github.com/laravel/jetstream)
+
+[https://github.com/laravel/fortify](https://github.com/laravel/fortify)
 
 [laravel installer jetstream support](https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack)
 
@@ -146,28 +152,40 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 ## Select Articles
 
-[https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug](https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug)
+[configure-vscode-to-debug-phpunit-tests-with-xdebug](https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug)
 
-[https://madewithlove.com/using-mysql-for-testing-on-laravel](https://madewithlove.com/using-mysql-for-testing-on-laravel)
+[xdebug-info-panel](https://laravel-news.com/xdebug-info-panel)
 
-[https://timacdonald.me/my-feature-test-suite-setup](https://timacdonald.me/my-feature-test-suite-setup)
+[using-mysql-for-testing-on-laravel](https://madewithlove.com/using-mysql-for-testing-on-laravel)
 
-[https://tighten.co/blog/tidy-up-your-tests-with-class-based-model-factories](https://tighten.co/blog/tidy-up-your-tests-with-class-based-model-factories)
+[my-feature-test-suite-setup](https://timacdonald.me/my-feature-test-suite-setup)
 
-[https://tighten.co/blog/dot-env-files-the-silent-killer](https://tighten.co/blog/dot-env-files-the-silent-killer)
+[laravel-auth-tips](https://laravel-news.com/laravel-auth-tips)
 
-[https://vegibit.com/laravel-aliases-and-contracts](https://vegibit.com/laravel-aliases-and-contracts)
+[laravel-jobs-queues-101](https://laravel-news.com/laravel-jobs-queues-101)
 
-[https://jasonmccreary.me/articles/avoiding-inheritance-laravel](https://jasonmccreary.me/articles/avoiding-inheritance-laravel)
+[how-to-run-workers-in-production](https://laravel-news.com/how-to-run-workers-in-production)
 
-[https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications](https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications)
+[queue-workers-how-they-work](https://divinglaravel.com/queue-workers-how-they-work)
 
-[https://laravel-news.com/laravel-auth-tips](https://laravel-news.com/laravel-auth-tips)
+[building-package-installers](https://laravel-news.com/building-package-installers)
 
-[https://laravel-news.com/building-package-installers](https://laravel-news.com/building-package-installers)
+[laravel-time-traveling](https://laravel-news.com/laravel-time-traveling)
 
-[https://laravel-news.com/xdebug-info-panel](https://laravel-news.com/xdebug-info-panel)
+[using-laravel-fortify-to-restore-laravel-ui-functionality](https://dev.to/skydiver/using-laravel-fortify-to-restore-laravel-ui-functionality-7dc)
 
-[https://laravel-news.com/bash-aliases](https://laravel-news.com/bash-aliases)
+[laravel-sanctum-explained-spa-authentication](https://dev.to/nicolus/laravel-sanctum-explained-spa-authentication-45g1)
 
-[https://laravel-news.com/laravel-time-traveling](https://laravel-news.com/laravel-time-traveling)
+[laravel-sanctum-api-token-authentication](https://laravelarticle.com/laravel-sanctum)
+
+[tidy-up-your-tests-with-class-based-model-factories](https://tighten.co/blog/tidy-up-your-tests-with-class-based-model-factories)
+
+[dot-env-files-the-silent-killer](https://tighten.co/blog/dot-env-files-the-silent-killer)
+
+[bash-aliases](https://laravel-news.com/bash-aliases)
+
+[laravel-aliases-and-contracts](https://vegibit.com/laravel-aliases-and-contracts)
+
+[avoiding-inheritance-laravel](https://jasonmccreary.me/articles/avoiding-inheritance-laravel)
+
+[crafting-maintainable-laravel-applications](https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications)
