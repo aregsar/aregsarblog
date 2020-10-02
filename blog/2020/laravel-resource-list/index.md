@@ -48,21 +48,7 @@ The PHP language reference
 
 [https://www.php.net/manual/en/langref.php](https://www.php.net/manual/en/langref.php)
 
-## Boilerplates
-
-Boilerplate Laravel project with advanced features
-
-[https://github.com/rappasoft/laravel-boilerplate](https://github.com/rappasoft/laravel-boilerplate)
-
-Statamic open source Laravel CMS
-
-[https://github.com/statamic/statamic](https://github.com/statamic/statamic)
-
-Blade UI kit example project
-
-[https://github.com/blade-ui-kit/blade-ui-kit-example](https://github.com/blade-ui-kit/blade-ui-kit-example)
-
-## TALL stack
+## TALL stack and Jetstream
 
 The Tailwind, Alpine, Livewire, Laravel (TALL) stack documentation
 
@@ -72,13 +58,19 @@ Laravel Blade view components for the TALL stack
 
 [https://blade-ui-kit.com](https://blade-ui-kit.com)
 
-Laravel 8 Jetstream TALL stack boilerplate with advanced features
+Laravel Jetstream TALL stack scaffold with advanced features
 
 [https://jetstream.laravel.com](https://jetstream.laravel.com)
 
+Jetstream repo
+
 [https://github.com/laravel/jetstream](https://github.com/laravel/jetstream)
 
+Fortify user authentication for Jetstream
+
 [https://github.com/laravel/fortify](https://github.com/laravel/fortify)
+
+Jetstream CLI
 
 [laravel installer jetstream support](https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack)
 
@@ -150,6 +142,20 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 [https://laracon.eu](https://laracon.eu)
 
+## Boilerplates
+
+Boilerplate Laravel project with advanced features
+
+[https://github.com/rappasoft/laravel-boilerplate](https://github.com/rappasoft/laravel-boilerplate)
+
+Statamic open source Laravel CMS
+
+[https://github.com/statamic/statamic](https://github.com/statamic/statamic)
+
+Blade UI kit example project
+
+[https://github.com/blade-ui-kit/blade-ui-kit-example](https://github.com/blade-ui-kit/blade-ui-kit-example)
+
 ## Select Articles
 
 [configure-vscode-to-debug-phpunit-tests-with-xdebug](https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug)
@@ -160,6 +166,8 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 [my-feature-test-suite-setup](https://timacdonald.me/my-feature-test-suite-setup)
 
+[building-package-installers](https://laravel-news.com/building-package-installers)
+
 [laravel-auth-tips](https://laravel-news.com/laravel-auth-tips)
 
 [laravel-jobs-queues-101](https://laravel-news.com/laravel-jobs-queues-101)
@@ -168,9 +176,7 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 
 [queue-workers-how-they-work](https://divinglaravel.com/queue-workers-how-they-work)
 
-[building-package-installers](https://laravel-news.com/building-package-installers)
-
-[laravel-time-traveling](https://laravel-news.com/laravel-time-traveling)
+[laravel-jetstream-how-to-get-started](https://devdojo.com/bobbyiliev/what-is-laravel-jetstream-and-how-to-get-started)
 
 [using-laravel-fortify-to-restore-laravel-ui-functionality](https://dev.to/skydiver/using-laravel-fortify-to-restore-laravel-ui-functionality-7dc)
 
@@ -189,3 +195,11 @@ Screencasts and video courses for everything from Laravel internals, projects, t
 [avoiding-inheritance-laravel](https://jasonmccreary.me/articles/avoiding-inheritance-laravel)
 
 [crafting-maintainable-laravel-applications](https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications)
+
+## Laravel Tips
+
+[new-laravel-migration-shortcuts-for-foreign-keys](https://joelclermont.com/post/2020-09/new-laravel-migration-shortcuts-for-foreign-keys)
+
+[laravel-8-factory-relationships](https://joelclermont.com/post/laravel-8-factory-relationships)
+
+[laravel-time-traveling](https://laravel-news.com/laravel-time-traveling)
