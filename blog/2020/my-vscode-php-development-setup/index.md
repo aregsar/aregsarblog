@@ -279,6 +279,39 @@ Finally, sometimes there might be caches cookies from other debug sessions that 
 
 For example since I also use PHPStorm I somehow had a cookie named `Phpstorm-b639e020` being sent in the request that I removed to fix the decryption exception I was getting when Laravel was trying to decrypt this cookie.
 
+## How XDebug works with the VSCode Debugger
+
+The XDebug extension running on the server collaborates with the VSCode installed PHP Debug extension to execute a debug session.
+Every time a request is made from the browser to the server a new XDebug session is started which completes when the response is returned to the browser.
+
+Below I detail the steps that happen when a XDebug session is established and the communication that occurs between the PHP server with the XDebug extension running on the server and the VSCode debug extension server in VSCode:
+
+1 - run\start the php server (php artisan serve running on port 8000) or (laravel Valet\nginx\php-fpm running on port 9000) with the php interpreter XDebug extension settings configured in php.ini
+
+2- launch\start VSCode IDE debug extension server (runs on port 9001 based on the .vscode/launch.json settings not to conflict with php-fpm port)
+
+3- Using the web browser, make a http request to the local php server at `localhost:8000` or `valethostedexample.test`
+passing XDEBUG_SESSION_START=VSCODE in query string param to let the XDebug extension know that it is the start of a debug session.
+
+example request when running php artisan serve on port 8000
+http://localhost:8000?XDEBUG_SESSION_START=VSCODE
+
+example request when running Valet which uses dnsmasq server to resolve .test domain to nginx port 80
+http://valethostedexample.test?XDEBUG_SESSION_START=VSCODE
+
+> Note when using the php artisan serve XDebug works even without including `XDEBUG_SESSION_START=VSCODE` in query string param. This will be further explained below.
+
+4- the php interpreter XDebug extension will detect a XDebug session for VSCode based on passed `XDEBUG_SESSION_START=VSCODE` query param and will connect to the VSCODE IDE debugger extension running on port 9001
+
+5-As the php interpreter executes the http request it communicates with the XDebug server running in the IDE to debug the executed code and finally returns the http response back to the browser. The php XDebug extension will inject a cookie `XDEBUG_SESSION=VSCODE` in the response.
+
+6-we make an new request to the web server to continue our debug session that starts the flow in steps 3 to 5 all over again. The following requests will send the `XDEBUG_SESSION=VSCODE` cookie so the php XDebug extension on the server detects that the request should establish a XDebug session again. So the XDEBUG_SESSION_START query string parameter in not required anymore after the first request (It can be removed from the query string although wont hurt if it remains)
+
+> Note: When using Laravel valet to serve our app, we need to add XDEBUG_SESSION_START=VSCODE to the query string parameter when making the first request (http://valethostedexample.test?XDEBUG_SESSION_START=VSCODE).
+> However when we use php artisan serve to serve our app, by default the first response will send back the XDEBUG_SESSION cookie without needing the XDEBUG_SESSION_START query string parameter to be present in the first request.Somehow the server detects XDebug session without XDEBUG_SESSION_START when serving on localhost. The requests after the first request will include the XDEBUG_SESSION cookie just as in the case when serving using Valet.
+
+[understanding-and-using-xdebug](https://crosp.net/blog/software-development/web/php/understanding-and-using-xdebug-with-phpstorm-and-magento-remotely) has nice diagrams showing the XDebug web server and IDE debug session negotiation process.
+
 ## Configuring vscode for phpunit testing
 
 To run your phpunit tests from within vscode, open the terminal by selecting the `ctrl+backtick` keyboard shortcut then type in `phpunit` in the terminal window to execute the tests.
