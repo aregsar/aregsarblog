@@ -331,36 +331,48 @@ The resource
 
 ### Running PHPUNIT from the command line using the VSCode terminal
 
-To run your phpunit tests from within VSCode, open the terminal by selecting the `ctrl+backtick` keyboard shortcut then type in `vendor/bin/phpunit` in the terminal window to execute the tests.
+To run your phpunit tests from within VSCode, open the terminal by selecting the `ctrl+backtick` keyboard shortcut then type in `vendor/bin/phpunit` in the terminal window
+to execute the tests.
 
 > I have added the alias `alias phpunit=vendor/bin/phpunit` to my .zshrc so I can just type `phpunit` instead of `vendor/bin/phpunit`.
 
-## Using the VSCode Better PHPUnit extension
+You can also use the standard `phpunit` command filters from within the VSCode terminal.
 
-> If you have the `Better PHPUnit` VSCode extension installed, you can click in the test class or test methods in your phpunit test files to execute specific tests:
+### Using the VSCode Better PHPUnit extension from the command pallete
 
-1-Click on a test method name or within the test method to run the individual test or click within the class outside of any methods or on the class name to run all the tests in the class.
+> If you have the `Better PHPUnit` VSCode extension installed, you can click in the test class or test methods in your phpunit test files to execute specific tests
+> using command pallete selections provided by the `Better PHPUnit`:
+
+1-Click on a test method name or within the test method to run the individual test or click within the class outside of any methods or on the class name to run all the tests
+in the class or anywhere outside the class to run all the tests in the file.
 
 2-Type `cmd+sh+p` keyboard shortcut to open the command panel.
 
 3-Type `phpunit` to see the following options `run`, `run file`, `run suite` and `run previous`
 
-4-Select `Run` to run the test for the selected method or the all the tests for the selected class.
+4-Select `run` to run the test for the selected method or the all the tests for the selected class or file.
+
+> Tip: You can just hit enter if that was the last command that was selected.
 
 If you select `run file` it will run all the tests in the selected file regardless of where you click within the file.
-If you select `run suite`, all tests in all test files will run.
-If you select `run previous` the last tests that were run will run again.
+If you select `run previous` the last tests that were run will run again even if we click away to another method, class or file.
+If you select `run suite`, all tests in all test files will run regardless of which file you have selected.
+
+### Using the VSCode Better PHPUnit extension keyboard shortcuts
 
 Alternatively you can use the `Better PHPUnit` extensions keyboard shortcuts to run tests.
 
-I have remapped those shortcuts to the shortcuts described in the laracasts video mentioned above.
-To do that you can open keyboard shortcuts UI from command pallete then
+1-Click on a test method name or within the test method to run the individual test or click within the class outside of any methods or on the class name to run all the tests
+in the class or anywhere outside the class to run all the tests in the file.
 
-type `better phpunit` in the search box to bringup all the shortcuts for that extension.
-I changed the `run` shortcut to `cmd+t` and the `run previous` to `cmd+sh+t`.
+2-Type `cmd+k cmd+r` to execute the `run` command to run the test for the selected method or the all the tests for the selected class or file.
 
-With these shortcuts, you can click in a test class or test method and select `cmd+t` to run the corresponding test.
-If you navigate cursor to another location you can alway select `cmd+sh+t` to rerun the last test that you ran without having to go back and click in that class or method.
+You can type `cmd+k cmd+r` to execute the `run file` command
+You can type `cmd+k cmd+p` to execute the `run previous` command
+There is no preconfigured shortcut to execute the `run suite` command. You can type `phpunit` in the terminal which is equivalent to the command.
+
+> If you rather re-map these shortcuts to other keys, open keyboard shortcuts UI from command pallete and type `better phpunit` in the search box to bringup all the shortcuts for that extension
+> where they can be remapped.
 
 ## Running XDebug from XUnit
 
