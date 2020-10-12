@@ -420,9 +420,19 @@ in the same way as the feature test code.
 
 ## ReflectionException issue when debugging with the PHPUnit runner
 
-in PHPUnit source code Runner/BaseTestRunner;
+There is an issue
+when we run the vscode debugger and we first run the betterphpunuit runner, we fist hit breakpoint on an exception with the message:
+
+`Exception has occurred.ReflectionException: Method suite does not exist`
+
+If we continue debugging we hit our normal breakpoints and can continue debugging and running the tests.
+
+> Note: When we run the VSCode debugger and we run `phpunit` command in the VSCode terminal this exception is not hit. So this section only applies to the BetterPhpUnit's phpunit runner.
+
+Below is where the exception breakpoint is hit:
 
 ```php
+//in PHPUnit source code Runner/BaseTestRunner.php
 abstract class BaseTestRunner
 {
 
@@ -430,14 +440,25 @@ abstract class BaseTestRunner
     {
 
         try {
+                //this line throws the exception
                 $suiteMethod = $testClass->getMethod(self::SUITE_METHODNAME);
 
 ```
 
-Exception has occurred.
-ReflectionException: Method suite does not exist
+This inital breakpoint is hit every time we run tests using the betterphpunit runner.
+Fixes for this are:
+
+uncheck the "Everything" box in VSCode debugger settings which is not always an option.
+
+in user-settings settings.json file set
+
+```json
+"better-phpunit.commandSuffix": "--stop-on-failure"
+```
 
 ## Resources
+
+[Breakpoints checkboxes in VSCode bottom left debug window](https://imgur.com/a/EAS5wHA)
 
 https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug/
 
