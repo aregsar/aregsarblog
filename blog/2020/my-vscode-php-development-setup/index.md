@@ -367,14 +367,75 @@ in the class or anywhere outside the class to run all the tests in the file.
 
 2-Type `cmd+k cmd+r` to execute the `run` command to run the test for the selected method or the all the tests for the selected class or file.
 
-You can type `cmd+k cmd+r` to execute the `run file` command
+You can type `cmd+k cmd+f` to execute the `run file` command
 You can type `cmd+k cmd+p` to execute the `run previous` command
 There is no preconfigured shortcut to execute the `run suite` command. You can type `phpunit` in the terminal which is equivalent to the command.
 
-> If you rather re-map these shortcuts to other keys, open keyboard shortcuts UI from command pallete and type `better phpunit` in the search box to bringup all the shortcuts for that extension
+> If you rather re-map these shortcuts to other keys, open keyboard shortcuts UI from command palette and type `better phpunit` in the search box to bringup all the shortcuts for that extension
 > where they can be remapped.
 
 ## Running XDebug from XUnit
+
+To verify that breakoints are hit within our feature and unit tests when we run the PHP debugger in VSCode
+
+Set breakpoints in the testBasicTest method in the `tests/feature/ExampleTest.php` file of a new Laravel project:
+
+```php
+class ExampleTest extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function testBasicTest()
+    {
+        $response = $this->get('/'); //set breakpoint here
+
+        $response->assertStatus(200); //set breakpoint here
+    }
+}
+```
+
+To verify that breakpoints will also hit withib the code under test:
+
+Set a breakpoint in `routes/web.php` file of a new Laravel project:
+
+```php
+Route::get('/', function () {
+    return view('welcome'); //set breakpoint here
+});
+```
+
+Now start the debugger as was detailed in the previous sections.(i.e. Open the VSCode debug panel using `cmd+sh+d` then click the listen for debug button)
+
+Finally click within the `testBasicTest` method and run the test method by typing the keyboard shortcut shortcut (cmd+k cmd+r)
+
+First you will hit the first breakpoint in the test method then when you hit the continue debugging button in the debugger toolbar, you will hit the breakpoint in the application route file.
+Then if you continue again you will hit the second break point in the test and if you continue yet again, the test will complete with results
+shown as usual.
+
+Similarly a breakpoint can be placed in the `testBasicTest` method of the `tests/unit/ExampleTest.php` file and the code can be debugged
+in the same way as the feature test code.
+
+## ReflectionException issue when debugging with the PHPUnit runner
+
+in PHPUnit source code Runner/BaseTestRunner;
+
+```php
+abstract class BaseTestRunner
+{
+
+    public function getTest(string $suiteClassFile, $suffixes = ''): ?TestSuite
+    {
+
+        try {
+                $suiteMethod = $testClass->getMethod(self::SUITE_METHODNAME);
+
+```
+
+Exception has occurred.
+ReflectionException: Method suite does not exist
 
 ## Resources
 
