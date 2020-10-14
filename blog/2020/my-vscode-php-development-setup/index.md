@@ -176,7 +176,9 @@ If you have Valet running then you don't need to run `php artisan serve`. Just f
 
 Laravel encrypts all cookies by default. Since the `XDEBUG_SESSION` cookie is injected by the PHP debug extension in the HTTP response, it is not encrypted by Laravel. This means that there will be an exception thrown by the Laravel when it tries to decrypt the cookie in the following request. These exceptions are caught higher up in the code execution stack by Laravel so the request execution will continue and eventually your breakpoints will be hit and the response will be returned.
 
-However if the `Exceptions` breakpoint and `Everything` breakpoint settings in the VSCode debugger are enabled, then the thrown framework exceptions will break at the exception location making for an annoying debugging experience.
+However if the `Exceptions` breakpoint and `Everything` breakpoint settings checkboxes in the VSCode debugger are checked, then the thrown framework exceptions will break at the exception location making for an annoying debugging experience.
+
+See [Breakpoints checkboxes in VSCode bottom left debug window](https://imgur.com/a/EAS5wHA).
 
 For the curious, the exception breakpoint occurs here in the class `Illuminate\Encryption\Encrypter`:
 
@@ -239,7 +241,10 @@ class EncryptCookies
 
 One solution to avoid the `XDEBUG_SESSION` cookie exception breakpoint will be to disable it in VSCode breakpoint settings.
 In the Breakpoints sub panel of the debug side panel in VSCode you can uncheck the break on `Exceptions` and break on `Everything` checkboxes to avoid breaking on any exceptions.
+
 The exception will still happen, however VSCode will not break on exceptions.
+
+See [Breakpoints checkboxes in VSCode bottom left debug window](https://imgur.com/a/EAS5wHA).
 
 However If you like to break other framework exceptions you have another option besides turning off exception breakpoints.
 
@@ -297,7 +302,7 @@ Below I detail the steps that happen when a XDebug session is established.
 
 The steps describe the communication that happens during the debug session, between the PHP server with the XDebug extension running on the back end server and the server that is running within VSCode that is part of the VSCode Debug extension:
 
-1 - We run\start the php server with the php interpreter XDebug extension settings configured in php.ini. This happens either using the command `php artisan serve` running the server on port 8000 or by using laravel Valet that runs nginx on port 80.
+1 - We run\start the php server with the php interpreter XDebug extension settings configured in php.ini. This happens either using the command `php artisan serve` running the server on port 8000 or by using Laravel Valet that runs nginx on port 80.
 
 2- We launch\start VSCode IDE debug extension server which runs on port 9001 based on my `.vscode/launch.json` settings
 
@@ -306,11 +311,13 @@ The steps describe the communication that happens during the debug session, betw
 3- Using the web browser, we make a http request to the local php server at `localhost:8000` or `valethostedexample.test` if we are using Valet,
 passing `XDEBUG_SESSION_START=VSCODE` in query string param to let the XDebug extension know that it is the start of a debug session.
 
-Example request when running php artisan serve on port 8000
-http://localhost:8000?XDEBUG_SESSION_START=VSCODE
+Example request when running php artisan serve on port 8000:
 
-Example request when running Valet which uses dnsmasq server to resolve .test domain to nginx port 80
-http://valethostedexample.test?XDEBUG_SESSION_START=VSCODE
+`http://localhost:8000?XDEBUG_SESSION_START=VSCODE`
+
+Example request when running Valet which uses dnsmasq server to resolve the `.test` domain to nginx http://localhost port 80:
+
+`http://valethostedexample.test?XDEBUG_SESSION_START=VSCODE`
 
 > Note when using the `php artisan serve` XDebug works even without including `XDEBUG_SESSION_START=VSCODE` in query string param. This will be further explained below.
 
@@ -327,56 +334,57 @@ So the XDEBUG_SESSION_START query string parameter in not required anymore after
 The resource
 [understanding-and-using-xdebug](https://crosp.net/blog/software-development/web/php/understanding-and-using-xdebug-with-phpstorm-and-magento-remotely) has nice diagrams showing the session negotiation process between the XDebug web server and IDE Debug extension server.
 
-## Configuring VSCode for PHPUNIT testing
+## Executing PHPUnit test from VSCode
 
-### Running PHPUNIT from the command line using the VSCode terminal
+There are several ways to run PHPUnit tests from within VSCode.
 
-To run your phpunit tests from within VSCode, open the terminal by selecting the `ctrl+backtick` keyboard shortcut then type in `vendor/bin/phpunit` in the terminal window
-to execute the tests.
+### Running PHPUnit from the command line using the VSCode terminal
 
-> I have added the alias `alias phpunit=vendor/bin/phpunit` to my .zshrc so I can just type `phpunit` instead of `vendor/bin/phpunit`.
+To run your PHPUnit tests from within VSCode, open the terminal by selecting the `ctrl+backtick` keyboard shortcut then type in `vendor/bin/phpunit` in the terminal window to execute the tests.
 
-You can also use the standard `phpunit` command filters from within the VSCode terminal.
+> I have added the alias `alias phpunit=vendor/bin/phpunit` to my `.zshrc` shell profile file so I can just type `phpunit` instead of `vendor/bin/phpunit`.
 
-### Using the VSCode Better PHPUnit extension from the command pallete
+You can also use the standard `phpunit` command filters from within the VSCode terminal to for example run only feature tests or only unit test.
 
-> If you have the `Better PHPUnit` VSCode extension installed, you can click in the test class or test methods in your phpunit test files to execute specific tests
-> using command pallete selections provided by the `Better PHPUnit`:
+### Using the VSCode Better PHPUnit extension to run tests from the command palette
 
-1-Click on a test method name or within the test method to run the individual test or click within the class outside of any methods or on the class name to run all the tests
-in the class or anywhere outside the class to run all the tests in the file.
+If you have the `Better PHPUnit` VSCode extension installed, you can click various locations within PHPUnit test files to execute specific tests using command palette selections provided by the `Better PHPUnit` extension. The steps to do so are listed below:
+
+1-Click on a test method name or within the test method to run the individual test. Or click within the class outside of any methods or on the class name to run all the tests in the class. Or click anywhere outside the class to run all the tests in the file.
 
 2-Type `cmd+sh+p` keyboard shortcut to open the command panel.
 
-3-Type `phpunit` to see the following options `run`, `run file`, `run suite` and `run previous`
+3-Type `phpunit` to see the following options `run`, `run file`, `run suite` and `run previous`.
 
-4-Select `run` to run the test for the selected method or the all the tests for the selected class or file.
+4-Select `run` to run the test for the selected method or the selected class or selected file.
 
-> Tip: You can just hit enter if that was the last command that was selected.
+> Tip: You can just hit enter if that is the default selection.
 
 If you select `run file` it will run all the tests in the selected file regardless of where you click within the file.
+
 If you select `run previous` the last tests that were run will run again even if we click away to another method, class or file.
+
 If you select `run suite`, all tests in all test files will run regardless of which file you have selected.
 
 ### Using the VSCode Better PHPUnit extension keyboard shortcuts
 
-Alternatively you can use the `Better PHPUnit` extensions keyboard shortcuts to run tests.
+Alternatively you can use the `Better PHPUnit` extension's keyboard shortcuts to run tests:
 
-1-Click on a test method name or within the test method to run the individual test or click within the class outside of any methods or on the class name to run all the tests
-in the class or anywhere outside the class to run all the tests in the file.
+1-Click on a test method name or within the test method to run the individual test. Or click within the class outside of any methods or on the class name to run all the tests in the class. Or click anywhere outside the class to run all the tests in the file.
 
-2-Type `cmd+k cmd+r` to execute the `run` command to run the test for the selected method or the all the tests for the selected class or file.
+2-Type `cmd+k cmd+r` to execute the `run` to run the test for the selected method or the selected class or selected file.
 
 You can type `cmd+k cmd+f` to execute the `run file` command
-You can type `cmd+k cmd+p` to execute the `run previous` command
-There is no preconfigured shortcut to execute the `run suite` command. You can type `phpunit` in the terminal which is equivalent to the command.
 
-> If you rather re-map these shortcuts to other keys, open keyboard shortcuts UI from command palette and type `better phpunit` in the search box to bringup all the shortcuts for that extension
-> where they can be remapped.
+You can type `cmd+k cmd+p` to execute the `run previous` command
+
+There is no preconfigured shortcut to execute the `run suite` command. But you can just type `vendor/bin/phpunit` in the terminal which is equivalent to the `run suite` command.
+
+> If you rather re-map these shortcuts to other keys, open keyboard shortcuts UI from command palette and type `better phpunit` in the search box to bring up all the shortcuts for that extension where they can be remapped.
 
 ## Running XDebug from XUnit
 
-To verify that breakoints are hit within our feature and unit tests when we run the PHP debugger in VSCode
+To verify that breakpoints are hit within our feature and unit tests when we run the PHP debugger in VSCode
 
 Set breakpoints in the testBasicTest method in the `tests/feature/ExampleTest.php` file of a new Laravel project:
 
@@ -397,7 +405,7 @@ class ExampleTest extends TestCase
 }
 ```
 
-To verify that breakpoints will also hit withib the code under test:
+To verify that breakpoints will also hit within the code under test:
 
 Set a breakpoint in `routes/web.php` file of a new Laravel project:
 
@@ -418,18 +426,21 @@ shown as usual.
 Similarly a breakpoint can be placed in the `testBasicTest` method of the `tests/unit/ExampleTest.php` file and the code can be debugged
 in the same way as the feature test code.
 
-## ReflectionException issue when debugging with the PHPUnit runner
+## ReflectionException issue when debugging with the Better PHPUnit runner
 
-There is an issue
-when we run the vscode debugger and we first run the betterphpunuit runner, we fist hit breakpoint on an exception with the message:
+There is an issue when we run tests the Better PHPUnit runner while running the VSCode debugger.
+
+The first thing that happens is we hit a breakpoint on an exception with the message:
 
 `Exception has occurred.ReflectionException: Method suite does not exist`
 
 If we continue debugging we hit our normal breakpoints and can continue debugging and running the tests.
 
-> Note: When we run the VSCode debugger and we run `phpunit` command in the VSCode terminal this exception is not hit. So this section only applies to the BetterPhpUnit's phpunit runner.
+However it is annoying to keep hitting this exception every time we run tests while debugging.
 
-Below is where the exception breakpoint is hit:
+> Note: When we run the VSCode debugger and we run `vendor/bin/phpunit` command in the VSCode terminal, this exception is not hit. So this section only applies to the Better PHPUnit's test runner.
+
+Below is the method where the exception breakpoint is hit:
 
 ```php
 //in PHPUnit source code Runner/BaseTestRunner.php
@@ -445,20 +456,21 @@ abstract class BaseTestRunner
 
 ```
 
-This inital breakpoint is hit every time we run tests using the betterphpunit runner.
-Fixes for this are:
+This initial breakpoint is hit every time we run tests using the Better PHPUnit runner while debugging.
 
-uncheck the "Everything" box in VSCode debugger settings which is not always an option.
+One way to fix this issue so the that we don't break on this exception is to uncheck the "Everything" box in VSCode debugger settings.
 
-in user-settings settings.json file set
+See [Breakpoints checkboxes in VSCode bottom left debug window](https://imgur.com/a/EAS5wHA).
+
+However we might not want to uncheck it for various reasons.
+
+The other thing that may fix this issue is to add the following setting in the VSCode user `settings.json` file:
 
 ```json
 "better-phpunit.commandSuffix": "--stop-on-failure"
 ```
 
 ## Resources
-
-[Breakpoints checkboxes in VSCode bottom left debug window](https://imgur.com/a/EAS5wHA)
 
 https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug/
 
