@@ -1,5 +1,9 @@
 # All Posts
 
+October 14, 2020
+
+[My VSCode PHP Development Setup](https://aregsar.com/blog/2020/my-vscode-php-development-setup)
+
 September 30, 2020
 
 [How To Create New Laravel 8 Project](https://aregsar.com/blog/2020/how-to-create-new-laravel-8-project)
