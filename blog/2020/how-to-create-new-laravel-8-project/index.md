@@ -122,6 +122,6 @@ You will be prompted to select the `stack` and `teams` options, when not specifi
 
 ## Resources
 
-https://laravel-news.com/updating-the-laravel-installer
+[updating-the-laravel-installer](https://laravel-news.com/updating-the-laravel-installer)
 
-https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack
+[laravel-installer-now-includes-support-for-jetpack](https://laravel-news.com/laravel-installer-now-includes-support-for-jetpack)
