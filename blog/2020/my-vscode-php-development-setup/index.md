@@ -16,24 +16,30 @@ First thing to do is install the following VSCode extensions:
 
 - `Better PHPUnit` extension by `calebporzio`
 
-## Configuring VSCode with XDebug for debugging
+## Install and configure PHP XDebug extension
 
-Follow the following four steps to configure XDebug.
+The following shows how to install and configure XDebug.
 
-### Step 1
+### Install the extension
 
 First we need to install the PHP XDebug extension:
 
 ```bash
+pecl channel-update pecl.php.net
+pecl clear-cache
 # force install the extension
 pecl install --force xdebug
 # check that the xdebug shows in the list of PHP extensions
-php -m
+php -m | grep 'xdebug'
 ```
 
-### Step 2
+> If you run into errors during installation on a Mac, make sure that the xcode tools are installed. You can use the command `xcode-select --install` to install them if not installed.
 
-After that locate your php.ini file:
+### Configure the extension
+
+Next we need configure the extension:
+
+Locate your php.ini file:
 
 ```bash
 php --ini
@@ -67,20 +73,58 @@ xdebug.remote_enable=1
 xdebug.remote_port=9001
 ```
 
-> You can opt to add separate config file at `/usr/local/etc/php/7.4/conf.d/ext-xdebug.ini` instead and include those
-> lines there. See resource articles for instructions.
+> If you are using Laravel valet you should run the `valet restart` command to pick up the XDebug changes.
 
-### Step 3
+### Alternate way to configure the extension
 
-Next open your shell configuration file which, for me is the `.zshrc` file, and add the following:
+There is an alternate approach to configuring XDebug that uses a separate configuration file for the XDebug settings instead of modifying the main `php.ini` file.
+
+Instead of updating the `/usr/local/etc/php/7.4/php.ini` file first comment out or remove the `zend_extension="xdebug.so"` line from the file.
+
+You can comment it our by prepending a semicolon in front of the line:
+
+```ini
+; zend_extension="xdebug.so"
+```
+
+Add a new file named `ext-xdebug.ini` to the `/usr/local/etc/php/7.4/conf.d/`
+
+```bash
+cd /usr/local/etc/php/7.4/conf.d
+touch ext-xdebug.ini
+```
+
+Add the following lines to the `/usr/local/etc/php/7.4/conf.d/ext-xdebug.ini` file:
+
+```ini
+[xdebug]
+zend_extension="/usr/local/lib/php/pecl/20190902/xdebug.so"
+xdebug.remote_enable=1
+xdebug.remote_port=9001
+
+;other optional configuration settings
+;xdebug.remote_autostart=1
+;xdebug.default_enable=1
+;xdebug.remote_host=127.0.0.1
+;xdebug.remote_connect_back=1
+;xdebug.idekey=VSCODE
+```
+
+## Configuring VSCode with XDebug for debugging
+
+Open your shell configuration file which, for me is the `~/.zshrc` file, and add the following:
 
 ```ini
 export XDEBUG_CONFIG="idekey=VSCODE"
 ```
 
-### Step 4
+close and source the file:
 
-Open VSCode from within your project directory.
+```bash
+source ~/.zshrc
+```
+
+Now open VSCode from within your project directory.
 
 ```bash
 cd myproject
