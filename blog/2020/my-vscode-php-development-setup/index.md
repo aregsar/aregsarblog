@@ -290,7 +290,7 @@ For example since I also use PHPStorm, I somehow had a cookie named `Phpstorm-b6
 
 We couldn't just remove the `XDEBUG_SESSION` session cookie since it is actually required for debugging.
 
-## Sidebar: How XDebug works with the VSCode Debugger
+## Aside: How XDebug works with the VSCode Debugger
 
 For the curious, I am going to explain how the PHP XDebug extension collaborates with your VSCode PHP Debug extension to allow setting breakpoints and debugging your application.
 
@@ -458,22 +458,20 @@ abstract class BaseTestRunner
 
 This initial breakpoint is hit every time we run tests using the Better PHPUnit runner while debugging.
 
-One way to fix this issue so the that we don't break on this exception is to uncheck the "Everything" box in VSCode debugger settings.
+The way to fix this issue so the that we don't break on this exception is to uncheck the "Everything" box in VSCode debugger settings.
 
 See [Breakpoints checkboxes in VSCode bottom left debug window](https://imgur.com/a/EAS5wHA).
 
-However we might not want to uncheck it for various reasons.
-
-The other thing that may fix this issue is to add the following setting in the VSCode user `settings.json` file:
-
-```json
-"better-phpunit.commandSuffix": "--stop-on-failure"
-```
+The exception will still be thrown but the code won't break at the exception.
 
 ## Resources
 
-https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug/
+[better-phpunit](https://github.com/calebporzio/better-phpunit)
 
-https://laracasts.com/series/visual-studio-code-for-php-developers
+[vscode-php-debug](https://github.com/felixfbecker/vscode-php-debug)
 
-https://cleody.com/setup-xdebug-in-laravel-valet-with-php-7-3-and-phpstorm/
+[configure-vscode-to-debug-phpunit-tests-with-xdebug](https://tighten.co/blog/configure-vscode-to-debug-phpunit-tests-with-xdebug)
+
+[visual-studio-code-for-php-developers](https://laracasts.com/series/visual-studio-code-for-php-developers)
+
+[setup-xdebug-in-laravel-valet-with-php-7-3-and-phpstorm](https://cleody.com/setup-xdebug-in-laravel-valet-with-php-7-3-and-phpstorm)
