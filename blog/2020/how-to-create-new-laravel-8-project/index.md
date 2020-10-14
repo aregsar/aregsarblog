@@ -79,6 +79,25 @@ php artisan serve
 
 Navigate to localhost:8000 to see the Laravel home page.
 
+## Installing PHP Redis Extension using PECL
+
+If you intend to use Redis with your Laravel application you will need to install the PHP Redis extension using the PHP PECL CLI.
+
+> The PECL CLI is installed as part of your PHP installation.
+
+```bash
+# update the pecl repo
+pecl channel-update pecl.php.net
+# clear cached extensions
+pecl clear-cache
+# install the extension (use the --force flag to install latest version even if the extension cache was not cleared)
+pecl install --force xdebug
+# make sure the extension was installed by listing the installed extensions filtered by xdebug
+php -m | grep 'xdebug'
+```
+
+Now you should be able to configure and use the redis driver in your Laravel applications.
+
 ## Installing Laravel Jetstream using the Laravel CLI
 
 One of the reasons that you may use the Laravel CLI to create a new Laravel project instead of the composer
