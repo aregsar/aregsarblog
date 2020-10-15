@@ -118,13 +118,15 @@ Open your shell configuration file which, for me is the `~/.zshrc` file, and add
 export XDEBUG_CONFIG="idekey=VSCODE"
 ```
 
-close and source the file:
+Close and source the file:
 
 ```bash
 source ~/.zshrc
 ```
 
-Now open VSCode from within your project directory.
+> Note: The following steps need to be performed once per project to set up the per project `.vscode/launch.json` file. Alternatively once its done for one project, you can just copy the generated `.vscode/launch.json` to other projects, instead of going through the process again for each new project.
+
+Open VSCode from within your project directory:
 
 ```bash
 cd myproject
