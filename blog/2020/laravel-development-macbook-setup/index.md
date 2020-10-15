@@ -129,6 +129,12 @@ composer global require laravel/valet
 #adds symlink to valet cli so need to add ~/.composer/vendor/bin to path
 ~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
 
+Add the following lines to the ~/.zshrc file
+#this is where the symlinks for valet and other composer global package binaries are installed
+#export PATH="~/.composer/vendor/bin:$PATH"
+export COMPOSER_GLOBAL_PACKAGE_HOME=~/.composer/vendor/bin
+export PATH=$COMPOSER_GLOBAL_PACKAGE_HOME:$PATH
+
 #check valet version
 valet --version
 ```
