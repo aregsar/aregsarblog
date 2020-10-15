@@ -2,9 +2,9 @@
 
 October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Laravel Development MacBook Setup](https://aregsar.com/blog/2020/laravel-development-macbook-setup)
+In this post I detail the PHP and Node packages that I install globally on my Mac for local Laravel development.
 
-In this post I detail the PHP and Node packages that I install globally on my Mac for local Laravel development
+Prior to post I have the Homebrew package manager installed as detailed at [my-vscode-php-development-setup](https://aregsar.com/blog/2020/my-vscode-php-development-setup).
 
 ## Install Node Version Manager
 
@@ -16,16 +16,16 @@ So the first thing I install is the node version manager, nvm:
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 ```
 
-php pecl composer valet (nginx and dnsmasq) install
+## Install php, pecl and php-fpm
 
-export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
-
-## install php, pecl and php-fpm
-
+```bash
 brew install php
+```
 
+```bash
 #show installed php versions
 brew list | grep php
+```
 
 #added php binaries here
 /usr/local/Cellar/php/7.4.9/
@@ -48,41 +48,54 @@ added /usr/local/bin/pecl symlink to /usr/local/Cellar/php/7.4.9/bin/pecl
 
 added /usr/local/sbin/php-fpm symlink to /usr/local/Cellar/php/7.4.9/sbin/php-fpm
 
-## install php extensions (xdebug and php-redis)
+## Install xdebug and redis php extensions
 
+```bash
 #install xdebug extension
 pecl install --force xdebug
+```
 
 #installed xdebug in the following locations
 /usr/local/Cellar/php/7.4.9/pecl/20190902/xdebug.so
 /usr/local/lib/php/pecl/20190902/xdebug.so
 
+```bash
 #install php-redis extension
 pecl install --force redis
+```
 
-#installed xdebug in the following locations
+#installed redis in the following locations
 /usr/local/Cellar/php/7.4.9/pecl/20190902/redis.so
 /usr/local/lib/php/pecl/20190902/redis.so
 
+```bash
 #list installed php extenstions
 #should show xdebug and redis
 php -m
+```
 
+```bash
 #show content of php.ini file
 cat /usr/local/etc/php/7.4/php.ini
+```
+
+```ini
 #should see following at top of the file:
 extension="redis.so"
 zend_extension="xdebug.so"
+```
 
+```bash
 #use pecl to shoe extension versions
 pecl list
 #should show the following:
 redis 5.3.1 stable
 xdebug 2.9.6 stable
+```
 
-## install composer
+## Install Composer PHP package manager
 
-#go to home directory
+```bash
 cd
 
 #download the composer-setup.php installation PHP script file to the current directory
@@ -103,26 +116,29 @@ php -r "unlink('composer-setup.php');"
 
 #show installed version
 composer --version
+```
 
-## install laravel valet
+## Install Laravel Valet
 
+```bash
 composer global require laravel/valet
 
 #installs valet cli in the following directory
 ~/.composer/vendor/laravel/valet
 
-# adds symlink to valet cli
-
-# so need to add ~/.composer/vendor/bin to path
-
+#adds symlink to valet cli so need to add ~/.composer/vendor/bin to path
 ~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
 
-# check valet version
-
+#check valet version
 valet --version
+```
 
+Now that Valet is installed and accessible globally, run the valet commands:
+
+```bash
 #install valet to have all valet commands available
 valet install
+```
 
 Stopping nginx...
 Installing nginx...
@@ -139,12 +155,18 @@ Valet is configured to serve for TLD [.test]
 Restarting nginx...
 Valet installed successfully!
 
+```bash
 #run valet trust so password is not required for valet commands
 valet trust
+```
+
 Sudoers entries have been added for Brew and Valet.
 
+```bash
 #make valet use current php version
 valet use php
+```
+
 Stopping php...
 Unlinking current version: php
 Linking new version: php
@@ -153,6 +175,10 @@ Restarting php...
 Restarting nginx...
 Valet is now using php@7.4.
 
+## Valet Park Laravel projects
+
+```bash
 cd code/laravel
 valet park
 valet parked
+```
