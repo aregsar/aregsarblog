@@ -1,6 +1,6 @@
 # Laravel Development MacBook Setup
 
-October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+October 15, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I detail the PHP and Node packages that I install globally on my Mac for local Laravel development.
 
