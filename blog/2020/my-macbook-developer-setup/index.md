@@ -4,9 +4,81 @@ October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [My MacBook Developer Setup](https://aregsar.com/blog/2020/my-macbook-developer-setup)
 
-In this post I detail how I setup a new MacBook for development.
+In this post I detail how I setup a new MacBook for development by listing the installation and configuration of my development tools and software.
 
-I will list the installation and configuration of my development tools and software.
+## Setup basic z shell profile
+
+Setup a basic initial `.zshrc` file in our home directory. Later we will add to this file.
+
+```bash
+cd && echo 'export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"' > .zshrc
+```
+
+Relaunch the shell or source the new `~/.zshrc` file:
+
+```bash
+source .zshrc
+```
+
+## Fix z shell permissions issue
+
+You may run into a permission error message when you relaunch your shell.
+The fix is to run `compaudit` and change permissions on the directories that `compaudit` lists:
+
+```bash
+compaudit
+#There are insecure directories:
+#/usr/local/share/zsh/site-functions
+#/usr/local/share/zsh
+```
+
+Run following to fix:
+
+```bash
+sudo chmod g-w /usr/local/share/zsh/site-functions
+sudo chmod g-w /usr/local/share/zsh
+```
+
+## Installing XCode development tools
+
+Git comes bundled with XCode development tools
+
+Install XCode development tools by checking the git version:
+
+```bash
+# Launches popup box to install command line developer tools
+git --version
+```
+
+Alternatively we install it directly:
+
+```bash
+# Launches popup box to install command line developer tools
+xcode-select --install
+```
+
+## Installing Homebrew
+
+According to the `https://brew.sh/` site, Homebrew can be installed running the following bash script:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+```
+
+## Using Homebrew to install command line tools
+
+```bash
+brew update && brew upgrade
+brew install wget
+brew install curl
+brew install tree
+brew install git
+brew install gh
+brew install python
+brew install httpie
+brew install redli
+brew install mysqlcli
+```
 
 ## Install applications
 
@@ -38,78 +110,29 @@ sqlitebrowser
 wireshark
 postman
 
-## Setup basic z shell profile
+## Create symlinks
 
-Setup a basic initial `.zshrc` file in our home directory. Later we will add to this file.
+Create symlinks to launch editor applications from the command line:
 
 ```bash
-#cd
-#touch .zshrc
-#add the path to .zshrc
-#export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
+ln -s "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" /usr/local/bin/code
+# the symlnk /usr/local/bin/pstorm is automatically created by the phpstorm installation
+```
 
-echo 'export PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"' > .zshrc
+Now we can type `subl`, `code` or `pstorm` from any directory to launch the respective editors, provided the PATH variable contains the `/usr/local/bin/` path.
+
+## Update the PATH variable
+
+```bash
+cd ~
 echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> .zshrc
 echo 'export PATH="/usr/local/opt/python/libexec/bin:$PATH"' >> .zshrc
-#to use code command in bash
-#add symlink /usr/local/bin/code
-/usr/local/bin/code -> /Applications/Visual Studio Code.app/Contents/Resources/app/bin/code
-
-/usr/local/bin/pstorm
-```
-
-Relaunch the terminal or source the new `~/.zshrc` file (source .zshrc).
-
-## Fix z shell permissions issue
-
-You may run into a permission error message when you relaunch your shell.
-The fix is to run `compaudit` and change permissions on the directories that `compaudit` lists:
-
-```bash
-compaudit
-#There are insecure directories:
-#/usr/local/share/zsh/site-functions
-#/usr/local/share/zsh
-#Run following to fix:
-sudo chmod g-w /usr/local/share/zsh/site-functions
-sudo chmod g-w /usr/local/share/zsh
-```
-
-## Installing XCode development tools
-
-Git comes bundled with XCode development tools
-
-Install XCode development tools by checking the git version:
-
-```bash
-# Launches popup box to install command line developer tools if not installed
-git --version
-```
-
-Alternatively we can install it directly:
-
-```bash
-xcode-select --install
-```
-
-## Installing Homebrew
-
-## Using Homebrew to install command line tools
-
-```bash
-brew install wget
-brew install curl
-brew install tree
-brew install git
-brew install gh
-brew install python
-brew install httpie
-beautiful soup
-redli
-mysqlcli
 ```
 
 ## Setting Up SSH key
+
+Steps to setup an SSH key that can be copied to my Github and DigitalOcean accounts:
 
 ```bash
 $ ls -al ~/.ssh
@@ -130,23 +153,36 @@ $ open ~/.ssh/config
 The file /Users/yourusername/.ssh/config does not exist.
 
 $ touch ~/.ssh/config
+
+# open ~/.ssh/config file using the default Mac TextEdit editor. We can type subl ~/.ssh/config Or code ~/.ssh/config instead to use other text editors.
 $ open ~/.ssh/config
 
-#add the following lines to the ~/.ssh/config file:
+# add the following lines to the ~/.ssh/config file:
 Host *
   AddKeysToAgent yes
   UseKeychain yes
   IdentityFile ~/.ssh/id_rsa
-#save and close
+# save and close file
 
 $ ssh-add -K ~/.ssh/id_rsa
 Identity added: /Users/yourusername/.ssh/id_rsa (youremail@youremaildomain)
+```
 
-# copy ssh key to clipboard
-$ pbcopy < ~/.ssh/id_rsa.pub
+> You can create additional SSH keys by simply providing a different name then `id_rsa` for the file name when prompted.
 
-#paste key in your github account
+Copying the key to my Github account.
 
+Copy ssh key to clipboard:
+
+```bash
+pbcopy < ~/.ssh/id_rsa.pub
+```
+
+Login to Github and paste key in your Github account.
+
+Test key by cloning a repo:
+
+```bash
 # test key by cloning a repo
 git clone git@github.com:yourrepousername/myrepo.git
 ```
