@@ -2,8 +2,6 @@
 
 October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[My MacBook Developer Setup](https://aregsar.com/blog/2020/my-macbook-developer-setup)
-
 In this post I detail how I setup a new MacBook for development by listing the installation and configuration of my development tools and software.
 
 ## Setup basic z shell profile

@@ -1,12 +1,20 @@
-# laravel development macbook setup
+# Laravel Development MacBook Setup
 
-[laravel development macbook setup](https://aregsar.com/blog/2020/laravel-development-macbook-setup)
+October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-=============
-nvm install
+[Laravel Development MacBook Setup](https://aregsar.com/blog/2020/laravel-development-macbook-setup)
+
+In this post I detail the PHP and Node packages that I install globally on my Mac for local Laravel development
+
+## Install Node Version Manager
+
+To compile assets and install client side packages we will need node, npm and npx.
+
+So the first thing I install is the node version manager, nvm:
+
+```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-
----
+```
 
 php pecl composer valet (nginx and dnsmasq) install
 

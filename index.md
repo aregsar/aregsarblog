@@ -1,5 +1,9 @@
 # All Posts
 
+October 15, 2020 by
+
+[My MacBook Developer Setup](https://aregsar.com/blog/2020/my-macbook-developer-setup)
+
 October 14, 2020
 
 [My VSCode PHP Development Setup](https://aregsar.com/blog/2020/my-vscode-php-development-setup)
