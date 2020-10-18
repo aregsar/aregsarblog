@@ -27,19 +27,19 @@ brew install php
 brew list | grep php
 ```
 
-#added php binaries here
+added php binaries here
 /usr/local/Cellar/php/7.4.9/
 
-#php cli binary
+php cli binary
 /usr/local/Cellar/php/7.4.9/bin/php
 
-#pecl cli binary
+pecl cli binary
 /usr/local/Cellar/php/7.4.9/bin/pecl
 
-#php-fpm binary
+php-fpm binary
 /usr/local/Cellar/php/7.4.9/sbin/php-fpm
 
-#added config files here
+added config files here
 /usr/local/etc/php/7.4/
 
 added /usr/local/bin/php symlink to /usr/local/Cellar/php/7.4.9/bin/php
@@ -55,7 +55,7 @@ added /usr/local/sbin/php-fpm symlink to /usr/local/Cellar/php/7.4.9/sbin/php-fp
 pecl install --force xdebug
 ```
 
-#installed xdebug in the following locations
+installed xdebug in the following locations
 /usr/local/Cellar/php/7.4.9/pecl/20190902/xdebug.so
 /usr/local/lib/php/pecl/20190902/xdebug.so
 
@@ -64,7 +64,7 @@ pecl install --force xdebug
 pecl install --force redis
 ```
 
-#installed redis in the following locations
+installed redis in the following locations
 /usr/local/Cellar/php/7.4.9/pecl/20190902/redis.so
 /usr/local/lib/php/pecl/20190902/redis.so
 
@@ -122,30 +122,39 @@ composer --version
 
 ```bash
 composer global require laravel/valet
+```
 
-#installs valet cli in the following directory
+installs valet cli in the following directory
 ~/.composer/vendor/laravel/valet
 
-#adds symlink to valet cli so need to add ~/.composer/vendor/bin to path
+adds symlink to valet cli so need to add ~/.composer/vendor/bin to path
 ~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
 
-Add the following lines to the ~/.zshrc file
+Add the following lines to the ~/.zshrc file:
+
+```ini
 #this is where the symlinks for valet and other composer global package binaries are installed
 #export PATH="~/.composer/vendor/bin:$PATH"
 export COMPOSER_GLOBAL_PACKAGE_HOME=~/.composer/vendor/bin
 export PATH=$COMPOSER_GLOBAL_PACKAGE_HOME:$PATH
+```
 
+```bash
 #check valet version
 valet --version
 ```
 
-Now that Valet is installed and accessible globally, run the valet commands:
+Now that Valet is installed and accessible globally, run the valet commands to configure Valet:
+
+install valet to have all valet commands available:
 
 ```bash
-#install valet to have all valet commands available
 valet install
 ```
 
+You should see similar to the following output:
+
+```bash
 Stopping nginx...
 Installing nginx...
 [nginx] is not installed, installing it now via Brew... 🍻
@@ -160,19 +169,29 @@ Restarting dnsmasq...
 Valet is configured to serve for TLD [.test]
 Restarting nginx...
 Valet installed successfully!
+```
+
+Run valet trust so password is not required for valet commands:
 
 ```bash
-#run valet trust so password is not required for valet commands
 valet trust
 ```
 
-Sudoers entries have been added for Brew and Valet.
+You should see the following output:
 
 ```bash
-#make valet use current php version
+Sudoers entries have been added for Brew and Valet.
+```
+
+make valet use current php version:
+
+```bash
 valet use php
 ```
 
+You should see the following output:
+
+```bash
 Stopping php...
 Unlinking current version: php
 Linking new version: php
@@ -180,11 +199,27 @@ Updating PHP configuration...
 Restarting php...
 Restarting nginx...
 Valet is now using php@7.4.
+```
 
 ## Valet Park Laravel projects
 
+To be able to server all Laravel projects using `myprojectname.test` URL we need to park all the projects in their parent directory.
+
 ```bash
-cd code/laravel
+cd directory_where_all_my_laravel_projects_reside
+#park all the projects
 valet park
+#list parked projects
 valet parked
+```
+
+You should see the output below:
+
+```bash
++-------+-----+-------------------+------------------------------------------------------+
+| Site  | SSL | URL               | Path                                                 |
++-------+-----+-------------------+------------------------------------------------------+
+| blog  |     | http://blog.test  | /directory_where_all_my_laravel_projects_reside/blog |
+| todo  |     | http://todo.test  | /directory_where_all_my_laravel_projects_reside/todo |
++-------+-----+-------------------+------------------------------------------------------+
 ```
