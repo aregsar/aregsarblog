@@ -107,6 +107,8 @@ Connect to a MySQL server:
 mysqlsh --sql -h 127.0.0.1 -P 3306 -D mydb -u myname -pmypassword
 ```
 
+I have more detailed posts on installing MySQL clients at [use-mysql-cli-to-connect-to-mysql](https://aregsar.com/blog/2020/use-mysql-cli-to-connect-to-mysql)
+
 ## Install the redli Redis CLI
 
 Install the client:
@@ -136,6 +138,8 @@ To connect to Digitalocean using SSL we add the --tls flag:
 ```bash
 redli --tls -h host -p port -a password
 ```
+
+I have more detailed posts on installing Redis clients at [use-redli-cli-to-connect-to-redis](https://aregsar.com/blog/2020/use-redli-cli-to-connect-to-redis)
 
 ## Install applications
 
