@@ -74,8 +74,67 @@ brew install git
 brew install gh
 brew install python
 brew install httpie
+```
+
+To install the standard MySQL CLI and the standard Redis CLI, you need to install the full server packages using brew:
+
+```bash
 brew install redli
 brew install mysqlcli
+```
+
+These will make the `mysql` CLI and `redis-cli` CLI commands available globally.
+
+I however opt to install MySQL and Redis clients recommended by Digitalocean that work well with their managed MySQL and Redis servers. The instructions to download and install those clients are in following two sections.
+
+## Install the mysqlsh MySQL CLI
+
+Install the client:
+
+```bash
+cd ~/Applications
+wget https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-8.0.20-macos10.15-x86-64bit.tar.gz
+tar xvf mysql-shell-8.0.20-macos10.15-x86-64bit.tar.gz
+rm mysql-shell-8.0.20-macos10.15-x86-64bit.tar.gz
+ln -s /Users/aregsarkissian/Applications/mysql-shell-8.0.20-macos10.15-x86-64bit/bin/mysqlsh /usr/local/bin/
+```
+
+> I run docker containers to run MySQL sever locally so I have no need to install MySQL server on my development machine.
+
+Connect to a MySQL server:
+
+```bash
+mysqlsh --sql -h 127.0.0.1 -P 3306 -D mydb -u myname -pmypassword
+```
+
+## Install the redli Redis CLI
+
+Install the client:
+
+```bash
+cd ~/Applications
+wget https://github.com/IBM-Cloud/redli/releases/download/v0.4.4/redli_0.4.4_darwin_amd64.tar.gz
+tar xvf redli_0.4.4_darwin_amd64.tar.gz
+rm redli_0.4.4_darwin_amd64.tar.gz
+ln -s /Users/aregsarkissian/Applications/redli /usr/local/bin/
+```
+
+> I run docker containers to run Redis server locally so I have no need to install MySQL server on my development machine.
+
+Connect to a Redis server:
+
+```bash
+#connect to Redis server
+redli -h 127.0.0.1 -p 8000 -a password
+
+#connect to Redis server on localhost
+redli -p 8000 -a password
+```
+
+To connect to Digitalocean using SSL we add the --tls flag:
+
+```bash
+redli --tls -h host -p port -a password
 ```
 
 ## Install applications
@@ -185,13 +244,19 @@ Test key by cloning a repo:
 git clone git@github.com:yourrepousername/myrepo.git
 ```
 
-## System Preferences
+## Setting up System Preferences
+
+To setup right click to pop up context menu, go to:
 
 system preferences > trackpad > right click dropdown
 
+To setup three finger window drag using the trackpad, got to:
+
 system preferences > accessibility > pointer control window drag
 
-finder preferences > sidebar add home directory
+To setup finder search directory preferences to search the home directory, go to:
+
+finder preferences > sidebar > add home directory
 
 ## Resources
 

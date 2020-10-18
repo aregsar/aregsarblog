@@ -4,7 +4,9 @@ October 15, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I detail the PHP and Node packages that I install globally on my Mac for local Laravel development.
 
-Prior to post I have the Homebrew package manager installed as detailed at [my-vscode-php-development-setup](https://aregsar.com/blog/2020/my-vscode-php-development-setup).
+Prior to this post I have the Homebrew package manager installed as detailed at [my-macbook-developer-setup/](https://aregsar.com/blog/2020/my-macbook-developer-setup). The Homebrew `brew` command is used in this post to install CLI tools and server binaries.
+
+Also after I setup my Mac for PHP and Laravel development, I have a related post on how to configure VSCode for PHP and Laravel development at [my-vscode-php-development-setup](https://aregsar.com/blog/2020/my-vscode-php-development-setup).
 
 ## Install Node Version Manager
 
