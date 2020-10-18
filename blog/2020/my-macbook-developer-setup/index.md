@@ -171,7 +171,7 @@ sqlitebrowser
 wireshark
 postman
 
-## Create symlinks
+## Create symlinks to launch editors from the command line
 
 Create symlinks to launch editor applications from the command line:
 
@@ -183,7 +183,7 @@ ln -s "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code" /us
 
 Now we can type `subl`, `code` or `pstorm` from any directory to launch the respective editors, provided the PATH variable contains the `/usr/local/bin/` path.
 
-## Update the PATH variable
+## Update the system PATH variable
 
 ```bash
 cd ~
