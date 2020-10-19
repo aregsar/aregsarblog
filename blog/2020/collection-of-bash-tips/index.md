@@ -109,62 +109,122 @@ Switch back to the previous tab an see the output of tail command.
 
 Various bash command tips
 
-## file descriptors 0, 1 and 2
+## File descriptors 0, 1 and 2
 
-stdin #fd 0
-stdout #fd 1
-stderr #fd 2
+Many bash commands use stdin,stdout and stderr that are represented as file descriptor (fd) numbers:
+
+stdin => 0
+stdout => 1
+stderr => 2
 
 ### Variable interpolation
 
-the ${} means contents of the variable var is interpolated with the surrounding text
-a${var}text
+To interpolate the variable `$var` use `${var}`.
 
-Otherwise if we dont use ${} then becomes contents of the variable avartext,
-$avartext
+The `{}` brackets wrapped around text portion of a variable `$var` means that the contents of the variable `var` is interpolated with the surrounding text.
+
+Otherwise `$varabcd` would be assumed the `$varabcd` variable, instead of the `$var` variable followed by the text `abcd` like `${var}abcd` would.
 
 ### Command evaluation
 
+To evaluate a command and interpolate its output with surrounding text use the \$() wrapper around the command.
+
+The format is \$(command):
+
+Example:
+
+```bash
+#interpolate the path of the python executable determined using the `which python` command.
 export PYTHON_HOME=\$(which python)
+```
 
 ### Open html file or URL in default browser
 
 $ open index.html
 $ open https://www.google.com
 
-### multiline file input
+### Insert newline into file
 
+The `echo` command will by default add a newline after the text we echo to a file. So everytime we append another string to the file using echo, the new string will appear on the next line.
+
+```bash
+echo "hello" > test
+echo "world" >> test
+cat test
+```
+
+Adding the `\n` character at the end of the string will insert an additional newline.
+
+```bash
 echo "hello\n" > test
-cat message
+echo "world" >> test
+cat test
+```
 
-\$ cat > hello << EOL
+We can add as many `\n` characters at the end of the string to insert more newlines
 
-> !/bin/bash
+```bash
+echo "hello\n\n\n\n" > test
+echo "world" >> test
+cat test
+```
+
+The newline can placed anywhere within the string as well to insert newline between text
+
+```bash
+echo "hello\nworld" > test
+cat test
+
+echo "\n\nhello\nworld" > test
+cat test
+```
+
+### multiline
+
+By using the `EOL` symbol with the `cat` command we can interactively add more lines until the closing `EOL` symbol on the last line completes the command.
+
+Create file and add multiple lines:
+
+```bash
+cat > test << EOL
+>!/bin/bash
 > hello
 > world
 > EOL
 
-\$ cat hello
+cat test
+```
 
-\$ cat >> hello << EOL
+Keep appending more lines:
 
+```bash
+cat >> test << EOL
 > once
 > more
 > EOL
 
-\$ cat hello
+cat test
+```
 
 ### Curl command piping
 
+Variations of the same command
+
+```bash
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 curl -o - https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+```
 
 ### Wget command piping
 
+Variations of the same command
+
+```bash
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 wget -qO - https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 wget -q -O- https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
 wget -q -O - https://raw.githubusercontent.com/creationix/nvm/v0.33.0/install.sh | bash
+```
 
 ## bash script tips
 
@@ -172,8 +232,15 @@ Various script file tips
 
 ### Give executable permissions Script
 
-$ chmod +x myscript.sh
-$ ./myscript
+Assume we have a script file called myscript:
+
+```bash
+#make the script file executable
+chmod +x myscript
+
+#execute the script
+./myscript
+```
 
 ### set environment variable used by executed script
 
