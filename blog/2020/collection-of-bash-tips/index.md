@@ -117,6 +117,12 @@ stdin => 0
 stdout => 1
 stderr => 2
 
+### dump all environment variables
+
+```bash
+env
+```
+
 ### Variable interpolation
 
 To interpolate the variable `$var` use `${var}`.
@@ -250,17 +256,40 @@ FOO=bar bash -c 'command1 args | command2'
 
 ### Setting Script language
 
-```bash
-!env /usr/local/bin/node
+starting a script file with the `#!` line tells the shell process running the script the interpreter to use to execute the script.
 
-!/usr/local/bin/node
+Bash script example:
+
+Use explicit bash interpreter
+
+```bash
+#!/bin/bash
+```
+
+Alternate form uses default bash interpreter
+
+```bash
+#!/usr/bin/env bash
+```
+
+PHP script example:
+
+```bash
+#!/usr/local/bin/php
 ```
 
 ### Script error flags
 
+Use the set command to set the error handling strategy of the script
+
 ```bash
--e
+#!/bin/bash
+set -euo pipefail
 ```
+
+“-e” ensures that your script stops on first command failure.
+“-u” ensures that your script exits on the first unset variable encountered.
+“-o pipefail” ensures that if any command in a set of piped commands failed, the overall exit status is the status of the failed command
 
 ### Script command line arguments
 
@@ -280,10 +309,24 @@ number of arguments
 
 \$#
 
-# script text
+script text
 
 \$0
 
-# first argumemt
+first argument
 
 \$1
+
+## resources
+
+https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps
+
+https://ashishb.net/all/the-first-two-statements-of-your-bash-script-should-be
+
+https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail
+
+https://nickjanetakis.com/blog/executing-code-after-an-error-occurs-with-bash-when-using-set-e
+
+https://nickjanetakis.com/blog/allowing-for-errors-in-bash-when-you-have-set-e-defined
+
+https://nickjanetakis.com/blog/here-is-why-you-should-quote-your-variables-in-bash
