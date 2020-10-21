@@ -114,16 +114,45 @@ stdout => 1
 stderr => 2
 
 ```bash
-descriptor symbols
-&1 means filedescriptor 1, stdout
-&2 means filedescriptor 2, stderror
+#Descriptor symbols allow redirects to point to the stdout and stderr file descriptors
 
-redirect symbols
-means it points the specified or default descriptor to a destination file where the content written to that descriptor will be sent to
-1> #redirect file descriptor 1
+#Below are the descriptor symbols for stdin and stdout
+
+# filedescriptor 1 symbol for stdout
+&1
+
+# filedescriptor 2 symbol for stder
+&2
+
+#Redirect symbols point the specified or default descriptor to a destination file where the content written to that descriptor will be sent to:
+
+#Below are the rediect symbols for stdin and stdout
+
+#redirect stdout file descriptor 1
+1>
+
+#redirect stdout file descriptor 1. File descriptor 1 is assumed as the default.
+>
+
+#redirect stderr file descriptor 1
 2> #redirect file descriptor 2
-> #redirect file descriptor 1 (implicit by default)
+```
 
+We can use the redirect symbol to redirect output of a command written to stdout to a file instead using the default stdout redirect symbol
+
+some_command > some_file
+
+or the equivalent using the explicit stdout redirect symbol
+
+some_command 1> some_file
+
+We can also redirect any errors from a command written to stderr to a file instead.
+
+some_command_with_errors 2> some_file
+
+Some examples below:
+
+```bash
 #echo text to standar output
 echo 'abcd'
 #echo text to standard output that is redirected to a file
@@ -140,6 +169,10 @@ echo 'xyz' 1>> testfile
 command 2> file
 ls -0 2> file
 ```
+
+We can redirect the stderr to the stdout file descriptor as well
+using the expression `2>&1` which is the concatenation of the `2>` stderr redirect to the `&1` stdout file descriptor.
+This will be useful in commands with multiple redirects that we will see in the next section.
 
 ### Multiple redirects
 
