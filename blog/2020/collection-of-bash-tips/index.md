@@ -107,48 +107,70 @@ Various bash command tips
 
 ### stdout, stderr and redirects
 
-Many bash commands use stdin,stdout and stderr that are represented as file descriptor (fd) numbers:
+Many bash commands use stdin, stdout and stderr that are represented using file descriptor numbers:
 
 stdin => 0
 stdout => 1
 stderr => 2
 
+File Descriptor symbols allow redirects to point to the stdout and stderr file descriptors.
+
+Below are the file descriptor symbols for stdin and stdout:
+
 ```bash
-#Descriptor symbols allow redirects to point to the stdout and stderr file descriptors
-
-#Below are the descriptor symbols for stdin and stdout
-
 # filedescriptor 1 symbol for stdout
 &1
 
 # filedescriptor 2 symbol for stder
 &2
+```
 
-#Redirect symbols point the specified or default descriptor to a destination file where the content written to that descriptor will be sent to:
+Redirect symbols point the specified or default descriptor to a destination file where the content written to that descriptor will be sent to:
 
-#Below are the rediect symbols for stdin and stdout
+Below are the redirect symbols for stdin and stdout:
 
+```bash
 #redirect stdout file descriptor 1
 1>
 
 #redirect stdout file descriptor 1. File descriptor 1 is assumed as the default.
 >
 
-#redirect stderr file descriptor 1
-2> #redirect file descriptor 2
+#redirect stderr file descriptor 2
+2>
 ```
 
-We can use the redirect symbol to redirect output of a command written to stdout to a file instead using the default stdout redirect symbol
+These redirect symbols will overwrite the content of the destination they redirect to, if the command is re executed.
+If we want to redirect and append the outputs of the command we need to use the append version of the symbols shown below:
 
+```bash
+#redirect and append stdout file descriptor 1
+1>>
+
+#redirect and append stdout file descriptor 1. File descriptor 1 is assumed as the default.
+>>
+
+#redirect and append stderr file descriptor 2
+2>>
+```
+
+We can use the stdout redirect symbol to redirect output of a command written to stdout to a file instead using the default stdout redirect symbol:
+
+```bash
 some_command > some_file
+```
 
-or the equivalent using the explicit stdout redirect symbol
+Or the equivalent using the explicit stdout redirect symbol:
 
+```bash
 some_command 1> some_file
+```
 
 We can also redirect any errors from a command written to stderr to a file instead.
 
+```bash
 some_command_with_errors 2> some_file
+```
 
 Some examples below:
 
@@ -156,18 +178,16 @@ Some examples below:
 #echo text to standar output
 echo 'abcd'
 #echo text to standard output that is redirected to a file
-command > file
 echo 'abcd' > testfile
 echo 'xyz' >> testfile
 
 #echo text to standard output that is redirected to a file
-command 1> file
 echo 'abcd' 1> testfile
 echo 'xyz' 1>> testfile
 
-
-command 2> file
-ls -0 2> file
+#redirect error output of the failed ls command to the test file
+ls -0 2> testfile
+ls -0 2>> testfile
 ```
 
 We can redirect the stderr to the stdout file descriptor as well
@@ -191,9 +211,11 @@ some_command 2>&1 > somefile
 
 #There is a shorthand that is the equivalent:
 some_command &> somefile
+```
 
-#below are examples:
+Below are examples:
 
+```bash
 #The following three echo commands are equivalent:
 echo 'abcd' > testfile 2>&1
 echo 'abcd' 1>testfile 2>&1
@@ -216,7 +238,13 @@ ls -0 > /dev/null 2>&1
 #If we send stdin and stdout to same text file the effect is not the same as the ouput from each will not get interleaved
 ls -0 >testfile 2>testfile
 
-#A more practical examlple is this command to run the laravel scheduler
+#redirect to separate files (note testfile1 will be empty since we only have stderr outout)
+ls -0 >testfile1 2>testfile2
+
+#a valid ls command will have an empty testfile1 file because we will only have stdout output)
+ls >testfile1 2>testfile2
+
+#A more practical examlple is this command to run the laravel scheduler as a cron job
 * * * * * cd /PATH-TO-LARAVEL-APP && php artisan schedule:run >> /dev/null 2>&1
 ```
 
