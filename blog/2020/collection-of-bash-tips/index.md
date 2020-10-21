@@ -1,36 +1,33 @@
-# collection of bash tips
+# Collection Of Bash Tips
 
 October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[collection of bash tips](https://aregsar.com/blog/2020/collection-of-bash-tips)
+[Collection Of Bash Tips](https://aregsar.com/blog/2020/collection-of-bash-tips)
 
 ## list processes running on system
 
-Command to list processes running on the system:
+Use the `ps` command to list processes running on the system:
 
 ```bash
-ps aux
+ps aux | grep php
 ```
 
 Flags:
 
-a = show processes for all users
+a = show rows processes for users attached to terminal session
 u = display the process's user/owner
-x = also show processes not attached to a terminal
+x = also show rows of processes not attached to a terminal
 
-Examples:
+Using any the above flags will display all columns.
+
+Instead we can use the `-Ao` flag with only the specific columns names that we want displayed:
 
 ```bash
-ps aux | grep nginx
-
-# Check what user PHP-FPM is running as (it's www-data)
-ps aux | grep php
-
-#only display user,pid and command columns in output
-ps -Ao user,pid,command | grep -v grep | grep 127
+# only display user,pid and command columns in output
+ps -Ao user,pid,command | grep php
 ```
 
-## check servers running on ports
+## Check servers running on ports
 
 Command to show network statistics:
 
@@ -72,7 +69,6 @@ Examples:
 
 ```bash
 #Watch command to watch the foo process
-
 watch 'ps aux | grep foo'
 
 #this wont work since it will execute watch over 'ps' command instead of result of entire command chain
@@ -185,7 +181,7 @@ echo "\n\nhello\nworld" > test
 cat test
 ```
 
-### multiline
+### multiline interactive input
 
 By using the `EOL` symbol with the `cat` command we can interactively add more lines until the closing `EOL` symbol on the last line completes the command.
 
@@ -210,6 +206,78 @@ cat >> test << EOL
 > EOL
 
 cat test
+```
+
+Overwrite content:
+
+```bash
+cat > test << EOL
+> hello
+> again
+> EOL
+
+cat test
+```
+
+## cat to files
+
+```bash
+#create a file with some text
+echo 'abcd' > test
+
+#print to output
+cat test
+
+#create a new file test1 from test file
+cat test > test1
+
+#print to output
+cat test1
+
+#append into test 1
+cat test >> test1
+
+#print to output
+cat test1
+
+#create a new file test2 from test1 file
+cat test1 > test2
+
+#print to output
+cat test2
+
+#print concatenated files to output
+cat test1 test2
+
+#concatenate both files into new file 3
+cat test1 test2 > test3
+
+#print to output
+cat test3
+
+#append concatenated file to test 3
+cat test1 test2 >> test3
+
+#print to output
+cat test3
+```
+
+## cat standard input
+
+We can cat standard input to a file as well
+
+Here is an example of cat-ing the standard input piped in from a ssh session.
+The cat command writes the id_rsa.pub to standard output of our local machine which is piped
+into the ssh command as standard input of the ssh command. Cat is then run on the remote machine via ssh
+command line argument that redirects the stdin to append the authorized_keys file using the `>>` append redirection symbol.
+
+Instead of explicitly having to specify `/dev/stdin`, The cat command also accepts a single dash character as a shorthand that is equivalent to `/dev/stding`.
+
+```bash
+cat ~/.ssh/id_rsa.pub | ssh root@<YOUR_IP> 'cat /dev/stdin >> ~/.ssh/authorized_keys'
+
+#shorthand with `cat -`
+cat ~/.ssh/id_rsa.pub | ssh root@<YOUR_IP> 'cat - >> ~/.ssh/authorized_keys'
 ```
 
 ### Curl command piping
@@ -322,6 +390,12 @@ first argument
 https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps
 
 https://ashishb.net/all/the-first-two-statements-of-your-bash-script-should-be
+
+https://linuxize.com/post/bash-redirect-stderr-stdout/
+
+https://medium.com/@codenameyau/step-by-step-breakdown-of-dev-null-a0f516f53158
+
+https://unix.stackexchange.com/questions/497207/difference-between-dev-null-21-and-dev-null-dev-null
 
 https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail
 
