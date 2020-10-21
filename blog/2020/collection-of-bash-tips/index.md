@@ -105,13 +105,87 @@ Switch back to the previous tab an see the output of tail command.
 
 Various bash command tips
 
-## File descriptors 0, 1 and 2
+### stdout, stderr and redirects
 
 Many bash commands use stdin,stdout and stderr that are represented as file descriptor (fd) numbers:
 
 stdin => 0
 stdout => 1
 stderr => 2
+
+```bash
+descriptor symbols
+&1 means filedescriptor 1, stdout
+&2 means filedescriptor 2, stderror
+
+redirect symbols
+means it points the specified or default descriptor to a destination file where the content written to that descriptor will be sent to
+1> #redirect file descriptor 1
+2> #redirect file descriptor 2
+> #redirect file descriptor 1 (implicit by default)
+
+#echo text to standar output
+echo 'abcd'
+#echo text to standard output that is redirected to a file
+command > file
+echo 'abcd' > testfile
+echo 'xyz' >> testfile
+
+#echo text to standard output that is redirected to a file
+command 1> file
+echo 'abcd' 1> testfile
+echo 'xyz' 1>> testfile
+
+
+command 2> file
+ls -0 2> file
+```
+
+### Multiple redirects
+
+The redirect symbol `>` or append redirect symbols `>>` can be used more then once at the end of the command line to redirect stdin or stderr.
+
+```bash
+#echo text to standard output, standard error is redirected to standard output and standard output is redirected to file
+#the first redirect symbol redirets the output of some_command to somefile
+# the secont redirect symbol in 2>&1 redirects the standard error represented by the file descriptor 2 to the standard
+#outout represented by the &1
+some_command > somefile 2>&1
+
+#the reverse will not work to send the stderror content into somefile since the the stderror is redirected to stdout before
+#the standard out is redirected to somefile.
+some_command 2>&1 > somefile
+
+#There is a shorthand that is the equivalent:
+some_command &> somefile
+
+#below are examples:
+
+#The following three echo commands are equivalent:
+echo 'abcd' > testfile 2>&1
+echo 'abcd' 1>testfile 2>&1
+echo 'abcd' &> testfile
+
+#The following three echo commands are equivalent:
+#here the stdout and std in are redirected to /dev/null instead of a file
+echo 'abcd' > /dev/null 2>&1
+echo 'abcd' 1> /dev/null 2>&1
+echo 'abcd' &> /dev/null
+
+#Of course the above will not generate any erros. so a more practical example
+#can use the ls command with an invalid flag to generate an error:
+#redirect to file and redirect error to output to same file
+ls -0 > testfile 2>&1
+
+#or to suppress any output
+ls -0 > /dev/null 2>&1
+
+#If we send stdin and stdout to same text file the effect is not the same as the ouput from each will not get interleaved
+ls -0 >testfile 2>testfile
+
+#A more practical examlple is this command to run the laravel scheduler
+* * * * * cd /PATH-TO-LARAVEL-APP && php artisan schedule:run >> /dev/null 2>&1
+```
 
 ### dump all environment variables
 
