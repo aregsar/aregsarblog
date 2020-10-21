@@ -23,8 +23,8 @@ Using any the above flags will display all columns.
 Instead we can use the `-Ao` flag with only the specific columns names that we want displayed:
 
 ```bash
-# only display user,pid and command columns in output
-ps -Ao user,pid,command | grep php
+# only display uid,user,pid and command columns in output
+ps -Ao uid,user,pid,command | grep php
 ```
 
 ## Check servers running on ports
@@ -320,6 +320,9 @@ cat test
 
 By using the `EOL` symbol with the `cat` command we can interactively add more lines until the closing `EOL` symbol on the last line completes the command.
 
+The `EOL` (End of line) keyword is used with the stdin redirect symbol `<` or append stdin redirect symbol `<<` to
+redirect input lines typed in interactively in the terminal as stdin that then get redirected to stdout using the stdout symbol `>`. The EOL keyword is used to end the input session.
+
 Create file and add multiple lines:
 
 ```bash
@@ -399,20 +402,35 @@ cat test3
 
 ## cat standard input
 
-We can cat standard input to a file as well
+We saw how use the cat command to output to a file, by interactive input through stdin.
 
-Here is an example of cat-ing the standard input piped in from a ssh session.
-The cat command writes the id_rsa.pub to standard output of our local machine which is piped
-into the ssh command as standard input of the ssh command. Cat is then run on the remote machine via ssh
-command line argument that redirects the stdin to append the authorized_keys file using the `>>` append redirection symbol.
+We can also use the cat command to get text from stdin and use the stdin redirect to redirect stdin to a file.
 
 Instead of explicitly having to specify `/dev/stdin`, The cat command also accepts a single dash character as a shorthand that is equivalent to `/dev/stding`.
+
+Both forms are shown in the example below:
 
 ```bash
 cat ~/.ssh/id_rsa.pub | ssh root@<YOUR_IP> 'cat /dev/stdin >> ~/.ssh/authorized_keys'
 
 #shorthand with `cat -`
 cat ~/.ssh/id_rsa.pub | ssh root@<YOUR_IP> 'cat - >> ~/.ssh/authorized_keys'
+```
+
+The cat command writes the id_rsa.pub to standard output of our local machine which is piped
+into the ssh command as standard input of the ssh command. Cat is then run on the remote machine via ssh
+command line argument that redirects the stdin to append the authorized_keys file using the `>>` append redirection symbol.
+
+## run command in background
+
+```bash
+command &
+command &>/dev/null &
+ps -eaf | grep php
+# -A flag means Select all processes, including those of other users.
+ps -Ao uid,user,pid,command | grep php
+#pid=1713
+kill 1713
 ```
 
 ### Curl command piping
@@ -520,6 +538,54 @@ first argument
 
 \$1
 
+## permissions
+
+```bash
+echo $USER
+sudo chown -R $USER:$USER /var/www
+sudo chmod -R 755 /var/www
+
+cd /var/www/myapp
+sudo chown -R www-data: storage bootstrap
+```
+
+## grep
+
+```bash
+cd /usr/local/bin && la | grep code
+cd /usr/local/bin && la | grep subl
+cd /usr/local/bin && la | grep pstorm
+```
+
+## find
+
+```bash
+root@localhost:~# find / \( -iname "php.ini" -o -name "www.conf" \)
+/etc/php/7.0/fpm/php.ini
+/etc/php/7.0/fpm/pool.d/www.conf
+/etc/php/7.0/cli/php.ini
+```
+
+## input processing
+
+```bash
+#non exported variable used in current shell
+instr="a,b,c,d,e"
+echo "${instr//,/$'\n'}"  ## Shell parameter expansion with escaped newline
+
+instr="a,b,c,d,e"
+echo "${instr//,/ }"  ## Shell parameter expansion
+
+$@
+$*
+
+$ tr ',' '\n' <<<"$instr"  ## With "tr"
+
+$ sed 's/,/\n/g' <<<"$instr"  ## With "sed"
+
+$ xargs -d, -n1 <<<"$instr"  ## With "xargs"
+```
+
 ## resources
 
 https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps
@@ -539,3 +605,5 @@ https://nickjanetakis.com/blog/executing-code-after-an-error-occurs-with-bash-wh
 https://nickjanetakis.com/blog/allowing-for-errors-in-bash-when-you-have-set-e-defined
 
 https://nickjanetakis.com/blog/here-is-why-you-should-quote-your-variables-in-bash
+
+https://stackoverflow.com/questions/9390124/whats-difference-between-21-dev-null-and-21-dev-null
