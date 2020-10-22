@@ -530,29 +530,61 @@ set -euxo pipefail
 
 ### Script command line arguments
 
-$*, $@, $# ,$0, \$1 used in bash script to refer to script and arguments
+`$*, $@, $# ,$0, $1` are used in bash script to refer to script and arguments
 
-$ script $arg1 \$arg2
+```bash
+script $arg1 $arg2
+```
 
-"$*" quotes the entire list of arguments "$arg1 \$arg2" output as a string
+`"$*"` quotes the entire list of arguments `"$arg1 $arg2"` output as a string
 
-"$@" quotes all arguments individual "$arg1" "\$arg2" output as a string
+`"$@"` quotes all arguments individual `"$arg1" "\$arg2"` output as a string
 
 When they are not quoted, $* and $@ are result in the same argument list string.
 
 Should not use without quotes because it will break if arguments contain spaces or wildcards.
 
-number of arguments
+Example of a bash alias I setup in my `.zshrc` file that uses the `"$*"` arguments.
 
-\$#
+```bash
+function gg {
+    #quote all arguments as a single message
+    #so we can write commit message without quotes
+    #gg this is my commit message sans quotes
+    #note: commit message can not have quotes or left and right brackets
+    if ! [ $# -eq 0 ]
+    then
+        git add -A
+        git commit -am "$*"
+        git status
+    fi
+}
+```
 
-script text
+This allows me to type in my git commit messages like so:
 
-\$0
+```bash
+gg my new commit
+```
 
-first argument
+Which will transform to:
 
-\$1
+```bash
+git commit -am "my new commit"
+```
+
+This is because `$*` representing the entire `my new commit` arguments is wrapped in quotes.
+
+Also note the script checks that the number of arguments to the `gg` command is not zero using:
+
+```bash
+#number of arguments
+$#
+```
+
+We could refer to the script text `gg` using the `$0`.
+
+We could also refer to the `my` argument using `$1`, the `new` argument using `$2` and so on.
 
 ## permissions
 
@@ -587,19 +619,11 @@ root@localhost:~# find / \( -iname "php.ini" -o -name "www.conf" \)
 ```bash
 #non exported variable used in current shell
 instr="a,b,c,d,e"
-echo "${instr//,/$'\n'}"  ## Shell parameter expansion with escaped newline
+echo "${instr//,/$\n}"  ## Shell parameter expansion with commas replaced by newlins using echo
+$ tr ',' '\n' <<<"$instr" ## Shell parameter expansion with commas replaced by newlins using tr
 
 instr="a,b,c,d,e"
-echo "${instr//,/ }"  ## Shell parameter expansion
-
-$@
-$*
-
-$ tr ',' '\n' <<<"$instr"  ## With "tr"
-
-$ sed 's/,/\n/g' <<<"$instr"  ## With "sed"
-
-$ xargs -d, -n1 <<<"$instr"  ## With "xargs"
+echo "${instr//,/ }"  ## Shell parameter expansion with commas replaced by spaces
 ```
 
 ## resources
