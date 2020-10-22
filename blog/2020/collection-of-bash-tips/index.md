@@ -320,8 +320,9 @@ cat test
 
 By using the `EOL` symbol with the `cat` command we can interactively add more lines until the closing `EOL` symbol on the last line completes the command.
 
-The `EOL` (End of line) keyword is used with the stdin redirect symbol `<` or append stdin redirect symbol `<<` to
-redirect input lines typed in interactively in the terminal as stdin that then get redirected to stdout using the stdout symbol `>`. The EOL keyword is used to end the input session.
+the stdin redirect symbol `<<` is used to redirect input lines typed in interactively in the terminal as stdin that then get redirected to stdout using the stdout symbol `>`. The `EOL` as the session terminator keyword. Any other word can be used in its place as long as the word at both ends match. The keywords will not be added to the content of the file.
+
+> Note that if we had used the `<` stdin redirection symbol `cat > test < EOL`, then `EOL` will be treated as a filename that is redirected by stdin, not an interactive session.
 
 Create file and add multiple lines:
 
@@ -353,6 +354,18 @@ cat > test << EOL
 > hello
 > again
 > EOL
+
+cat test
+```
+
+We can use any characters as the terminator as long as both sides match.
+
+```bash
+cat > test << MYTerm
+>!/bin/bash
+> hello
+> world
+> MYTERM
 
 cat test
 ```
@@ -501,11 +514,14 @@ PHP script example:
 
 ### Script error flags
 
-Use the set command to set the error handling strategy of the script
+Use the set command to set the error handling strategy of the script.
+Include it after the first line `#!/usr/bin/env bash`.
 
 ```bash
-#!/bin/bash
+#exit script anywhere the in the command pipeline on error or unset variable
 set -euo pipefail
+#also prints out commmands and arguments values that are executed
+set -euxo pipefail
 ```
 
 “-e” ensures that your script stops on first command failure.
@@ -592,18 +608,16 @@ https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environment
 
 https://ashishb.net/all/the-first-two-statements-of-your-bash-script-should-be
 
-https://linuxize.com/post/bash-redirect-stderr-stdout/
-
-https://medium.com/@codenameyau/step-by-step-breakdown-of-dev-null-a0f516f53158
-
-https://unix.stackexchange.com/questions/497207/difference-between-dev-null-21-and-dev-null-dev-null
-
 https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail
-
-https://nickjanetakis.com/blog/executing-code-after-an-error-occurs-with-bash-when-using-set-e
 
 https://nickjanetakis.com/blog/allowing-for-errors-in-bash-when-you-have-set-e-defined
 
 https://nickjanetakis.com/blog/here-is-why-you-should-quote-your-variables-in-bash
 
+https://linuxize.com/post/bash-redirect-stderr-stdout/
+
+https://medium.com/@codenameyau/step-by-step-breakdown-of-dev-null-a0f516f53158
+
 https://stackoverflow.com/questions/9390124/whats-difference-between-21-dev-null-and-21-dev-null
+
+https://unix.stackexchange.com/questions/497207/difference-between-dev-null-21-and-dev-null-dev-null
