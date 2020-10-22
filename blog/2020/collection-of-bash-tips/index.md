@@ -1,8 +1,10 @@
 # Collection Of Bash Tips
 
-October 16, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+October 22, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Collection Of Bash Tips](https://aregsar.com/blog/2020/collection-of-bash-tips)
+This post list a collection of bash commands and scripts that I have collected over the years to be used as a reference.
+
+I also list resources on various bash topics at the end of the post.
 
 ## list processes running on system
 
@@ -628,20 +630,20 @@ echo "${instr//,/ }"  ## Shell parameter expansion with commas replaced by space
 
 ## resources
 
-https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps
+[how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps)
 
-https://ashishb.net/all/the-first-two-statements-of-your-bash-script-should-be
+[the-first-two-statements-of-your-bash-script-should-be](https://ashishb.net/all/the-first-two-statements-of-your-bash-script-should-be)
 
-https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail
+[safer_bash_scripts_with_set_euxo_pipefail](https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail)
 
-https://nickjanetakis.com/blog/allowing-for-errors-in-bash-when-you-have-set-e-defined
+[allowing-for-errors-in-bash-when-you-have-set-e-defined](https://nickjanetakis.com/blog/allowing-for-errors-in-bash-when-you-have-set-e-defined)
 
-https://nickjanetakis.com/blog/here-is-why-you-should-quote-your-variables-in-bash
+[here-is-why-you-should-quote-your-variables-in-bash](https://nickjanetakis.com/blog/here-is-why-you-should-quote-your-variables-in-bash)
 
-https://linuxize.com/post/bash-redirect-stderr-stdout/
+[bash-redirect-stderr-stdout](https://linuxize.com/post/bash-redirect-stderr-stdout)
 
-https://medium.com/@codenameyau/step-by-step-breakdown-of-dev-null-a0f516f53158
+[step-by-step-breakdown-of-dev-null](https://medium.com/@codenameyau/step-by-step-breakdown-of-dev-null-a0f516f53158)
 
-https://stackoverflow.com/questions/9390124/whats-difference-between-21-dev-null-and-21-dev-null
+[whats-difference-between-21-dev-null-and-21-dev-null](https://stackoverflow.com/questions/9390124/whats-difference-between-21-dev-null-and-21-dev-null)
 
-https://unix.stackexchange.com/questions/497207/difference-between-dev-null-21-and-dev-null-dev-null
+[difference-between-dev-null-21-and-dev-null-dev-null](https://unix.stackexchange.com/questions/497207/difference-between-dev-null-21-and-dev-null-dev-null)

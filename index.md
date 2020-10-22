@@ -1,5 +1,9 @@
 # All Posts
 
+October 22, 2020
+
+[Collection Of Bash Tips](https://aregsar.com/blog/2020/collection-of-bash-tips)
+
 October 15, 2020
 
 [Laravel Development MacBook Setup](https://aregsar.com/blog/2020/laravel-development-macbook-setup)
