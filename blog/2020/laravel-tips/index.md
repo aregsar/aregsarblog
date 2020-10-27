@@ -93,3 +93,15 @@ $jobs = PlanFilter::UsersOnBasePlan(Users)->map(fn($user){
 //run a batch of jobs each job will upgrade a specific user
 Bus::batch($jobs)->dispatch();
 ```
+
+## In memory vs database collections
+
+difference between Illuminate\Support\Collection and Illuminate\Database\Eloquent\Collection
+
+## Eloquent relations vs data access methods
+
+difference between model->relproperty->model vs model->relmethod()->model in eloquent relations when evaluated
+
+## Request properties and PHP magic methods
+
+accessing model->property in request and form request objects using magic get methods
