@@ -227,25 +227,43 @@ Open 'Command Palette' dropdown
 ### Other useful shortcuts
 
 toggle comment line(s)
+
 `cmd+/`
 
 Find in current File
+
 `cmd+f`
 
 close current file
+
 `cmd+w`
 
 Save current file
+
 `cmd+s`
 
 Save all modified files
+
 `cmd+opt+s`
 
 Open VSCode configuration settings UI
+
 `cmd+,` (cmd+comma)
 
 Close various panels
+
 `esc`
+
+## Editing with multiple cursors
+
+Hold the `option` key down and click the mouse cursor two or more locations to spawn multiple persistent cursors at those locations.
+Then release the `option` key.
+
+`opt+click`
+
+Then when you type characters, they will appear at all cursor locations.
+
+Hit escape or click anywhere to change to single cursor at that location.
 
 ## Extensions
 

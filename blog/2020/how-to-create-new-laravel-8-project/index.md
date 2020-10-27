@@ -79,6 +79,8 @@ php artisan serve
 
 Navigate to localhost:8000 to see the Laravel home page.
 
+> To check the `Laravel\Framework` package version installed a part of the generated `Laravel\Laravel` project scaffold, open the composer.json file and search for `Laravel\Framework` text to see the package version.
+
 ## Installing PHP Redis Extension using PECL
 
 If you intend to use Redis with your Laravel application you will need to install the PHP Redis extension using the PHP PECL CLI.

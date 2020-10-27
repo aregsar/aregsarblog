@@ -196,6 +196,8 @@ Blade UI kit example project
 
 [crafting-maintainable-laravel-applications](https://jasonmccreary.me/articles/crafting-maintainable-laravel-applications)
 
+[laravel-pseudo-daemons](https://aaronfrancis.com/2020/laravel-pseudo-daemons)
+
 ## Laravel Tips
 
 [new-laravel-migration-shortcuts-for-foreign-keys](https://joelclermont.com/post/2020-09/new-laravel-migration-shortcuts-for-foreign-keys)
