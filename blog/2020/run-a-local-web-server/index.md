@@ -2,6 +2,10 @@
 
 April 2, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
+In this post I detail how to run a web server on your local system using various languages.
+
+## Using NPX
+
 If you have NodeJS installed you can use the npx cli.
 
 ```bash
@@ -9,12 +13,39 @@ If you have NodeJS installed you can use the npx cli.
 npx serve .
 ```
 
+let's serve an html page
+
+```bash
+echo "<html><body>Hello</body></html>" > index.html
+npx serve .
+open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://localhost:5000
+```
+
+## Using PHP
+
 If you have PHP installed you can use the php cli.
 
 ```bash
-# serve files from the current directory and tail the web server output
-php -S localhost:5000 -t .
+# serve files from the current directory
+php -S localhost:8000
 ```
+
+Or
+
+```bash
+# serve files from the specified directory which happens to be the current directory
+php -S localhost:8000 -t .
+```
+
+let's serve an html page
+
+```bash
+echo "<?php phpinfo(); ?>" > index.php
+php -S localhost:8000
+open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://localhost:8000
+```
+
+## Using Python
 
 If you have Python 3 installed you can use the python cli.
 
@@ -50,6 +81,7 @@ parcel index.html -p 5000
 ```
 
 ### Setup ParcelJS using YARN
+
 If you have node installed and you installed the yarn package manager, you can install ParcelJS globally using the yarn cli.
 
 ```bash
@@ -76,9 +108,9 @@ Add index.html file in the directory that you run the local server and add the f
 
 ```html
 <html>
-<body>
-Hello
-</body>
+  <body>
+    Hello
+  </body>
 </html>
 ```
 
