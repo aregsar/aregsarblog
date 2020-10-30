@@ -8,7 +8,7 @@ October 15, 2020
 
 [Laravel Development MacBook Setup](https://aregsar.com/blog/2020/laravel-development-macbook-setup)
 
-October 15, 2020 by
+October 15, 2020
 
 [My MacBook Developer Setup](https://aregsar.com/blog/2020/my-macbook-developer-setup)
 
