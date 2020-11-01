@@ -34,6 +34,26 @@ $bv = $data['bv']
 @php $myVar = 'My Value';
 ```
 
+## $dates vs $casts
+
+Do not use Eloquent Model $dates property to cast dates. Use the $casts property instead.
+
+```php
+class User extends Model
+{
+    #do not use the $dates casting
+    #protected $dates = [
+    #   'created_at',
+    #];
+
+    #use the $casts casting which can cast to dates as well as other types
+    protected $casts = [
+        'is_admin' => 'boolean',
+        'created_at' => 'datetime'
+    ];
+}
+```
+
 ## Remove logic from blade views
 
 Sometimes we have conditional code based on some model state, like so:

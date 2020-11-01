@@ -82,6 +82,38 @@ settings (cmd+,) => editor > general - change font size with command-mouse wheel
 change font size
 cmd+mouse wheel
 
+## Turn off code folding
+
+from preferencesview > appearance > toolwindow bar (turn off)
+
+adds following xml to ~/Library/Application Support/JetBrains/PhpStorm2020.2/options/editor.xml
+
+```xml
+<application>
+  <component name="EditorSettings">
+    <option name="IS_FOLDING_OUTLINE_SHOWN" value="false" />
+  </component>
+</application>
+```
+
+### Copy default macos keymaps before making changes
+
+open settings prferences
+cmd+comma
+select keymap
+the keymaps pane dropdown defaults to macOS
+(you can select another editors keymaps such as sublime (macOS))
+click on the settings wheel next to the macOS selection
+select duplicate to copy the default phpstorm macOS keymaps
+type in name for duplicate (mykeymap) and hit enter
+now we have a child copy keymap named that hangs off of the its parent macOS keymaps in the editor pane, named mykeymap (with corresponding xml file in ~/Library/Application Support/JetBrains/PhpStorm2020.2/options
+or not!)
+that we can modify to override its parent, without changing the default macOS keymaps
+select search icon in panel to find shortcut by typing the shortcut in the search area.
+click on shortcut to select corresponding editor action and add or remove shortcuts for that editor action
+
+https://github.com/codepress/wp-phpstorm-settings#keymaps
+
 ## Editing keymaps
 
 Keymaps are the phpstorm keyboard shortcuts.
@@ -186,34 +218,176 @@ pop up breadcrumb menu `cmd+uparrow` or open project sidebar `cmd+1` to select a
 
 Navigate to desired directory using the left,right,up or down arrow keys. Use the enter key to expand directories.
 
-create new file\directory\class\etc when breadcrumb menu or sub menu item is selected
-cmd+n
+create new file\directory\class\etc when breadcrumb menu or sub menu item is selected by typing `cmd+n`
 
 ## Creating new file using breadcrumbs
 
-phpstorm creating and opening files and diretories using breadcrumb menu
+PhpStorm creating and opening files and directories using breadcrumb menu:
 
 pop up the breadcrumb menu
-cmd+uparrow
+
+`cmd+uparrow`
 
 navigate the bread crumb menu
-left or right arrow keys
 
-open a file selected in the breadcrumb menu or sub menu
-open a directory selected in breadcrumb menu or sub menu
-enter key
+`left or right arrow keys`
+
+open a file or directory selected in the breadcrumb menu or sub menu
+
+`enter key`
 
 create new file\directory\class\etc when breadcrumb menu or sub menu item is selected
-cmd+n
+
+`cmd+n`
 
 ## Other
 
 open run command box (type node or npm)
-doubletap-ctrl
+
+`doubletap-ctrl`
 
 open debug configuration dialog box (one time only)
-run > edit configurations
+
+`run > edit configurations`
+
+To insert the fully qualified namespace for a class name
+
+`Type in class name and hit tab key`
+
+## Set composer path in pstorm
+
+when we create a project in pstorm it asks to
+use existing composer file
+so we need to set the path
+which composer
+paste the result in text box
+/usr/local/bin/composer
+
+## Set PHP CLI path in pstorm including xdebug extension path
+
+(this is setup only for php script debugging. further configuration needed for laravel debugging)
+open a index.php script
+in pstorm menu
+select
+run > debug
+to debug
+will get error php interpreter not installed
+
+open preferences
+cmd+,
+in preferences list
+select project settings > php
+click browse on the interpreter to open a edit box
+which php
+paste the result path parent bin directory
+/usr/local/bin
+next to edit box it will detect and show the xdebug as the debugger if is installed and its configured
+otherwise we need to install and configure xdebug on our machine(same as for vscode)
+once configured pstorm should detect it
+
+## Aside: Installing XDebug
+
+Below are steps to install and configure xdebug:
+#install xdebug
+pecl install --force xdebug
+#show loaded php.ini configuration file
+php --ini
+Loaded Configuration File: /usr/local/etc/php/7.4/php.ini
+
+#xdebug settings in .ini file
+[xdebug]
+zend_extension="absolute/path/to/xdebug.so"
+xdebug.remote_enable=1
+xdebug.remote_port=9001
+xdebug.remote_host=localhost
+
+xdebug.remote_autorestart=1
+xdebug.profiler_enable=1
+xdebug.profiler_output_dir="path/to"
+xdebug.idekey=PHPSTORM
+
+## Configure XDebug for Laravel debugging
+
+open laravel project
+from pstorm menu
+select run > edit configurations
+this opens the run/debug configuration dialog
+
+from side panel
+select 'php web application' to configure
+(instead of selecting php script)
+
+click on setup a server button
+opens a server setting panel
+setup a new server with the following settings
+server Name: laravel
+Host: localhost
+Port: 8000 or 80?
+debugger:xdebug
+
+click OK to setup and go back to the server settings panel
+now configure the laravel server we setup
+
+configuration name: myproject
+select Server= laravel
+
+set a start URL to the url route for the controller action we
+want to debug
+
+set start URL: /
+default browser: chrome
+apply the configuration
+
+now should be able to set a breakpoint in the controller action
+and run debug and break in the controller action:
+
+from pstorm menu
+select run > debug to start debugging
+
+## Setup PHPUnit
+
+Set phpunit script path to be able to run tests from pstorm
+
+open the laravel project
+
+open project settings:
+cmd+comma
+
+select:
+php > phpunit
+
+select:
+'use custom loader'
+
+paste in the path in the 'path to script' text box
+~/zdev/laravel/myproject/vendor/autoload.php
+
+Now while we are in a specific file focused
+we can select run to run tests
+by right clicking in class or method
+
+## Setting search scopes
+
+For PhpStorm to seach composer vendor folder
+
+configured/initialized composer for my PHP project. Now All folders in my /vendor directory are listed as "library root" and are not searched when using "Find In Path..."
+
+Furthermore I cannot add them as a scope to the project as they are not shown since they are "non-project files"?
+
+I would like to be able to search the folder normally or at least add them to a scope. All the folders are included in my composer settings.
+
+set the Custom option in Scope. Projects and Libraries
+On Find in Path dialog
+You either have to specify the actual path to work with (use Directory option of the Scope section and point to the "vendor" folder) or use Scope option (e.g. "All Places" or "Project and Libraries")
 
 ## Resources
 
 https://www.jetbrains.com/help/phpstorm/configuring-keyboard-and-mouse-shortcuts.html
+
+https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox
+
+https://stitcher.io/blog/phpstorm-scopes
+
+https://github.com/codepress/wp-phpstorm-settings#keymaps
+
+https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Searching-vendor-folder-for-composer-based-project
