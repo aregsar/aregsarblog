@@ -72,7 +72,7 @@ To make white spaces visible in the editor document window:
 
 Open the settings dialog with `cmd+,`
 
-select the `appearance` setting under `editor > general` folder in the left pane.
+select `editor > general > appearance` setting in the left pane.
 
 check the `show whitespaces` check box in the pane on the right side.
 
@@ -94,7 +94,7 @@ Documents opened after the changes will now use the new settings.
 
 Open the settings dialog with `cmd+,`
 
-select the `appearance` setting under `editor > general` folder in the left pane.
+select `editor > general` setting in the left pane.
 
 Check the `change font size with command-mouse wheel` checkbox in the setting pane on the right side.
 
@@ -102,27 +102,32 @@ Now you can change font size by holding down the `cmd` key and using the mouse w
 
 ## Turn off code folding
 
-from preferencesview > appearance > toolwindow bar (turn off)
+select `editor > general > code folding` setting in left pane
+uncheck the `show code folding outline` checkbox in right pane
+uncheck all checkboxes under `fold by default` section so that code in any language is never folded
 
-adds following xml to ~/Library/Application Support/JetBrains/PhpStorm2020.2/options/editor.xml
+### User customized settings configuration files
+
+Any changed settings will be located in a related file in the
+`~/Library/Application Support/JetBrains/PhpStorm2020.2/options/`
+directory
+
+As an example the xml file `~/Library/Application Support/JetBrains/PhpStorm2020.2/options/editor.xml` contains my customized settings below:
 
 ```xml
 <application>
+  <component name="DefaultFont">
+    <option name="FONT_SIZE" value="22" />
+  </component>
   <component name="EditorSettings">
     <option name="IS_FOLDING_OUTLINE_SHOWN" value="false" />
+    <option name="IS_WHITESPACES_SHOWN" value="true" />
+    <option name="IS_WHEEL_FONTCHANGE_ENABLED" value="true" />
   </component>
 </application>
 ```
 
-## Closing pop ups opened by keyboard shortcuts
-
-You can use the escape key to close any settings dialog, search box or pop up window opened by a keyboard shortcut
-
-You can also close any of these pop ups by using the `enter` key to confirm a selected item.
-
-The `enter` key can also be used to confirm a selected item in the project explorer side panel, when the panel is open.
-
-## Editing, Adding and Removing keymaps
+## Editing, Adding and Removing keymaps (keyboard shortcuts)
 
 Keymaps are the phpstorm keyboard shortcuts.
 
@@ -250,6 +255,14 @@ rightclick on any tab and select close all
 
 comment/uncomment line(s)
 cmd+/
+
+## Closing pop ups opened by keyboard shortcuts
+
+You can use the escape key to close any settings dialog, search box or pop up window opened by a keyboard shortcut
+
+You can also close any of these pop ups by using the `enter` key to confirm a selected item.
+
+The `enter` key can also be used to confirm a selected item in the project explorer side panel, when the panel is open.
 
 ## Creating a new file
 
