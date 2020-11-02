@@ -147,18 +147,29 @@ Currently the keymaps file for my version of phpstorm is located at:
 
 open settings (cmd+,)
 
-select `keymap`
+select `keymap` from the left pane to display the keymaps pane on the right
 
-the keymaps pane dropdown defaults to macOS
-(you can select another editors keymaps such as sublime (macOS))
-click on the settings wheel next to the macOS selection
-select duplicate to copy the default phpstorm macOS keymaps
-type in name for duplicate (mykeymap) and hit enter
-now we have a child copy keymap named that hangs off of the its parent macOS keymaps in the editor pane, named mykeymap (with corresponding xml file in ~/Library/Application Support/JetBrains/PhpStorm2020.2/options
-or not!)
-that we can modify to override its parent, without changing the default macOS keymaps
-select search icon in panel to find shortcut by typing the shortcut in the search area.
-click on shortcut to select corresponding editor action and add or remove shortcuts for that editor action
+The keymaps pane dropdown defaults to the php storm default `macOS` keymaps
+
+> using the dropdown you can select another editors keymaps such as sublime (macOS) to use the sublime text default macOS keymaps
+
+Click on the settings wheel next to the dropdown
+
+Select `duplicate` to copy the default php storm macOS keymaps
+
+Type in `mykeymaps` and hit enter to name the duplicate keymaps and create the xml file at `~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps/mykeymaps.xml`
+
+Now we should see that a child keymap named `mykeymaps` is hanging off of the a parent `macOS` keymaps in dropdown, with `mykeymaps` as the default selection.
+
+If we edit, add or remove keymaps while the `mykeymaps` is selected, we override its parent `macOS` keymaps, without changing the default macOS keymaps.
+
+The changes will be added to the `mykeymaps.xml`.
+
+We can click on the search icon in the keymaps panel on the right to pop up a keyboard shortcuts search
+
+We can then press the shortcut keys on the keyboard and the commands that the shortcut applies to will be displayed in the search area.
+
+We can double click on shortcut to pop up the shortcut editor box where we can edit or remove the shortcut.
 
 ### Add custom user keymap for the terminal panel
 
