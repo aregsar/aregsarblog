@@ -108,9 +108,11 @@ uncheck all checkboxes under `fold by default` section so that code in any langu
 
 ### User customized settings configuration files
 
-Any changed settings will be located in a related file in the
-`~/Library/Application Support/JetBrains/PhpStorm2020.2/options/`
-directory
+Any changed settings will be located in a related file at the General location:
+
+`~/Library/Application Support/JetBrains/PhpStorm<version>/keymaps`
+
+For my specific installation this is the `~/Library/Application Support/JetBrains/PhpStorm2020.2/options/` directory
 
 As an example the xml file `~/Library/Application Support/JetBrains/PhpStorm2020.2/options/editor.xml` contains my customized settings below:
 
@@ -135,17 +137,18 @@ We can edit these keymaps and the resulting settings will be saved as a file whe
 
 The General location will be at:
 
-~/Library/Application Support/JetBrains/PhpStorm<version>/keymaps
+`~/Library/Application Support/JetBrains/PhpStorm<version>/keymaps`
 
 Currently the keymaps file for my version of phpstorm is located at:
 
-~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps
+`~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps`
 
 ### Copy default macos keymaps before making changes
 
-open settings prferences
-cmd+comma
-select keymap
+open settings (cmd+,)
+
+select `keymap`
+
 the keymaps pane dropdown defaults to macOS
 (you can select another editors keymaps such as sublime (macOS))
 click on the settings wheel next to the macOS selection
@@ -161,7 +164,7 @@ click on shortcut to select corresponding editor action and add or remove shortc
 
 open settings (cmd+,)
 
-click `keymap`
+select `keymap`
 
 expand `Tool Windows folder`
 
@@ -197,64 +200,91 @@ click the OK button to add the short cut
 
 All the essential shortcuts that I use are listed below:
 
-### keyboard shortcuts to enable searching and finding everything
+### keyboard shortcuts to enable searching for everything
 
 open preferences dialog box
-cmd+comma
 
-open global search box (use tab key to navigate the tabs to search by class, file, symbol or all)
-cmd+o
-doubletap-shift
+`cmd+,` (cmd+comma)
+
+open global search box
+
+Three shortcuts (once opened, use tab key to navigate the tabs to search by class, file, symbol or all)
+
+Double click `shift` key (selects `all` search tab when search box opens)
+
+`cmd+o` (selects `class` search tab when search box opens)
+
+`cmd_sh+o` (selects `file` search tab when search box opens)
 
 opens recent files box/toggle to last file
-cmd+e
+
+`cmd+e`
 
 pop up breadcrumb menu
-cmd+uparrow
+
+`cmd+uparrow`
 
 toggle\focus project sidebar
-cmd+1
+
+`cmd+1`
 
 toggle favorites sidebar
-cmd+2
 
-toggle the terminal panel
-cmd+3 (added custom user keymap)
+`cmd+2`
 
 toggle the problems panel
-cmd+6
+
+`cmd+6`
 
 Opening the file structure popup (search class methods and properties in file)
-cmd+4 (added custom user keymap)
+
+`cmd+4` (added custom user keymap)
 
 find in files\find in path
-cmd+sh+f
+
+`cmd+sh+f`
+
+### keyboard shortcuts for running commands
+
+toggle the terminal panel
+
+`cmd+3` (added custom user keymap)
+
+open run command box (type node or npm)
+
+Double click `ctrl` key
 
 ### keyboard shortcuts for file operations
 
 open find bar
-cmd+f
+
+`cmd+f`
 
 open find and replace bar
-cmd+r
+
+`cmd+r`
 
 save current file modifications
-cmd+s
+
+`cmd+s`
 
 close tab
-cmd+w
+
+`cmd+w`
+
+> To Close all tabs right click on any tab and select close all
 
 save all modified files
-cmd+opt+s
+
+`cmd+opt+s`
 
 reformat file
-cmd+opt+L
 
-Close all tabs
-rightclick on any tab and select close all
+`cmd+opt+L`
 
 comment/uncomment line(s)
-cmd+/
+
+`cmd+/`
 
 ## Closing pop ups opened by keyboard shortcuts
 
@@ -263,14 +293,6 @@ You can use the escape key to close any settings dialog, search box or pop up wi
 You can also close any of these pop ups by using the `enter` key to confirm a selected item.
 
 The `enter` key can also be used to confirm a selected item in the project explorer side panel, when the panel is open.
-
-## Creating a new file
-
-pop up breadcrumb menu `cmd+uparrow` or open project sidebar `cmd+1` to select a directory
-
-Navigate to desired directory using the left,right,up or down arrow keys. Use the enter key to expand directories.
-
-create new file\directory\class\etc when breadcrumb menu or sub menu item is selected by typing `cmd+n`
 
 ## Creating new file using breadcrumbs
 
@@ -292,19 +314,9 @@ create new file\directory\class\etc when breadcrumb menu or sub menu item is sel
 
 `cmd+n`
 
-## Other
+## Open debug configuration dialog box
 
-open run command box (type node or npm)
-
-`doubletap-ctrl`
-
-open debug configuration dialog box (one time only)
-
-`run > edit configurations`
-
-To insert the fully qualified namespace for a class name
-
-`Type in class name and hit tab key`
+from application menu select `run > edit configurations` to open debug configuration dialog box
 
 ## Set composer path in pstorm
 
@@ -431,6 +443,12 @@ I would like to be able to search the folder normally or at least add them to a 
 set the Custom option in Scope. Projects and Libraries
 On Find in Path dialog
 You either have to specify the actual path to work with (use Directory option of the Scope section and point to the "vendor" folder) or use Scope option (e.g. "All Places" or "Project and Libraries")
+
+## Php Editor Tips
+
+To insert the fully qualified namespace for a class name
+
+`Type in class name and hit tab key`
 
 ## Resources
 
