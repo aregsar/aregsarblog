@@ -14,6 +14,8 @@ Below are the steps to take to turn off the UI elements:
 
 To hide the toolbar, using the menu navigate to `view > appearance > toolbar` and uncheck the toolbar
 
+To hide the toolbar window bars, using the menu navigate to `view > appearance > toolbar window bars` and uncheck the toolbar
+
 To hide the navigation bar, using the menu navigate to `view > appearance > navigation bar` and uncheck the navigation bar
 
 To hide the status bar, using the menu navigate to `view > appearance > status bar` and uncheck the status bar
@@ -96,6 +98,28 @@ adds following xml to ~/Library/Application Support/JetBrains/PhpStorm2020.2/opt
 </application>
 ```
 
+## Closing pop ups opened by keyboard shortcuts
+
+You can use the escape key to close any settings dialog, search box or pop up window opened by a keyboard shortcut
+
+You can also close any of these pop ups by using the `enter` key to confirm a selected item.
+
+The `enter` key can also be used to confirm a selected item in the project explorer side panel, when the panel is open.
+
+## Editing, Adding and Removing keymaps
+
+Keymaps are the phpstorm keyboard shortcuts.
+
+We can edit these keymaps and the resulting settings will be saved as a file where the local user settings are saved for the version of php storm that you have.
+
+The General location will be at:
+
+~/Library/Application Support/JetBrains/PhpStorm<version>/keymaps
+
+Currently the keymaps file for my version of phpstorm is located at:
+
+~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps
+
 ### Copy default macos keymaps before making changes
 
 open settings prferences
@@ -112,62 +136,52 @@ that we can modify to override its parent, without changing the default macOS ke
 select search icon in panel to find shortcut by typing the shortcut in the search area.
 click on shortcut to select corresponding editor action and add or remove shortcuts for that editor action
 
-https://github.com/codepress/wp-phpstorm-settings#keymaps
+### Add custom user keymap for the terminal panel
 
-## Editing keymaps
+open settings (cmd+,)
 
-Keymaps are the phpstorm keyboard shortcuts.
+click `keymap`
 
-We can edit these keymaps and the resulting settings will be saved as a file where the local user settings are saved for the version of php storm that you have.
+expand `Tool Windows folder`
 
-The General location will be at:
+double click `Terminal` selection to open the shortcut settings box for the `Terminal`
 
-~/Library/Application Support/JetBrains/PhpStorm<version>/keymaps
+select `remove opt+F12`
 
-Currently the keymaps file for my version of phpstorm is located at:
+click the OK button to remove the existing short cut that conflicts with the MacOS shortcut
 
-~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps
+double click `Terminal` selection to open the shortcut settings box for the `Terminal`
 
-The steps to edit the keymap settings are shown by way of the example of changing the keymap for the shortcut to open the terminal window in the editor.
-By default the shortcut is mapped to a Mac specific shortcut. So I had to change it to unused shortcut.
+click `add keyboard short cuts`
 
-1- use the cmd+, shortcut to open the settings settings dialog
-2- select keymap
-3- expand Tool Windows folder
-4- doubleclick the `Terminal` shortcut to open the shortcut settings box for the `Terminal`
-5- select remove opt+F12 (the existing short cut)
-6-SELECT OK
-7-doubleclick the Terminal shortcut again
-8- select add shortcut which pops up the shortcut edit box
-10-Type the shortcut we want with the keyboard which in my case was `cmd+3` (You will see it now displayed as the shortcut)
-11-click the `OK` buttom with the mouse to confirm the shortcut. (Do not use the keyboard until after you click OK with mouse, otherwise the key you hit will be considered part of the shortcut key combination)
+using the keyboard type `cmd+3` and then do not type on keyboard before next step
 
-## Closing pop ups opened by keyboard shortcuts
+click the OK button to add the new short cut
 
-You can use the escape key to close any settings dialog, search box or pop up window opened by a keyboard shortcut
+### Add custom user keymap for the file structure popup
 
-You can also close any of these pop ups by using the `enter` key to confirm a selected item.
+open settings (cmd+,)
 
-The `enter` key can also be used to confirm a selected item in the project explorer side panel, when the panel is open.
+click `keymap`
 
-## Opening the build in terminal
+type `file structure` in the search box
 
-open/focus terminal window
-cmd+3 (configured keymap)
-settings (cmd+,) => keymap => (expand)Tool Windows folder >(doubleclick)Terminal - add cmd+3 shortcut
+under `Main men > navigate` double click `File Structure` selection
 
-## Navigating PHP elements within a file
+using the keyboard type `cmd+4` and then do not type on keyboard before next step
 
-open file structure navigation (search class methods and properties in file)
-cmd+4 (configured keymap)
-settings (cmd+,) => keymap => search for file "file structure" => Main menu > navigate - (doubleclick) File Structure - add cmd+4 shortcut
+click the OK button to add the short cut
 
-## keyboard shortcuts to enable searching and finding everything
+## Shortcut listing
+
+All the essential shortcuts that I use are listed below:
+
+### keyboard shortcuts to enable searching and finding everything
 
 open preferences dialog box
 cmd+comma
 
-open global search box (use tab key to navigate the tabs)
+open global search box (use tab key to navigate the tabs to search by class, file, symbol or all)
 cmd+o
 doubletap-shift
 
@@ -183,10 +197,19 @@ cmd+1
 toggle favorites sidebar
 cmd+2
 
+toggle the terminal panel
+cmd+3 (added custom user keymap)
+
+toggle the problems panel
+cmd+6
+
+Opening the file structure popup (search class methods and properties in file)
+cmd+4 (added custom user keymap)
+
 find in files\find in path
 cmd+sh+f
 
-## keyboard shortcuts for file operations
+### keyboard shortcuts for file operations
 
 open find bar
 cmd+f
