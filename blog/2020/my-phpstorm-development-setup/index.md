@@ -4,6 +4,32 @@ October 29, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [My Phpstorm Development Setup](https://aregsar.com/blog/2020/my-phpstorm-development-setup)
 
+In this post I detail how I set up php storm for productive php debvelopment.
+
+## Opening Php storm editor from the command line
+
+Before we can configure php storm to open from the terminal we need to launch it using the desktop icon and select new project and create an empty project.
+
+This opens the editor window and displays the application menu.
+
+Using the application menu select `tools > create command line launcher` to open the command line launcher input box.
+
+Type in `/usr/local/bin/pstorm` which is the path of the php storm executable on your system.
+
+Click the OK button.
+
+Quit the php storm application.
+
+Now you can go to any project folder in the terminal and type `pstorm .` to launch the editor window in the scope of your project.
+
+> Note: The symlink `/usr/local/bin/pstorm` is automatically created by the php storm installation
+
+To find the path on your system use the bash command below:
+
+```bash
+which pstorm
+```
+
 ## Setting up the editor UI
 
 The first thing I like to do is to get rid of as much UI clutter and use keyboard shortcuts to access editor features. To that end I turn off most of UI elements.
@@ -24,65 +50,55 @@ I keep the editor tab bar visible to be able to tab between open documents, howe
 
 ## Configuring the editor tab bar settings
 
-If you want to configure how the tabs in the editor tab bar behave you can open editor tabs settings box by navigating from the menu to `window > editor table > configure editor tabs`.
+To configure how the tabs in the editor tab bar behave:
+
+open editor tabs settings box by navigating from the menu to `window > editor table > configure editor tabs`.
 
 Here you can choose your settings.
 
-## Opening Php storm editor from the command line
-
-To setup the editor to be able to open from our project directory in the terminal we need to configure it as shown:
-
-1- Open the command line launcher input box
-
-2- Navigate to:
-
-tools > create command line launcher
-
-3- Type in the path of the php storm executable on your system.
-
-The name of the executable is `pstorm` and you can find its path by executing the bash command:
-
-```bash
-which pstorm
-```
-
-The path to type will be: `/usr/local/bin/pstorm`
-
-> Note: The symlink `/usr/local/bin/pstorm` is automatically created by the php storm installation
-
 ## Accessing the Php storm settings dialog
 
-The settings dialog is where you can find and configure all the phpstorm settings.
+The settings dialog is where you can find and configure all the php storm settings.
 
-The dialog can be opened by the `cmd+,` command comma shortcut.
+The dialog can be opened by typing the `cmd+,` (command+comma) shortcut.
 
 Once opened you can navigate to the setting you want to change using the directory structure.
 
 You can also search for a setting which will make it easier to locate the setting.
 
-As an example this is how to change the setting to display whitespaces in the editor window:
+## Show whitespaces in the editor window
 
-`settings (cmd+,) => editor > general > appearance - show whitespaces`
-
-## Setting the font settings of a document when first opened
-
-If you want to change the font size when a document is opened you can follow these steps
+To make white spaces visible in the editor document window:
 
 Open the settings dialog with `cmd+,`
-Type `font` in search box
-Choose `Editor > Font` setting in the left pane.
-Type in the font size in the setting pane on the right side
 
-You can change other settings as well.
+select the `appearance` setting under `editor > general` folder in the left pane.
 
-Any documents opened after you click the `OK` button will use the new default settings.
+check the `show whitespaces` check box in the pane on the right side.
 
-## Changing the font size on the fly
+## Changing the default document font settings
 
-settings (cmd+,) => editor > general - change font size with command-mouse wheel
+To change the font settings of documents opened in the editor, follow these steps
 
-change font size
-cmd+mouse wheel
+Open the settings dialog with `cmd+,`
+
+Select the `Font` setting under the `Editor` folder in the left pane.
+
+Change the default settings as desired in the setting pane on the right side.
+
+Click OK to save the new settings.
+
+Documents opened after the changes will now use the new settings.
+
+## Configure changing the font size using the mouse wheel
+
+Open the settings dialog with `cmd+,`
+
+select the `appearance` setting under `editor > general` folder in the left pane.
+
+Check the `change font size with command-mouse wheel` checkbox in the setting pane on the right side.
+
+Now you can change font size by holding down the `cmd` key and using the mouse wheel to zoom in and out.
 
 ## Turn off code folding
 
