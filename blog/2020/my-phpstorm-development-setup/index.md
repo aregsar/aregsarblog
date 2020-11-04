@@ -325,11 +325,19 @@ create new file\directory\class\etc when breadcrumb menu or sub menu item is sel
 
 `cmd+n`
 
-## Open debug configuration dialog box
+## Opening the debug configuration dialog box
 
-from application menu select `run > edit configurations` to open debug configuration dialog box
+From application menu select `run > edit configurations` to open debug configuration dialog box
 
 ## Set composer path in pstorm
+
+PHP storm autodetects your composer installation, however you can manually set it:
+
+`tools > composer > init composer`
+
+select `composer executable`
+
+type `composer` in text box
 
 when we create a project in pstorm it asks to
 use existing composer file
@@ -340,27 +348,35 @@ paste the result in text box
 
 ## Set PHP CLI path in pstorm including xdebug extension path
 
-(this is setup only for php script debugging. further configuration needed for laravel debugging)
-open a index.php script
-in pstorm menu
-select
-run > debug
-to debug
-will get error php interpreter not installed
+This is setup only for php script debugging. further configuration needed for laravel debugging.
 
-open preferences
-cmd+,
-in preferences list
-select project settings > php
-click browse on the interpreter to open a edit box
-which php
-paste the result path parent bin directory
-/usr/local/bin
-next to edit box it will detect and show the xdebug as the debugger if is installed and its configured
-otherwise we need to install and configure xdebug on our machine(same as for vscode)
-once configured pstorm should detect it
+open preferences dialog using `cmd+,`
 
-## Aside: Installing XDebug
+select `languages & frameworks > php`
+
+click browse button for the CLI interpreter to open a edit box
+
+click the `+` button to open the `select cli intrepreter` dropdown
+
+select the `other local ...` dropdown selection to open the `cli interpreters` dialog box
+
+paste in the parent directory of the PHP CLI (`/usr/local/bin`) into the `PHP Executable` text box
+
+The path pasted into the text box will automatically change to the PHP CLI Path (`/usr/local/bin/php`) and you will see the version of the CLI displayed below the text box. Also if XDebug was installed and configured for that version of the PHP interpreter, then the XDebug version will also be shown under the text box.
+
+Otherwise install and configure XDebug as outlined in the next section and. Once configured phpstorm should automatically detect it.
+
+> use the `which php` to get the path to the PHP executable
+
+To test the interpreter and XDebug are working:
+
+open a `index.php` script
+
+from application menu select `run > debug`
+
+Should be able to debug otherwise will get error if php interpreter not installed
+
+## Aside: Installing and configuring XDebug
 
 Below are steps to install and configure xdebug:
 #install xdebug
@@ -472,3 +488,5 @@ https://stitcher.io/blog/phpstorm-scopes
 https://github.com/codepress/wp-phpstorm-settings#keymaps
 
 https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Searching-vendor-folder-for-composer-based-project
+
+https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html
