@@ -373,15 +373,19 @@ from application menu select `run > debug`
 
 Should be able to debug otherwise will get error if php interpreter not installed
 
-## Aside: Installing and configuring XDebug
+## Aside: Installing and configuring XDebug (bookmark)
 
 Below are steps to install and configure xdebug:
+
+```bash
 #install xdebug
 pecl install --force xdebug
 #show loaded php.ini configuration file
 php --ini
 Loaded Configuration File: /usr/local/etc/php/7.4/php.ini
+```
 
+```ini
 #xdebug settings in .ini file
 [xdebug]
 zend_extension="absolute/path/to/xdebug.so"
@@ -393,44 +397,55 @@ xdebug.remote_autorestart=1
 xdebug.profiler_enable=1
 xdebug.profiler_output_dir="path/to"
 xdebug.idekey=PHPSTORM
+```
 
 ## Configure XDebug for Laravel debugging
 
 open laravel project
+
 from pstorm menu
+
 select run > edit configurations
+
 this opens the run/debug configuration dialog
 
 from side panel
-select 'php web application' to configure
-(instead of selecting php script)
+
+select 'php web application' to configure (instead of selecting php script)
 
 click on setup a server button
+
 opens a server setting panel
+
 setup a new server with the following settings
+
 server Name: laravel
+
 Host: localhost
+
 Port: 8000 or 80?
+
 debugger:xdebug
 
-click OK to setup and go back to the server settings panel
-now configure the laravel server we setup
+Click OK to setup and go back to the server settings panel
+
+Now configure the laravel server that we just setup
 
 configuration name: myproject
+
 select Server= laravel
 
-set a start URL to the url route for the controller action we
-want to debug
+set a start URL to the url route for the controller action we want to debug
 
 set start URL: /
+
 default browser: chrome
-apply the configuration
 
-now should be able to set a breakpoint in the controller action
-and run debug and break in the controller action:
+Apply the configuration
 
-from pstorm menu
-select run > debug to start debugging
+Now should be able to set a breakpoint in the controller action and run debug and break in the controller action:
+
+From the application menu select `run > debug` to start debugging
 
 ## Setup PHPUnit
 
