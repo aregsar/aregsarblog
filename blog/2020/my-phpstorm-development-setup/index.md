@@ -329,24 +329,21 @@ create new file\directory\class\etc when breadcrumb menu or sub menu item is sel
 
 From application menu select `run > edit configurations` to open debug configuration dialog box
 
-## Set composer path in pstorm
+## Set PHP Composer package manager path
 
-PHP storm autodetects your composer installation, however you can manually set it:
+Phpstorm auto detects your local composer installation, however you can manually set it:
 
-`tools > composer > init composer`
+from the application menu select `tools > composer > init composer`
 
 select `composer executable`
 
 type `composer` in text box
 
-when we create a project in pstorm it asks to
-use existing composer file
-so we need to set the path
-which composer
-paste the result in text box
-/usr/local/bin/composer
+Phpstorm will auto detect the `composer` executable if its location is found in the Path environment variable.
 
-## Set PHP CLI path in pstorm including xdebug extension path
+> You can find out the actual composer path using the `which composer` bash command
+
+## Set PHP CLI path including XDebug extension path
 
 This is setup only for php script debugging. further configuration needed for laravel debugging.
 
@@ -366,7 +363,7 @@ The path pasted into the text box will automatically change to the PHP CLI Path 
 
 Otherwise install and configure XDebug as outlined in the next section and. Once configured phpstorm should automatically detect it.
 
-> use the `which php` to get the path to the PHP executable
+> you can use the `which php` bash command to find the path to the PHP executable
 
 To test the interpreter and XDebug are working:
 
@@ -490,3 +487,5 @@ https://github.com/codepress/wp-phpstorm-settings#keymaps
 https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Searching-vendor-folder-for-composer-based-project
 
 https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html
+
+https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json
