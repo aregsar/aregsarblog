@@ -378,12 +378,6 @@ xdebug.remote_port=9001
 You must include the absolute path to the extension. It is `/usr/local/lib/php/pecl/20190902/` on my machine.
 To find the path on your machine see my other blog post on configuring VSCode for Laravel development.
 
-Add the following environment variable:
-
-`export XDEBUG_CONFIG="idekey=PHPSTORM"`
-
-> There is a `xdebug.idekey=PHPSTORM` configuration setting that is not added to php.ini because that is a setting used for a remote XDebug server.
-
 The full list of configuration properties is listed below:
 
 ```ini
@@ -395,6 +389,7 @@ xdebug.remote_host=localhost
 xdebug.remote_autorestart=1
 xdebug.profiler_enable=1
 xdebug.profiler_output_dir="absolute/path/to/directory"
+# this setting is only for multiuser debug sessions when using a proxy server between XDebug and multiple editors
 xdebug.idekey=PHPSTORM
 ```
 
@@ -438,13 +433,13 @@ In the right side setting pane, in the Debug Port field in the XDebug section, s
 
 This will be the XDebug server port through which the phpstorm debugger will communicate with XDebug.
 
-To test the interpreter and XDebug are working add the following environment variable.
-
-This is required for XDebug to know that it is communicating with the PhpStorm debugger as apposed to say the VSCode debug extension.
+To test the interpreter and XDebug are working add the following environment variable:
 
 `export XDEBUG_CONFIG="idekey=PHPSTORM"`
 
-create a `index.php` script in the project folder:
+This environment variable is required for XDebug to know that it is communicating with the PhpStorm debugger.
+
+Create a `index.php` script in the project folder:
 
 ```bin
 echo '<?php' > index.php
@@ -479,7 +474,7 @@ server Name: laravel
 
 Host: localhost
 
-Port: 8000 or 80?
+Port: 8000 if using `php artisan serve` or `php -S localhost:8000` (set Port: 80 if using Laravel Valet )
 
 debugger:xdebug
 
@@ -557,8 +552,24 @@ https://github.com/codepress/wp-phpstorm-settings#keymaps
 
 https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Searching-vendor-folder-for-composer-based-project
 
+https://xdebug.org/docs/remote
+
 https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html
 
 https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json
 
 https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct
+
+https://www.jetbrains.com/help/phpstorm/multiuser-debugging-via-xdebug-proxies.html
+
+https://www.jetbrains.com/help/phpstorm/creating-a-php-debug-server-configuration.html
+
+https://www.jetbrains.com/help/phpstorm/debugging-a-php-http-request.html#debug-the-request-via-http-client
+
+https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html
+
+https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints.html
+
+https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger
+
+https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html
