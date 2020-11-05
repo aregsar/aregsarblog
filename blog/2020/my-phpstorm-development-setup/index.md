@@ -331,6 +331,8 @@ From application menu select `run > edit configurations` to open debug configura
 
 ## Set PHP Composer package manager path
 
+> It is assumed we have PHP and Composer installed globally and the composer executable renamed from `composer.phar` to `composer` and moved a location that is in the system path.
+
 Phpstorm auto detects your local composer installation, however you can manually set it:
 
 from the application menu select `tools > composer > init composer`
@@ -343,37 +345,9 @@ Phpstorm will auto detect the `composer` executable if its location is found in 
 
 > You can find out the actual composer path using the `which composer` bash command
 
-## Set PHP CLI path including XDebug extension path
+## Aside: Installing and configuring XDebug
 
-This is setup only for php script debugging. further configuration needed for laravel debugging.
-
-open preferences dialog using `cmd+,`
-
-select `languages & frameworks > php`
-
-click browse button for the CLI interpreter to open a edit box
-
-click the `+` button to open the `select cli intrepreter` dropdown
-
-select the `other local ...` dropdown selection to open the `cli interpreters` dialog box
-
-paste in the parent directory of the PHP CLI (`/usr/local/bin`) into the `PHP Executable` text box
-
-The path pasted into the text box will automatically change to the PHP CLI Path (`/usr/local/bin/php`) and you will see the version of the CLI displayed below the text box. Also if XDebug was installed and configured for that version of the PHP interpreter, then the XDebug version will also be shown under the text box.
-
-Otherwise install and configure XDebug as outlined in the next section and. Once configured phpstorm should automatically detect it.
-
-> you can use the `which php` bash command to find the path to the PHP executable
-
-To test the interpreter and XDebug are working:
-
-open a `index.php` script
-
-from application menu select `run > debug`
-
-Should be able to debug otherwise will get error if php interpreter not installed
-
-## Aside: Installing and configuring XDebug (bookmark)
+Skip this section, if you have the XDebug php extension installed.
 
 We need to run a local XDebug server using our local PHP interpreter to communicate with the phpstorm debugger.
 
@@ -424,17 +398,57 @@ xdebug.profiler_output_dir="absolute/path/to/directory"
 xdebug.idekey=PHPSTORM
 ```
 
+## Set PHP CLI path including XDebug extension path
+
+> Make sure to install and configure the PHP XDebug extension before this section
+
+This is setup only for php script debugging. further configuration needed for Laravel debugging.
+
+open preferences dialog using `cmd+,`
+
+select `languages & frameworks > php`
+
+click browse button for the CLI interpreter to open a edit box
+
+click the `+` button to open the `select cli intrepreter` dropdown
+
+select the `other local ...` dropdown selection to open the `cli interpreters` dialog box
+
+paste in the parent directory of the PHP CLI (`/usr/local/bin`) into the `PHP Executable` text box
+
+The path pasted into the text box will automatically change to the PHP CLI Path (`/usr/local/bin/php`) and you will see the version of the CLI displayed below the text box.
+
+> you can use the `which php` bash command to find the path to the PHP executable
+
+Also if XDebug was installed and configured for that version of the PHP interpreter, then the XDebug version will also be shown under the text box.
+
+Otherwise install and configure XDebug as outlined in the previous section. Once configured phpstorm should automatically detect it.
+
+Give this configuration a name (defaults to PHP) click OK which closes the `cli interpreters` dialog box and adds the interpreter configuration.
+
+This puts us back in the `Preferences` dialog where we should see the configured interpreter selected in the CLI interpreter drop down.
+
+Finally we need to configure the debugger server port that phpstorm runs to communicate with XDebug. This must be exactly the same port number as the `xdebug.remote_port = 9001` setting specified in the php.ini file.
+
+> By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
+
+So select `Debug` under the `Php` folder which is the currently selected folder in left pane (i.e. select `languages & frameworks > php > Debug`)
+
+In the right side setting pane, in the Debug Port field in the XDebug section, set the port number to `9001`.
+
+This will be the XDebug server port through which the phpstorm debugger will communicate with XDebug.
+
+To test the interpreter and XDebug are working:
+
+open a `index.php` script
+
+from application menu select `run > debug`
+
+Should be able to debug otherwise will get error if php interpreter not installed
+
 ## Configure XDebug for Laravel debugging
 
 Open the Laravel project that you want to debug in phpstorm
-
-Configure the debugger server port that phpstorm runs to communicate with XDebug
-
-In the Debug Port field, set the port through which the tool will communicate with PhpStorm to `9001`.
-
-This must be exactly the same port number as the `xdebug.remote_port = 9001` setting specified in the php.ini file.
-
-> By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
 
 from the application menu select `run > edit configurations`
 
