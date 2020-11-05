@@ -438,11 +438,24 @@ In the right side setting pane, in the Debug Port field in the XDebug section, s
 
 This will be the XDebug server port through which the phpstorm debugger will communicate with XDebug.
 
-To test the interpreter and XDebug are working:
+To test the interpreter and XDebug are working add the following environment variable.
 
-open a `index.php` script
+This is required for XDebug to know that it is communicating with the PhpStorm debugger as apposed to say the VSCode debug extension.
 
-from application menu select `run > debug`
+`export XDEBUG_CONFIG="idekey=PHPSTORM"`
+
+create a `index.php` script in the project folder:
+
+```bin
+echo '<?php' > index.php
+echo 'phpinfo();' >> index.php
+```
+
+set a breakpoint on the second line
+
+From the application menu select `run > debug`
+
+You should hit the breakpoint
 
 Should be able to debug otherwise will get error if php interpreter not installed
 
