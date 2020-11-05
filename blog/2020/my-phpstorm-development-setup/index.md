@@ -375,43 +375,72 @@ Should be able to debug otherwise will get error if php interpreter not installe
 
 ## Aside: Installing and configuring XDebug (bookmark)
 
-Below are steps to install and configure xdebug:
+We need to run a local XDebug server using our local PHP interpreter to communicate with the phpstorm debugger.
+
+Below are steps to install and configure XDebug:
 
 ```bash
 #install xdebug
 pecl install --force xdebug
 #show loaded php.ini configuration file
 php --ini
-Loaded Configuration File: /usr/local/etc/php/7.4/php.ini
 ```
+
+You should see the location printed:
+
+`Loaded Configuration File: /usr/local/etc/php/7.4/php.ini`
+
+Add the following settings at top of the php.ini file
 
 ```ini
 #xdebug settings in .ini file
+zend_extension="/usr/local/lib/php/pecl/20190902/xdebug.so"
+xdebug.remote_enable=1
+xdebug.remote_port=9001
+```
+
+> By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
+
+You must include the absolute path to the extension. It is `/usr/local/lib/php/pecl/20190902/` on my machine.
+To find the path on your machine see my other blog post on configuring VSCode for Laravel development.
+
+Add the following environment variable:
+
+`export XDEBUG_CONFIG="idekey=PHPSTORM"`
+
+> There is a `xdebug.idekey=PHPSTORM` configuration setting that is not added to php.ini because that is a setting used for a remote XDebug server.
+
+The full list of configuration properties is listed below:
+
+```ini
 [xdebug]
 zend_extension="absolute/path/to/xdebug.so"
 xdebug.remote_enable=1
 xdebug.remote_port=9001
 xdebug.remote_host=localhost
-
 xdebug.remote_autorestart=1
 xdebug.profiler_enable=1
-xdebug.profiler_output_dir="path/to"
+xdebug.profiler_output_dir="absolute/path/to/directory"
 xdebug.idekey=PHPSTORM
 ```
 
 ## Configure XDebug for Laravel debugging
 
-open laravel project
+Open the Laravel project that you want to debug in phpstorm
 
-from pstorm menu
+Configure the debugger server port that phpstorm runs to communicate with XDebug
 
-select run > edit configurations
+In the Debug Port field, set the port through which the tool will communicate with PhpStorm to `9001`.
 
-this opens the run/debug configuration dialog
+This must be exactly the same port number as the `xdebug.remote_port = 9001` setting specified in the php.ini file.
 
-from side panel
+> By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
 
-select 'php web application' to configure (instead of selecting php script)
+from the application menu select `run > edit configurations`
+
+This opens the run/debug configuration dialog
+
+from side panel select `php web application` (instead of `selecting php script`) to configure the server
 
 click on setup a server button
 
@@ -504,3 +533,5 @@ https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Search
 https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html
 
 https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json
+
+https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct
