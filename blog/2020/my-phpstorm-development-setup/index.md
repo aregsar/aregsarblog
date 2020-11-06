@@ -329,6 +329,10 @@ create new file\directory\class\etc when breadcrumb menu or sub menu item is sel
 
 From application menu select `run > edit configurations` to open debug configuration dialog box
 
+This dialog allows us to add php script, php unit or php server configurations to run or debug PHP scripts, unit tests and web applications.
+
+We will configure a web server configuration in the sections below to run\debug Laravel applications
+
 ## Set PHP Composer package manager path
 
 > It is assumed we have PHP and Composer installed globally and the composer executable renamed from `composer.phar` to `composer` and moved a location that is in the system path.
@@ -448,9 +452,9 @@ echo 'phpinfo();' >> index.php
 
 set a breakpoint on the second line
 
-From the application menu select `run > debug`
+From the application menu select `run > debug` to debug the script
 
-You should hit the breakpoint
+You should hit the breakpoint. Then use the debug buttons on the left to resume the execution of the script or to step into the script.
 
 Should be able to debug otherwise will get error if php interpreter not installed
 
@@ -462,39 +466,43 @@ from the application menu select `run > edit configurations`
 
 This opens the run/debug configuration dialog
 
-from side panel select `php web application` (instead of `selecting php script`) to configure the server
+You should see two predefined configurations in the left pane. One for running php scripts and another for running phpunit.
 
-click on setup a server button
+> There is also a templates node that when expanded shows all the available configuration templates
 
-opens a server setting panel
+Click the plus button to add a new `debug configuration`
 
-setup a new server with the following settings
+select `php web page` configuration template from the dropdown
 
-server Name: laravel
+This will add a new `php web page` debug configuration settings left pane.
+
+Type in a name for this configuration in the right side pane. I type the laravel project name.
+
+The server dropdown in the right side panel will need to select a server that we must setup.
+
+click on button next to the server drop down in the right side panel which pops up a `servers` dialog to configure a PHP server that PHP Storm will run and connect to for the debug session.
+
+The first time there wont be any configured servers so click the plus sign to add a new `server configuration`
+
+give the server the name `laravel`
 
 Host: localhost
 
-Port: 8000 if using `php artisan serve` or `php -S localhost:8000` (set Port: 80 if using Laravel Valet )
+Port: 8001
 
-debugger:xdebug
+debugger drop down should have `xdebug` selected if XDebug was installed and configured.
 
-Click OK to setup and go back to the server settings panel
+Click OK to close the dialog and go back to the `run\debug configuratoions` dialog
 
-Now configure the laravel server that we just setup
+The server `laravel` that we just setup should be selected in the server dropdown
 
-configuration name: myproject
+set a start URL to `/` which is the url route for the controller action we want to debug
 
-select Server= laravel
+select default browser `chrome` in the dropdown
 
-set a start URL to the url route for the controller action we want to debug
+click OK to save the configuration and close the `run\debug configuratoions` dialog
 
-set start URL: /
-
-default browser: chrome
-
-Apply the configuration
-
-Now should be able to set a breakpoint in the controller action and run debug and break in the controller action:
+Now should be able to set a breakpoint in the controller action and run debug and break in the controller action.
 
 From the application menu select `run > debug` to start debugging
 
