@@ -40,7 +40,8 @@ php -S localhost:8000 -t .
 let's serve an html page
 
 ```bash
-echo "<?php phpinfo(); ?>" > index.php
+echo "<?php" > index.php
+echo "phpinfo();" >> index.php
 php -S localhost:8000
 open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://localhost:8000
 ```

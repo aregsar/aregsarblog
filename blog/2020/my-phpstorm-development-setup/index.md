@@ -488,7 +488,7 @@ give the server the name `laravel`
 
 Host: localhost
 
-Port: 8001
+Port: 8000
 
 debugger drop down should have `xdebug` selected if XDebug was installed and configured.
 
@@ -504,7 +504,23 @@ click OK to save the configuration and close the `run\debug configuratoions` dia
 
 Now should be able to set a breakpoint in the controller action and run debug and break in the controller action.
 
-From the application menu select `run > debug` to start debugging
+Start the server:
+
+`php artisan serve`
+
+From the application menu select `run > debug` to start debugging.
+
+PhpStorm launches the configured browser and navigates to the configured URL `/`.
+
+`http://localhost:8000/?XDEBUG_SESSION_START=13537`
+
+It also appends the `XDEBUG_SESSION_START` query string parameter to indicate to the XDebug extension running in the server pipeline that this is the start of a debug session.
+
+XDebug then writes a `XDEBUG_SESSION` cookie to the browser in the response.
+
+This cookie will be sent back to the server on subsequent requests that will indicate to XDebug to maintain the debug session until the debugger is stoped.
+
+At this point the breakpoint should be hit.
 
 ## Setup PHPUnit
 
