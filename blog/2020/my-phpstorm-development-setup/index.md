@@ -480,9 +480,9 @@ Type in a name for this configuration in the right side pane. I type the laravel
 
 The server dropdown in the right side panel will need to select a server that we must setup.
 
-click on button next to the server drop down in the right side panel which pops up a `servers` dialog to configure a PHP server that PHP Storm will run and connect to for the debug session.
+click on button next to the server drop down in the right side panel which pops up a `servers` dialog to configure a PHP server that PHP Storm will try to connect to, to establish a debug session.
 
-The first time there wont be any configured servers so click the plus sign to add a new `server configuration`
+The first time we are configuring phpstorm for debugging, there wont be any configured servers so click the plus sign to add a new `server configuration`
 
 give the server the name `laravel`
 
@@ -514,17 +514,31 @@ PhpStorm launches the configured browser and navigates to the configured URL `/`
 
 `http://localhost:8000/?XDEBUG_SESSION_START=13537`
 
-It also appends the `XDEBUG_SESSION_START` query string parameter to indicate to the XDebug extension running in the server pipeline that this is the start of a debug session.
+It also appends the `XDEBUG_SESSION_START` query string parameter to indicate to the XDebug extension running in the server pipeline that this is the start of a debug session. The value of the parameter is automatically defined by PhpStorm. It can be any value so for instance when debugging using the VSCode editor I set it to `XDEBUG_SESSION_START=VSCODE`.
 
-XDebug then writes a `XDEBUG_SESSION` cookie to the browser in the response.
+XDebug then writes a `XDEBUG_SESSION=13537` cookie to the browser in the response.
 
 This cookie will be sent back to the server on subsequent requests that will indicate to XDebug to maintain the debug session until the debugger is stoped.
 
 At this point the breakpoint should be hit.
 
+## Debugging using Laravel valet
+
+Since our project is called `blog` Valet servs it at `http://blog.test`.
+
+In phpstorm add a new server configuration named `valet` that runs on port 80 and host set to `http://blog.test`.
+
+Then in the debug configuration named `blog` that we setup in previous section, change the server selection in the dropdown to `valet`
+
+Now just like previous section from the application menu select `run > debug` to start debugging.
+
+Since Valet is serving our app we don't need to start a server with artisan.
+
+Phpstorm should launch the browser and go to `http://blog.test/?XDEBUG_SESSION_START=13537`.
+
 ## Setup PHPUnit
 
-Set phpunit script path to be able to run tests from pstorm
+Set phpunit script path to be able to run tests from phpstorm
 
 open the laravel project
 
