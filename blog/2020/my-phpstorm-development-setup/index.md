@@ -566,33 +566,45 @@ We should hit any breakpoint we setup in the controller action that responds to 
 
 When we debug with valet there is an issue where when we launch the debugger we breaking in the laravel valet server.php file before getting to the controller action.
 
+The debugger stops in the `~/.composer/vendor/laravel/valet/server.php` file in my Valet composer installation on the line:
+
+`define('VALET_HOME_PATH', posix_getpwuid(fileowner(__FILE__))['dir'].'/.config/valet');`
+
 If we hit the resume debugging button we will continue executing as normal.
 
-## Setup PHPUnit
+## Setup PHPUnit for running or debugging Laravel tests
 
-Set phpunit script path to be able to run tests from phpstorm
+Open your laravel project in php storm
 
-open the laravel project
+Just as we did in the previous section From application menu select `run > edit configurations` to open run/debug configuration dialog box again.
 
-open project settings:
-cmd+comma
+select the phpunit node in the left pane and click the plus sign to add a new phpunit configuration.
 
-select:
-php > phpunit
+In the right side panel:
 
-select:
-'use custom loader'
+Give the configution a name. I give the name `test`
 
-paste in the path in the 'path to script' text box
-~/zdev/laravel/myproject/vendor/autoload.php
+select the `Define in the configuration file` radio button under the `test server` section
 
-Now while we are in a specific file focused
-we can select run to run tests
-by right clicking in class or method
+Check the `use alternative configuration file` checkbox
+
+Browse to your laravel project root directory and select the `phpunit.xml` file
+
+The preferred debug engine dropdown should have XDebug selected if `XDebug` was installed and configured as specified in previous sections.
+
+click OK to save the configuration and close the dialog
+
+To run or debug tests use the `run > run` or `run > debug` menu items from the phpstorm application menu. This will run all the tests.
+
+To run individual or sets of tests, the test results node can be expanded to show more granular tests that can be executed by right clicking on the node.
+
+When using the `run > debug` menu, any breakpoint set in the test code or application code will be hit.
+
+> Note: when debugging the tests and the test complete, the test results will be in the console panel of the debugger window.
 
 ## Setting search scopes
 
-For PhpStorm to seach composer vendor folder
+For PhpStorm to search composer vendor folder
 
 configured/initialized composer for my PHP project. Now All folders in my /vendor directory are listed as "library root" and are not searched when using "Find In Path..."
 
@@ -643,3 +655,5 @@ https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints
 https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger
 
 https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html
+
+https://blog.jgrossi.com/2018/using-xdebug-with-phpunit-in-phpstorm/
