@@ -460,9 +460,9 @@ We can configure php storm to debug our laravel application in Three ways.
 
 One way is that we can can run the laravel artisan server and configure php storm server connection settings to launch the debugger and connect to the laravel server.
 
-The other way is we can use Laravel Valet to have the application always running at a `.test` domain and configure php storm server connection settings to launch the debugger and connect to the Nginx server that is run by Valet, using the Valet domain and port settings.
+Another way is we can use Laravel Valet to have the application always running at a `.test` domain and configure php storm server connection settings to launch the debugger and connect to the Nginx server that is run by Valet, using the Valet domain and port settings.
 
-The final way is to use phpunit.
+The final way is to debug using phpunit, which will be described in the phpunit section.
 
 ### Opening the debug configuration dialog box
 
