@@ -207,6 +207,28 @@ using the keyboard type `cmd+4` and then do not type on keyboard before next ste
 
 click the OK button to add the short cut
 
+## Add custom user keymap for the Find Window
+
+To find the keymap setting for the find window
+open settings dialog using `cmd+,`
+keymap in left pane
+type in `find`
+
+in right pane find the `Find` result under the `Tool Windows`
+node. It is mapped to `cmd+3` which we mapped to the terminal
+window shortcut
+
+double click on it and select `remove shortcut` to remove the current
+mapping and click OK.
+
+double click on it again and select `add keyboard shortcut`
+type `cmd+9` on the keyboard and click OK with the mouse.
+
+> You may get a warning prompt that that `cmd+9` keymap is assigned to version control. I just ignore and override the
+> warning since I dont use the editors source control features.
+
+finally click OK to close the settings dialog and save the new setting.
+
 ## Shortcut listing
 
 All the essential shortcuts that I use are listed below:
@@ -259,7 +281,13 @@ The scope can be changed to encompass just the project files or search the proje
 
 `cmd+6`
 
-- Find in path (find in files)
+- toggle the find window
+
+`cmd+9` (added custom user keymap)
+
+This is generally first opened from the Find in path dialog using the `cmd+enter` shortcut while in the dialog.
+
+- Open the Find in path dialog (find in files)
 
 `cmd+sh+f`
 
@@ -271,7 +299,7 @@ Just like the global search box, the scope can be changed to encompass just the 
 
 When we type in our search term the search results will be automatically displayed.
 
-While the search results are displayed we can use the `cmd+enter` shortcut to open up the search results in in the `Find` window bottom panel in the main editor.
+While the search results are displayed we can use the `cmd+enter` shortcut to open up the search results in in the `Find Window` bottom panel in the main editor. `cmd+9` will toggle the find window for when we want to close it temporarily and open it back up again.
 
 The find window displays the directory hierarchy of the files that have matching results results in the left pane and displays the selected file contents in the right pane.
 
@@ -628,25 +656,13 @@ When searching using the global search box (regardles of the selecting class, fi
 
 The scope that is used can be selected using the dropdown on the right side in the global search box.
 
-For PhpStorm to search composer vendor folder
-
-configured/initialized composer for my PHP project. Now All folders in my /vendor directory are listed as "library root" and are not searched when using "Find In Path..."
-
-Furthermore I cannot add them as a scope to the project as they are not shown since they are "non-project files"?
-
-I would like to be able to search the folder normally or at least add them to a scope. All the folders are included in my composer settings.
-
-set the Custom option in Scope. Projects and Libraries
-On Find in Path dialog
-You either have to specify the actual path to work with (use Directory option of the Scope section and point to the "vendor" folder) or use Scope option (e.g. "All Places" or "Project and Libraries")
-
 ## PHP Editor Tips
 
 To insert the fully qualified namespace for a class name
 
 `Type in class name and hit tab key`
 
-Multiple cursors
+To edit using multiple cursors hold down the command key and click in locations you want the cursor.
 
 ## Resources
 
