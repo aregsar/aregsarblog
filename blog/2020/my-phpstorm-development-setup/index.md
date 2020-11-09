@@ -265,7 +265,7 @@ toggle the debug panel
 
 `cmd+5`
 
-open run command box (type node or npm)
+open run command box (can type in a command to execute such as node or npm)
 
 Double click `ctrl` key
 
@@ -373,7 +373,7 @@ xdebug.remote_enable=1
 xdebug.remote_port=9001
 ```
 
-> By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
+> By default, XDebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
 
 You must include the absolute path to the extension. It is `/usr/local/lib/php/pecl/20190902/` on my machine.
 To find the path on your machine see my other blog post on configuring VSCode for Laravel development.
@@ -425,7 +425,7 @@ This puts us back in the `Preferences` dialog where we should see the configured
 
 Finally we need to configure the debugger server port that PhpStorm runs to communicate with XDebug. This must be exactly the same port number as the `xdebug.remote_port = 9001` setting specified in the php.ini file.
 
-> By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
+> By default, XDebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
 
 So select `Debug` under the `Php` folder which is the currently selected folder in left pane (i.e. select `languages & frameworks > php > Debug`)
 
@@ -456,13 +456,13 @@ Should be able to debug otherwise will get error if PHP interpreter not installe
 
 ## Configure XDebug for Laravel debugging
 
-We can configure PhpStorm to debug our laravel application in Three ways.
+We can configure PhpStorm to debug our Laravel application in Three ways.
 
-One way is that we can can run the laravel artisan server and configure PhpStorm server connection settings to launch the debugger and connect to the laravel server.
+One way is that we can can run the Laravel artisan server and configure PhpStorm server connection settings to launch the debugger and connect to the Laravel server.
 
 Another way is we can use Laravel Valet to have the application always running at a `.test` domain and configure PhpStorm server connection settings to launch the debugger and connect to the Nginx server that is run by Valet, using the Valet domain and port settings.
 
-The final way is to debug using phpunit, which will be described in the phpunit section.
+The final way is to debug using PHPUnit, which will be described in the PHPUnit section.
 
 ### Opening the debug configuration dialog box
 
@@ -476,7 +476,7 @@ We will configure a web server configuration in the sections below to run\debug 
 
 ### Debugging using php artisan serve command
 
-Once the run/debug configuration dialog box is opened, you should see two predefined configurations in the left pane. One for running PHP scripts and another for running phpunit.
+Once the run/debug configuration dialog box is opened, you should see two predefined configurations in the left pane. One for running PHP scripts and another for running PHPUnit.
 
 > There is also a templates node that when expanded shows all the available configuration templates.
 
@@ -486,7 +486,7 @@ select `php web page` configuration template from the dropdown
 
 This will add a new `php web page` debug configuration settings left pane.
 
-Type in a name for this configuration in the right side pane. I type the laravel project name.
+Type in a name for this configuration in the right side pane. I type the Laravel project name.
 
 The server dropdown in the right side panel will need to select a server that we must setup.
 
@@ -512,7 +512,7 @@ select default browser `chrome` in the dropdown
 
 click OK to save the configuration and close the `run\debug configuratoions` dialog
 
-From the terminal start the laravel server by running the artisan command:
+From the terminal start the Laravel server by running the artisan command:
 
 `php artisan serve`
 
@@ -548,7 +548,7 @@ From application menu select `run > edit configurations` to open run/debug confi
 
 click on button next to the server drop down in the right side panel which pops up the `servers` dialog to add a Valet server connection configuration:
 
-click the plus sign to add a new server configuration named `valet` that runs on port 80 and host set to `blog.test` just like we did before to add the laravel server connection configuration in the previous section.
+click the plus sign to add a new server configuration named `valet` that runs on port 80 and host set to `blog.test` just like we did before to add the Laravel server connection configuration in the previous section.
 
 Click OK to close the `servers` dialog and go back to the run/debug configuration dialog.
 
@@ -562,9 +562,9 @@ PhpStorm should launch the browser and go to `http://blog.test/?XDEBUG_SESSION_S
 
 We should hit any breakpoint we setup in the controller action that responds to the root `/` route.
 
-### Issue with breaking in the laravel valet server before the controller action
+### Issue with breaking in the Laravel Valet server before the controller action
 
-When we debug with valet there is an issue where when we launch the debugger we breaking in the laravel valet server.php file before getting to the controller action.
+When we debug with Valet there is an issue where when we launch the debugger we breaking in the Laravel valet server.php file before getting to the controller action.
 
 The debugger stops in the `~/.composer/vendor/laravel/valet/server.php` file in my Valet composer installation on the line:
 
@@ -574,21 +574,21 @@ If we hit the resume debugging button we will continue executing as normal.
 
 ## Setup PHPUnit for running or debugging Laravel tests
 
-Open your laravel project in PhpStorm
+Open your Laravel project in PhpStorm
 
 Just as we did in the previous section From application menu select `run > edit configurations` to open run/debug configuration dialog box again.
 
-select the phpunit node in the left pane and click the plus sign to add a new phpunit configuration.
+select the PHPUnit node in the left pane and click the plus sign to add a new PHPUnit configuration.
 
 In the right side panel:
 
-Give the configution a name. I give the name `test`
+Give the configuration a name. I give the name `test`
 
 select the `Define in the configuration file` radio button under the `test server` section
 
 Check the `use alternative configuration file` checkbox
 
-Browse to your laravel project root directory and select the `phpunit.xml` file
+Browse to your Laravel project root directory and select the `phpunit.xml` file
 
 The preferred debug engine dropdown should have XDebug selected if `XDebug` was installed and configured as specified in previous sections.
 
@@ -621,6 +621,8 @@ You either have to specify the actual path to work with (use Directory option of
 To insert the fully qualified namespace for a class name
 
 `Type in class name and hit tab key`
+
+Multiple cursors
 
 ## Resources
 
