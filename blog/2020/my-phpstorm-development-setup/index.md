@@ -1,28 +1,28 @@
-# My Phpstorm Development Setup
+# My PhpStorm Development Setup
 
 October 29, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[My Phpstorm Development Setup](https://aregsar.com/blog/2020/my-phpstorm-development-setup)
+[My PhpStorm Development Setup](https://aregsar.com/blog/2020/my-phpstorm-development-setup)
 
-In this post I detail how I set up php storm for productive php debvelopment.
+In this post I detail how I set up PhpStorm for productive PHP development.
 
-## Opening Php storm editor from the command line
+## Opening PhpStorm editor from the command line
 
-Before we can configure php storm to open from the terminal we need to launch it using the desktop icon and select new project and create an empty project.
+Before we can configure PhpStorm to open from the terminal we need to launch it using the desktop icon and select new project and create an empty project.
 
 This opens the editor window and displays the application menu.
 
 Using the application menu select `tools > create command line launcher` to open the command line launcher input box.
 
-Type in `/usr/local/bin/pstorm` which is the path of the php storm executable on your system.
+Type in `/usr/local/bin/pstorm` which is the path of the PhpStorm executable on your system.
 
 Click the OK button.
 
-Quit the php storm application.
+Quit the PhpStorm application.
 
 Now you can go to any project folder in the terminal and type `pstorm .` to launch the editor window in the scope of your project.
 
-> Note: The symlink `/usr/local/bin/pstorm` is automatically created by the php storm installation
+> Note: The symlink `/usr/local/bin/pstorm` is automatically created by the PhpStorm installation
 
 To find the path on your system use the bash command below:
 
@@ -56,9 +56,9 @@ open editor tabs settings box by navigating from the menu to `window > editor ta
 
 Here you can choose your settings.
 
-## Accessing the Php storm settings dialog
+## Accessing the PhpStorm settings dialog
 
-The settings dialog is where you can find and configure all the php storm settings.
+The settings dialog is where you can find and configure all the PhpStorm settings.
 
 The dialog can be opened by typing the `cmd+,` (command+comma) shortcut.
 
@@ -131,15 +131,15 @@ As an example the xml file `~/Library/Application Support/JetBrains/PhpStorm2020
 
 ## Editing, Adding and Removing keymaps (keyboard shortcuts)
 
-Keymaps are the phpstorm keyboard shortcuts.
+Keymaps are the PhpStorm keyboard shortcuts.
 
-We can edit these keymaps and the resulting settings will be saved as a file where the local user settings are saved for the version of php storm that you have.
+We can edit these keymaps and the resulting settings will be saved as a file where the local user settings are saved for the version of PhpStorm that you have.
 
 The General location will be at:
 
 `~/Library/Application Support/JetBrains/PhpStorm<version>/keymaps`
 
-Currently the keymaps file for my version of phpstorm is located at:
+Currently the keymaps file for my version of PhpStorm is located at:
 
 `~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps`
 
@@ -149,13 +149,13 @@ open settings (cmd+,)
 
 select `keymap` from the left pane to display the keymaps pane on the right
 
-The keymaps pane dropdown defaults to the php storm default `macOS` keymaps
+The keymaps pane dropdown defaults to the PhpStorm default `macOS` keymaps
 
 > using the dropdown you can select another editors keymaps such as sublime (macOS) to use the sublime text default macOS keymaps
 
 Click on the settings wheel next to the dropdown
 
-Select `duplicate` to copy the default php storm macOS keymaps
+Select `duplicate` to copy the default PhpStorm macOS keymaps
 
 Type in `mykeymaps` and hit enter to name the duplicate keymaps and create the xml file at `~/Library/Application Support/JetBrains/PhpStorm2020.2/keymaps/mykeymaps.xml`
 
@@ -333,7 +333,7 @@ create new file\directory\class\etc when breadcrumb menu or sub menu item is sel
 
 > It is assumed we have PHP and Composer installed globally and the composer executable renamed from `composer.phar` to `composer` and moved a location that is in the system path.
 
-Phpstorm auto detects your local composer installation, however you can manually set it:
+PhpStorm auto detects your local composer installation, however you can manually set it:
 
 from the application menu select `tools > composer > init composer`
 
@@ -341,7 +341,7 @@ select `composer executable`
 
 type `composer` in text box
 
-Phpstorm will auto detect the `composer` executable if its location is found in the Path environment variable.
+PhpStorm will auto detect the `composer` executable if its location is found in the Path environment variable.
 
 > You can find out the actual composer path using the `which composer` bash command
 
@@ -349,7 +349,7 @@ Phpstorm will auto detect the `composer` executable if its location is found in 
 
 Skip this section, if you have the XDebug php extension installed.
 
-We need to run a local XDebug server using our local PHP interpreter to communicate with the phpstorm debugger.
+We need to run a local XDebug server using our local PHP interpreter to communicate with the PhpStorm debugger.
 
 Below are steps to install and configure XDebug:
 
@@ -397,7 +397,7 @@ xdebug.idekey=PHPSTORM
 
 > Make sure to install and configure the PHP XDebug extension before this section
 
-This is setup only for php script debugging. further configuration needed for Laravel debugging.
+This is setup only for PHP script debugging. further configuration needed for Laravel debugging.
 
 open preferences dialog using `cmd+,`
 
@@ -417,13 +417,13 @@ The path pasted into the text box will automatically change to the PHP CLI Path 
 
 Also if XDebug was installed and configured for that version of the PHP interpreter, then the XDebug version will also be shown under the text box.
 
-Otherwise install and configure XDebug as outlined in the previous section. Once configured phpstorm should automatically detect it.
+Otherwise install and configure XDebug as outlined in the previous section. Once configured PhpStorm should automatically detect it.
 
 Give this configuration a name (defaults to PHP) click OK which closes the `cli interpreters` dialog box and adds the interpreter configuration.
 
 This puts us back in the `Preferences` dialog where we should see the configured interpreter selected in the CLI interpreter drop down.
 
-Finally we need to configure the debugger server port that phpstorm runs to communicate with XDebug. This must be exactly the same port number as the `xdebug.remote_port = 9001` setting specified in the php.ini file.
+Finally we need to configure the debugger server port that PhpStorm runs to communicate with XDebug. This must be exactly the same port number as the `xdebug.remote_port = 9001` setting specified in the php.ini file.
 
 > By default, Xdebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
 
@@ -431,7 +431,7 @@ So select `Debug` under the `Php` folder which is the currently selected folder 
 
 In the right side setting pane, in the Debug Port field in the XDebug section, set the port number to `9001`.
 
-This will be the XDebug server port through which the phpstorm debugger will communicate with XDebug.
+This will be the XDebug server port through which the PhpStorm debugger will communicate with XDebug.
 
 To test the interpreter and XDebug are working add the following environment variable:
 
@@ -452,21 +452,21 @@ From the application menu select `run > debug` to debug the script
 
 You should hit the breakpoint. Then use the debug buttons on the left to resume the execution of the script or to step into the script.
 
-Should be able to debug otherwise will get error if php interpreter not installed
+Should be able to debug otherwise will get error if PHP interpreter not installed
 
 ## Configure XDebug for Laravel debugging
 
-We can configure php storm to debug our laravel application in Three ways.
+We can configure PhpStorm to debug our laravel application in Three ways.
 
-One way is that we can can run the laravel artisan server and configure php storm server connection settings to launch the debugger and connect to the laravel server.
+One way is that we can can run the laravel artisan server and configure PhpStorm server connection settings to launch the debugger and connect to the laravel server.
 
-Another way is we can use Laravel Valet to have the application always running at a `.test` domain and configure php storm server connection settings to launch the debugger and connect to the Nginx server that is run by Valet, using the Valet domain and port settings.
+Another way is we can use Laravel Valet to have the application always running at a `.test` domain and configure PhpStorm server connection settings to launch the debugger and connect to the Nginx server that is run by Valet, using the Valet domain and port settings.
 
 The final way is to debug using phpunit, which will be described in the phpunit section.
 
 ### Opening the debug configuration dialog box
 
-Open the Laravel project that you want to debug in phpstorm
+Open the Laravel project that you want to debug in PhpStorm
 
 From application menu select `run > edit configurations` to open run/debug configuration dialog box
 
@@ -476,7 +476,7 @@ We will configure a web server configuration in the sections below to run\debug 
 
 ### Debugging using php artisan serve command
 
-Once the run/debug configuration dialog box is opened, you should see two predefined configurations in the left pane. One for running php scripts and another for running phpunit.
+Once the run/debug configuration dialog box is opened, you should see two predefined configurations in the left pane. One for running PHP scripts and another for running phpunit.
 
 > There is also a templates node that when expanded shows all the available configuration templates.
 
@@ -490,9 +490,9 @@ Type in a name for this configuration in the right side pane. I type the laravel
 
 The server dropdown in the right side panel will need to select a server that we must setup.
 
-click on button next to the server drop down in the right side panel which pops up a `servers` dialog to configure a PHP server that PHP Storm will try to connect to, to establish a debug session.
+click on button next to the server drop down in the right side panel which pops up a `servers` dialog to configure a PHP server that PhpStorm will try to connect to, to establish a debug session.
 
-The first time we are configuring phpstorm for debugging, there wont be any configured servers so click the plus sign to add a new `server configuration`
+The first time we are configuring PhpStorm for debugging, there wont be any configured servers so click the plus sign to add a new `server configuration`
 
 give the server the name `laravel`
 
@@ -516,11 +516,11 @@ From the terminal start the laravel server by running the artisan command:
 
 `php artisan serve`
 
-### Launching the php storm debugger
+### Launching the PhpStorm debugger
 
-Now that the server configuration is setup, we can launch the phpstorm debugger to debug the application.
+Now that the server configuration is setup, we can launch the PhpStorm debugger to debug the application.
 
-You should be able to set a breakpoint in the controller action that reponds tp the root `/` route and run debug and break in the controller action.
+You should be able to set a breakpoint in the controller action that responds tp the root `/` route and run debug and break in the controller action.
 
 From the application menu select `run > debug` to start debugging.
 
@@ -532,13 +532,13 @@ It also appends the `XDEBUG_SESSION_START` query string parameter to indicate to
 
 The session id can be any value so for instance when debugging using the VSCode editor I always have it set to `XDEBUG_SESSION_START=VSCODE`.
 
-XDebug then writes a `XDEBUG_SESSION=13537` cookie to the browser in the response. The value is the session id that was generated by phpstorm and passed to XDebug using the `XDEBUG_SESSION_START` query string parameter.
+XDebug then writes a `XDEBUG_SESSION=13537` cookie to the browser in the response. The value is the session id that was generated by PhpStorm and passed to XDebug using the `XDEBUG_SESSION_START` query string parameter.
 
 This cookie will be sent back to the server on subsequent requests that will indicate to XDebug to maintain the debug session until the debugger is stoped.
 
 At this point the breakpoint should be hit.
 
-> If you also do debugging using VSCode, you may have to manually delete any remaining `XDEBUG_SESSION=<debugsessionid>` cooke left over from the last php storm debug session.
+> If you also do debugging using VSCode, you may have to manually delete any remaining `XDEBUG_SESSION=<debugsessionid>` cooke left over from the last PhpStorm debug session.
 
 ### Debugging using Laravel Valet
 
@@ -558,7 +558,7 @@ Now just like previous section from the application menu select `run > debug` to
 
 Since Valet is serving our app we don't need to start a server with artisan this time.
 
-Phpstorm should launch the browser and go to `http://blog.test/?XDEBUG_SESSION_START=<debugsessionid>`.
+PhpStorm should launch the browser and go to `http://blog.test/?XDEBUG_SESSION_START=<debugsessionid>`.
 
 We should hit any breakpoint we setup in the controller action that responds to the root `/` route.
 
@@ -574,7 +574,7 @@ If we hit the resume debugging button we will continue executing as normal.
 
 ## Setup PHPUnit for running or debugging Laravel tests
 
-Open your laravel project in php storm
+Open your laravel project in PhpStorm
 
 Just as we did in the previous section From application menu select `run > edit configurations` to open run/debug configuration dialog box again.
 
@@ -594,7 +594,7 @@ The preferred debug engine dropdown should have XDebug selected if `XDebug` was 
 
 click OK to save the configuration and close the dialog
 
-To run or debug tests use the `run > run` or `run > debug` menu items from the phpstorm application menu. This will run all the tests.
+To run or debug tests use the `run > run` or `run > debug` menu items from the PhpStorm application menu. This will run all the tests.
 
 To run individual or sets of tests, the test results node can be expanded to show more granular tests that can be executed by right clicking on the node.
 
@@ -616,7 +616,7 @@ set the Custom option in Scope. Projects and Libraries
 On Find in Path dialog
 You either have to specify the actual path to work with (use Directory option of the Scope section and point to the "vendor" folder) or use Scope option (e.g. "All Places" or "Project and Libraries")
 
-## Php Editor Tips
+## PHP Editor Tips
 
 To insert the fully qualified namespace for a class name
 
