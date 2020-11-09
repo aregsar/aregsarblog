@@ -173,61 +173,58 @@ We can double click on shortcut to pop up the shortcut editor box where we can e
 
 ### Add custom user keymap for the terminal panel
 
-open settings (cmd+,)
+Open settings (cmd+,)
 
-select `keymap`
+Select `keymap`
 
-expand `Tool Windows folder`
+Expand `Tool Windows folder`
 
-double click `Terminal` selection to open the shortcut settings box for the `Terminal`
+Double click `Terminal` selection to open the shortcut settings box for the `Terminal`
 
-select `remove opt+F12`
+Select `remove opt+F12`
 
-click the OK button to remove the existing short cut that conflicts with the MacOS shortcut
+Click the OK button to remove the existing short cut that conflicts with the MacOS shortcut
 
-double click `Terminal` selection to open the shortcut settings box for the `Terminal`
+Double click `Terminal` selection to open the shortcut settings box for the `Terminal`
 
-click `add keyboard short cuts`
+Click `add keyboard short cuts`
 
-using the keyboard type `cmd+3` and then do not type on keyboard before next step
+Using the keyboard type `cmd+3` and then do not type on keyboard before next step
 
-click the OK button to add the new short cut
+Click the OK button to add the new short cut
 
 ### Add custom user keymap for the file structure popup
 
-open settings (cmd+,)
+Open settings (cmd+,)
 
-click `keymap`
+Click `keymap`
 
-type `file structure` in the search box
+Type `file structure` in the search box
 
-under `Main men > navigate` double click `File Structure` selection
+Under `Main men > navigate` double click `File Structure` selection
 
-using the keyboard type `cmd+4` and then do not type on keyboard before next step
+Using the keyboard type `cmd+4` and then do not type on keyboard before next step
 
-click the OK button to add the short cut
+Click the OK button to add the short cut
 
 ## Add custom user keymap for the Find Window
 
-To find the keymap setting for the find window
-open settings dialog using `cmd+,`
-keymap in left pane
-type in `find`
+Open settings dialog using `cmd+,`
 
-in right pane find the `Find` result under the `Tool Windows`
-node. It is mapped to `cmd+3` which we mapped to the terminal
-window shortcut
+Click `keymap` in the left pane
 
-double click on it and select `remove shortcut` to remove the current
-mapping and click OK.
+Type `find` in the search box in the left pane to find the keymap setting for the find window
 
-double click on it again and select `add keyboard shortcut`
-type `cmd+9` on the keyboard and click OK with the mouse.
+Double click on it and select `remove shortcut` to remove the current
+mapping, which is `cmd+3`that we mapped to the terminal window shortcut
 
-> You may get a warning prompt that that `cmd+9` keymap is assigned to version control. I just ignore and override the
-> warning since I dont use the editors source control features.
+Double click on it again and select `add keyboard shortcut`
 
-finally click OK to close the settings dialog and save the new setting.
+Type `cmd+9` on the keyboard and then click OK with the mouse.
+
+> You may get a warning prompt that that `cmd+9` keymap is assigned to version control. I just ignore and override the warning since I dont use the editors source control features.
+
+Finally click OK to close the settings dialog and save the new setting.
 
 ## Shortcut listing
 
@@ -251,11 +248,7 @@ Double click `shift` key (the search by `all` tab is selected when search box op
 
 Once opened, we can use the tab key to navigate between the search by all, by class, by file, by symbols or by actions tabs
 
-When searching using the global search box (regardless of the selecting class, file or other search tabs) we can change the scope of the search.
-
-The search scope to use can be selected using the dropdown on the right side in the global search box.
-
-The scope can be changed to encompass just the project files or search the project and composer packages in the `vendor` directory or search everywhere in the system or other available search scopes including custom search scopes that we can create.
+> Setting search scopes: When searching using the global search box (regardless of the selecting class, file or other search tabs) we can change the scope of the search. The search scope to use can be selected using the dropdown on the right side in the global search box. The scope can be changed to encompass just the project files or search the project and composer packages in the `vendor` directory or search everywhere in the system or other available search scopes including custom search scopes that we can create.
 
 - opens recent files box/toggle to last file
 
@@ -293,9 +286,7 @@ This is generally first opened from the Find in path dialog using the `cmd+enter
 
 The find in path dialog box has tabs to search by project, by directory or by selected search scope.
 
-When the search by `scope` tab is selected, a dropdown is displayed that allows the search scope to be selected.
-
-Just like the global search box, the scope can be changed to encompass just the project files or search the project and composer packages in the `vendor` directory or search everywhere in the system or other available search scopes including custom search scopes that we can create.
+> Setting search scopes: When the search by `scope` tab is selected, a dropdown is displayed that allows the search scope to be selected. Just like the global search box, the scope can be changed to encompass just the project files or search the project and composer packages in the `vendor` directory or search everywhere in the system or other available search scopes including custom search scopes that we can create.
 
 When we type in our search term the search results will be automatically displayed.
 
@@ -650,11 +641,13 @@ When using the `run > debug` menu, any breakpoint set in the test code or applic
 
 > Note: when debugging the tests and the test complete, the test results will be in the console panel of the debugger window.
 
-## Setting search scopes
+## Setting PHP Script Run\Debug configurations
 
-When searching using the global search box (regardles of the selecting class, file or other search tabs) we can change the scope of the search to encompass just the project files or the project and composer packages in the `vendor` directory or everywhere in the system or other available search scopes including custom search scopes that we can create.
+TBD
 
-The scope that is used can be selected using the dropdown on the right side in the global search box.
+## Creating custom search scopes
+
+TBD
 
 ## PHP Editor Tips
 
