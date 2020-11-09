@@ -213,91 +213,111 @@ All the essential shortcuts that I use are listed below:
 
 ### keyboard shortcuts to enable searching for everything
 
-open preferences dialog box
+- open preferences dialog box
 
 `cmd+,` (cmd+comma)
 
-open global search box
+- open global search box
 
-Three shortcuts (once opened, use tab key to navigate the tabs to search by class, file, symbol or all)
+I use the three common shortcuts below:
 
-Double click `shift` key (selects `all` search tab when search box opens)
+Double click `shift` key (the search by `all` tab is selected when search box opens)
 
-`cmd+o` (selects `class` search tab when search box opens)
+`cmd+o` (the search by `class` tab is selected when search box opens)
 
-`cmd_sh+o` (selects `file` search tab when search box opens)
+`cmd_sh+o` (the search by `file` tab is selected when search box opens)
 
-opens recent files box/toggle to last file
+Once opened, we can use the tab key to navigate between the search by all, by class, by file, by symbols or by actions tabs
+
+When searching using the global search box (regardless of the selecting class, file or other search tabs) we can change the scope of the search.
+
+The search scope to use can be selected using the dropdown on the right side in the global search box.
+
+The scope can be changed to encompass just the project files or search the project and composer packages in the `vendor` directory or search everywhere in the system or other available search scopes including custom search scopes that we can create.
+
+- opens recent files box/toggle to last file
 
 `cmd+e`
 
-pop up breadcrumb menu
+- pop up breadcrumb menu
 
 `cmd+uparrow`
 
-toggle\focus project sidebar
+- toggle\focus project sidebar
 
 `cmd+1`
 
-toggle favorites sidebar
+- toggle favorites sidebar
 
 `cmd+2`
 
-Opening the file structure popup (search class methods and properties in file)
+- Opening the file structure popup (search class methods and properties in file)
 
 `cmd+4` (added custom user keymap)
 
-toggle the problems panel
+- toggle the problems panel
 
 `cmd+6`
 
-find in files\find in path
+- Find in path (find in files)
 
 `cmd+sh+f`
 
+The find in path dialog box has tabs to search by project, by directory or by selected search scope.
+
+When the search by `scope` tab is selected, a dropdown is displayed that allows the search scope to be selected.
+
+Just like the global search box, the scope can be changed to encompass just the project files or search the project and composer packages in the `vendor` directory or search everywhere in the system or other available search scopes including custom search scopes that we can create.
+
+When we type in our search term the search results will be automatically displayed.
+
+While the search results are displayed we can use the `cmd+enter` shortcut to open up the search results in in the `Find` window bottom panel in the main editor.
+
+The find window displays the directory hierarchy of the files that have matching results results in the left pane and displays the selected file contents in the right pane.
+
 ### keyboard shortcuts for running commands
 
-toggle the terminal panel
+- toggle the terminal panel
 
 `cmd+3` (added custom user keymap)
 
-toggle the debug panel
+- toggle the debug panel
 
 `cmd+5`
 
-open run command box (can type in a command to execute such as node or npm)
+- open run command box (can type in a command to execute such as node or npm)
 
 Double click `ctrl` key
 
 ### keyboard shortcuts for file operations
 
-open find bar
+- open find bar
 
 `cmd+f`
 
-open find and replace bar
+- open find and replace bar
 
 `cmd+r`
 
-save current file modifications
+- save current file modifications
 
 `cmd+s`
 
-close tab
+- close current document tab
 
 `cmd+w`
 
 > To Close all tabs right click on any tab and select close all
 
-save all modified files
+- save all modified files
 
 `cmd+opt+s`
 
-reformat file
+- reformat file
 
 `cmd+opt+L`
 
-comment/uncomment line(s)
+- comment/uncomment line(s)
 
 `cmd+/`
 
@@ -313,19 +333,19 @@ The `enter` key can also be used to confirm a selected item in the project explo
 
 PhpStorm creating and opening files and directories using breadcrumb menu:
 
-pop up the breadcrumb menu
+- pop up the breadcrumb menu
 
 `cmd+uparrow`
 
-navigate the bread crumb menu
+- navigate the bread crumb menu
 
 `left or right arrow keys`
 
-open a file or directory selected in the breadcrumb menu or sub menu
+- open a file or directory selected in the breadcrumb menu or sub menu
 
 `enter key`
 
-create new file\directory\class\etc when breadcrumb menu or sub menu item is selected
+- create new file\directory\class\etc when breadcrumb menu or sub menu item is selected
 
 `cmd+n`
 
@@ -604,6 +624,10 @@ When using the `run > debug` menu, any breakpoint set in the test code or applic
 
 ## Setting search scopes
 
+When searching using the global search box (regardles of the selecting class, file or other search tabs) we can change the scope of the search to encompass just the project files or the project and composer packages in the `vendor` directory or everywhere in the system or other available search scopes including custom search scopes that we can create.
+
+The scope that is used can be selected using the dropdown on the right side in the global search box.
+
 For PhpStorm to search composer vendor folder
 
 configured/initialized composer for my PHP project. Now All folders in my /vendor directory are listed as "library root" and are not searched when using "Find In Path..."
@@ -626,17 +650,21 @@ Multiple cursors
 
 ## Resources
 
-https://www.jetbrains.com/help/phpstorm/configuring-keyboard-and-mouse-shortcuts.html
+https://xdebug.org/docs/remote
 
-https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox
-
-https://stitcher.io/blog/phpstorm-scopes
+https://blog.jgrossi.com/2018/using-xdebug-with-phpunit-in-phpstorm/
 
 https://github.com/codepress/wp-phpstorm-settings#keymaps
 
+https://stitcher.io/blog/phpstorm-scopes
+
 https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Searching-vendor-folder-for-composer-based-project
 
-https://xdebug.org/docs/remote
+https://resources.jetbrains.com/storage/products/phpstorm/docs/PhpStorm_ReferenceCard.pdf
+
+https://www.jetbrains.com/help/phpstorm/configuring-keyboard-and-mouse-shortcuts.html
+
+https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox
 
 https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html
 
@@ -657,5 +685,3 @@ https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints
 https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger
 
 https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html
-
-https://blog.jgrossi.com/2018/using-xdebug-with-phpunit-in-phpstorm/
