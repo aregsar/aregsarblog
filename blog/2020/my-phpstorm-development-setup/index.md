@@ -66,6 +66,26 @@ Once opened you can navigate to the setting you want to change using the directo
 
 You can also search for a setting which will make it easier to locate the setting.
 
+## Changing Font and Appearance of project directory navigation side panel
+
+> If navigation panel is closed, you can open it with `cmd+1` keyboard shortcut to see the effects if the setting change.
+
+Open settings dialog with `cmd+,` shortcut
+
+Select `Appearance & Behaviour > Apperance` in left pane of the dialog
+
+Make the following changes in the right pane of the dialog:
+
+Check the `use custom font` checkbox
+
+select font (e.g. Monospaced)
+
+set font size
+
+Check the `show tree indent guides` checkbox
+
+> Note changing the font size will also increase the size of the tab bar tabs
+
 ## Show whitespaces in the editor window
 
 To make white spaces visible in the editor document window:
@@ -103,7 +123,9 @@ Now you can change font size by holding down the `cmd` key and using the mouse w
 ## Turn off code folding
 
 select `editor > general > code folding` setting in left pane
+
 uncheck the `show code folding outline` checkbox in right pane
+
 uncheck all checkboxes under `fold by default` section so that code in any language is never folded
 
 ### User customized settings configuration files
@@ -466,7 +488,7 @@ Finally we need to configure the debugger server port that PhpStorm runs to comm
 
 > By default, XDebug listens on port 9000 but php-fpm running on my machine uses that port number so I change it to 9001.
 
-So select `Debug` under the `Php` folder which is the currently selected folder in left pane (i.e. select `languages & frameworks > php > Debug`)
+So select `Debug` node under the `Php` node which is the currently selected node in left pane (i.e. select `languages & frameworks > php > Debug`)
 
 In the right side setting pane, in the Debug Port field in the XDebug section, set the port number to `9001`.
 
@@ -645,10 +667,6 @@ When using the `run > debug` menu, any breakpoint set in the test code or applic
 
 TBD
 
-## Creating custom search scopes
-
-TBD
-
 ## PHP Editor Tips
 
 To insert the fully qualified namespace for a class name
@@ -694,3 +712,5 @@ https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints
 https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger
 
 https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html
+
+[Creating custom search scopes](https://www.jetbrains.com/help/phpstorm/configuring-scopes-and-file-colors.html#creating-a-new-custom-scope)

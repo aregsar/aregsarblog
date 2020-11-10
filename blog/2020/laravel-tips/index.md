@@ -72,7 +72,12 @@ This logic is hard to test.
 
 Instead do this logic in a controller action, in the model or a helper class.
 
-Set the result to a variable and pass that variable to the view.
+Set the result to a variable and pass that variable to the view:
+
+```php
+$post_owned_by_current_user = $post->ownedBy(auth()->user());
+return View('someview',['post_owned_by_current_user '=> $post_owned_by_current_user ])
+```
 
 Then the conditional logic will be simplified as:
 
@@ -80,7 +85,7 @@ Then the conditional logic will be simplified as:
 @if($post_owned_by_current_user)
 ```
 
-Which means when we write feature tests we can just check the value of this variable returned from the action.
+This also means when we write feature tests we can just check the value of this variable returned from the action.
 
 > Note: if we have a collection of posts and have to do this check on each post, then we loop through the posts in the action and calculate the values for all the posts and return them as an additional variable for each post.
 
@@ -113,6 +118,12 @@ $jobs = PlanFilter::UsersOnBasePlan(Users)->map(fn($user){
 //run a batch of jobs each job will upgrade a specific user
 Bus::batch($jobs)->dispatch();
 ```
+
+## Understand static vs instance semantics
+
+https://stackoverflow.com/questions/5197300/new-self-vs-new-static
+
+https://www.leaseweb.com/labs/2014/04/static-versus-self-php/
 
 ## In memory vs database collections
 
