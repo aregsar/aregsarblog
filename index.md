@@ -1,5 +1,9 @@
 # All Posts
 
+November 11, 2020
+
+[Turn On Key Repeat For MacOS Text Editors](https://aregsar.com/blog/2020/turn-on-key-repeat-for-macos-text-editors)
+
 October 22, 2020
 
 [Collection Of Bash Tips](https://aregsar.com/blog/2020/collection-of-bash-tips)

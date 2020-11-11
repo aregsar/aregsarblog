@@ -663,9 +663,51 @@ When using the `run > debug` menu, any breakpoint set in the test code or applic
 
 > Note: when debugging the tests and the test complete, the test results will be in the console panel of the debugger window.
 
-## Setting PHP Script Run\Debug configurations
+## Run\Debug configuration shortcuts
 
-TBD
+- Open the Run\Debug configuration dialog
+
+use `ctrl+opt+d` or `ctrl+opt+r` to open the run\debug configurations context menu.
+
+use the up\down arrow key to select the `edit configurations ...` item
+
+hit enter to open the Run\Debug configuration dialog
+
+- Popup the debug configurations context menu
+
+`ctrl+opt+d`
+
+select the debug configuration you want to run using up/down arrow keys and hit enter
+
+- Popup the run configurations context menu
+
+`ctrl+opt+r`
+
+select the run configuration you want to run using up/down arrow keys and hit enter
+
+- Rerun the last debug configuration
+
+`ctrl+d`
+
+> will run the last debug configuration that was run using `ctrl+opt+d`
+
+- Rerun the last run configuration
+
+`ctrl+r`
+
+> will run the last run configuration that was run using `ctrl+opt+r`
+
+## Debugging or Running a PHP Script
+
+click in the script document
+
+select `ctrl+opt+d` to pop up the debug menu
+
+with the up/down arrow key select the script file in the menu
+
+hit enter key
+
+to run the script instead of debugging the script use `ctrl+opt+r`
 
 ## PHP Editor Tips
 
@@ -712,5 +754,7 @@ To edit using multiple cursors hold down the command key and click in locations 
 [https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger](https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger)
 
 [https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html)
+
+https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html
 
 [Creating custom search scopes](https://www.jetbrains.com/help/phpstorm/configuring-scopes-and-file-colors.html#creating-a-new-custom-scope)

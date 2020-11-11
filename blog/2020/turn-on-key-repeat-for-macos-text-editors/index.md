@@ -1,8 +1,10 @@
-# Turn On Key Repeat For MacOS Text Editors
+# Turn On Key Repeat For MacOS Text Editors]
 
 November 11, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Turn On Key Repeat For MacOS Text Editors](https://aregsar.com/blog/2020/turn-on-key-repeat-for-macos-text-editors)
+By default for when you press and hold a key on MacOS, the key does not repeat.
+
+To fix this for various text editors use the commands specified below for your editors.
 
 ## Turn on key repeat commands for individual editors
 
