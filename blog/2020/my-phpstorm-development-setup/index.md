@@ -726,11 +726,11 @@ Check the `Surround selection on tyoping quote or brace` checkbox to enable this
 
 To edit using multiple cursors hold down the command key and click in locations you want the cursor.
 
-To duplicate text click on line or select one or more lines and type `cmd+d` (partial selection on the last line works)
+To duplicate text click on line or select one or more lines and type `cmd+d` (partial selection on the first and last line works the same)
 
-To move one or more lines select the lines and type `sh+opt+uparrow` to move up and `sh+opt+downarrow` to move down
+To move one or more lines select the lines and type `sh+opt+uparrow` to move up and `sh+opt+downarrow` to move down (partial selection on the first and last line works the same)
 
-To delete a line place cursor on the line and type `cmd+backspace`
+To delete a whole line place cursor on the line and type `cmd+backspace` (partial selection on one or more lines works the same)
 
 ### php tips
 
@@ -756,9 +756,9 @@ To insert the fully qualified namespace for a class name type in class name and 
 
 [configuring-local-interpreter](https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html)
 
-[using-the-composer-dependency-manager.html#working-with-composer-json](https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json)
+[using-the-composer-dependency-manager](https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json)
 
-[configuring-xdebug.html#integrationWithProduct](https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct)
+[configuring-xdebug](https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct)
 
 [multiuser-debugging-via-xdebug-proxies](https://www.jetbrains.com/help/phpstorm/multiuser-debugging-via-xdebug-proxies.html)
 
