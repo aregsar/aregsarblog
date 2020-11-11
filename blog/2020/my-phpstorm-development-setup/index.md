@@ -713,7 +713,8 @@ to run the script instead of debugging the script use `ctrl+opt+r`
 
 ## Setting to surround selected text option
 
-By default when we type any one of the `< [ ( { " '` characters or the back tick character when we have a text selection, that text will be wrapped with matching pairs of the character that we typed.
+By default when we type any one of the `< [ ( { " '` characters or the back tick character when we have a text selection,
+that text will be wrapped with matching pairs of the character that we typed.
 
 This configuration can be found at `Editor > General > Smart Keys` in the preferences dialog (`cmd+,`)
 
@@ -721,11 +722,19 @@ Check the `Surround selection on tyoping quote or brace` checkbox to enable this
 
 ## PHP Editor Tips
 
-To insert the fully qualified namespace for a class name
-
-`Type in class name and hit tab key`
+### general tips
 
 To edit using multiple cursors hold down the command key and click in locations you want the cursor.
+
+To duplicate text click on line or select one or more lines and type `cmd+d` (partial selection on the last line works)
+
+To move one or more lines select the lines and type `sh+opt+uparrow` to move up and `sh+opt+downarrow` to move down
+
+To delete a line place cursor on the line and type `cmd+backspace`
+
+### php tips
+
+To insert the fully qualified namespace for a class name type in class name and hit tab key
 
 ## Resources
 
@@ -739,34 +748,34 @@ To edit using multiple cursors hold down the command key and click in locations 
 
 [Searching-vendor-folder-for-composer-based-project](https://intellij-support.jetbrains.com/hc/en-us/community/posts/205436970-Searching-vendor-folder-for-composer-based-project)
 
-[https://resources.jetbrains.com/storage/products/phpstorm/docs/PhpStorm_ReferenceCard.pdf](https://resources.jetbrains.com/storage/products/phpstorm/docs/PhpStorm_ReferenceCard.pdf)
+[PhpStorm Reference](https://resources.jetbrains.com/storage/products/phpstorm/docs/PhpStorm_ReferenceCard.pdf)
 
-[https://www.jetbrains.com/help/phpstorm/configuring-keyboard-and-mouse-shortcuts.html](https://www.jetbrains.com/help/phpstorm/configuring-keyboard-and-mouse-shortcuts.html)
+[configuring-keyboard-and-mouse-shortcuts](https://www.jetbrains.com/help/phpstorm/configuring-keyboard-and-mouse-shortcuts.html)
 
-[https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox](https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox) https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox
+[working-with-the-ide-features-from-command-line](https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox) https://www.jetbrains.com/help/phpstorm/working-with-the-ide-features-from-command-line.html#toolbox
 
-[https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html](https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html)
+[configuring-local-interpreter](https://www.jetbrains.com/help/phpstorm/configuring-local-interpreter.html)
 
-[https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json](https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json)
+[using-the-composer-dependency-manager.html#working-with-composer-json](https://www.jetbrains.com/help/phpstorm/using-the-composer-dependency-manager.html#working-with-composer-json)
 
-[https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct](https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct)
+[configuring-xdebug.html#integrationWithProduct](https://www.jetbrains.com/help/phpstorm/configuring-xdebug.html#integrationWithProduct)
 
-[https://www.jetbrains.com/help/phpstorm/multiuser-debugging-via-xdebug-proxies.html](https://www.jetbrains.com/help/phpstorm/multiuser-debugging-via-xdebug-proxies.html)
+[multiuser-debugging-via-xdebug-proxies](https://www.jetbrains.com/help/phpstorm/multiuser-debugging-via-xdebug-proxies.html)
 
-[https://www.jetbrains.com/help/phpstorm/creating-a-php-debug-server-configuration.html](https://www.jetbrains.com/help/phpstorm/creating-a-php-debug-server-configuration.html)
+[creating-a-php-debug-server-configuration](https://www.jetbrains.com/help/phpstorm/creating-a-php-debug-server-configuration.html)
 
-[https://www.jetbrains.com/help/phpstorm/debugging-a-php-http-request.html#debug-the-request-via-http-client](https://www.jetbrains.com/help/phpstorm/debugging-a-php-http-request.html#debug-the-request-via-http-client)
+[debugging-a-php-http-request.html#debug-the-request-via-http-client](https://www.jetbrains.com/help/phpstorm/debugging-a-php-http-request.html#debug-the-request-via-http-client)
 
-[https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html](https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html)
+[debugging-a-php-cli-script](https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html)
 
-[https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints.html](https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints.html)
+[debugging-with-php-exception-breakpoints](https://www.jetbrains.com/help/phpstorm/debugging-with-php-exception-breakpoints.html)
 
-[https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger](https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger)
+[debugging-php-js](https://www.jetbrains.com/help/phpstorm/debugging-php-js.html#start-the-javascript-debugger)
 
-[https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html)
+[zero-configuration-debugging-cli](https://www.jetbrains.com/help/phpstorm/zero-configuration-debugging-cli.html)
 
-https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html
+[debugging-a-php-cli-script](https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html)
 
 [Creating custom search scopes](https://www.jetbrains.com/help/phpstorm/configuring-scopes-and-file-colors.html#creating-a-new-custom-scope)
 
-https://www.jetbrains.com/help/mps/adding-deleting-and-moving-lines.html
+[adding-deleting-and-moving-lines](https://www.jetbrains.com/help/mps/adding-deleting-and-moving-lines.html)
