@@ -362,6 +362,30 @@ Double click `ctrl` key
 
 `cmd+/`
 
+### Run\Debug configuration shortcuts
+
+`ctrl+opt+d`
+
+select the debug configuration you want to run using up/down arrow keys and hit enter
+
+- Popup the run configurations context menu
+
+`ctrl+opt+r`
+
+select the run configuration you want to run using up/down arrow keys and hit enter
+
+- Rerun the last debug configuration
+
+`ctrl+d`
+
+> will run the last debug configuration that was run using `ctrl+opt+d`
+
+- Rerun the last run configuration
+
+`ctrl+r`
+
+> will run the last run configuration that was run using `ctrl+opt+r`
+
 ## Closing pop ups opened by keyboard shortcuts
 
 You can use the escape key to close any settings dialog, search box or pop up window opened by a keyboard shortcut
@@ -517,7 +541,7 @@ Should be able to debug otherwise will get error if PHP interpreter not installe
 
 ## Configure XDebug for Laravel debugging
 
-We can configure PhpStorm to debug our Laravel application in Three ways.
+We can configure PhpStorm to debug our Laravel application in three ways.
 
 One way is that we can can run the Laravel artisan server and configure PhpStorm server connection settings to launch the debugger and connect to the Laravel server.
 
@@ -525,7 +549,7 @@ Another way is we can use Laravel Valet to have the application always running a
 
 The final way is to debug using PHPUnit, which will be described in the PHPUnit section.
 
-### Opening the debug configuration dialog box
+### Opening the debug configurations dialog using the application menu
 
 Open the Laravel project that you want to debug in PhpStorm
 
@@ -534,6 +558,18 @@ From application menu select `run > edit configurations` to open run/debug confi
 This dialog allows us to add php script, php unit or php server configurations to run or debug PHP scripts, unit tests and web applications.
 
 We will configure a web server configuration in the sections below to run\debug Laravel applications
+
+### Opening the debug configurations dialog using the context menu
+
+Open the Laravel project that you want to debug in PhpStorm
+
+use `ctrl+opt+d` keyboard shortcut to open the debug configurations context menu.
+
+use the up\down arrow key to select the `edit configurations ...` item
+
+hit enter to open the Run\Debug configuration dialog
+
+- Popup the debug configurations context menu
 
 ### Debugging using php artisan serve command
 
@@ -662,40 +698,6 @@ To run individual or sets of tests, the test results node can be expanded to sho
 When using the `run > debug` menu, any breakpoint set in the test code or application code will be hit.
 
 > Note: when debugging the tests and the test complete, the test results will be in the console panel of the debugger window.
-
-## Run\Debug configuration shortcuts
-
-- Open the Run\Debug configuration dialog
-
-use `ctrl+opt+d` or `ctrl+opt+r` to open the run\debug configurations context menu.
-
-use the up\down arrow key to select the `edit configurations ...` item
-
-hit enter to open the Run\Debug configuration dialog
-
-- Popup the debug configurations context menu
-
-`ctrl+opt+d`
-
-select the debug configuration you want to run using up/down arrow keys and hit enter
-
-- Popup the run configurations context menu
-
-`ctrl+opt+r`
-
-select the run configuration you want to run using up/down arrow keys and hit enter
-
-- Rerun the last debug configuration
-
-`ctrl+d`
-
-> will run the last debug configuration that was run using `ctrl+opt+d`
-
-- Rerun the last run configuration
-
-`ctrl+r`
-
-> will run the last run configuration that was run using `ctrl+opt+r`
 
 ## Debugging or Running a PHP Script
 
