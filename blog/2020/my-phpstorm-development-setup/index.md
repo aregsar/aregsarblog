@@ -711,6 +711,14 @@ hit enter key
 
 to run the script instead of debugging the script use `ctrl+opt+r`
 
+## Setting to surround selected text option
+
+By default when we type any one of the `< [ ( { " '` characters or the back tick character when we have a text selection, that text will be wrapped with matching pairs of the character that we typed.
+
+This configuration can be found at `Editor > General > Smart Keys` in the preferences dialog (`cmd+,`)
+
+Check the `Surround selection on tyoping quote or brace` checkbox to enable this if disabled.
+
 ## PHP Editor Tips
 
 To insert the fully qualified namespace for a class name
@@ -760,3 +768,5 @@ To edit using multiple cursors hold down the command key and click in locations 
 https://www.jetbrains.com/help/phpstorm/debugging-a-php-cli-script.html
 
 [Creating custom search scopes](https://www.jetbrains.com/help/phpstorm/configuring-scopes-and-file-colors.html#creating-a-new-custom-scope)
+
+https://www.jetbrains.com/help/mps/adding-deleting-and-moving-lines.html
