@@ -738,6 +738,24 @@ To delete a whole line place cursor on the line and type `cmd+backspace` (partia
 
 To insert the fully qualified namespace for a class name type in class name and hit tab key
 
+## Plugins
+
+Theme with icons for project view file types
+
+[https://plugins.jetbrains.com/plugin/8006-material-theme-ui](https://plugins.jetbrains.com/plugin/8006-material-theme-ui)
+
+Code completion plugin for Laravel
+
+[https://plugins.jetbrains.com/plugin/13441-laravel-idea](https://plugins.jetbrains.com/plugin/13441-laravel-idea)
+
+Alpine JS support
+
+[https://plugins.jetbrains.com/plugin/15251-alpine-js-support](https://plugins.jetbrains.com/plugin/15251-alpine-js-support)
+
+Alternate testing framework
+
+[https://plugins.jetbrains.com/plugin/14636-pest](https://plugins.jetbrains.com/plugin/14636-pest)
+
 ## Resources
 
 [XDebug docs](https://xdebug.org/docs/remote)
@@ -781,3 +799,7 @@ To insert the fully qualified namespace for a class name type in class name and 
 [Creating custom search scopes](https://www.jetbrains.com/help/phpstorm/configuring-scopes-and-file-colors.html#creating-a-new-custom-scope)
 
 [adding-deleting-and-moving-lines](https://www.jetbrains.com/help/mps/adding-deleting-and-moving-lines.html)
+
+[https://blog.jetbrains.com/phpstorm/2020/11/phpstorm-2020-3-eap-6](https://blog.jetbrains.com/phpstorm/2020/11/phpstorm-2020-3-eap-6)
+
+[https://blog.jetbrains.com/phpstorm/2020/10/how-the-pest-phpstorm-plugin-will-improve-your-testing-workflow](https://blog.jetbrains.com/phpstorm/2020/10/how-the-pest-phpstorm-plugin-will-improve-your-testing-workflow)
