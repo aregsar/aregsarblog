@@ -724,6 +724,8 @@ Check the `Surround selection on tyoping quote or brace` checkbox to enable this
 
 ### general tips
 
+Type `cmd+downarrow` to go to end `cmd+uparrow` to go beginning of document
+
 To edit using multiple cursors hold down the command key and click in locations you want the cursor.
 
 To duplicate text click on line or select one or more lines and type `cmd+d` (partial selection on the first and last line works the same)

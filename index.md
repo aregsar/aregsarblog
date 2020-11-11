@@ -2,6 +2,10 @@
 
 November 11, 2020
 
+[My PhpStorm Development Setup](https://aregsar.com/blog/2020/my-phpstorm-development-setup)
+
+November 11, 2020
+
 [Turn On Key Repeat For MacOS Text Editors](https://aregsar.com/blog/2020/turn-on-key-repeat-for-macos-text-editors)
 
 October 22, 2020
