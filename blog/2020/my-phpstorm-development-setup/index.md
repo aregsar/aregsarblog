@@ -2,8 +2,6 @@
 
 November 11, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
-[My PhpStorm Development Setup](https://aregsar.com/blog/2020/my-phpstorm-development-setup)
-
 In this post I detail how I set up PhpStorm for productive PHP development.
 
 ## Opening PhpStorm editor from the command line
