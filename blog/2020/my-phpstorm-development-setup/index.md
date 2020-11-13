@@ -742,7 +742,7 @@ then run:
 php path/to/script.php
 ```
 
-If we multiple editors are running a XDebug session connecting through a proxy to the XDebug server, we need to set an `idekey` setting as well In this scenario the XDebug server needs to know which editors debugger server port 9000 it should connect to based on the unique `idekey` value that is sent to XDebug (via command line flags or via env variables read by the editor) from each machine that is running the editor during the initial connection when the debugger starts.
+If multiple editors are running an XDebug session connecting through a proxy to the XDebug server, we need to also set an `idekey` setting as well In this scenario the XDebug server needs to know which editors debugger server port 9001 it should connect to based on the unique `idekey` value that is sent to XDebug (via command line flags or via env variables read by the editor) from each machine that is running the editor during the initial connection when the debugger starts.
 
 ```bash
 #executing a script while enabling XDebug
