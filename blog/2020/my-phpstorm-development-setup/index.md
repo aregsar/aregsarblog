@@ -516,13 +516,11 @@ In the right side setting pane, in the Debug Port field in the XDebug section, s
 
 This will be the XDebug server port through which the PhpStorm debugger will communicate with XDebug.
 
-To test the interpreter and XDebug are working add the following environment variable:
+> If we need to use a proxy server to connect multiple editors to XDebug server we need to add the export environment variable `export XDEBUG_CONFIG="idekey=PHPSTORM"` in our bash shell configuration file. This environment variable is required for XDebug to know that it is communicating with the our PhpStorm debugger. The value of `idekey` does not need to be `PHPSTORM` it can be any unique value that distinguishes between the multiple editors. We can even use different editors for instance VSCode and PhpStorm.
 
-`export XDEBUG_CONFIG="idekey=PHPSTORM"`
+Test that the interpreter and XDebug are working:
 
-This environment variable is required for XDebug to know that it is communicating with the PhpStorm debugger.
-
-Create a `index.php` script in the project folder:
+Create a `index.php` script in the project folder
 
 ```bin
 echo '<?php' > index.php
@@ -699,15 +697,70 @@ When using the `run > debug` menu, any breakpoint set in the test code or applic
 
 ## Debugging or Running a PHP Script
 
+set breakpoint in the script document
+
 click in the script document
 
 select `ctrl+opt+d` to pop up the debug menu
 
 with the up/down arrow key select the script file in the menu
 
-hit enter key
+hit enter key to start debugging the script.
 
-to run the script instead of debugging the script use `ctrl+opt+r`
+To run the script instead of debugging the script use `ctrl+opt+r`
+
+## Debugging or Running a PHP Script from the command line
+
+When we execute the script through PhpStorm by using the debug or run commands, PhpStorm runs the configured PHP interpreter with the XDebug settings in the PHP.ini file.
+
+However we can also run the script using the command line instead of through PhpStorm debug command.
+
+In this case we need to pass the XDebug settings either by command line params or by setting the XDEBUG_CONFIG environment variable.
+
+Debug the script by using the debug options of the PHP CLI:
+
+```bash
+#executing a script while enabling XDebug
+php \
+-d xdebug.remote_enable=1  \
+-d xdebug.remote_mode=req \
+-d xdebug.remote_port=9000 \
+-d xdebug.remote_host=127.0.0.1 \
+-d xdebug.remote_connect_back=0 \
+path/to/script.php
+```
+
+Or set the `XDEBUG_CONFIG` environment variable.
+
+```ini
+export XDEBUG_CONFIG="remote_enable=1 remote_mode=req remote_port=9001 remote_host=127.0.0.1 remote_connect_back=0"
+```
+
+then run:
+
+```bash
+php path/to/script.php
+```
+
+If we are using if we are using a proxy we need the set `idekey` setting as well:
+
+```bash
+#executing a script while enabling XDebug
+php \
+-d xdebug.remote_enable=1  \
+-d xdebug.remote_mode=req \
+-d xdebug.remote_port=9000 \
+-d xdebug.remote_host=127.0.0.1 \
+-d xdebug.remote_connect_back=0 \
+-d xdebug.idekey=PHPSTORM \
+path/to/script.php
+```
+
+Or
+
+```ini
+export XDEBUG_CONFIG="idekey=PHPSTORM remote_enable=1 remote_mode=req remote_port=9001 remote_host=127.0.0.1 remote_connect_back=0"
+```
 
 ## Setting to surround selected text option
 
