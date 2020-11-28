@@ -89,11 +89,12 @@ npm run watch
 
 ## Configuring Blade Views for Fortify
 
-in app > providers > FortifyServiceProvider.php
-in the boot() method add:
+in app/providers/FortifyServiceProvider.php
+in the register() method add:
 
 ```php
 Fortify::registerView(fn()=> view('auth.register'));
+
 Fortify::loginView(fn()=> view('auth.login'));
 ```
 
