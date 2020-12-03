@@ -2,6 +2,50 @@
 
 [laravel fortify auth with blade and bootstrap](https://aregsar.com/blog/2020/laravel-fortify-auth-with-blade-and-bootstrap)
 
+## Setup Bootstrap 5
+
+Install Bootstrap 5 using NPM:
+
+```bash
+#@next since bootstrap 5 is not released yet
+#may not need to install popper.js when bootstrap 5 is release
+npm i bootstrap@next popper.js sass sass-loader --save-dev
+```
+
+Create the application Bootstrap scss file importing bootstrap:
+
+```bash
+echo '@import "~bootstrap/scss/bootstrap";' > resources/sass/app.scss
+```
+
+Update the `webpack.mix.js` file to compile the scss file:
+
+```js
+mix.js('resources/js/app.js','public/js')
+   .sass('resources/sass/app.scss','public/css');
+   .sourceMaps();
+```
+
+In `resources/js/app.js` add:
+
+```js
+window.Popper = require("popper.js").default;
+require("./bootstrap");
+```
+
+Build assets:
+
+```bash
+npm run dev
+```
+
+Open a new terminal tab and run npm watch to automatically rebuild assets as we update the scss file
+
+```bash
+cd myapp
+npm run watch
+```
+
 ## Setup Laravel Fortify
 
 ```bash
@@ -100,44 +144,11 @@ here is the out of the box configuration
 ];
 ```
 
-## Setup Bootstrap 5
-
-Install Bootstrap 5 using NPM:
-
-```bash
-#@next since bootstrap 5 is not released yet
-#may not need to install popper.js when bootstrap 5 is release
-npm i bootstrap@next popper.js sass sass-loader --save-dev
-```
-
-Create the application Bootstrap scss file importing bootstrap:
-
-```bash
-echo '@import "~bootstrap/scss/bootstrap";' > resources/sass/app.scss
-```
-
-Update the `webpack.mix.js` file to compile the scss file:
-
-```js
-mix.js('resources/js/app.js','public/js')
-   .sass('resources/sass/app.scss','public/css');
-   .sourceMaps();
-```
-
-Build assets:
-
-```bash
-npm run dev
-```
-
-Open a new terminal tab and run npm watch to automatically rebuild assets as we update the scss file
-
-```bash
-cd myapp
-npm run watch
-```
-
 ## Configuring Blade Views for Fortify
+
+'/' # unauthenticated users
+'/home' #dashboard where logged in user is redirected to
+#also will redirect to /home when account is registered and user is immidiately logged in but if email verification middleware protects the /home then the logged in user is redirected to the verify email page where they can resent the verification link
 
 in app/providers/FortifyServiceProvider.php
 in the register() method add:
@@ -155,18 +166,37 @@ create views/auth/login.blade.php
 in the register view make sure bootstrap form input tags
 have a name attribute set to name,email.password.password_confirmation
 
-<input name="name" type="text" @error('name') is-invalid @enderror class="form-control" id="name" value="{{old('name')}}">
+```html
+<input
+  class="form-control @error('name') is-invalid @enderror"
+  id="name"
+  name="name"
+  type="text"
+  value="{{ old('name') }}"
+/>
 
-and add:
 @error('name')
-<span class="invalid-feedback" role="alert">
-{{ $message }}
-</span>
+<span class="invalid-feedback" role="alert"> {{ $message }} </span>
 @enderror
+```
 
 ### Create the Register Blade View
 
-TBD
+register input names: name, email,password,password_confirmation
+
+```html
+<input
+  class="form-control @error('name') is-invalid @enderror"
+  id="name"
+  name="name"
+  type="text"
+  value="{{ old('name') }}"
+/>
+
+@error('name')
+<span class="invalid-feedback" role="alert"> {{ $message }} </span>
+@enderror
+```
 
 ### Create the Main Blade Layout View
 
@@ -175,6 +205,7 @@ and put in that folder renamed to main.blade.php)
 
 add a meta tag
 
+```html
 <meta name="csrf-token" content="{{csrf_token()}}">
 <title>{{config('app.name')}}</title>
 <link href="{{asset('css/app.css')}}" rel="stylesheet">
@@ -201,6 +232,7 @@ add a meta tag
 <main class="container">
 	@yield('content')
 </main>
+```
 
 ### Create the index blade view
 
@@ -219,3 +251,43 @@ in routs.php
 ```php
 Route::get('/', fn() => view('index'));
 ```
+
+## Add Reset Password Feature
+
+Fortify::requestPasswordResetLinkView(fn()=> view('auth.forgotpassword'));
+
+//Fortify sets this status message in the session,
+//when the send reset link action completes and redirects back to
+//the view that has the reset password form:
+//"we have emailed your password reset link!"
+@if(session('status'))
+{{session('status')}}
+@endif
+
+---
+
+Fortify::resetPasswordView(fn($request)=>view('auth.resetpassword',['request'=>$request]));
+
+//in auth.resetpassword get values that fortify redirected with
+//$request->route('token') could just be $request->token ???
+<input type="hidden" name="token" value="{{$request->route('token')}}">
+<input type="email" name="email" value="{{request->email}}">
+
+---
+
+//once user class inherits from MustVerifyEmail and we add
+the middleware->['auth','verifyemail'] to proteted routes
+fortify will redirect to the auth.verifyemail view where we have the resend verification email form
+
+Fortify::verifyEmailView(fn()=> view('auth.verifyemail'));
+
+//form for resending verificaion link
+
+<form method="POST" action="{{route('verification.send')}}">
+
+//show "verification link sent" status message after submiting the form
+@if(session('status'))
+{{session('status')}}
+@endif
+
+## XX
