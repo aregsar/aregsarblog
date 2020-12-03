@@ -2,19 +2,32 @@
 
 [laravel fortify auth with blade and bootstrap](https://aregsar.com/blog/2020/laravel-fortify-auth-with-blade-and-bootstrap)
 
-php artisan route:list --compact
-
 ## Setup Laravel Fortify
 
 ```bash
 laravel new myapp
-cd mayapp
-composer require laravel/fortify
-php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
-php artisan migrate
+cd myapp
 ```
 
-Register the FortifyServiceProvider in `config/app.php` by adding the `FortifyServiceProvider::class` to the providers array in `'providers'` section :
+```bash
+composer require laravel/fortify
+```
+
+```bash
+php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
+```
+
+The publish command publishes:
+
+```bash
+app/Providers/FortifyServiceProvider.php
+config/fortify.php
+app/actions/Fortify/xxxaction.php
+```
+
+The `app/actions/Fortify` directory actions are registered with Fortify in the boot method of the `FortifyServiceProvider` class as described in the next section.
+
+Register the FortifyServiceProvider in `config/app.php` by adding the `FortifyServiceProvider::class` to the providers array in the `'providers'` array:
 
 ```php
 'providers' => [
@@ -22,13 +35,47 @@ Register the FortifyServiceProvider in `config/app.php` by adding the `FortifySe
 ]
 ```
 
-### Fortify Published Files
+Now that Fortify is configured lets see what routes it provides for us out of the box
 
-The publish command publishes the app/Providers/FortifyServiceProvider.php and config/fortify.php files used to configure Fortify.
+```bash
+php artisan route:list
+```
 
-The publish command also publishes Fortify auth action classes to the app/actions/Fortify directory. These actions are registered with Fortify as described in the boot method of the FortifyServiceProvider as described in the next section.
+## Setup database
 
-### Registering auth actions with the FortifyServiceProvider
+Add a docker compose file
+
+```yaml
+a
+```
+
+Run docker compose to start the database server
+
+```bash
+docker-compose up
+```
+
+Configure the database settings in the .env file
+
+```ini
+db=a
+```
+
+Run the artisan migrate command to add the tables
+
+```bash
+php artisan migrate
+```
+
+To shut down the docker containers run:
+
+```bash
+docker-compose down
+```
+
+> Note the database data is persisted on local host
+
+## Registering auth actions with the FortifyServiceProvider
 
 FortifyServiceProvider boot method contains Fortify calls to register the auth action classes with Fortify. These action classes encapsulate the authentication logic for each Fortify authentication feature.
 
@@ -38,7 +85,7 @@ Example:
 Fortify::createUsersUsing(CreateNewUser::class)
 ```
 
-### Enabling auth features using Fortify features Config
+## Enabling auth features using Fortify features Config
 
 config/fortify.php
 
@@ -55,35 +102,38 @@ here is the out of the box configuration
 
 ## Setup Bootstrap 5
 
+Install Bootstrap 5 using NPM:
+
 ```bash
-npm i bootstrap@next popper.js sass sass-loader --save-dev
 #@next since bootstrap 5 is not released yet
-#may not need to install popper.js when bootstrap 5 is released
+#may not need to install popper.js when bootstrap 5 is release
+npm i bootstrap@next popper.js sass sass-loader --save-dev
 ```
 
-in webpack.mix.js
+Create the application Bootstrap scss file importing bootstrap:
+
+```bash
+echo '@import "~bootstrap/scss/bootstrap";' > resources/sass/app.scss
+```
+
+Update the `webpack.mix.js` file to compile the scss file:
 
 ```js
-mix.js'resources/js/app.js','public/js')
+mix.js('resources/js/app.js','public/js')
    .sass('resources/sass/app.scss','public/css');
    .sourceMaps();
 ```
 
-in the project
-
-create the resources > sass > app.scss file
-open the file and add on first line:
-
-```scss
-@import "~bootstrap/scss/bootstrap";
-```
+Build assets:
 
 ```bash
-#compile bootstrap
 npm run dev
+```
 
-#open another terminal tab and run
-#instead of constantly running npm run dev to rebuild assets
+Open a new terminal tab and run npm watch to automatically rebuild assets as we update the scss file
+
+```bash
+cd myapp
 npm run watch
 ```
 
