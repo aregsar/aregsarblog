@@ -2,6 +2,15 @@
 
 [laravel fortify auth with blade and bootstrap](https://aregsar.com/blog/2020/laravel-fortify-auth-with-blade-and-bootstrap)
 
+## Create a new Laravel 8 poject
+
+Create the Laravel 8 application using the Laravel CLI:
+
+```bash
+laravel new myapp
+cd myapp
+```
+
 ## Setup Bootstrap 5
 
 Install Bootstrap 5 using NPM:
@@ -46,22 +55,30 @@ cd myapp
 npm run watch
 ```
 
+In the next post we will setup Laravel Fortify for the project
+
 ## Setup Laravel Fortify
 
-```bash
-laravel new myapp
-cd myapp
-```
+In the previous article we setup a new Laravel 8 project and installed Bootstrap 5 in the project. You can find the post here:
+
+[laravel fortify auth with blade and bootstrap](https://aregsar.com/blog/2020/laravel-fortify-auth-with-blade-and-bootstrap)
+
+In this post we will install and setup Laravel Fortify in the project:
+
+First we install Laravel Fortify package
 
 ```bash
+cd myapp
 composer require laravel/fortify
 ```
+
+Next we publish the FortifyServiceProvider
 
 ```bash
 php artisan vendor:publish --provider="Laravel\\Fortify\\FortifyServiceProvider"
 ```
 
-The publish command publishes:
+The publish command publishes the following files:
 
 ```bash
 app/Providers/FortifyServiceProvider.php
@@ -71,9 +88,7 @@ app/actions/Fortify/xxxaction.php
 
 > The `app/actions/Fortify` directory actions are registered with Fortify in the boot method of the `FortifyServiceProvider` class as described in the next section.
 
-### Register the FortifyServiceProvider
-
-In `config/app.php` by adding the `FortifyServiceProvider::class` to the providers array in the `'providers'` array:
+Next we register the `FortifyServiceProvider` in `config/app.php` by adding the `FortifyServiceProvider::class` to the `'providers'` array:
 
 ```php
 'providers' => [
@@ -87,7 +102,9 @@ Now that Fortify is configured lets see what routes it provides for us out of th
 php artisan route:list
 ```
 
-## Setup database
+## Setup the database
+
+We need to add the Laravel authentication and Fortify tables. To do that we need to stand up a MySQL database and run migrations against it By performing the following steps:
 
 Add a docker compose file
 
@@ -113,13 +130,7 @@ Run the artisan migrate command to add the tables
 php artisan migrate
 ```
 
-To shut down the docker containers run:
-
-```bash
-docker-compose down
-```
-
-> Note the database data is persisted on local host
+> To shut down the docker containers run `docker-compose down`. Because we configured a Docker Volume, the database data is persisted on local host after the containers are shut down and will be reloaded once we startup the database container again.
 
 ## Registering auth actions with the FortifyServiceProvider
 
@@ -131,13 +142,13 @@ Example:
 Fortify::createUsersUsing(CreateNewUser::class)
 ```
 
+These actions will be used in the Fortify Featurs that we implement in future posts
+
 ## Enabling auth features using Fortify features Config
 
-config/fortify.php
+The features that we want to enable are listed in the `'features'` array of the `config/fortify.php` file
 
-'features' section has and array of Fortify features that we can turn on by adding the feature to the array.
-
-here is the out of the box configuration
+Here is the out of the box configuration:
 
 ```php
 'features'=>[
@@ -145,6 +156,10 @@ here is the out of the box configuration
     Features::resetPasswords(),
 ];
 ```
+
+We will update this array with additional features that we will implement in the following posts.
+
+In the next post we will setup the registration and login features of Fortify
 
 ## Configuring Blade Views for Fortify
 
