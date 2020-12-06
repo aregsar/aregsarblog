@@ -51,8 +51,10 @@ server {
 
         root /var/www/example.com/public;
 
+        index index.html index.php;
+
         location / {
-                index index.html index.php;
+
 
                 try_files $uri $uri/ =404;
         }
@@ -87,14 +89,29 @@ Here values of both location blocks end in a trailing slash. This is important b
 
 So if we have the request `https://example.com/api/path` and `https://example.com/another/path`, the first URI will be matched by the `location /api/` because of the more specific `/api/` prefix match and the second one will match with the `location /` path with the `/` prefix match. Note the same matching rules will apply for `https://example.com/api/` and `https://example.com/another/path/` where they have a trailing slash. But if we have `https://example.com/api` without the trailing slash, then it will be matched by the `location /` instead because there is no prefix `/api/` to match the other location block.
 
-Once we match a location, we are now ready to apply the rules in the location block.
-For the `location /` the way the `try_files` rule works is that it first tries to match the URI path `$uri` after location prefix, trying to find a matching file on the same path from the root. If it find the file it will serve the file.
+There are different types of location matching. The examples above used `prefix` matching to match part or all the route path starting from the root URI `/` slash character.
+
+Another type of match is a regular expression match an has the form of:
+
+```nginx
+location ~ \.php$ {
+
+}
+```
+
+The `~` tilde character option after the `location` keyword signifies a case sensitive regular expression match type. By default when there is no option specified, the matching defaults to prefix matching.
+
+So in this case we are matching a regular expression that looks for any URI path that ends with `.php`. Examples are `https://example.com/index.php`, `https://example.com/foo.php`, `https://example.com/path/to/index.php` and `https://example.com/path/to/foo.php`. These all will be matched by the above location block.
+
+Once we match a location, we are now ready to apply the rules in the location block. Note that with some of the rules, if the URI that is being matched is modified by these rules, NGINX does a internal redirect and re-matches the modified URI against all the sibling location blocks again. This happens quite frequently when the URI being matched is a directory and gets one of the files specified in the `index` setting appended to the URI being matched, triggering a internal redirect and a re-matching.
+
+So for the `location /` the way the `try_files` rule works is that it first tries to match the URI path `$uri` after location prefix, trying to find a matching file on the same path from the root. If it find the file it will serve the file.
 
 If it does not find a it tries to match a directory `$uri/` after the location prefix, trying to find a matching directory on the same path from the root. If it find the directory it will first try appending the first file parameter `index.html` of the `index` rule and do an internal redirect to try to match the new URI with the appended `index.html`. In this case the `location /` will again match the URL and this time the `try_files` `$uri` will be used to match the `index.html` file. If the file exists in the directory then it will get served. If it doesn't then the `$uri/` will be tries again, this time appending `index.php` and will again redirect internally to find a match for the new URI.
 
 This time however the `location ~` will be matched and will server the `index.php` file from the directory specified with the `root setting`.
 
-> Note that the `index` setting could be applied at the level above the `location` blocks. In that case it will be inherited by all the location blocks. However our `location ~` block will never need to use the `index` setting so it is OK to move it into the location block that will be using it.
+> Note that the `index` setting is applied at the level above all the `location` blocks. In that case it will be inherited by all the location blocks. However our `location ~` block will never need to use the `index` setting so we could actually move the `index` setting into the `location /` block that will be using it without impacting the URI matching process.
 
 When `try_files $uri $uri/ =404;` tries to match the remainder of the URI, if does not find a match it will fallback to 404 error status. In our case we will never hit the 404 fallback because there will always be redirected to the `location ~` block based on the `index.php` default page specified in the index setting.
 
@@ -106,7 +123,7 @@ The `error_page 404 /index.php;` indicates that if a 404 error status is generat
 
 A slight variation of this configuration can be found in the wild. I have shown this configuration below where I removed the index.php from the index setting in the `server` block and instead I added a fallback `/index.php?$query_string` parameter to the `location /` block. In this version because we don't have `index.php` default to match in the try_files block and redirect to `location ~ \.php$` location block, we will end up falling back to the `/index.php` in the try_files block which will redirect to the `location ~ \.php$` location block.
 
-Of course it does not hurt to include both the index.php and fallback /index.php in that case the fallbak will never be used.
+Of course it does not hurt to include both the index.php and fallback /index.php in that case the fallback will never be used.
 
 Also note that once we have a location match for the index.php file in the `location ~ \.php$` will look for the `index.php` file in the document root which is specified by the root setting. Even if the path index.php that matched had preceding URL path segments leading to the index.php file at the tail. For instance if the path matched was `/a/b/index.php` the file that will be searched for by the PHP interpreter will be at `/var/www/example.com/public/index.php` and not at `/var/www/example.com/public/a/b/index.php`.
 
@@ -118,9 +135,9 @@ server {
 
         root /var/www/example.com/public;
 
-        location / {
-                index index.html;
+        index index.html;
 
+        location / {
                 try_files $uri $uri/ /index.php?$query_string
         }
 
@@ -175,3 +192,33 @@ server {
     error_page 404 /index.php;
 }
 ```
+
+## Serving static content with an API backend
+
+The following configuration is modified for apps that serve an API within the same domain at a `/api/` URI prefix.
+
+```nginx
+server {
+        listen 80;
+        listen [::]:80;
+        server_name example.com www.example.com;
+
+        root /var/www/example.com/public;
+
+        index index.html;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+        location /api/ {
+                try_files $uri $uri/ =404;
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        }
+}
+```
+
+Any request that contain a URI prefix of `/api/` are matched to the `location /api/` block and routed to the PHP API server as long as the URIs end with `index.php`.
+
+All other requests are matched to `location /` and served as static files. So a request to `https://example.com/`, `https://example.com/` or `https://example.com/index.html` will serve the static page to bootstrap a Vue JS app perhaps.
