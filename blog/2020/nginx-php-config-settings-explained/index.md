@@ -205,11 +205,17 @@ server {
 
         location / {
                 index index.html;
-                try_files $uri $uri/ /index.php?$query_string;
+                try_files $uri $uri/ =404;
+        }
+
+        location /api {
+                index index.php;
+                try_files $uri/ /index.php?$query_string;
         }
 
         location /api/ {
-                try_files /index.php?$query_string;
+                index index.php;
+                try_files $uri/ /index.php?$query_string;
         }
 
         location ~ \.php$ {
