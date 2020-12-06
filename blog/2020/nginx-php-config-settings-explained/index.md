@@ -6,6 +6,10 @@ In this post I will attempt to demystify the nginx configuration settings for se
 
 ## The components of an NGINX config file
 
+The main NGINX config file is located at `/etc/nginx/nginx.config`.
+
+The content is listed below:
+
 ```nginx
 user  nginx;
 worker_processes  1;
@@ -27,6 +31,18 @@ http {
     gzip on;
 
     include /etc/nginx/conf.d/*.conf;
+}
+```
+
+At the top level we have general settings for the NGINX processes.
+
+For HTTP requests the the `http{}` block inside which are the HTTP related settings.
+
+Within the HTTP blog there can be one or more `server{}` blocks. Each one of these blocks is responsible for matching a request coming in through an IP and PORT as shown below.
+
+```nginx
+http {
+    include /etc/nginx/conf.d/*.conf;
 
     server{
         listen 80;
@@ -41,7 +57,19 @@ http {
 }
 ```
 
-For the purposes of this post I will start with the `server` configuration block that matches the URI of the request we want to respond to.
+The HTTP block also includes an `include` directive that includes one or more configuration files that include the `.conf` extension from the `/etc/nginx/conf.d/` directory. These files can also include server blocks that will be included in the HTTP block.
+
+General best practice is to not modify the main config file to add server blocks. If we are only running a single server then it is best practice to add the server block in a `/etc/nginx/conf.d/server.conf` file.
+
+If we are running more than one website on a single server, there is a `/etc/nginx/sites_active/` directory that we can add configuration files to for each server. Each of these files will contain a single server block for a specific website. Any files in this directory will be included by default in the HTTP block.
+
+Instead of directly adding configuration files in `/etc/nginx/sites_active/` it is best practice to instead add the file to the `/etc/nginx/sites_available/` directory and symlink it in the `/etc/nginx/sites_active/` directory. This way we can keep the configuration file and simply unlink it in `/etc/nginx/sites_active/` if we want to disable the site, instead of having to remove the actual file from `/etc/nginx/sites_active/`.
+
+## Configuring Server blocks
+
+As mentioned before the `server` configuration block that matches the URI of the request we want to respond to.
+
+Below a server block for responding to requests using a PHP server is shown:
 
 ```nginx
 server {
@@ -66,10 +94,61 @@ server {
 }
 ```
 
-The way the location block work is they match the URI path after the domain name or IP:PORT part of the URI.
-They also match starting with more specific to less specific paths.
+In the following sections I will describe each of the main directives and blocks within the server block. There can be additional directives that will be shown in a more fully configured server block.
 
-For example if we have two location block
+### The listen directive
+
+The listen directives at the top match the PORT that the request is coming in. `listen 80` is for IPv4 and the `listen [::]:80` is for IPv6 port matching. You could also specify a specific IP along with the PORT such as `listen 123.22.22.33:80` to match the right interface if there are multiple IP interfaces on the server.
+
+Once listen directive has a match, that server block is chosen to handle the request.
+
+Sometimes multiple server blocks may use the same listen directive which will result in multiple matching server blocks. In that case and only in that case the `server_name` directive is used to match the requests for the server blocks that has a match using the `listen` directive.
+
+Note that if the listen directive does not match a server block then the server_name directive is not even considered and the server block will be eliminated from consideration.
+
+### The server_name directive
+
+The server_name directive matches the host header sent as part of the request to select a single server block if the listen directive had multiple matches. The hots header can either contain a domain name or an IP address depending on what address was used to send the HTTP request.
+
+In the server block above the `server_name example.com www.example.com;` directive will match if the host header is either `example.com` of `www.example.com`.
+
+Other examples are `server_name localhost` or `server_name 127.0.0.1`.
+
+Again it is important to emphasize that the server name directive only comes into play if the listen directive did not find a unique match between server blocks.
+
+## The root directive
+
+Within a server block there will be directives such as the `try_files` directive that will try to match the URI path of the request. The URI path is everything after the host and port portion of the URI not including the query string.
+
+The root directive maps the root of the URI path to the directory location specified as its parameter.
+
+So for example, in the server block above the root URI `/` path is mapped to `/var/www/example.com/public/` directory by the `root` directive.
+
+Everything after the root path will be matched to the directory structure in the root directory.
+
+So for example, the URI path `/foo/bar.html` will be matched matched to `/var/www/example.com/public/foo/bar.html` if that path exists.
+
+## The index directive
+
+The `index` directive is useful when matching URI paths that are directories (i.e. they end in trailing slash) using the `try_files{}` directive.
+
+When a URI directory path is matched to an existing file directory path under the root directory then the `index` directive comes into play.
+
+The files listed as the parameters of the `index` directive are appended to the URI path one at a time resulting a URI file path.
+
+This URI file path is then internally redirected and goes through the matching rules of the `location{}` blocks within the server block.
+
+Location blocks are described next.
+
+### The location blocks
+
+Location blocks specify URI paths to match within the URI path of the incoming request. This match happens starting with the most specific location path and ends with the least specific location path. The location block that matches first will specify the further matching directives that apply to the request and how the is routed.
+
+Some directives within the location block will cause the request to be redirected internally and go through the entire location matching process within the server block again. This redirection usually happens when the URI path is modified based on one of the directives that apply to the location block. One example of this is the `index` directive.
+
+> Directives in a server block are inherited by all child blocks within that server block. So the index directive in the server block applies to all location blocks in that server block.
+
+For example if we have two location blocks below:
 
 ```nginx
 location /{
@@ -80,8 +159,6 @@ location /api/{
 
 }
 ```
-
-http://nginx.org/en/docs/varindex.html
 
 Here values of both location blocks end in a trailing slash. This is important because it means that the location matches a directory starting with the directory location specified in the `root` setting.
 
@@ -158,7 +235,7 @@ server {
     add_header X-XSS-Protection "1; mode=block";
     add_header X-Content-Type-Options "nosniff";
 
-    root /var/www/travel_list/public;
+    root /var/www/example.com/public;
 
     index index.html index.php;
 
@@ -228,3 +305,51 @@ server {
 Any request that contain a URI prefix of `/api/` are matched to the `location /api/` block and routed to the PHP API server as long as the URIs end with `index.php`.
 
 All other requests are matched to `location /` and served as static files. So a request to `https://example.com/`, `https://example.com/` or `https://example.com/index.html` will serve the static page to bootstrap a Vue JS app perhaps.
+
+## Docker and NGINX configuration
+
+When deploying PHP applications using Docker we typically have separate containers for NGINX and the PHP server PHP-FPM.
+
+In this scenario both containers will have the root directory in the file system.
+The difference is that the NGINX container root directory will only have the static html and other static files that it serves directly but not the index.php file.
+
+Note that even though the NGINX configuration uses `index.php` string in the URI path to match which location block that handles the request, it does not need the actual file to exist on the server since it does not serve the index.php file. The location block that matches the `index.php` string in the URI path forwards the request to the PHP server to be served by PHP-FPM.
+
+The PHP-FPM server on the other hand needs the index.php file to exist in the root directory so it can serve it. It needs the index.php file but it does not need all the other static files that NGINX serves, since PHP is not serving those files.
+
+It just so happens that when we are using a single server to run both NGINX and PHP then both the static files and the index.php file need to exist in the root directory so each server can serve the file requested of it.
+
+> Note: The root directory is specified in the NGINX config so it has to be passed to PHP-FPM as a CGI parameter along with the request so PHP-FPM will know the location of the root directory.
+
+Even thought NGINX and PHP-FPM only need the files that they serve to exist in the root directory specified by the NGINX configuration, all the files can be copied to root directory location on both containers as long as space is not a constraint.
+
+The other aspect that is different about hosting NGINX and PHP-FPM in separate docker containers is that the way that the request is passed from NGINX to PHP-FPM in the `location * ./php.index` block will be slightly different.
+
+In a multi container solution using docker compose each service will have it own name. So if the PHP-FPM service is named `app` then the request is passed from the NGINX container to the `app` service as `app:80`. The internal networking DNS for docker will figure out how to route the request.
+
+The updated NGINX server block that includes this change is shown below:
+
+```nginx
+server {
+        listen 80;
+        listen [::]:80;
+        server_name example.com www.example.com;
+
+        root /var/www/example.com/public;
+
+        index index.html;
+
+        location / {
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        }
+}
+```
+
+## Resources
+
+http://nginx.org/en/docs/varindex.html
