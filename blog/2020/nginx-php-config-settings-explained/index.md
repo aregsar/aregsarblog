@@ -286,19 +286,25 @@ server {
         }
 
         location /api {
-                index index.php;
-                try_files $uri/ /index.php?$query_string;
-        }
+                #index index.php;
+                #try_files $uri/ /index.php?$query_string;
 
-        location /api/ {
-                index index.php;
-                try_files $uri/ /index.php?$query_string;
-        }
-
-        location ~ \.php$ {
                 include snippets/fastcgi-php.conf;
                 fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
         }
+
+        location /api/ {
+                #index index.php;
+                #try_files $uri/ /index.php?$query_string;
+
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        }
+
+        <!-- location ~ \.php$ {
+                include snippets/fastcgi-php.conf;
+                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+        } -->
 }
 ```
 
@@ -325,7 +331,7 @@ Even thought NGINX and PHP-FPM only need the files that they serve to exist in t
 
 The other aspect that is different about hosting NGINX and PHP-FPM in separate docker containers is that the way that the request is passed from NGINX to PHP-FPM in the `location * ./php.index` block will be slightly different.
 
-In a multi container solution using docker compose each service will have it own name. So if the PHP-FPM service is named `app` then the request is passed from the NGINX container to the `app` service as `app:80`. The internal networking DNS for docker will figure out how to route the request.
+In a multi container solution using docker compose each service will have it own name. So if the PHP-FPM service is named `app` then the request is passed from the NGINX container to the `app` service as `proxy_pass http://app:80`. The internal networking DNS for docker will figure out how to route the request to the `app` container. Internally in the PHP_FPM container port 80 will be mapped to port 9000 which is the port that PHP-FPM runs on by default.
 
 The updated NGINX server block that includes this change is shown below:
 
@@ -345,7 +351,7 @@ server {
 
         location ~ \.php$ {
                 include snippets/fastcgi-php.conf;
-                fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+                proxy_pass http://app:80;
         }
 }
 ```
