@@ -1,6 +1,6 @@
 # Working With Docker
 
-November 11, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+December 19, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [working with docker](https://aregsar.com/blog/2020/working-with-docker)
 

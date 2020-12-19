@@ -1,6 +1,12 @@
 # working with linux users and groups
 
+December 19, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+
 [working with linux users and groups](https://aregsar.com/blog/2020/working-with-linux-users-and-groups)
+
+In this post I show how the `groupadd`, `useradd` and `usermod` commands can be used to create and manage users and groups.
+
+I also show commands to show information about users and groups in the system.
 
 ## Group Operations
 
@@ -42,7 +48,7 @@ Normally the new user id and the new group id will be the same but can get out o
 groupadd bob && useradd -m -g bob bob
 ```
 
-> Note: The -g option specified the default group to assign the user to. Using -G instead of -g will add the user to secondary group not the default group so we need to use lowercase character.
+> Note: The -g option specified the default group to assign the user to. Using -G instead of -g will add the user to secondary group not the default group so we need to use lowercase character. One the other hand if we did want to create a user with an automatic default group and assign it to a secondary group an example would be `useradd -m -G admin bob` where we create the user bob that gets a default group of bob and is also added to the existing admin group.
 
 ## Existing User Operations using the usermod command
 
@@ -51,6 +57,8 @@ Add existing user to existing group
 ```bash
 usermod -aG examplegroup exampleusername
 ```
+
+> Note if the `a` is removed then it will replace the current secondary groups the user belongs to with the given group instead of appending the group.
 
 Example of adding user bob to the admin group
 
@@ -70,9 +78,9 @@ Example of adding user bob to both admin and sudo groups
 usermod -aG admin,sudo bob
 ```
 
-> Note sudo is a special group that allows the user to use the sudo command to elevate to root user privilages
+> Note sudo is a special group that allows the user to use the sudo command to elevate to root user privileges.
 
-Change the default group of a user to an existing group
+Change the default group of a user to another existing group
 
 ```bash
 usermod -g groupname username
@@ -86,32 +94,44 @@ usermod -g admin bob
 
 ## Users Info
 
+show current user username
+
+```bash
+whoami
+```
+
+show current username and id, default group name and id, and all groups for current user
+
+```bash
+id
+```
+
+show groups names of the groups the current user belongs to
+
+```bash
+groups
+```
+
+show username and id, default group name and id, and all groups for given user
+
+```bash
+id exampleusername
+```
+
+show groups given user belongs to
+
+```bash
+groups exampleusername
+```
+
 list all users on system
 
+```bash
 cat /etc/passwd
+```
 
 list all groups on system
 
+```bash
 cat /etc/group
-
-show current user username
-
-whoami
-
-show group ids and default group for current user
-
-id
-
-show groups the current user belongs to
-
-groups
-
-show group ids and default group for a user
-
-id username
-
-show groups a user belongs to
-
-groups exampleusername
-
-on linux only `/etc/default/useradd`
+```
