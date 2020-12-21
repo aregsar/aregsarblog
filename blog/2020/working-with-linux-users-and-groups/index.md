@@ -6,7 +6,11 @@ December 19, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I show how the `groupadd`, `useradd` and `usermod` commands can be used to create and manage users and groups.
 
-I also show commands to show information about users and groups in the system.
+In addition will mention the `adduser` command that is an alternative to using the `useradd` command.
+
+I will also describe the `su` command used to switch users.
+
+Finally I will also show commands to show information about users and groups in the system.
 
 ## Group Operations
 
@@ -150,7 +154,7 @@ usermod -g admin bob
 
 ## Switching users
 
-WE can switch from the current user logged into the system to a different existing user by using the su command:
+WE can switch from the current user logged into the system to a different existing user by using the su (switch user) command:
 
 ```bash
 su otheruser

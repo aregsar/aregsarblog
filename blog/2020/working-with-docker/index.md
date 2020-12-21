@@ -184,6 +184,8 @@ docker build -f mydockerfile -t imagename .
 
 ## Resources
 
-https://hub.docker.com/_/nginx
-https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image/
-https://docs.docker.com/storage/bind-mounts/
+[NGINX Docker Image](https://hub.docker.com/_/nginx)
+
+[how-to-use-the-official-nginx-docker-image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image)
+
+[Docker bind mounts](https://docs.docker.com/storage/bind-mounts)
