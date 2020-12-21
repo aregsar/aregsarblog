@@ -16,7 +16,7 @@ show permissions for a file or directory
 
 ls -l filename_or_directory
 
-## Changing the permissions of a file or directory
+## Changing the permissions of a file or directory using chmod
 
 We can change the permissions for a files and directories using he chmod command which stands for change mode.
 
@@ -48,7 +48,9 @@ So for example `rwxrw-r--` means the user that owns the file has all permissions
 
 ### Setting the permissions
 
-There are two ways to set the permission types. One uses the octal number system to specify which permission bits are turned on or off. The other uses letters and symbols to turn the the permission bits on or off.
+There are two ways to set the permission types.
+
+One way uses the octal number system to specify which permission bits are turned on or off.
 
 Below is an example the octal number system is used to set the permissions:
 
@@ -67,6 +69,10 @@ rwxrw-r--
 
 We can see that the zeros correspond to the dashes and the ones correspond to the permission type for the position.
 
+The other way to set permissions, uses permission class letters and permission type letters and symbols to turn the the permission bits on or off. It is described in the following section.
+
+### Setting permissions using permission class, permission type and symbols
+
 The general form of the other way to set the permissions is:
 
 chmod <permission class(s) to be changed><symbol><permission type(s) to be changed>
@@ -83,7 +89,7 @@ The permission type to be changed can be any combination of `rwx` with at least 
 
 See the links in the resources for examples of changing user permissions.
 
-## Changing the user and/or group ownership of a file or directory
+## Changing the user and/or group ownership of a file or directory using chown
 
 We can change the ownership of a file or directory using the `chown` command which stands for change owner.
 
