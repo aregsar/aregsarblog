@@ -18,7 +18,7 @@ ls -l filename_or_directory
 
 ## Changing the permissions of a file or directory
 
-We can change the permissions for a files and directories using he chmod command with stands for change mode.
+We can change the permissions for a files and directories using he chmod command which stands for change mode.
 
 chmod permissions filename_or_directory
 
@@ -26,33 +26,37 @@ If we are changing the permissions for a directory and we want the changes to be
 
 chmod -R permissions directory
 
-When we list the file or directory permissions with the ls command, they are divided into three ownership blocks in the following order:
+### Permissions classes and types
+
+When we list the file or directory permissions with the ls command, they are divided into three ownership classes in the following order:
 
 [user-owner-permissions][group-owner-permissions][non-owner-permissions]
 
-Each block has three bits associated with it. Each bit corresponds to a permission type in following order:
+Each class has three bits associated with it, where each bit corresponds to a permission type in following order:
 
 [rwx][rwx][rwx]
 
-Where:
+The rwx permission types are:
 
-r=read permission bit
-w=write permission bit
-x=execute permission bit
+r=read permission
+w=write permission
+x=execute permission
 
-When a the permission has a dash `-` instead of the corresponding permission letter, it means that it is not allowed.
+For each position, when a permission bit has a dash `-` instead of the permission type, it means that the corresponding permission type is turned off. Otherwise the permission type in that position is on.
 
-So for example `rwxrw-r--` means the user that owns the file has all permissions, the group that owns the file only has read and write permissions and the non owner users only have read permissions.
+So for example `rwxrw-r--` means the user that owns the file has all permissions, the group that owns the file only has read and write permissions and the non owner users class only have read permissions.
 
-To set the permissions to `rwxrw-r--` there are two general methods we can use.
+### Setting the permissions
 
-The first is the using the octal number system:
+There are two ways to set the permission types. One uses the octal number system to specify which permission bits are turned on or off. The other uses letters and symbols to turn the the permission bits on or off.
+
+Below is an example the octal number system is used to set the permissions:
 
 ```bash
 chmod 764 somefile
 ```
 
-This will set the file permissions to `rwxrw-r--` using the `111110100` which is the octal number system binary code for 764.
+This will set the file permissions to `rwxrw-r--` using the binary number `111110100` which is the octal number system binary code for 764.
 
 If we superimpose the permissions with the binary code we get:
 
@@ -61,43 +65,23 @@ rwxrw-r--
 111110100
 ```
 
-We can see that he zeros correspond to the dashes and the ones have the corresponding permission letter for the position.
+We can see that the zeros correspond to the dashes and the ones correspond to the permission type for the position.
 
-The second way is to turn individual permissions on and off.
+The general form of the other way to set the permissions is:
 
-This turns on execute permission for somefile for user owner of file
+chmod <permission class(s) to be changed><symbol><permission type(s) to be changed>
 
-chmod +x somefile
+Or more specifically:
 
-This does the opposite
+chmod <ugo|a|none><symbol><rwx|none>
 
-chmod -x somefile
+The symbol can be one of `+`, `-` or `=`.
 
-By changing the x to r or w above we can do the same for those permissions. or we use any combination of the three letters to turn on or off multiple permissions:
+The permission class to be changed can be any combination of `ugo` with one, two, all or none being present. If they are all present, then an `a` can be used instead, signifying all permission classes will be changed. When none are present, it also signifies that all permission classes will be changed.
 
-chmod -r somefile
-chmod +rwx somefile
-chmod +rx somefile
+The permission type to be changed can be any combination of `rwx` with at least one, two or all being present when using the `+` or `-` symbol. When using he `=` symbol, one, two, all or none can be present. When the `-` or `=` symbol is used, the permission types that are not specified will set that permission type to a dash `-` for the corresponding permission type of the classes that are having their permission changed.
 
-This turns on permission for somefile only for the group owner of file
-
-chmod g+x somefile
-
-This does the opposite
-
-chmod g-x somefile
-
-By changing the x to r or w above we can do the same for those permissions. or we use any combination of the three letters to turn on or off multiple permissions.
-
-This turns on permission for somefile only for the non owner users
-
-chmod o+x somefile
-
-This does the opposite
-
-chmod o-x somefile
-
-By changing the x to r or w above we can do the same for those permissions. or we use any combination of the three letters to turn on or off multiple permissions.
+See the links in the resources for examples of changing user permissions.
 
 ## Changing the user and/or group ownership of a file or directory
 
@@ -124,6 +108,8 @@ With this option there is a colon appended to the user name and no group name is
 > If you only want to change a users group, there is also a chgrp command that can be used instead of chown
 
 ## Resources
+
+https://en.wikipedia.org/wiki/Chmod
 
 https://www.guru99.com/file-permissions.html
 
