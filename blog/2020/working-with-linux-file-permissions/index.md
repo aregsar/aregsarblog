@@ -18,7 +18,13 @@ ls -l filename_or_directory
 
 ## Changing the permissions of a file or directory
 
+We can change the permissions for a files and directories using he chmod command with stands for change mode.
+
 chmod permissions filename_or_directory
+
+If we are changing the permissions for a directory and we want the changes to be applied recursively for all subfiles and subfolder we can add the -R option
+
+chmod -R permissions directory
 
 When we list the file or directory permissions with the ls command, they are divided into three ownership blocks in the following order:
 
@@ -95,6 +101,12 @@ By changing the x to r or w above we can do the same for those permissions. or w
 
 ## Changing the user and/or group ownership of a file or directory
 
+We can change the ownership of a file or directory using the `chown` command which stands for change owner.
+
+change only the user owner of the file or directory
+
+chown user filename_or_directory
+
 change user and group owner of the file or directory
 
 chown user:group filename_or_directory
@@ -103,15 +115,13 @@ change only the group of the file or directory
 
 chown :group filename_or_directory
 
-change only the user owner of the file or directory
+This final option changes the user and changes the group to the user's default group:
 
 chown user: filename_or_directory
 
-the colon at the end is not required so we could do as well
+With this option there is a colon appended to the user name and no group name is specified.
 
-chown user filename_or_directory
-
-> Note since the chown command handles both users and groups I am not going to use the chgrp that only changes group ownership.
+> If you only want to change a users group, there is also a chgrp command that can be used instead of chown
 
 ## Resources
 

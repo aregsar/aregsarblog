@@ -104,6 +104,8 @@ We can also make the user have an empty password by deleting the password:
 passwd -d bob
 ```
 
+> Note The -d option is not the same as `passswd -l bob` which locks the password for bob and is the same as the specifying the `--disabled-password` option for `adduser` command when creating user bob.
+
 ## Existing User Operations using the usermod command
 
 Add existing user to existing group
