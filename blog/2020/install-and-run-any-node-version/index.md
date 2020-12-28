@@ -17,19 +17,18 @@ Below are the bash commands that get added to my `.bash_profile` file after runn
 ```bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm and prepends to $PATH variable
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 ```
 
 The install script downloads the `.nvm` directory and adds it to the $HOME directory.
 The first line of the NVM lines added to the `.bash_profile` file, setup this directory for the following lines to use.
-The second NVM line checks for the existence of a downloaded `nvm.sh` script file in the `$HOME/.nvm` directory and sources the file if it exists which runs the script.
-The Last NVM line checks for the existence of a downloaded `bash_completion` script file in the `$HOME/.nvm` directory and sources the file if it exists which runs the script.
+The second NVM line checks for the existence of a downloaded `nvm.sh` script file in the `$HOME/.nvm`directory and sources the file if it exists which runs the script. The Last NVM line checks for the existence of a downloaded`bash_completion`script file in the`$HOME/.nvm` directory and sources the file if it exists which runs the script.
 
 These lines get executed when the bash profile file is sourced.
 
 > Note: You can move the NVM `.bash_profile` script to the appropriate dotfile on your system, as long as it gets executed at shell startup.
 
-After installation  you can check the installed version of NVM:
+After installation you can check the installed version of NVM:
 
 ```bash
 nvm --version
@@ -145,7 +144,7 @@ There are also hacks to make `nvm use` command execute automatically by aliasing
 
 The following article talks about using node `engines` as an alternative to switching node versions:
 
-[https://medium.com/@faith__ngetich/locking-down-a-project-to-a-specific-node-version-using-nvmrc-and-or-engines-e5fd19144245](https://medium.com/@faith__ngetich/locking-down-a-project-to-a-specific-node-version-using-nvmrc-and-or-engines-e5fd19144245)
+[https://medium.com/@faith\_\_ngetich/locking-down-a-project-to-a-specific-node-version-using-nvmrc-and-or-engines-e5fd19144245](https://medium.com/@faith__ngetich/locking-down-a-project-to-a-specific-node-version-using-nvmrc-and-or-engines-e5fd19144245)
 
 ## Checking NVM, Node, NPM , NPX versions
 
@@ -195,3 +194,7 @@ brew upgrade yarn
 # check global yarn version
 yarn --version
 ```
+
+## Resources
+
+[https://www.digitalocean.com/community/tutorials/nodejs-node-version-manager](https://www.digitalocean.com/community/tutorials/nodejs-node-version-manager)
