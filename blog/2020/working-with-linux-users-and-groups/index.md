@@ -186,10 +186,22 @@ show current user username
 whoami
 ```
 
-show current username and id, default group name and id, and all groups for current user
+show current users username and id, default group name and id, and all groups for current user
 
 ```bash
 id
+```
+
+show current users id
+
+```bash
+id -u
+```
+
+show current users default group id
+
+```bash
+id -g
 ```
 
 show groups names of the groups the current user belongs to
@@ -221,3 +233,7 @@ list all groups on system
 ```bash
 cat /etc/group
 ```
+
+## Resources
+
+[https://linuxize.com/post/how-to-create-users-in-linux-using-the-useradd-command](https://linuxize.com/post/how-to-create-users-in-linux-using-the-useradd-command)

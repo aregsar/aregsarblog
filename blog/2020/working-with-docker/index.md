@@ -182,6 +182,20 @@ Example where the mydockerfile is a file in the current directory and the contex
 
 docker build -f mydockerfile -t imagename .
 
+## Docker run options
+
+run as with specified user and group id
+
+-u $(id -u):$(id -g)
+
+pass env value from host env vars
+
+-e AWS_KEY
+
+pass explicit env value
+
+-e AWS_KEY=abcd
+
 ## Resources
 
 [NGINX Docker Image](https://hub.docker.com/_/nginx)
@@ -189,3 +203,5 @@ docker build -f mydockerfile -t imagename .
 [how-to-use-the-official-nginx-docker-image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image)
 
 [Docker bind mounts](https://docs.docker.com/storage/bind-mounts)
+
+[https://jonathan.bergknoff.com/journal/run-more-stuff-in-docker](https://jonathan.bergknoff.com/journal/run-more-stuff-in-docker)
