@@ -196,17 +196,19 @@ pass explicit env value
 
 -e AWS_KEY=abcd
 
-## Docker volume path rules
+## Docker volume mapping path rules
 
 Say we have our application content in a `/app` directory and nginx document root is the `/var/www` directory.
 
-The path rules and path format when mounting a volume are as follows:
+The path rules and path format when mounting a directory volume are as follows:
+
+> Note: if destination directory does not exist, there will be a runtime error
 
 ```bash
 #mount /app directory at /var/www directory
 #which means content of /app directory appear in the /var/www directroy
 #source or destination trailing slash is not required
-#same path rules apply when specifying volume paths in dockerfile or docker-compose file
+
 docker run -v /app/:/var/www/
 docker run -v /app:/var/www
 docker run -v /app/:/var/www
@@ -222,12 +224,45 @@ docker run -v ./:/var/www/
 docker run -v .:/var/www/
 
 #mount a named volume
-#source pathdoes not start with a slash and is a volume name
+#source path does not start with a slash or dot and is a volume name
 #means content of /var/www directory are mapped to the storage area of the named volume
 #destination trailing slash is not required
 
 docker run -v app:/var/www/
 docker run -v app:/var/www
+```
+
+mount a file
+
+> Note: a host file can not be mapped to a container directory without specifying the file name in the container directory
+
+```bash
+#server.conf on host is mounted as default.conf in conf.d directory of container
+#replaces existing container default.conf
+docker run -v /app/nginx/server.conf:/etc/nginx/conf.d/default.conf
+
+#default.conf on host is mounted as default.conf in conf.d directory of container
+#replaces existing container default.conf
+docker run -v /app/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+#server.conf on host is mounted as server.conf in conf.d directory of container
+docker run -v /app/nginx/server.conf:/etc/nginx/conf.d/server.conf
+
+#nginx.conf on host is mounted as server.conf in conf.d directory of container
+docker run -v /app/nginx/nginx.conf:/etc/nginx/conf.d/server.conf
+```
+
+> Note: Same path rules apply when specifying volume paths in a docker-compose file.
+
+## Docker COPY command path rules
+
+```bash
+#copy host default.conf file to docker image default.conf
+#created the directory and file in the image if it does not exist
+COPY config/default.conf /etc/nginx/conf.d/default.conf
+
+#copy host nginx.conf file to docker image default.conf
+COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 ```
 
 ## Resources
@@ -243,3 +278,5 @@ docker run -v app:/var/www
 https://www.digitalocean.com/community/tutorials/how-to-share-data-between-the-docker-container-and-the-host
 
 https://docs.docker.com/reference/
+
+https://stackoverflow.com/questions/41935435/understanding-volume-instruction-in-dockerfile
