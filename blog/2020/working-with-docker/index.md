@@ -196,12 +196,50 @@ pass explicit env value
 
 -e AWS_KEY=abcd
 
+## Docker volume path rules
+
+Say we have our application content in a `/app` directory and nginx document root is the `/var/www` directory.
+
+The path rules and path format when mounting a volume are as follows:
+
+```bash
+#mount /app directory at /var/www directory
+#which means content of /app directory appear in the /var/www directroy
+#source or destination trailing slash is not required
+#same path rules apply when specifying volume paths in dockerfile or docker-compose file
+docker run -v /app/:/var/www/
+docker run -v /app:/var/www
+docker run -v /app/:/var/www
+docker run -v /app:/var/www/
+
+#if we are running the command from the /app directory we can use the present working directory
+
+docker run -v $PWD:/var/www/
+docker run -v $(pwd):/var/www/
+docker run -v ${PWD}/:/var/www/
+docker run -v $(pwd)/:/var/www/
+docker run -v ./:/var/www/
+docker run -v .:/var/www/
+
+#mount a named volume
+#source pathdoes not start with a slash and is a volume name
+#means content of /var/www directory are mapped to the storage area of the named volume
+#destination trailing slash is not required
+
+docker run -v app:/var/www/
+docker run -v app:/var/www
+```
+
 ## Resources
 
 [NGINX Docker Image](https://hub.docker.com/_/nginx)
 
 [how-to-use-the-official-nginx-docker-image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image)
 
-[Docker bind mounts](https://docs.docker.com/storage/bind-mounts)
+[deploying-nginx-on-docker](https://www.nginx.com/blog/deploying-nginx-nginx-plus-docker)
 
 [https://jonathan.bergknoff.com/journal/run-more-stuff-in-docker](https://jonathan.bergknoff.com/journal/run-more-stuff-in-docker)
+
+https://www.digitalocean.com/community/tutorials/how-to-share-data-between-the-docker-container-and-the-host
+
+https://docs.docker.com/reference/
