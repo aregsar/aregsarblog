@@ -196,11 +196,13 @@ pass explicit env value
 
 -e AWS_KEY=abcd
 
-## Docker volume mapping path rules
+## Docker Volume mounting path rules
+
+### Directory path rules
 
 Say we have our application content in a `/app` directory and nginx document root is the `/var/www` directory.
 
-The path rules and path format when mounting a directory volume are as follows:
+Bind mounting a host directory:
 
 > Note: if destination directory does not exist, there will be a runtime error
 
@@ -222,8 +224,11 @@ docker run -v ${PWD}/:/var/www/
 docker run -v $(pwd)/:/var/www/
 docker run -v ./:/var/www/
 docker run -v .:/var/www/
+```
 
-#mount a named volume
+Mounting a named volume:
+
+```bash
 #source path does not start with a slash or dot and is a volume name
 #means content of /var/www directory are mapped to the storage area of the named volume
 #destination trailing slash is not required
@@ -232,7 +237,7 @@ docker run -v app:/var/www/
 docker run -v app:/var/www
 ```
 
-mount a file
+### File path rules
 
 > Note: a host file can not be mapped to a container directory without specifying the file name in the container directory
 
@@ -256,12 +261,37 @@ docker run -v /app/nginx/nginx.conf:/etc/nginx/conf.d/server.conf
 
 ## Docker COPY command path rules
 
+Say are in a application directory with two sub directories named config and content. Each of those directories have content that we need to copy to a docker image we are building. The directory also has a default dockerfile.
+
+Then from within the application directory we run the docker build command specifying the build context to be the current directory.
+
 ```bash
+docker build -t myappimage .
+```
+
+Within the dockerfile the COPY command has the following path rules.
+
+Directory COPY rules:
+
+```Dockerfile
+#copy content of the content directory into /usr/share/nginx/html/
+#if /usr/share/nginx/html/ doesn’t exist, it is created as a directory
+#if a file of same name exists in /usr/share/nginx/html/ it will be overwritten
+#source directory ending with a slash is optional
+#destination needs to end in a slash
+COPY content /usr/share/nginx/html/
+COPY content/ /usr/share/nginx/html/
+```
+
+File COPY rules:
+
+```Dockerfile
 #copy host default.conf file to docker image default.conf
-#created the directory and file in the image if it does not exist
+#creates the directory and file in the image if it does not exist
 COPY config/default.conf /etc/nginx/conf.d/default.conf
 
-#copy host nginx.conf file to docker image default.conf
+#copy host nginx.conf file to docker image, renamed to default.conf
+#creates the directory and file in the image if it does not exist
 COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 ```
 
@@ -280,3 +310,5 @@ https://www.digitalocean.com/community/tutorials/how-to-share-data-between-the-d
 https://docs.docker.com/reference/
 
 https://stackoverflow.com/questions/41935435/understanding-volume-instruction-in-dockerfile
+
+https://medium.com/better-programming/docker-tips-about-the-build-context-dbc76505e178
