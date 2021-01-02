@@ -200,6 +200,8 @@ We need to explicitly run the bash command since the nginx image does not run th
 
 ## Docker run options for host mapping
 
+### Port Mapping
+
 When we ran the nginx container in the previous section we also used the -p option.
 
 ```bash
@@ -209,6 +211,8 @@ docker run --rm -d --name znginx -p 8080:80 nginx
 This option is used to map the port 8080 of the host to the internal network port 80 of the container that the web server running in the container is listening on.
 
 The mapping allows us to connect to port 8080 using a web browser on our host machine with the actual http requests routed to port 80 within the running container.
+
+### Volume Mapping
 
 Another mapping option we can use with the docker run command is the -v option for mapping files and directories in the container to files and directories on our host.
 
@@ -222,6 +226,12 @@ Additionally we can make the content mapped into the container read only, which 
 
 ```bash
 docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/:ro nginx
+```
+
+multiple mappings of the same kind can be specified:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/:ro nginx -v $PWD/nginx.conf:/etc/nginx/nginx.conf:ro nginx
 ```
 
 ## Running the bash shell command in the ubuntu container
@@ -286,9 +296,9 @@ docker run --rm -d --name znginx -p 8080:80 library/nginx:latest
 #exec into running container to inspect the contents
 docker exec -it znginx bash
 
-#bind mount volume maps container directory to host directory
-docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/:ro nginx
-docker run --rm -d --name znginx -p 8080:80 -v $PWD/nginx.conf:/etc/nginx/nginx.conf:ro nginx
+#volume maps host content directory to container directory as read only
+#volume maps host config directory to container directory as read only
+docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/:ro -v $PWD/nginx.conf:/etc/nginx/nginx.conf:ro nginx
 ```
 
 ## Using a Dockerfile to build a custom NGINX container
@@ -325,6 +335,7 @@ We will use the docker build command to build our custom image using our dockerf
 cd app/docker/nginx
 run docker build -t mynginx .
 docker run --rm -d --name znginx -p 8080:80 mynginx
+# here we are explicitly running the default command run by default by the base nginx image
 docker run --rm -d --name znginx -p 8080:80 mynginx nginx -g 'daemon off;'
 ```
 
@@ -498,10 +509,10 @@ COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 
 [https://jonathan.bergknoff.com/journal/run-more-stuff-in-docker](https://jonathan.bergknoff.com/journal/run-more-stuff-in-docker)
 
-https://www.digitalocean.com/community/tutorials/how-to-share-data-between-the-docker-container-and-the-host
+[how-to-share-data-between-the-docker-container-and-the-host](https://www.digitalocean.com/community/tutorials/how-to-share-data-between-the-docker-container-and-the-host)
 
-https://docs.docker.com/reference/
+[https://docs.docker.com/reference](https://docs.docker.com/reference)
 
-https://stackoverflow.com/questions/41935435/understanding-volume-instruction-in-dockerfile
+[understanding-volume-instruction-in-dockerfile](https://stackoverflow.com/questions/41935435/understanding-volume-instruction-in-dockerfile)
 
-https://medium.com/better-programming/docker-tips-about-the-build-context-dbc76505e178
+[docker-tips-about-the-build-context](https://medium.com/better-programming/docker-tips-about-the-build-context-dbc76505e178)
