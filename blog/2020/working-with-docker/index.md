@@ -4,6 +4,87 @@ December 19, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [working with docker](https://aregsar.com/blog/2020/working-with-docker)
 
+## Common commands when working with containers
+
+```bash
+#list all containers (ommiting the flag will list only running containers)
+docker ps -a
+
+#list all images on host machine
+docker images
+
+#stop one or more running containers by name or id
+#when running a container with the --rm flag, stoping the container will auto remove it
+docker stop container_name_or_id
+
+#remove one or more stopped containers by name or id
+docker rm container_name_or_id
+
+#stop all running containers
+docker stop $(docker ps -q)
+
+#remove all stoped containers
+docker container prune -f
+
+#remove all images (either command will work)
+docker image prune -a -f
+docker rmi $(docker images -q)
+
+#show all docker stats about images and containers on the host
+docker system info
+
+#removes unused docker resources. see help for usage
+docker system prune --help
+```
+
+## Listing available commands
+
+```bash
+#list available container commands
+docker container
+
+#list available image commands
+docker image
+
+#list available volume commands
+docker volume
+
+#list available network commands
+docker network
+```
+
+Example of running the available ls and prune network commands
+
+```bash
+#list all the networks
+docker network ls
+#prune unused networks
+docker network prune
+```
+
+## The inspect command
+
+The inspect command dumps the configuration of images and containers
+
+```bash
+#inspect the build time configuration an image
+docker inspect image_name_or_id
+
+#inspect the runtime configuration of a container
+docker inspect container_name_or_id
+```
+
+Examples of inspecting images:
+
+```bash
+docker inspect nginx
+docker inspect nginx:latest
+docker inspect library/nginx:latest
+docker inspect library/nginx
+docker inspect ubuntu:20.04
+docker inspect library/ubuntu:20.04
+```
+
 ## Running the bash shell in ubuntu container
 
 ```bash
@@ -31,6 +112,8 @@ docker run -ti --rm -v $PWD:/app -w /app redis bash
 docker run --rm -d --name znginx -p 8080:80 nginx
 docker run --rm -d --name znginx -p 8080:80 nginx:latest
 docker run --rm -d --name znginx -p 8080:80 library/nginx:latest
+
+#exec into running container to inspect the contents
 docker exec -it znginx bash
 
 #bind mount volume maps container directory to host directory
@@ -89,73 +172,6 @@ docker run --rm -v $PWD:/app -w /app composer php artisan make:auth
 docker run --rm -v "$PWD":/app -w /app php:7.2-cli php -m
 
 docker run --rm -v "$PWD":/app -w /app php:7.2-fpm php -m
-```
-
-## The inspect command
-
-```bash
-docker inspect nginx
-docker inspect nginx:latest
-docker inspect library/nginx:latest
-docker inspect library/nginx
-
-docker inspect ubuntu:20.04
-docker inspect library/ubuntu:20.04
-
-#inspect the build time configuration an image
-docker inspect image_name_or_id
-
-#inspect the runtime configuration of a container
-docker inspect container_name_or_id
-```
-
-## Common commands when working with containers
-
-```bash
-#list all containers (ommiting the flag will list only running containers)
-docker ps -a
-
-#list all images
-docker images
-
-#stop one or more running containers by name or id
-docker stop container_name_or_id
-
-#remove one or more stopped containers by name or id
-docker rm container_name_or_id
-
-#stop all running containers
-docker stop $(docker ps -q)
-
-#remove all stoped containers
-docker container prune -f
-
-#remove all images
-docker image prune -a -f
-docker rmi $(docker images -q)
-
-docker system info
-```
-
-## Listing all container commands
-
-```bash
-#list available container commands
-docker container
-
-#list available image commands
-docker image
-
-#list available volume commands
-docker volume
-
-#list available network commands
-docker network
-
-Examples:
-
-docker network ls
-docker network prune
 ```
 
 ## The docker build context, Dockerfiles and .dockerignore
