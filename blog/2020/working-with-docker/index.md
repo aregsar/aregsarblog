@@ -7,7 +7,7 @@ December 19, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 ## Common commands when working with containers
 
 ```bash
-#list all containers (ommiting the flag will list only running containers)
+#list all stopped and running containers (ommiting the flag will list only running containers)
 docker ps -a
 
 #list all images on host machine
@@ -93,7 +93,23 @@ docker run --rm -it --name zubuntu ubuntu:20.04 bash
 docker run --rm -it --name zubuntu ubuntu:20.04 /bin/bash
 
 docker run --rm --name zubuntu ubuntu:20.04
+```
+
+Running the ubuntu container in detached (non interactive) mode causes the container to stop immediately after running.
+
+This is normal as the process running as PID 1 in the container exits immediately after running the container, which in turn stops the container.
+
+```bash
+docker run -d --name zubuntu ubuntu:20.04
+#see the stoped container
+docker ps -a
+#remove the stopped container
+docker rm zubuntu
+
+#this time we will autoremove after itb stops
 docker run --rm -d --name zubuntu ubuntu:20.04
+#we will not see the stopped container since it is autoremoved by the --rm option
+docker ps -a
 ```
 
 ## Running the bash shell in other common containers
