@@ -170,11 +170,15 @@ The order or the options does not matter:
 docker run --rm -it --name zubuntu ubuntu:20.10
 ```
 
-The final option I will show is the -d option. This option can be used instead of the -it option to run the container in detached mode. By default running the container without the -d option, runs the container in the foreground, so control will not return to the terminal if the container continues to run.
+## Running containers in the background
 
-Using this option does not make sense in the context of the ubuntu container as will be shown in the next section.
+The -d option can be used instead of the -it option to run the container in detached mode.
 
-However this is the right option when using a web server image that will continue running after we run the container. This way the control will return to the terminal while the container continues running.
+By default running the container without the -d option, runs the container in the foreground, so control will not return to the terminal if the container continues to run.
+
+> Note this does not mean that the command/process within the container runs in the background. It only means the container itself running on the host machine will run in the background. In practice the main process that runs within the container needs to run in the foreground so that the container does not exit automatically. This is why using this option does not make sense in the context of the ubuntu container, as will be shown in the next section.
+
+This is the right option when using a web server image that needs to continue running after we run the container. This way the control will return to the terminal on the host, while the container continues running in the background.
 
 Here is an example of running the nginx server using the -d option:
 
@@ -194,7 +198,33 @@ docker exec -it znginx bash
 
 We need to explicitly run the bash command since the nginx image does not run the bash command by default. Instead by default it runs an entrypoint script to startup the web server.
 
-## Running the bash shell in ubuntu container
+## Docker run options for host mapping
+
+When we ran the nginx container in the previous section we also used the -p option.
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 nginx
+```
+
+This option is used to map the port 8080 of the host to the internal network port 80 of the container that the web server running in the container is listening on.
+
+The mapping allows us to connect to port 8080 using a web browser on our host machine with the actual http requests routed to port 80 within the running container.
+
+Another mapping option we can use with the docker run command is the -v option for mapping files and directories in the container to files and directories on our host.
+
+Here we are using the -v option to map the contents of the `$(pwd)/content` directory on our host into `/usr/share/nginx/html/` directory in the running container.
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/ nginx
+```
+
+Additionally we can make the content mapped into the container read only, which means the container can not modify the content, by adding a third segment `ro` to the mapping.
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/:ro nginx
+```
+
+## Running the bash shell command in the ubuntu container
 
 As shown in the previous section running the ubuntu container without specifying the bash command will run the default bash command of the image:
 
@@ -241,6 +271,11 @@ docker run -ti --rm -v $PWD:/app -w /app mysql bash
 docker run -ti --rm -v $PWD:/app -w /app redis bash
 ```
 
+The -w option is a working directory option.
+It changes the current directory within the container to the `/app` directory when the container starts, so that when the bash command is run within the container, the present working directory would be `/app` directory.
+
+Note that the volume mapping will ensure that the `/app` directory will exist in the container, if it does not already.
+
 ## Running the NGINX container
 
 ```bash
@@ -284,6 +319,8 @@ COPY config/nginx.conf /etc/nginx/nginx.conf
 COPY config/nginx.conf /etc/nginx/conf.d/default.conf
 ```
 
+We will use the docker build command to build our custom image using our dockerfile and then we will run this custom image instead of the stock nginx image.
+
 ```bash
 cd app/docker/nginx
 run docker build -t mynginx .
@@ -308,6 +345,11 @@ docker run --rm -v "$PWD":/app -w /app php:7.2-cli php -m
 
 docker run --rm -v "$PWD":/app -w /app php:7.2-fpm php -m
 ```
+
+The -w option is a working directory option.
+It changes the current directory within the container to the `/app` directory when the container starts, so that the command that is executed uses the `/app` working directory as its present working directory.
+
+Note that the volume mapping will ensure that the `/app` directory will exist in the container, if it does not already.
 
 ## The docker build context, Dockerfiles and .dockerignore
 
