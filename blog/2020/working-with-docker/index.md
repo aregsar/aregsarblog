@@ -85,14 +85,133 @@ docker inspect ubuntu:20.04
 docker inspect library/ubuntu:20.04
 ```
 
-## Running the bash shell in ubuntu container
+## Running a container
+
+I will illustrate running a container using the docker ubuntu image.
+
+Simplest form of running a container:
 
 ```bash
-docker run --rm -it --name zubuntu ubuntu:20.04
-docker run --rm -it --name zubuntu ubuntu:20.04 bash
-docker run --rm -it --name zubuntu ubuntu:20.04 /bin/bash
+docker run ubuntu
+```
 
-docker run --rm --name zubuntu ubuntu:20.04
+This is equivalent as running with the default tag:
+
+```bash
+docker run ubuntu:latest
+```
+
+which is equivalent to running with default namespace:
+
+```bash
+docker run libarary\ubuntu
+```
+
+which is equivalent to running with the default tag and namespace:
+
+```bash
+docker run libarary\ubuntu:latest
+```
+
+Generally we can omit the namespace unless we have a specific namespace for our organization.
+
+However it is a good practice to use a specific tag. This is because specifying `latest` or omitting the tag which is the equivalent to specifying `latest` may cause a different version of the image to be used depending on when we run the command.
+
+Using a specific tag ensures that we are always using the same image.
+
+Running the ubuntu container with the ubuntu version tag:
+
+```bash
+docker run ubuntu:20.10
+```
+
+This is equivalent to running with the default namespace
+
+```bash
+docker run library\ubuntu:20.10
+```
+
+Finally note that we did not type a command after the image name, in any of the examples. This will cause the default Entrypoint\Command that the image is configured with to run.
+
+In the case of ubuntu, the command that the container runs is the bash command. This will run the bash shell as the main docker process PID 1 and will exit the process automatically because there is no bash command to run. This in turn will will automatically stop the running container.
+
+## Docker run command options
+
+Generally we run containers with a few standard options.
+
+I will demonstrate by way of examples:
+
+The --rm tag to auto remove the container after it has been stoped.
+
+```bash
+docker run --rm ubuntu:20.10
+```
+
+When we run a container it gets assigned a container id, even after it is stoped.
+
+The name tag gives the running or stopped container a name we can reference it with instead of the container id.
+We can only have one container with that specific name running at one time, so docker run will show an error if we try using the same name twice.
+
+```bash
+docker run --rm --name zubuntu ubuntu:20.10
+```
+
+The -it option runs the container in interactive mode (the i option) and communicates with container using the tty teletype command line interface (the t option). Both options are combined together to allow you to interact with the running container.
+
+```bash
+docker run --rm --name zubuntu -it ubuntu:20.10
+```
+
+Running this command will put you in the ubuntu container. To exit the container, type `exit`.
+
+The order or the options does not matter:
+
+```bash
+docker run --rm -it --name zubuntu ubuntu:20.10
+```
+
+The final option I will show is the -d option. This option can be used instead of the -it option to run the container in detached mode. By default running the container without the -d option, runs the container in the foreground, so control will not return to the terminal if the container continues to run.
+
+Using this option does not make sense in the context of the ubuntu container as will be shown in the next section.
+
+However this is the right option when using a web server image that will continue running after we run the container. This way the control will return to the terminal while the container continues running.
+
+Here is an example of running the nginx server using the -d option:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 nginx
+```
+
+Omitting the -d option would make the container run in the forground.
+
+Since the -d option does not let us interact with the container, we can use the docker exec command to connect to the running container using the container name or id.
+
+Here is an example of connecting to the running znginx container and running the bash command.
+
+```bash
+docker exec -it znginx bash
+```
+
+We need to explicitly run the bash command since the nginx image does not run the bash command by default. Instead by default it runs an entrypoint script to startup the web server.
+
+## Running the bash shell in ubuntu container
+
+As shown in the previous section running the ubuntu container without specifying the bash command will run the default bash command of the image:
+
+```bash
+docker run --rm -it --name zubuntu ubuntu:20.10
+```
+
+That is equivalent to running the bash command globally:
+
+```bash
+docker run --rm -it --name zubuntu ubuntu:20.10 bash
+```
+
+Which is equivalent to running the bash command from it installation directory:
+
+```bash
+docker run --rm -it --name zubuntu ubuntu:20.10 /bin/bash
 ```
 
 Running the ubuntu container in detached (non interactive) mode causes the container to stop immediately after running.
