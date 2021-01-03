@@ -286,57 +286,16 @@ It changes the current directory within the container to the `/app` directory wh
 
 Note that the volume mapping will ensure that the `/app` directory will exist in the container, if it does not already.
 
-## Running the NGINX container
+## Running an NGINX container
 
 ```bash
 docker run --rm -d --name znginx -p 8080:80 nginx
-docker run --rm -d --name znginx -p 8080:80 nginx:latest
-docker run --rm -d --name znginx -p 8080:80 library/nginx:latest
 
-#exec into running container to inspect the contents
+#exec into running container to inspect the contents. type exit to exit the container
 docker exec -it znginx bash
 
-#volume maps host content directory to container directory as read only
-#volume maps host config directory to container directory as read only
-docker run --rm -d --name znginx -p 8080:80 -v $(pwd)/content:/usr/share/nginx/html/:ro -v $PWD/nginx.conf:/etc/nginx/nginx.conf:ro nginx
-```
-
-## Using a Dockerfile to build a custom NGINX container
-
-The directory structure below where we have a docker file and content directory
-
-```bash
-app/docker/nginx/Dockerfile
-app/docker/nginx/content/
-app/docker/nginx/content/index.html
-app/docker/nginx/config/
-app/docker/nginx/config/nginx.conf
-```
-
-```Dockerfile
-#Dockerfile
-FROM nginx
-#if /usr/share/nginx/html doesn’t exist, it is created as a file
-#copy content of the content directory into /usr/share/nginx/
-#COPY content /usr/share/nginx/html
-#copy content of the content directory into /usr/share/nginx/html/
-#if /usr/share/nginx/html/ doesn’t exist, it is created as a directory
-COPY content /usr/share/nginx/html/
-COPY content/index.html /usr/share/nginx/html/index.html
-#overwrite the main nginx.conf file
-COPY config/nginx.conf /etc/nginx/nginx.conf
-#overwite the conf.d/default.conf file
-COPY config/nginx.conf /etc/nginx/conf.d/default.conf
-```
-
-We will use the docker build command to build our custom image using our dockerfile and then we will run this custom image instead of the stock nginx image.
-
-```bash
-cd app/docker/nginx
-run docker build -t mynginx .
-docker run --rm -d --name znginx -p 8080:80 mynginx
-# here we are explicitly running the default command run by default by the base nginx image
-docker run --rm -d --name znginx -p 8080:80 mynginx nginx -g 'daemon off;'
+#stop the container using its name
+docker stop znginx
 ```
 
 ## Running one off commands in your project directory
