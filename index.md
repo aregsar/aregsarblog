@@ -1,5 +1,13 @@
 # All Posts
 
+January 4, 2021
+
+[My Zshrc Config File](https://aregsar.com/blog/2020/my-zshrc-config-file)
+
+January 4, 2021
+
+[Working With Docker](https://aregsar.com/blog/2020/working-with-docker)
+
 November 11, 2020
 
 [My PhpStorm Development Setup](https://aregsar.com/blog/2020/my-phpstorm-development-setup)

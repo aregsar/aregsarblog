@@ -1,8 +1,12 @@
-# working with nginx docker container
+# Working With NGINX Docker Image
 
-[working with nginx docker container](https://aregsar.com/blog/2020/working-with-nginx-docker-container)
+January 4, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-## Running the nginx container
+[Working With NGINX Docker Image](https://aregsar.com/blog/2020/working-with-nginx-docker-container)
+
+In this post I detail how you can use the Nginx docker image to configure and run the a web server in your local development environment.
+
+## Running the Nginx container
 
 ```bash
 docker run --rm -d --name znginx -p 8080:80 nginx

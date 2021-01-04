@@ -1,6 +1,8 @@
-# my zshrc config file
+# My Zshrc Config File
 
-[my zshrc config file](https://aregsar.com/blog/2020/my-zshrc-config-file)
+January 4, 2021 by [Areg Sarkissian](https://aregsar.com/about)
+
+Here is the content of my latest .zshrc file:
 
 ```bash
 #https://support.apple.com/en-us/HT201236
