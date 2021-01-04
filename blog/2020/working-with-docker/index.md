@@ -1,6 +1,6 @@
 # Working With Docker
 
-January 4, 2021 by [Areg Sarkissian](https://aregsar.com/about)
+December 31, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I detail various docker commands and concepts that I use frequently to manage docker containers in my local development environment.
 

@@ -1,10 +1,10 @@
 # All Posts
 
-January 4, 2021
+December 31, 2020
 
 [My Zshrc Config File](https://aregsar.com/blog/2020/my-zshrc-config-file)
 
-January 4, 2021
+December 31, 2020
 
 [Working With Docker](https://aregsar.com/blog/2020/working-with-docker)
 

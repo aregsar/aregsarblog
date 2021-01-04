@@ -1,6 +1,6 @@
 # My Zshrc Config File
 
-January 4, 2021 by [Areg Sarkissian](https://aregsar.com/about)
+December 31, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 Here is the content of my latest .zshrc file:
 
@@ -150,7 +150,7 @@ alias laranew="composer create-project --prefer-dist laravel/laravel"
 
 alias laraopen='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://localhost:8000'
 
-alias radaropen='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://radar.test'
+alias myappopen='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://myapp.test'
 
 function ft {
      php artisan migrate --env=testing

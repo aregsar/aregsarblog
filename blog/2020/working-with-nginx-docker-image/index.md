@@ -1,6 +1,6 @@
 # Working With NGINX Docker Image
 
-January 4, 2021 by [Areg Sarkissian](https://aregsar.com/about)
+December 31, 2020 by [Areg Sarkissian](https://aregsar.com/about)
 
 [Working With NGINX Docker Image](https://aregsar.com/blog/2020/working-with-nginx-docker-container)
 
