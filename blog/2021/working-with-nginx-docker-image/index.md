@@ -1,8 +1,10 @@
 # Working With NGINX Docker Image
 
-December 31, 2020 by [Areg Sarkissian](https://aregsar.com/about)
+January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-[Working With NGINX Docker Image](https://aregsar.com/blog/2020/working-with-nginx-docker-container)
+January 1, 2021
+
+[Working With NGINX Docker Image](https://aregsar.com/blog/2021/working-with-nginx-docker-image)
 
 In this post I detail how you can use the Nginx docker image to configure and run the a web server in your local development environment.
 
@@ -124,3 +126,7 @@ https://www.digitalocean.com/community/tutorials/how-to-run-nginx-in-a-docker-co
 [how-to-use-the-official-nginx-docker-image](https://www.docker.com/blog/how-to-use-the-official-nginx-docker-image)
 
 [deploying-nginx-on-docker](https://www.nginx.com/blog/deploying-nginx-nginx-plus-docker)
+
+# working with nginx docker image
+
+[working with nginx docker image](https://aregsar.com/blog/2020/working-with-nginx-docker-image)

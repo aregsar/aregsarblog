@@ -105,8 +105,8 @@ function postaregsar {
         title="$*"
         #replace dashes with spaces
         words=${title//-/ }
-        cd ~/blog/aregsarblog/blog/2020 && mkdir $title
-        cd $title && echo -e "# $words\n\n[$words](https://aregsar.com/blog/2020/$title)" >> index.md
+        cd ~/blog/aregsarblog/blog/2021 && mkdir $title
+        cd $title && echo -e "# $words\n\nJanuary 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)\n\nJanuary 1, 2021\n\n[$words](https://aregsar.com/blog/2021/$title)" >> index.md
         pwd
     fi
 }
@@ -121,11 +121,12 @@ function postaregcode {
         title="$*"
         #replace dashes with spaces
         words=${title//-/ }
-        cd ~/blog/aregcode/blog/2020 && mkdir $title
-        cd $title && echo -e "# $words\n\n[$words](https://aregcode.com/blog/2020/$title)" >> index.md
+        cd ~/blog/aregcode/blog/2021 && mkdir $title
+        cd $title && echo -e "# $words\n\nJanuary 1, 2021 by [Areg Sarkissian](https://aregcode.com/about)\n\nJanuary 1, 2021\n\n[$words](https://aregcode.com/blog/2021/$title)" >> index.md
         pwd
     fi
 }
+
 
 
 
