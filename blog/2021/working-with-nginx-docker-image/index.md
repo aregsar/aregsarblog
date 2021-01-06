@@ -6,32 +6,191 @@ January 1, 2021
 
 [Working With NGINX Docker Image](https://aregsar.com/blog/2021/working-with-nginx-docker-image)
 
-In this post I detail how you can use the Nginx docker image to configure and run the a web server in your local development environment.
+In this post I detail how you can use the Nginx docker image to configure and run a web server on your local development environment.
 
 ## Running the Nginx container
 
+We can run an nginx docker container using the official nginx docker image by running the following command:
+
 ```bash
 docker run --rm -d --name znginx -p 8080:80 nginx
+```
 
+This is equivalent to running:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 nginx:latest
+```
+
+The `nginx` name at the end of the command is the image name. If the image does not exist on the host machine it will be pulled from the Docker hub.
+
+The --rm option will auto remove the container when it is stopped.
+
+The -d option runs the container in detached mode which means the container is running in the background and control returns back to the terminal.
+
+The --name option gives the running container a unique name that we can reference instead of the container id in other docker commands.
+
+the -p option maps the local port 8080 on the host machine to port 80 inside the container where the nginx server is listening for incoming HTTP requests.
+
+We can run the `docker ps` command to see the container running:
+
+```bash
+docker ps
+
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES
+49631bc95069        nginx               "/docker-entrypoint.…"   14 seconds ago      Up 13 seconds       0.0.0.0:8080->80/tcp   znginx
+```
+
+We can navigate to `localhost:8080` to see the displayed default nginx web page based on the default nginx configuration:
+
+```bash
+Welcome to nginx!
+If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
+
+For online documentation and support please refer to nginx.org.
+Commercial support is available at nginx.com.
+
+Thank you for using nginx.
+```
+
+We can use the `docker cp` command to copy files from the running container to our host machine for inspection:
+
+Let's copy the the default configuration file from nginx to our current directory:
+
+```bash
 #copy the original nginx default.conf file from the running docker container to a file named default.conf in our current directory to inspect
 docker cp znginx:/etc/nginx/conf.d/default.conf default.conf
+```
 
+The first argument to docker cp is the path to the file in the container prefixed by the container name and a colon.
+
+The second argument is the path to the file we want to copy to on our host machine.
+
+Once copied we can display the contents of the file:
+
+```bash
+cat default.conf
+
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #charset koi8-r;
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
+```
+
+Now lets use the `docker exec` command to connect to the running container using the container name.
+
+The command allows us to execute the bash command in the running container to run an interactive bash shell within the container:
+
+```bash
 #exec into running container by the container name to inspect the contents (type exit to exit the running container)
 docker exec -it znginx bash
 ```
 
-navigate to http://localhost:8080
+The -it option specifies that we will run the bash command in interactive mode.
+
+Once we execute this command our command prompt in the terminal will change to the terminal prompt of the running container and drop us into the root directory of the container:
+
+```bash
+root@ebc3b9243cfb:/#
+```
+
+We can run bash commands within the container.
+
+Let's display the current directory and list the contents of the root directory:
+
+```bash
+pwd
+ls -al
+```
+
+Once we are done interacting with the container we can exit the container and return to the terminal prompt on our host by typing the exit command:
+
+```bash
+exit
+```
+
+Finally we can stop the running container using the container name:
 
 ```bash
 docker stop znginx
 ```
 
-Alternative equivalent image names:
+After stoping the container let's see if we can show the stopped container:
 
 ```bash
-docker run --rm -d --name znginx -p 8080:80 nginx:latest
-docker run --rm -d --name znginx -p 8080:80 library/nginx:latest
+docker ps -a
 ```
+
+The -a flag show all running and stopped containers.
+
+However we don't see the stopped container because it was automatically removed since we specified the --rm option when we ran the container.
+
+Lets try running and stopping the container without the --rm option:
+
+```bash
+docker run -d --name znginx -p 8080:80 nginx:latest
+docker stop znginx
+```
+
+Now let's run the docker ps command with -a option again:
+
+```bash
+docker ps -a
+
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS               NAMES
+89cc0a7c4f48        nginx:latest        "/docker-entrypoint.…"   49 seconds ago      Exited (0) 37 seconds ago                       znginx
+```
+
+This time we will see the stopped container since we did not specify the --rm option.
+
+This time we have to explicitly remove the container ourselves using the docker rm command:
+
+```bash
+docker rm znginx
+```
+
+Now if we run the `docker ps -a` command again we will not see the stopped container anymore.
 
 ## Overriding the nginx default content and configuration
 
