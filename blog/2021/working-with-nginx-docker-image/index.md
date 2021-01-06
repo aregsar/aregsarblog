@@ -22,7 +22,11 @@ This is equivalent to running:
 docker run --rm -d --name znginx -p 8080:80 nginx:latest
 ```
 
-The `nginx` name at the end of the command is the image name. If the image does not exist on the host machine it will be pulled from the Docker hub.
+The `nginx` name at the end of the command is the image name.
+
+If the image does not exist on the host machine it will be pulled from the Docker hub.
+
+If the image tag is not specified, then it is assumed to be the latest tag.
 
 The --rm option will auto remove the container when it is stopped.
 
@@ -169,7 +173,7 @@ However we don't see the stopped container because it was automatically removed 
 Lets try running and stopping the container without the --rm option:
 
 ```bash
-docker run -d --name znginx -p 8080:80 nginx:latest
+docker run -d --name znginx -p 8080:80 nginx
 docker stop znginx
 ```
 
@@ -191,6 +195,126 @@ docker rm znginx
 ```
 
 Now if we run the `docker ps -a` command again we will not see the stopped container anymore.
+
+## Inspecting the nginx container
+
+Let now run the nginx container again to see how it is configured:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 nginx
+```
+
+The first thing we can do is run the `docker inspect` command using the running container name or id to see how the original container image was built.
+
+Running docker inspect on the container also shows any runtime command and options that are modify the build time image configuration at container startup.
+
+When the docker run command is executed, an additional command can be specified after the docker image name. This command runs at container startup, overriding any default command specified in the docker image.
+
+In our case we do not run any commands after specifying the nginx image name, so the default command that the image is built with will run at container startup.
+
+> Note: In addition to running docker inspect using a running container name or id, we can run docker inspect using any docker image name to just see the build time configuration of an image.
+
+```bash
+docker inspect znginx
+```
+
+I have listed only a partial snippet output of the above docker inspect command:
+
+```bash
+[
+    {
+        "Id": "6183f96c4571d4b023c3dd00ab815bf5d5d6597fa99c1c8aa094c139140d584d",
+        "Created": "2021-01-06T20:27:25.64038Z",
+        "Path": "/docker-entrypoint.sh",
+        "Args": [
+            "nginx",
+            "-g",
+            "daemon off;"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 2258,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2021-01-06T20:27:25.9872245Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        "Mounts": [],
+        "Config": {
+            "Hostname": "6183f96c4571",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "80/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+                "NGINX_VERSION=1.19.6",
+                "NJS_VERSION=0.5.0",
+                "PKG_RELEASE=1~buster"
+            ],
+            "Cmd": [
+                "nginx",
+                "-g",
+                "daemon off;"
+            ],
+            "Image": "nginx",
+            "Volumes": null,
+            "WorkingDir": "",
+            "Entrypoint": [
+                "/docker-entrypoint.sh"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "maintainer": "NGINX Docker Maintainers \u003cdocker-maint@nginx.com\u003e"
+            },
+            "StopSignal": "SIGQUIT"
+        },
+    }
+]
+```
+
+Two interesting parts of the configuration are the Cmd and Entrypoint items:
+
+```bash
+   "Cmd": [
+        "nginx",
+        "-g",
+        "daemon off;"
+    ],
+    "Entrypoint": [
+        "/docker-entrypoint.sh"
+    ],
+```
+
+As we can see at startup the container runs the `/docker-entrypoint.sh` script that is located at the root of the container filesystem.
+
+In addition the contained runs the following default command at startup `nginx -g daemon off;`.
+
+This causes main container startup process PID 1 to run the nginx server in non-background mode within the container. Since nginx would then be running in the forground, the PID 1 process would keep running which would in turn keep the container running until it is explicitly is stopped.
+
+If nginx was run in its standard background mode, the main container startup process PID 1, would fork to run the nginx server in background mode and would exit afterwards causing the container to exit and be stopped automatically.
+
+```bash
+exec
+
+ls -l | grep docker-entrypoint.sh
+```
+
+## Inspecting the nginx directory structure
+
+xxx
 
 ## Overriding the nginx default content and configuration
 
