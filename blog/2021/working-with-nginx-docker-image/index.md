@@ -144,17 +144,17 @@ We can run bash commands within the container.
 Let's display the current directory and list the contents of the root directory:
 
 ```bash
-pwd
-ls -al
+root@ebc3b9243cfb:/# pwd
+root@ebc3b9243cfb:/# ls -al
 ```
 
 Once we are done interacting with the container we can exit the container and return to the terminal prompt on our host by typing the exit command:
 
 ```bash
-exit
+root@ebc3b9243cfb:/# exit
 ```
 
-Finally we can stop the running container using the container name:
+Now that we are back in the local shell, we can stop the running container using the container name:
 
 ```bash
 docker stop znginx
@@ -302,19 +302,249 @@ As we can see at startup the container runs the `/docker-entrypoint.sh` script t
 
 In addition the contained runs the following default command at startup `nginx -g daemon off;`.
 
-This causes main container startup process PID 1 to run the nginx server in non-background mode within the container. Since nginx would then be running in the forground, the PID 1 process would keep running which would in turn keep the container running until it is explicitly is stopped.
+This causes main container startup process PID 1 to run the nginx server in non-background mode within the container. Since nginx would then be running in the foreground, the PID 1 process would keep running which would in turn keep the container running until it is explicitly is stopped.
 
 If nginx was run in its standard background mode, the main container startup process PID 1, would fork to run the nginx server in background mode and would exit afterwards causing the container to exit and be stopped automatically.
 
-```bash
-exec
+Let's docker exec into the running container:
 
-ls -l | grep docker-entrypoint.sh
+```bash
+docker exec -it znginx bash
+```
+
+And Let's verify that the `docker-entrypoint.sh` exists in the root directory:
+
+```bash
+root@6183f96c4571:/# pwd
+/
+root@6183f96c4571:/# ls | grep docker-entrypoint.sh
+docker-entrypoint.sh
+root@6183f96c4571:/# exit
+```
+
+Back in our local shell we can stop the container which will be auto removed after being stopped:
+
+```bash
+docker stop znginx
+docker ps -a
 ```
 
 ## Inspecting the nginx directory structure
 
-xxx
+Once again lets start by running the container and docker exec-ing into it:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 nginx
+docker exec -it znginx bash
+```
+
+```bash
+root@6183f96c4571:/# ls -al
+cd /etc/nginx
+ls -al
+```
+
+Here we see all the nginx configuration files and directories:
+
+The main config file is located at `/etc/nginx/nginx.conf`.
+
+Let's list the content of this file:
+
+```bash
+cat /etc/nginx/nginx.conf
+```
+
+The content of the file is listed below:
+
+```bash
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    include /etc/nginx/conf.d/*.conf;
+}
+```
+
+The last line in the configuration includes any files ending with `.conf` from the `/etc/nginx/conf.d/` directory.
+
+The default installation of nginx only includes a `/etc/nginx/conf.d/default.conf` file.
+
+Let's print out its content:
+
+```bash
+cat /etc/nginx/conf.d/default.conf
+```
+
+The content is shown below:
+
+```bash
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #charset koi8-r;
+    #access_log  /var/log/nginx/host.access.log  main;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+}
+```
+
+As we can see this file contains a nginx server block that configures a default virtual server for nginx that handles our web requests.
+
+We can also see that there is a root document `root /usr/share/nginx/html;` specified within the `location /` block that matches to root URL of `/`.
+
+> See the resources section at the bottom of this post for nginx configuration file specification resources.
+
+The document root specifies the `/usr/share/nginx/html` as the document root from which nginx will search for and server static content files.
+
+Let's take a look in this directory:
+
+```bash
+ls /usr/share/nginx/html
+```
+
+we can see an index.html file which is served by default when we navigate to `localhost:8080` in the browser.
+
+Let's see that the content of this file matches the html file content that we see when we navigate to `localhost:8080`.
+
+```bash
+cat /usr/share/nginx/html/index.html
+```
+
+And indeed it is:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to nginx!</title>
+    <style>
+      body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome to nginx!</h1>
+    <p>
+      If you see this page, the nginx web server is successfully installed and
+      working. Further configuration is required.
+    </p>
+
+    <p>
+      For online documentation and support please refer to
+      <a href="http://nginx.org/">nginx.org</a>.<br />
+      Commercial support is available at
+      <a href="http://nginx.com/">nginx.com</a>.
+    </p>
+
+    <p><em>Thank you for using nginx.</em></p>
+  </body>
+</html>
+```
+
+This file is served by default when we navigate to the root URL `/` of `localhost:8080`, because of the `index index.html index.htm;` directive inside the `location /` block of the `default.conf` file.
+
+You may have also noticed a `fastcgi_params` file in the `/etc/nginx/` directory. This file is referenced from the commented out section of the `default.conf` file. The file is used when we enable that section to serve php files.
+
+Let's see its content:
+
+```bash
+cat /etc/nginx/fastcgi_params
+```
+
+It lists various CGI parameters used with proxying requests to the PHP-FPM server.
+
+Some of them in the output are listed below:
+
+```bash
+fastcgi_param  QUERY_STRING       $query_string;
+fastcgi_param  REQUEST_METHOD     $request_method;
+fastcgi_param  CONTENT_TYPE       $content_type;
+fastcgi_param  CONTENT_LENGTH     $content_length;
+fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+fastcgi_param  REQUEST_URI        $request_uri;
+fastcgi_param  DOCUMENT_URI       $document_uri;
+fastcgi_param  DOCUMENT_ROOT      $document_root;
+fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+fastcgi_param  REQUEST_SCHEME     $scheme;
+```
+
+Exit the container:
+
+```bash
+root@6183f96c4571:/# exit
+```
+
+Back in our local shell we can stop the container which will be auto removed after being stopped:
+
+```bash
+docker stop znginx
+docker ps -a
+```
 
 ## Overriding the nginx default content and configuration
 
