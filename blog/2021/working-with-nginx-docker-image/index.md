@@ -619,7 +619,20 @@ Finally we need to open the additional `./docker/nginx/content/about.html` conte
 
 Now we are ready to replace the content and configuration when we run the container.
 
-First lets just override the default `index.html` page by mapping the content directory that we setup on the host to the default `/usr/share/nginx/html` document root in the container.
+First lets just override the default `index.html` page by mapping the file that we setup on the host to the default `/usr/share/nginx/html/index.html` file in the document root directory of the container.
+
+From the app directory run the following command:
+
+```bash
+#use a different configuration that serves from document root at /var/www/ directory. Put ./nginx/content/index.html onto /var/www/index.html
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content/index.html":/usr/share/nginx/html/index.html nginx
+```
+
+Navigate to `localhost:8080` to view the new `index.html` file content.
+
+Stop the container.
+
+As a more practical alternative, instead of mapping the single `index.html` file, we can map the entire contents of the content directory that we setup on the host to the default `/usr/share/nginx/html` document root directory in the container.
 
 From the app directory run the following command:
 
@@ -627,9 +640,9 @@ From the app directory run the following command:
 docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/usr/share/nginx/html nginx
 ```
 
-Navigate to `localhost:8080` to view the new file content. We see that the default `index.html` file mapped into the document root is overridden.
+Navigate to `localhost:8080` to view the new `index.html` file content.
 
-Also Navigate to `localhost:8000/about.html`. We can see the additional content file that is mapped into the document root.
+Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
 
 Stop the container:
 
@@ -637,18 +650,9 @@ Stop the container:
 docker stop znginx
 ```
 
-Next Let's override the default configuration file that contains a new document root `/var/www` replacing the default `/usr/share/nginx/html` document root.
+Next Let's override the default configuration file in the container with the one that we created that specifies a new document root `/var/www`.
 
-We also need to map our content files from the host to the new document root in the container.
-
-From the app directory run the following command:
-
-```bash
-#use a different configuration that serves from document root at /var/www/ directory. Put ./nginx/content/index.html onto /var/www/index.html
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content/index.html":/var/www/index.html -v "$(pwd)/docker/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf nginx
-```
-
-Stop the container.
+We will also need to map our content files from the host to the new document root in the container.
 
 From the app directory run the following command:
 
