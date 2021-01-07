@@ -512,7 +512,9 @@ And indeed it is:
 
 This file is served by default when we navigate to the root URL `/` of `localhost:8080`, because of the `index index.html index.htm;` directive inside the `location /` block of the `default.conf` file.
 
-You may have also noticed a `fastcgi_params` file in the `/etc/nginx/` directory. This file is referenced from the commented out section of the `default.conf` file. The file is used when we enable that section to serve php files.
+You may have also noticed a `fastcgi_params` file in the `/etc/nginx/` directory. This file is included by the line `include fastcgi_params;` in a commented out section of the `default.conf` file.
+
+If we uncomment that section the content of the `fastcgi_params` file will be included in the `default.conf` file. The content contains additional CGI parameters that will be passed to the PHP server specified in that section.
 
 Let's see its content:
 
@@ -553,7 +555,9 @@ docker ps -a
 
 ## Overriding the nginx default content and configuration
 
-The directory structure below where we have a docker file and content directory
+We can use the docker run command with volume mapping to change the default nginx configuration. We can also change the content that is served using volume mapping.
+
+Let's first setup a directory structure on our host machine to hold the new configuration and content files that we want to map to the running container:
 
 ```bash
 mkdir app && cd app
@@ -564,25 +568,94 @@ touch ./docker/nginx/content/index.html
 touch ./docker/nginx/content/about.html
 ```
 
+Now we need to open the `./docker/nginx/config/nginx.conf` configuration file and add the following content:
+
+```bash
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    location / {
+        root   /var/www;
+        index  index.html index.htm;
+    }
+}
+```
+
+I have changed the document root from `/usr/share/nginx/html` directory to a `/var/www` directory. The `/var/www` directory does not exist in the image but will be temporarily created when we run the container with the volume mapping option.
+
+The volume mapping specified with the -v option in the docker run command maps an existing directory on the host machine to a directory in the container. If the directory in the container does not exist, it will be created at container startup but the container will revert to its original directory structure the next time it is run without the volume option.
+
+Next we need to open the `./docker/nginx/content/index.html` content file and add the following:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Updated nginx!</title>
+  </head>
+  <body>
+    <h1>Updated nginx!</h1>
+  </body>
+</html>
+```
+
+Finally we need to open the additional `./docker/nginx/content/about.html` content file and add the following:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About nginx!</title>
+  </head>
+  <body>
+    <h1>About nginx!</h1>
+  </body>
+</html>
+```
+
+Now we are ready to replace the content and configuration when we run the container.
+
+First lets just override the default `index.html` page by mapping the content directory that we setup on the host to the default `/usr/share/nginx/html` document root in the container::
+
 ```bash
 docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/usr/share/nginx/html:ro nginx
+```
 
-docker stop znginx
+> The :ro (read only) part of the volume mapping specifies that nginx can only read but not modify the content files.
 
-#use a different configuration that serves from document root at /var/www/ directory. Put contents of ./nginx/content into /var/www
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/var/www:ro -v "$(pwd)/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf:ro nginx
+Navigate to `localhost:8080` to view the new file content. We see that the default `index.html` file mapped into the document root is overridden.
 
-docker stop znginx
+Also Navigate to `locahost:8000/about.html`. We can see the additional content file that is mapped into the document root.
 
-#use a different configuration that serves from document root at /var/www/ directory. Put ./nginx/content/index.html onto /var/www/index.html
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content/index.html":/var/www/index.html:ro -v "$(pwd)/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf:ro nginx
+Stop the container:
 
-docker stop znginx
-
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/var/www:ro -v "$(pwd)/nginx/config/default.conf":/etc/nginx/conf.d/default.conf:ro nginx
-
+```bash
 docker stop znginx
 ```
+
+Next Let's override the default configuration file that contains a new document root `/var/www` instead of the default `/usr/share/nginx/html`. We also need to map our content files from the host to the new document root in the container:
+
+```bash
+#use a different configuration that serves from document root at /var/www/ directory. Put contents of ./nginx/content into /var/www
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/var/www:ro -v "$(pwd)/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf:ro nginx
+```
+
+Stop the container.
+
+```bash
+#use a different configuration that serves from document root at /var/www/ directory. Put ./nginx/content/index.html onto /var/www/index.html
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content/index.html":/var/www/index.html:ro -v "$(pwd)/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf:ro nginx
+```
+
+Stop the container.
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/var/www:ro -v "$(pwd)/nginx/config/default.conf":/etc/nginx/conf.d/default.conf:ro nginx
+```
+
+Stop the container.
 
 ## Building a custom image
 
