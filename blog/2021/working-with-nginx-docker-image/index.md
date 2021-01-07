@@ -338,10 +338,14 @@ docker run --rm -d --name znginx -p 8080:80 nginx
 docker exec -it znginx bash
 ```
 
+We are dropped in again into the root directory of the container.
+
+The nginx installation directory is `/etc/ningx`.
+
+Let's list the content of this directory:
+
 ```bash
-root@6183f96c4571:/# ls -al
-cd /etc/nginx
-ls -al
+root@6183f96c4571:/# ls -l /etc/nginx
 ```
 
 Here we see all the nginx configuration files and directories:
@@ -351,7 +355,7 @@ The main config file is located at `/etc/nginx/nginx.conf`.
 Let's list the content of this file:
 
 ```bash
-cat /etc/nginx/nginx.conf
+root@6183f96c4571:/# cat /etc/nginx/nginx.conf
 ```
 
 The content of the file is listed below:
@@ -397,7 +401,7 @@ The default installation of nginx only includes a `/etc/nginx/conf.d/default.con
 Let's print out its content:
 
 ```bash
-cat /etc/nginx/conf.d/default.conf
+root@6183f96c4571:/# cat /etc/nginx/conf.d/default.conf
 ```
 
 The content is shown below:
@@ -461,7 +465,7 @@ The document root specifies the `/usr/share/nginx/html` as the document root fro
 Let's take a look in this directory:
 
 ```bash
-ls /usr/share/nginx/html
+root@6183f96c4571:/# ls /usr/share/nginx/html
 ```
 
 we can see an index.html file which is served by default when we navigate to `localhost:8080` in the browser.
@@ -469,7 +473,7 @@ we can see an index.html file which is served by default when we navigate to `lo
 Let's see that the content of this file matches the html file content that we see when we navigate to `localhost:8080`.
 
 ```bash
-cat /usr/share/nginx/html/index.html
+root@6183f96c4571:/# cat /usr/share/nginx/html/index.html
 ```
 
 And indeed it is:
@@ -513,7 +517,7 @@ You may have also noticed a `fastcgi_params` file in the `/etc/nginx/` directory
 Let's see its content:
 
 ```bash
-cat /etc/nginx/fastcgi_params
+root@6183f96c4571:/# cat /etc/nginx/fastcgi_params
 ```
 
 It lists various CGI parameters used with proxying requests to the PHP-FPM server.
@@ -543,6 +547,7 @@ Back in our local shell we can stop the container which will be auto removed aft
 
 ```bash
 docker stop znginx
+#check that the container is removed
 docker ps -a
 ```
 
