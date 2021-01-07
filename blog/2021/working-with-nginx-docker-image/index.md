@@ -557,10 +557,11 @@ The directory structure below where we have a docker file and content directory
 
 ```bash
 mkdir app && cd app
-touch ./docker/nginx/content/
-touch ./docker/nginx/content/index.html
-touch ./docker/nginx/config/
+mkdir -p ./docker/nginx/config
+mkdir -p ./docker/nginx/content
 touch ./docker/nginx/config/nginx.conf
+touch ./docker/nginx/content/index.html
+touch ./docker/nginx/content/about.html
 ```
 
 ```bash
@@ -593,18 +594,20 @@ touch ./docker/nginx/Dockerfile
 
 ```dockerfile
 FROM nginx:latest
-COPY $PWD/nginx/content /usr/share/nginx/html
+COPY ./docker/nginx/content /usr/share/nginx/html
 ```
 
 ```dockerfile
 FROM nginx:latest
-COPY $PWD/nginx/content/index.html /usr/share/nginx/html/index.html
+COPY ./docker/nginx/content/index.html /usr/share/nginx/html/index.html
 ```
 
 ```dockerfile
 FROM nginx:latest
-COPY $PWD/nginx/config/default.conf /etc/nginx/conf.d/default.conf
-COPY $PWD/nginx/content /var/www
+#change the configuration to use /var/www/app as document root
+COPY ./docker/nginx/config/default.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /var/www/app
+COPY ./docker/nginx/content /var/www/app
 ```
 
 ## Using a Dockerfile to build a custom NGINX container
