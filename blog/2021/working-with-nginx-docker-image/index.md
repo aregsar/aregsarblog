@@ -563,7 +563,7 @@ Let's first setup a directory structure on our host machine to hold the new conf
 mkdir app && cd app
 mkdir -p ./docker/nginx/config
 mkdir -p ./docker/nginx/content
-touch ./docker/nginx/config/nginx.conf
+touch ./docker/nginx/config/default.conf
 touch ./docker/nginx/content/index.html
 touch ./docker/nginx/content/about.html
 ```
@@ -632,6 +632,10 @@ Navigate to `localhost:8080` to view the new `index.html` file content.
 
 Stop the container.
 
+```bash
+docker stop znginx
+```
+
 As a more practical alternative, instead of mapping the single `index.html` file, we can map the entire contents of the content directory that we setup on the host to the default `/usr/share/nginx/html` document root directory in the container.
 
 From the app directory run the following command:
@@ -640,9 +644,7 @@ From the app directory run the following command:
 docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/usr/share/nginx/html nginx
 ```
 
-Navigate to `localhost:8080` to view the new `index.html` file content.
-
-Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
+Navigate to `localhost:8080` to view the new `index.html` file content. Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
 
 Stop the container:
 
@@ -660,17 +662,41 @@ From the app directory run the following command:
 docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/var/www -v "$(pwd)/docker/nginx/config/default.conf":/etc/nginx/conf.d/default.conf nginx
 ```
 
-Stop the container.
+Navigate to `localhost:8080` to view the new `index.html` file content. Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
 
-Lets rename our default.conf on the host machine to nginx.conf and run the command again:
+The /var/www does not exist in the nginx docker image, but is created automatically when we run the container.
+
+Let's docker exec into the container to verify this:
 
 ```bash
+docker exec -it znginx bash
+root@80c8cf23bd51:/#
+```
+
+Now verify that there is a /var/www directory that has our volume mapped content files:
+
+```bash
+root@80c8cf23bd51:/# ls /var/www
+about.html  index.html
+```
+
+Exit the container and stop it.
+
+```bash
+root@80c8cf23bd51:/# exit
+docker stop znginx
+```
+
+Finally let's rename our `default.conf` on the host machine to `nginx.conf` and run the command again:
+
+```bash
+mv ./docker/nginx/config/default.conf ./docker/nginx/config/nginx.conf
 docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/var/www -v "$(pwd)/docker/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf nginx
 ```
 
-In this case the host file name nginx.conf gets renamed to default.conf in the container.
+In this case the host file name `nginx.conf` on the host gets copied to default.conf in the container, overriding the original default.conf file.
 
-Stop the container.
+Navigate to `localhost:8080` to view the new `index.html` file content. Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
 
 ## Building a custom image
 
