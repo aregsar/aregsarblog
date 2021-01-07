@@ -591,8 +591,9 @@ Next we need to open the `./docker/nginx/content/index.html` content file and ad
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
     <title>Updated nginx!</title>
   </head>
   <body>
@@ -605,8 +606,9 @@ Finally we need to open the additional `./docker/nginx/content/about.html` conte
 
 ```html
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
     <title>About nginx!</title>
   </head>
   <body>
@@ -617,17 +619,17 @@ Finally we need to open the additional `./docker/nginx/content/about.html` conte
 
 Now we are ready to replace the content and configuration when we run the container.
 
-First lets just override the default `index.html` page by mapping the content directory that we setup on the host to the default `/usr/share/nginx/html` document root in the container::
+First lets just override the default `index.html` page by mapping the content directory that we setup on the host to the default `/usr/share/nginx/html` document root in the container.
+
+From the app directory run the following command:
 
 ```bash
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/usr/share/nginx/html:ro nginx
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/usr/share/nginx/html nginx
 ```
-
-> The :ro (read only) part of the volume mapping specifies that nginx can only read but not modify the content files.
 
 Navigate to `localhost:8080` to view the new file content. We see that the default `index.html` file mapped into the document root is overridden.
 
-Also Navigate to `locahost:8000/about.html`. We can see the additional content file that is mapped into the document root.
+Also Navigate to `localhost:8000/about.html`. We can see the additional content file that is mapped into the document root.
 
 Stop the container:
 
@@ -635,34 +637,45 @@ Stop the container:
 docker stop znginx
 ```
 
-Next Let's override the default configuration file that contains a new document root `/var/www` instead of the default `/usr/share/nginx/html`. We also need to map our content files from the host to the new document root in the container:
+Next Let's override the default configuration file that contains a new document root `/var/www` replacing the default `/usr/share/nginx/html` document root.
 
-```bash
-#use a different configuration that serves from document root at /var/www/ directory. Put contents of ./nginx/content into /var/www
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/var/www:ro -v "$(pwd)/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf:ro nginx
-```
+We also need to map our content files from the host to the new document root in the container.
 
-Stop the container.
+From the app directory run the following command:
 
 ```bash
 #use a different configuration that serves from document root at /var/www/ directory. Put ./nginx/content/index.html onto /var/www/index.html
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content/index.html":/var/www/index.html:ro -v "$(pwd)/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf:ro nginx
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content/index.html":/var/www/index.html -v "$(pwd)/docker/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf nginx
 ```
 
 Stop the container.
 
+From the app directory run the following command:
+
 ```bash
-docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/nginx/content":/var/www:ro -v "$(pwd)/nginx/config/default.conf":/etc/nginx/conf.d/default.conf:ro nginx
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/var/www -v "$(pwd)/docker/nginx/config/default.conf":/etc/nginx/conf.d/default.conf nginx
 ```
+
+Stop the container.
+
+Lets rename our default.conf on the host machine to nginx.conf and run the command again:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/var/www -v "$(pwd)/docker/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf nginx
+```
+
+In this case the host file name nginx.conf gets renamed to default.conf in the container.
 
 Stop the container.
 
 ## Building a custom image
 
-Adding a docker file:
+From the app directory create a docker file:
 
 ```bash
 touch ./docker/nginx/Dockerfile
+echo 'FROM nginx:latest'
+echo 'COPY ./docker/nginx/content /usr/share/nginx/html'
 ```
 
 ```dockerfile
