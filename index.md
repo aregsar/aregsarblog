@@ -1,12 +1,16 @@
 # All Posts
 
-December 31, 2020
+January 8, 2021
 
-[My Zshrc Config File](https://aregsar.com/blog/2020/my-zshrc-config-file)
+[Working With NGINX Docker Image](https://aregsar.com/blog/2021/working-with-nginx-docker-image)
 
 December 31, 2020
 
 [Working With Docker](https://aregsar.com/blog/2020/working-with-docker)
+
+December 31, 2020
+
+[My Zshrc Config File](https://aregsar.com/blog/2020/my-zshrc-config-file)
 
 November 11, 2020
 

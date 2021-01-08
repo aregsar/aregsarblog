@@ -1,10 +1,6 @@
 # Working With NGINX Docker Image
 
-January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
-
-January 1, 2021
-
-[Working With NGINX Docker Image](https://aregsar.com/blog/2021/working-with-nginx-docker-image)
+January 8, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I detail how you can use the Nginx docker image to configure and run a web server on your local development environment.
 
