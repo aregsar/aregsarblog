@@ -737,6 +737,14 @@ The docker build command will build a new docker image by the name of `mynginx`.
 
 > The docker build command will be described in the next section.
 
+We can list all the images on our system:
+
+```bash
+docker images
+```
+
+You should see the image tagged `mynginx` in the list of images.
+
 Let's run the image that we just created:
 
 ```bash
@@ -752,9 +760,12 @@ Lets remove the `mynginx` image as well:
 ```bash
 rm Dockerfile
 docker image rm mynginx
+docker images
 ```
 
-Let's create a new Dockerfile that copies the contents of the content directory into the docker image:
+The `mynginx` image will no longer show up in the list of images.
+
+Let's create a new `Dockerfile` file that copies the contents of the content directory into the docker image:
 
 ```bash
 echo 'FROM nginx:latest' > Dockerfile
@@ -770,14 +781,14 @@ Now Let's stop the container and delete the Dockerfile again as well as deleting
 Let's make one last Dockerfile that also copies a nginx configuration file that changes the default nginx document root:
 
 ```bash
-cd docker/nginx
 echo 'FROM nginx:latest' > Dockerfile
-#RUN mkdir -p /var/www
 echo 'COPY ./content /var/www' >> Dockerfile
 echo 'COPY ./config/default.conf /etc/nginx/conf.d/default.conf' >> Dockerfile
 ```
 
 Again we can build, run and then stop the container.
+
+Note that even though the /var/www directory did not exist in the base image, it was created as part of the COPY command.
 
 ## Using a Dockerfile file to build a custom NGINX container
 
