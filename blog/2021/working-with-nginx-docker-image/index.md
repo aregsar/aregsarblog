@@ -160,6 +160,8 @@ Now that we are back in the local shell, we can stop the running container using
 docker stop znginx
 ```
 
+> Note: when we stop a container the running process in the container receives a signal to quit. Sometimes it takes a few seconds for the process to respond and shutdown. Usually if the process does not shut down within a short time, docker will shutdown the container.
+
 After stoping the container let's see if we can show the stopped container:
 
 ```bash
@@ -549,7 +551,11 @@ Back in our local shell we can stop the container which will be auto removed aft
 
 ```bash
 docker stop znginx
-#check that the container is removed
+```
+
+#check that the container is removed:
+
+```bash
 docker ps -a
 ```
 
@@ -654,6 +660,8 @@ docker stop znginx
 
 Next Let's override the default configuration file in the container with the one that we created that specifies a new document root `/var/www`.
 
+To do so we need to map the `default.conf` file we created on the host to the container.
+
 We will also need to map our content files from the host to the new document root in the container.
 
 From the app directory run the following command:
@@ -664,7 +672,7 @@ docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/va
 
 Navigate to `localhost:8080` to view the new `index.html` file content. Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
 
-The /var/www does not exist in the nginx docker image, but is created automatically when we run the container.
+The `/var/www` directory does not exist in the nginx docker image, but is created automatically when we run the container.
 
 Let's docker exec into the container to verify this:
 
@@ -694,63 +702,145 @@ mv ./docker/nginx/config/default.conf ./docker/nginx/config/nginx.conf
 docker run --rm -d --name znginx -p 8080:80 -v "$(pwd)/docker/nginx/content":/var/www -v "$(pwd)/docker/nginx/config/nginx.conf":/etc/nginx/conf.d/default.conf nginx
 ```
 
-In this case the host file name `nginx.conf` on the host gets copied to default.conf in the container, overriding the original default.conf file.
+In this case the host file name `nginx.conf` on the host gets copied to `default.conf` in the container, overriding the original `default.conf` file.
 
 Navigate to `localhost:8080` to view the new `index.html` file content. Also Navigate to `localhost:8000/about.html`. We can see the additional content file.
 
-## Building a custom image
-
-From the app directory create a docker file:
+Stop the container:
 
 ```bash
-touch ./docker/nginx/Dockerfile
-echo 'FROM nginx:latest'
-echo 'COPY ./docker/nginx/content /usr/share/nginx/html'
+docker stop znginx
 ```
 
-```dockerfile
-FROM nginx:latest
-COPY ./docker/nginx/content /usr/share/nginx/html
+## Building a custom image
+
+Lets change to the nginx directory to create a custom docker image:
+
+```bash
+cd docker/nginx
 ```
+
+Next let's create a file named `Dockerfile` that copies the index.html file in the content directory to the docker image:
 
 ```dockerfile
 FROM nginx:latest
 COPY ./docker/nginx/content/index.html /usr/share/nginx/html/index.html
 ```
 
+```bash
+cd docker/nginx
+echo 'FROM nginx:latest' > Dockerfile
+echo 'COPY ./docker/nginx/content/index.html /usr/share/nginx/html/index.html' >> Dockerfile
+```
+
+Let's use this `Dockerfile` file to build a custom image:
+
+```bash
+run docker build -t mynginx .
+```
+
+The docker build command will build a new docker image by the name of `mynginx`. The command uses the `Dockerfile` we created in the current directory by default.
+
+> The docker build command will be described in the next section.
+
+Let's run the image that we just created:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 mynginx
+```
+
+We can navigate to localhost:8080 as usual to see our custom html page that we copied to the container image in the Dockerfile.
+
+Let's stop the container with the usual command and delete the Dockerfile.
+
+Lets remove the `mynginx` image as well:
+
+```bash
+docker image rm mynginx
+```
+
+Let's create a new Dockerfile that copies the contents of the content directory into the docker image:
+
+```dockerfile
+FROM nginx:latest
+COPY ./docker/nginx/content /usr/share/nginx/html
+```
+
+```bash
+cd docker/nginx
+echo 'FROM nginx:latest' > Dockerfile
+echo 'COPY ./docker/nginx/content /usr/share/nginx/html' >> Dockerfile
+```
+
+Now we can run the same docker build command to build the image again with the new Dockerfile.
+
+After we build the image we can run it as before.
+
+Now Let's stop the container and delete the Dockerfile again as well as deleting the `mynginx` image as before.
+
+Let's make one last Dockerfile that also copies a nginx configuration file that changes the default nginx document root:
+
 ```dockerfile
 FROM nginx:latest
 #change the configuration to use /var/www/app as document root
 COPY ./docker/nginx/config/default.conf /etc/nginx/conf.d/default.conf
-RUN mkdir -p /var/www/app
-COPY ./docker/nginx/content /var/www/app
+#RUN mkdir -p /var/www
+COPY ./docker/nginx/content /var/www
 ```
-
-## Using a Dockerfile to build a custom NGINX container
-
-```Dockerfile
-#Dockerfile
-FROM nginx
-#if /usr/share/nginx/html doesn’t exist, it is created as a file
-#copy content of the content directory into /usr/share/nginx/
-#COPY content /usr/share/nginx/html
-#copy content of the content directory into /usr/share/nginx/html/
-#if /usr/share/nginx/html/ doesn’t exist, it is created as a directory
-COPY content /usr/share/nginx/html/
-COPY content/index.html /usr/share/nginx/html/index.html
-#overwrite the main nginx.conf file
-COPY config/nginx.conf /etc/nginx/nginx.conf
-#overwite the conf.d/default.conf file
-COPY config/nginx.conf /etc/nginx/conf.d/default.conf
-```
-
-We will use the docker build command to build our custom image using our dockerfile and then we will run this custom image instead of the stock nginx image.
 
 ```bash
-cd app/docker/nginx
+cd docker/nginx
+echo 'FROM nginx:latest' > Dockerfile
+echo 'COPY ./docker/nginx/content /var/www' >> Dockerfile
+echo 'COPY ./docker/nginx/config/default.conf /etc/nginx/conf.d/default.conf' >> Dockerfile
+```
+
+Again we can build, run and then stop the container.
+
+## Using a Dockerfile file to build a custom NGINX container
+
+The docker build command can be used to build a custom image using our `Dockerfile` file and then we can run this custom image instead of the stock nginx image.
+
+From the app directory we can change into the nginx directory and run the docker build command to build a new image:
+
+```bash
+cd docker/nginx
 run docker build -t mynginx .
+```
+
+By default the docker run command uses the `Dockerfile` file that it finds in the directory that the command is run.
+
+The period at the end of the command specifies the current directory as the build context. This tells the docker command to recursively copy the contents of the current directory to the docker engine where the image is built.
+
+Source files referenced in the Dockerfile are relative to the build context directory.
+
+The -t option tags the image with the name `mynginx`. This name can be then used to run the image:
+
+```bash
 docker run --rm -d --name znginx -p 8080:80 mynginx
-# here we are explicitly running the default command run by default by the base nginx image
+```
+
+## Running explicit commands
+
+If we wanted to we can explicitly run a container startup command when we run the nginx container:
+
+```bash
+docker run --rm -d --name znginx -p 8080:80 nginx nginx -g 'daemon off;'
+```
+
+He we are explicitly running the default `nginx -g 'daemon off;'` command that would be run by default when the nginx image starts.
+
+In effect we are overriding the same command that would have been run, thus nothing will change from a normal container run.
+
+The first `nginx` in the docker run command is the docker image name.
+
+The second `nginx` in the docker run command is the command that runs in the container which starts up the nginx server in the container.
+
+The `-g 'daemon off;'` after the `nginx` command is the option that runs the main nginx server process in the foreground.
+
+We could also run the same command with the custom docker image that we built in the last section:
+
+```bash
 docker run --rm -d --name znginx -p 8080:80 mynginx nginx -g 'daemon off;'
 ```
 
@@ -767,3 +857,19 @@ https://www.digitalocean.com/community/tutorials/how-to-run-nginx-in-a-docker-co
 # working with nginx docker image
 
 [working with nginx docker image](https://aregsar.com/blog/2020/working-with-nginx-docker-image)
+
+```Dockerfile
+#Dockerfile
+FROM nginx
+#if /usr/share/nginx/html doesn’t exist, it is created as a file
+#copy content of the content directory into /usr/share/nginx/
+#COPY content /usr/share/nginx/html
+#copy content of the content directory into /usr/share/nginx/html/
+#if /usr/share/nginx/html/ doesn’t exist, it is created as a directory
+COPY content /usr/share/nginx/html/
+COPY content/index.html /usr/share/nginx/html/index.html
+#overwrite the main nginx.conf file
+COPY config/nginx.conf /etc/nginx/nginx.conf
+#overwite the conf.d/default.conf file
+COPY config/nginx.conf /etc/nginx/conf.d/default.conf
+```
