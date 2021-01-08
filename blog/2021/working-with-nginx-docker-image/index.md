@@ -722,21 +722,15 @@ cd docker/nginx
 
 Next let's create a file named `Dockerfile` that copies the index.html file in the content directory to the docker image:
 
-```dockerfile
-FROM nginx:latest
-COPY ./docker/nginx/content/index.html /usr/share/nginx/html/index.html
-```
-
 ```bash
-cd docker/nginx
 echo 'FROM nginx:latest' > Dockerfile
-echo 'COPY ./docker/nginx/content/index.html /usr/share/nginx/html/index.html' >> Dockerfile
+echo 'COPY ./content/index.html /usr/share/nginx/html/index.html' >> Dockerfile
 ```
 
 Let's use this `Dockerfile` file to build a custom image:
 
 ```bash
-run docker build -t mynginx .
+docker build -t mynginx .
 ```
 
 The docker build command will build a new docker image by the name of `mynginx`. The command uses the `Dockerfile` we created in the current directory by default.
@@ -756,20 +750,15 @@ Let's stop the container with the usual command and delete the Dockerfile.
 Lets remove the `mynginx` image as well:
 
 ```bash
+rm Dockerfile
 docker image rm mynginx
 ```
 
 Let's create a new Dockerfile that copies the contents of the content directory into the docker image:
 
-```dockerfile
-FROM nginx:latest
-COPY ./docker/nginx/content /usr/share/nginx/html
-```
-
 ```bash
-cd docker/nginx
 echo 'FROM nginx:latest' > Dockerfile
-echo 'COPY ./docker/nginx/content /usr/share/nginx/html' >> Dockerfile
+echo 'COPY ./content /usr/share/nginx/html' >> Dockerfile
 ```
 
 Now we can run the same docker build command to build the image again with the new Dockerfile.
@@ -780,19 +769,12 @@ Now Let's stop the container and delete the Dockerfile again as well as deleting
 
 Let's make one last Dockerfile that also copies a nginx configuration file that changes the default nginx document root:
 
-```dockerfile
-FROM nginx:latest
-#change the configuration to use /var/www/app as document root
-COPY ./docker/nginx/config/default.conf /etc/nginx/conf.d/default.conf
-#RUN mkdir -p /var/www
-COPY ./docker/nginx/content /var/www
-```
-
 ```bash
 cd docker/nginx
 echo 'FROM nginx:latest' > Dockerfile
-echo 'COPY ./docker/nginx/content /var/www' >> Dockerfile
-echo 'COPY ./docker/nginx/config/default.conf /etc/nginx/conf.d/default.conf' >> Dockerfile
+#RUN mkdir -p /var/www
+echo 'COPY ./content /var/www' >> Dockerfile
+echo 'COPY ./config/default.conf /etc/nginx/conf.d/default.conf' >> Dockerfile
 ```
 
 Again we can build, run and then stop the container.
