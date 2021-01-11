@@ -10,6 +10,13 @@ Here is the content of my latest .zshrc file:
 #ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 #chmod u+x ~/scripts/judge.sh
 
+
+########################################################################
+# Exports
+########################################################################
+
+
+
 #set base path for homebrew
 #with /usr/local/bin preceding /usr/bin and usr/local/sbin preceding /usr/sbin
 export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
@@ -30,6 +37,16 @@ export PATH=$PATH:$DOTNET_TOOLS_HOME
 #export XDEBUG_CONFIG="idekey=VSCODE"
 #export XDEBUG_CONFIG="idekey=PHPSTORM"
 
+export FILE_DIRECTORY=~/Documents
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+########################################################################
+# Aliases
+########################################################################
+
 alias phpunit='vendor/bin/phpunit'
 
 alias rmrf="rm -rf"
@@ -44,13 +61,8 @@ alias aregsar="cd ~/blog/aregsarblog && ls -al"
 alias aregcode="cd ~/blog/aregcode && ls -al"
 alias alwaysdeployed="cd ~/blog/alwaysdeployed && ls -al"
 
-
-
 alias .z='code .zshrc'
 alias sz='source .zshrc'
-
-
-
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -65,7 +77,28 @@ alias pull='git pull && git status'
 alias clone='git clone'
 alias nah='git reset --hard'
 
+alias pa="php artisan"
+alias pamodel="php artisan make:model -mf"
+alias pacontroller="php artisan make:controller"
+alias paview="php artisan make:view"
+alias palivewire="php artisan make:livewire"
+alias paversion="php artisan --version"
+alias paserve="php artisan serve --port=8000"
+alias papubstub="php artisan stub:publish"
+alias ci="composer install"
+alias ni="npm install"
+alias build="npm install && npm run dev"
+#alias laranew="composer create-project --prefer-dist laravel/laravel:5.8.*"
+alias laranew="composer create-project --prefer-dist laravel/laravel"
+alias laraopen='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://app.test'
+alias gotoaregsar='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://aregsar.com'
+alias loc='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://localhost:8000'
+# usage: web http://aregsar.com
+alias web='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 
+########################################################################
+# Functions
+########################################################################
 
 function gg {
     #quote all arguments as a single message
@@ -81,12 +114,9 @@ function gg {
 }
 
 
-
-
-
-#copy a file to from ~/Documents to current directory
+#copy a file to from  $FILE_DIRECTORY (~/Documents) to current directory
 #used to copy images into blog post folders
-export FILE_DIRECTORY=~/Documents
+
 function copyfile {
     if ! [ $# -eq 0 ]
     then
@@ -106,6 +136,7 @@ function postaregsar {
         #replace dashes with spaces
         words=${title//-/ }
         cd ~/blog/aregsarblog/blog/2021 && mkdir $title
+        #cd $title && echo -e "# $words\n\n[$words](https://aregsar.com/blog/2021/$title)" >> index.md
         cd $title && echo -e "# $words\n\nJanuary 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)\n\nJanuary 1, 2021\n\n[$words](https://aregsar.com/blog/2021/$title)" >> index.md
         pwd
     fi
@@ -122,36 +153,12 @@ function postaregcode {
         #replace dashes with spaces
         words=${title//-/ }
         cd ~/blog/aregcode/blog/2021 && mkdir $title
+        #cd $title && echo -e "# $words\n\n[$words](https://aregcode.com/blog/2021/$title)" >> index.md
         cd $title && echo -e "# $words\n\nJanuary 1, 2021 by [Areg Sarkissian](https://aregcode.com/about)\n\nJanuary 1, 2021\n\n[$words](https://aregcode.com/blog/2021/$title)" >> index.md
         pwd
     fi
 }
 
-
-
-
-alias pa="php artisan"
-alias pamodel="php artisan make:model -mf"
-alias pacontroller="php artisan make:controller"
-alias paview="php artisan make:view"
-alias palivewire="php artisan make:livewire"
-
-alias paversion="php artisan --version"
-alias paserve="php artisan serve --port=8000"
-
-alias papubstub="php artisan stub:publish"
-
-alias ci="composer install"
-alias ni="npm install"
-alias build="npm install && npm run dev"
-
-
-#alias laranew="composer create-project --prefer-dist laravel/laravel:5.8.*"
-alias laranew="composer create-project --prefer-dist laravel/laravel"
-
-alias laraopen='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://localhost:8000'
-
-alias myappopen='open -a /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://myapp.test'
 
 function ft {
      php artisan migrate --env=testing
@@ -162,8 +169,4 @@ function ut {
      ./vendor/bin/paratest --processes 4 --runner WrapperRunner --testsuite Unit
 }
 
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 ```
