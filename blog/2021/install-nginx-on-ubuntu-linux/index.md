@@ -8,14 +8,25 @@ January 1, 2021
 
 In this post I will detail installation, configuration and running of the NGINX web server on the Docker Ubuntu image.
 
-The instructions in this post will apply to installing NGINX on a Ubuntu cloud server as well.
+This will be done to simulate installing and running nginx on a ubuntu cloud server, so the instructions in this post will apply to cloud servers as well.
+
+Since we are simulating a cloud server installation, we can ignore the recommendation to only run one process per docker container.
 
 ## The Ubuntu Docker image
 
 We can run the official Ubuntu docker image by running the following command:
 
 ```bash
-docker run --rm -it --name zubuntu ubuntu:20:10
+docker run --rm -it --name zubuntu ubuntu:20.10
+
+apt-get install -y software-properties-common
+add-apt-repository -y ppa:nginx/development
+
+
+apt-get update
+apt-get install -y nginx
+nginx -v
+ps aux | grep nginx
 ```
 
 ## Resources
