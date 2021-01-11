@@ -18,15 +18,52 @@ We can run the official Ubuntu docker image by running the following command:
 
 ```bash
 docker run --rm -it --name zubuntu ubuntu:20.10
+```
 
-apt-get install -y software-properties-common
-add-apt-repository -y ppa:nginx/development
+Install NGINX
 
-
+```bash
+# add-apt-repository not available by default
+# add-apt-repository -y ppa:nginx/development
+#update available repository package list and version
 apt-get update
+#install the server
 apt-get install -y nginx
+#check nginx version
 nginx -v
+#verify nginx configuration is correct
+nginx –t
+#verify the nginx process is running
 ps aux | grep nginx
+
+
+##########################
+# apt-get -y install sudo
+# apt-get -y install apt-transport-https
+# apt-get -y install ca-certificates
+# apt-get -y install curl
+# apt-get install -y software-properties-common
+# add-apt-repository -y ppa:nginx/development
+# apt-get update
+#########################
+```
+
+## Nginx installation directories
+
+```bash
+
+
+# /var/www/html – Website content as seen by visitors.
+# /etc/nginx – Location of the main Nginx application files.
+# /etc/nginx/nginx.conf – The main Nginx configuration file.
+# /etc/nginx/conf.d – list of configuration files included by main nginx.conf.
+# /etc/nginx/sites-available – List of all websites configured through Nginx.
+# /etc/nginx/sites-enabled – List of websites actively being served by Nginx.
+# /etc/nginx/snippets - configuration snippets to include in server blocks
+
+# /var/log/nginx/access.log – Access logs tracking every request to your server.
+# /var/log/ngins/error.log – A log of any errors generated in Nginx.
+
 ```
 
 ## Resources
@@ -35,12 +72,12 @@ ps aux | grep nginx
 
 [Working With NGINX Docker Image](https://aregsar.com/blog/2021/working-with-nginx-docker-image)
 
-[how-to-install-nginx-ubuntu-18-04](https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04)
-
-[how-to-install-nginx-on-ubuntu-18-04-quickstart](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04-quickstart)
+[how-to-install-nginx-on-ubuntu-20-04](https://phoenixnap.com/kb/how-to-install-nginx-on-ubuntu-20-04)
 
 [install-and-configure-nginx](https://ubuntu.com/tutorials/install-and-configure-nginx)
 
-[how-to-install-nginx-on-ubuntu-20-04](https://phoenixnap.com/kb/how-to-install-nginx-on-ubuntu-20-04)
+[how-to-install-nginx-on-ubuntu-18-04-quickstart](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04-quickstart)
+
+[how-to-install-nginx-ubuntu-18-04](https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04)
 
 [nginx.com/install](https://www.nginx.com/resources/wiki/start/topics/tutorials/install)
