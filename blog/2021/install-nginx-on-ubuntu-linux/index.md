@@ -81,3 +81,7 @@ ps aux | grep nginx
 [how-to-install-nginx-ubuntu-18-04](https://www.linode.com/docs/guides/how-to-install-nginx-ubuntu-18-04)
 
 [nginx.com/install](https://www.nginx.com/resources/wiki/start/topics/tutorials/install)
+
+[nginx cli](https://www.nginx.com/resources/wiki/start/topics/tutorials/commandline)
+
+[nginx command line options](http://nginx.org/en/docs/switches.html)
