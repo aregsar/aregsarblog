@@ -484,6 +484,18 @@ chmod +x myscript
 ./myscript
 ```
 
+### Give executable permissions Script for owner user only
+
+Assume we have a script file called myscript:
+
+```bash
+#make the script file executable
+chmod u+x myscript
+
+#execute the script
+./myscript
+```
+
 ### set environment variable used by executed script
 
 FOO=bar bash -c 'command1 args'
@@ -538,11 +550,13 @@ set -euxo pipefail
 script $arg1 $arg2
 ```
 
+When `$\*` and `$@` are quoted:
+
 `"$*"` quotes the entire list of arguments `"$arg1 $arg2"` output as a string
 
-`"$@"` quotes all arguments individual `"$arg1" "\$arg2"` output as a string
+`"$@"` quotes all arguments individually `"$arg1" "$arg2"` output as a string
 
-When they are not quoted, $* and $@ are result in the same argument list string.
+When `$\*` and `$@` are not quoted they result the argument list as is and not quoted.
 
 Should not use without quotes because it will break if arguments contain spaces or wildcards.
 
