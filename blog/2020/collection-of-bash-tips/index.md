@@ -543,15 +543,13 @@ FOO=bar bash -c 'command1 args | command2'
 
 starting a script file with the `#!` line tells the shell process running the script the interpreter to use to execute the script.
 
-Bash script example:
-
-Use explicit bash interpreter
+Use explicit bash interpreter:
 
 ```bash
 #!/bin/bash
 ```
 
-Alternate form uses default bash interpreter
+Alternate form, using the default bash interpreter:
 
 ```bash
 #!/usr/bin/env bash
