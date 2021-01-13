@@ -330,7 +330,6 @@ Create file and add multiple lines:
 
 ```bash
 cat > test << EOL
->!/bin/bash
 > hello
 > world
 > EOL
@@ -364,12 +363,50 @@ We can use any characters as the terminator as long as both sides match.
 
 ```bash
 cat > test << MYTerm
->!/bin/bash
 > hello
 > world
 > MYTERM
 
 cat test
+```
+
+### multiline input in a shell script
+
+First we create a shell script file:
+
+```bash
+touch multilinescript
+```
+
+Then we add the following to the multilinescript script file:
+
+> We can actually be recursive and interactively add content to the multilinescript file using the iteractive multiline technique we learned in last section!
+
+```bash
+#!/bin/bash
+
+cat > test << EOL
+hello
+world
+script
+EOL
+```
+
+Run the script:
+
+```bash
+#give execute permissions to owner
+chmod u+x multilinescript
+#execute the script
+./multilinescript
+```
+
+The result will be a file names test created with following content:
+
+```bash
+hello
+world
+script
 ```
 
 ## cat to files
