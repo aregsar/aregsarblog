@@ -154,16 +154,16 @@ Then I add the following override settings to the `settings.json` file:
   // Controls whether to use global `.gitignore` and `.ignore` files when searching for files.
   "search.useGlobalIgnoreFiles": false,
   // Controls whether to use `.gitignore` and `.ignore` files when searching for files.
-  "search.useIgnoreFiles": true,
+  //Set this to false and instead selectively ignore directories to search using the search.exclude section below
+  "search.useIgnoreFiles": false,
   //Inherits all glob patterns from the `files.exclude` setting.
-  //overrides .gitignore settings
-  //vendor setting is added to override .gitignore vendor setting
+  //can not override .gitignore settings since only can be used to exclude an entry from being searched
+  //i.e. setting the value to false has no effect. This is why the git ignore setting are set to false allowing
+  //this setting to selectively exclude some of the entries in the git ignore
   "search.exclude": {
     "**/node_modules": true,
     "**/bower_components": true,
-    "**/*.code-search": true,
-    //added this to include the .gitignore 'vendor' directories in directories to search
-    "**/vendor": false
+    "**/*.code-search": true
   }
 }
 ```
