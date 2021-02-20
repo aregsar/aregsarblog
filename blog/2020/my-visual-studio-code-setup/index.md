@@ -164,6 +164,14 @@ Then I add the following override settings to the `settings.json` file:
     "**/node_modules": true,
     "**/bower_components": true,
     "**/*.code-search": true
+  },
+  "workbench.startupEditor": "newUntitledFile",
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[php]": {
+    //do not include $ in the list of separators
+    "editor.wordSeparators": "`~!@#%^&*()-=+[{]}\\|;:'\",.<>/?"
   }
 }
 ```
