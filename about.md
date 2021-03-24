@@ -1,8 +1,6 @@
 # About Me
 
-Hi, my name is Areg and I help development teams rapidly build and deploy reliable and maintainable web applications.
-
-In the past I have developed mission critical software for organizations as diverse as America Online, Autobytel and Disney.
+Hi, my name is Areg and I am a web developer interested in the Laravel Ecosystem.
 
 Below is a list of development tools and services I use:
 
@@ -15,25 +13,23 @@ Below is a list of development tools and services I use:
 - [Tailwindcss](https://tailwindcss.com/) - Utility first CSS framework
 - [StimulusJS](https://stimulusjs.org) - MVC framework for organizing client side Javascript
 - [Turbolinks](https://github.com/turbolinks/turbolinks) - Framework for Ajax loaded html pages
-- [hotwire](https://hotwire.dev/) - The next version of TurboLinks
-- [htmx](https://htmx.org) - Html attribute based framework
-- [Redis](https://redis.io/)
-- [Elasticsearch](https://www.elastic.co/what-is/elasticsearch)
-- [Mailhog](https://blog.mailtrap.io/mailhog-explained/)
-- [ngrok](https://ngrok.com/) - Secure public URLs for local webhook testing
+- [Hotwire](https://hotwire.dev/) - The next version of TurboLinks
+- [Redis](https://redis.io/) - In memory cache, queue and session server
+- [Elasticsearch](https://www.elastic.co/what-is/elasticsearch) - Full text search index server
+- [MySQL](https://www.mysql.com/) - Relational Database
+- [Mailhog](https://blog.mailtrap.io/mailhog-explained/) - Email server (in docker for local development)
 - [VSCode](https://code.visualstudio.com/) - Lightweight editor and IDE
 - [PHPStorm](https://www.jetbrains.com/phpstorm/) - Powerful PHP IDE
 - [TablePlus](https://tableplus.com/) - Database management GUI for MySQL, Redis and more
+- [Takeout](https://github.com/tighten/takeout) - Docker container management for local development
 
 ## Services
 
-- [Takeout](https://github.com/tighten/takeout) - Docker container management for local development
 - [PHPDocker.io](https://phpdocker.io/) - Docker compose file generator for local development
+- [ngrok](https://ngrok.com/) - Secure public URLs for local webhook testing
 - [kanbanflow](https://kanbanflow.com/) - Kanban board with [Pomodoro](https://en.wikipedia.org/wiki/Pomodoro_Technique) timer
-- [Mailtrap](https://mailtrap.io) - Email delivery testing service
-- [Zeplin](https://zeplin.io/) - Web design service for developer and designer collaboration
 - [DigitalOcean](https://www.digitalocean.com/) - Cloud deployment with managed MySQL database, managed Redis cluster and Managed Load Balancer
-- [SendGrid](https://sendgrid.com/) - Transactional Email Service
+- [Postmark](https://postmarkapp.com/) - Transactional Email Service
 - [HoneyBadger](https://www.honeybadger.io/for/laravel/) - Exception, uptime, scheduled task and background job monitoring for Laravel
 - [Papertrail](https://www.papertrail.com/) - Application log aggregator
 - [Cloudinary](https://cloudinary.com/) - Media file hosting and CDN service

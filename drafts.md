@@ -65,4 +65,5 @@ April 1, 2021
 [Redis Configure Laravel Queue](https://aregsar.com/blog/2021/redis-configure-laravel-queue)
 
 April 1, 2021
+
 [ElasticSearch for Laravel Development](https://aregsar.com/blog/2021/elasticsearch-for-laravel-development)
