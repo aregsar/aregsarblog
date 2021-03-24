@@ -2,6 +2,8 @@
 
 Hi, my name is Areg and I am a web developer interested in the Laravel Ecosystem.
 
+My main focus is on developing Laravel applications that have HTML at the core, are majestic monoliths and use boring LEMP stack technology.
+
 Below is a list of development tools and services I use:
 
 ## Tools
@@ -14,6 +16,7 @@ Below is a list of development tools and services I use:
 - [StimulusJS](https://stimulusjs.org) - MVC framework for organizing client side Javascript
 - [Turbolinks](https://github.com/turbolinks/turbolinks) - Framework for Ajax loaded html pages
 - [Hotwire](https://hotwire.dev/) - The next version of TurboLinks
+- [Htmx](https://htmx.org) - Framework for HTML attribute based Ajax (IntercoolerJS 2.0)
 - [Redis](https://redis.io/) - In memory cache, queue and session server
 - [Elasticsearch](https://www.elastic.co/what-is/elasticsearch) - Full text search index server
 - [MySQL](https://www.mysql.com/) - Relational Database
