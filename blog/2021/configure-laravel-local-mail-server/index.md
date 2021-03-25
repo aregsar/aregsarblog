@@ -18,7 +18,7 @@ services:
       image: mailhog/mailhog:latest
       container_name: app-mailhog
       ports:
-        - "8003:1025"
+        - "${MAIL_PORT}:1025"
         - "8025:8025"
 EOL
 ```
@@ -32,6 +32,8 @@ MAIL_MAILER=smtp
 MAIL_HOST=127.0.0.1
 MAIL_PORT=8003
 ```
+
+> docker-compose.yml also uses settings from the .env file
 
 Step 3 - Startup the docker service
 

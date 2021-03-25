@@ -103,7 +103,9 @@ The selected `redis` store in the `stores` section is now shown as well.
 I have shown below the `redis` driver section in the config/database.php file.
 This is the actual driver that is selected by `driver` setting of the `redis` store in the config/cache.php file
 
-```bash
+Within this driver we see two connection settings `default` and `cache`. The later is the one that is selected by the `connection` setting of the `redis` store in the config/cache.php file.
+
+```php
 'redis' => [
 
         'client' => env('REDIS_CLIENT', 'phpredis'),
@@ -122,7 +124,7 @@ This is the actual driver that is selected by `driver` setting of the `redis` st
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL'),
+            'url' => env('REDIS_URL'),//This setting is not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
@@ -132,10 +134,127 @@ This is the actual driver that is selected by `driver` setting of the `redis` st
     ],
 ```
 
-Within this driver we see two connection settings `default` and `cache`. The later is the one that is selected by the `connection` setting of the `redis` store in the config/cache.php file.
-
 > We can add any number of redis connections here, named any way we want. We can then use those connections from any cache stores we add to other configuration files.
 
 ## Setting the redis driver connection to a local redis service
 
-To configure the `cache` connection
+Step 1 we need to make a change to the `cache` connection in confi/database.php as shown below:
+
+```php
+'redis' => [
+        'cache' => [
+            'url' => env('REDIS_URL'),//This setting is not used
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'c:',
+        ],
+    ],
+```
+
+We changed the database setting and added a prefix setting. All keys using this connection will automatically get a `c:` prefix.
+
+> redis clusters do not support multiple databases so we are distinguishing this connection using the redis key prefix instead.
+
+Step 2 -Setup the redis sever docker service
+
+```bash
+echo docker-compose.yml << EOL
+version: "3.1"
+  redis:
+    image: redis:alpine
+    container_name: redis
+    command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "${REDIS_PORT}:6379"
+EOL
+```
+
+> If you already have a docker-compose.yml file in the project root then just add the redis service portion of the above yml code under the services section.
+
+Step 2- Open the project `.env` file and update the connection settings for the mailhog local mail service.
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=radar
+REDIS_PORT=8002
+```
+
+> docker-compose.yml also uses settings from the .env file
+
+Step 3 - Startup the docker service
+
+```bash
+docker-compose up
+```
+
+Step 4 - Use the cache service
+
+In laravel when we use the `cache()` helper of the `Cache::` facade, they use the `default` cache store from config/cache.php which in turn uses the `cache` connection in the config/database.php as configured by.
+
+We can create additional redis stores in the stores array in config/cache.php configure them in the same way as we configured the `redis` cache store, and use these stores explicitly by name with the Laravel cache helper or facade api.
+
+Here is an example:
+
+In config/database.php add a `cache2` connection with a `c2` key prefix
+
+```php
+'redis' => [
+
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'c:',
+        ],
+
+        'cache2' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'c2:',
+        ],
+
+    ],
+```
+
+> Note that both cache connections use the same cache server settings. We could if we needed for scalability add a different `REDIS_HOST_2` env setting to use a completely separate redis server.
+
+In config/cache.php add a redis2 store that uses the new cache2 connection
+
+```php
+    'stores' => [
+
+        'redis' => [
+                'driver' => 'redis', //the actual cache driver for the 'redis' store
+                'connection' => 'cache',//the redis connection setting as specified in the config/database.php file
+                'lock_connection' => 'default',
+            ],
+         'redis2' => [
+                'driver' => 'redis', //the actual cache driver for the 'redis' store
+                'connection' => 'cache2',//the redis connection setting as specified in the config/database.php file
+                'lock_connection' => 'default',
+            ],
+    ]
+```
+
+With this setup we could explicitly pass the string `redis2` to the cache helper or facade to use the redis server accessed via the `cache2` connection.
+
+When done you can shutdown the docker service
+
+```bash
+docker-compose down
+```
