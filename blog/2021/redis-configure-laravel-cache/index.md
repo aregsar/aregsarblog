@@ -101,18 +101,26 @@ The selected `redis` store in the `stores` section is now shown as well.
 ## The redis driver connection
 
 I have shown below the `redis` driver section in the config/database.php file.
+
 This is the actual driver that is selected by `driver` setting of the `redis` store in the config/cache.php file
 
-Within this driver we see two connection settings `default` and `cache`. The later is the one that is selected by the `connection` setting of the `redis` store in the config/cache.php file.
+Within the `redis` driver we see two connection settings `default` and `cache`. The later is the one that is selected by the `connection` setting of the `redis` store in the config/cache.php file.
 
 ```php
 'redis' => [
 
+        //this specifies the redis client used by Laravel
+        //By default REDIS_CLUSTER is not specified in the .env file so falls back to using the 'phpredis' value.
+        //the 'phpredis' value requires installing the redis php extension (phpredis.so) extension using: pecl install redis.
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
+            //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
+            //falls back to the 'redis' value since by default the REDIS_CLUSTER setting is not specified in the .env file
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            //This setting adds a application specific prefix to the cache keys to distinguish between data from multiple apps using the same redis server
+            //I have commented out the setting as I will use a different redis server per application
+            //'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
         'default' => [
@@ -138,7 +146,7 @@ Within this driver we see two connection settings `default` and `cache`. The lat
 
 ## Setting the redis driver connection to a local redis service
 
-Step 1 we need to make a change to the `cache` connection in confi/database.php as shown below:
+Step 1 we need to make a change to the `cache` connection in config/database.php as shown below:
 
 ```php
 'redis' => [
@@ -197,11 +205,23 @@ Step 4 - Use the cache service
 
 In laravel when we use the `cache()` helper of the `Cache::` facade, they use the `default` cache store from config/cache.php which in turn uses the `cache` connection in the config/database.php as configured by.
 
-We can create additional redis stores in the stores array in config/cache.php configure them in the same way as we configured the `redis` cache store, and use these stores explicitly by name with the Laravel cache helper or facade api.
+When done you can shutdown the docker service
+
+```bash
+docker-compose down
+```
+
+## Creating and using non default redis cache stores
+
+We can create additional redis stores in the stores array in config/cache.php file and configure them in the same way as we configured the default `redis` cache store.
+
+We can then use these stores explicitly by name with the Laravel cache helper or facade api.
 
 Here is an example:
 
-In config/database.php add a `cache2` connection with a `c2` key prefix
+In config/database.php add a `cache2` connection with a `c2` key prefix.
+
+Both the original and new cache connections are shown below:
 
 ```php
 'redis' => [
@@ -231,13 +251,14 @@ In config/database.php add a `cache2` connection with a `c2` key prefix
     ],
 ```
 
-> Note that both cache connections use the same cache server settings. We could if we needed for scalability add a different `REDIS_HOST_2` env setting to use a completely separate redis server.
+> Note that both cache connections use the same cache server settings. We could if we needed for scalability add a different `REDIS_HOST_2` env setting to use a completely separate redis server in production.
 
-In config/cache.php add a redis2 store that uses the new cache2 connection
+Next in config/cache.php add a `redis2` store that uses the new `cache2` connection.
+
+Both the original and new redis stores are shown below:
 
 ```php
     'stores' => [
-
         'redis' => [
                 'driver' => 'redis', //the actual cache driver for the 'redis' store
                 'connection' => 'cache',//the redis connection setting as specified in the config/database.php file
@@ -245,16 +266,10 @@ In config/cache.php add a redis2 store that uses the new cache2 connection
             ],
          'redis2' => [
                 'driver' => 'redis', //the actual cache driver for the 'redis' store
-                'connection' => 'cache2',//the redis connection setting as specified in the config/database.php file
+                'connection' => 'cache2',//the new redis connection setting as specified in the config/database.php file
                 'lock_connection' => 'default',
             ],
     ]
 ```
 
-With this setup we could explicitly pass the string `redis2` to the cache helper or facade to use the redis server accessed via the `cache2` connection.
-
-When done you can shutdown the docker service
-
-```bash
-docker-compose down
-```
+With this setup we could explicitly pass the string `redis2` to the cache helper or facade to use the redis store that uses the `cache2` connection to access the redis server.
