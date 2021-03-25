@@ -4,7 +4,7 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Using Homebrew to install PHP
 
-Insructions for installing Homebrew can be found [here](https://homebrew)
+> Instructions for installing Homebrew can be found [here](https://brew.sh)
 
 Before installing PHP we need to update brew itself.
 
@@ -20,7 +20,7 @@ brew install php
 php -v
 ```
 
-> Make sure the path `/usr/bin/local` is in the system path and precedes the path of the default PHP installation that came with your MacOS. The path `/usr/bin/local` has the `php` symlink that points to the actual php installation directory for the version of php that was just installed.
+> Make sure the path `/usr/bin/local` is in the system path and precedes the path of the default PHP installation that came with your MacOS. The path `/usr/bin/local` has the `php` symlink that points to the actual php installation directory for the version of php that is installed.
 
 ## Upgrading to the latest version
 
@@ -34,26 +34,36 @@ This will install the latest version of PHP and update the `php` symlink in `usr
 
 ## Installing and using multiple versions
 
-Instead of the normal `brew install php` and `brew upgrade php` commands we can use the `shivammathur/php` brew tap to install and switch between multiple versions of PHP:
+Instead of the normal `brew install php` and `brew upgrade php` commands we can use the `shivammathur/php` brew tap to install multiple versions of PHP and switch between them:
 
-First add the tap for the plugin:
+First add the brew tap for the plugin:
 
 ```bash
 brew tap shivammathur/php
 ```
 
-Next install the desired version:
+Next install the desired version of PHP:
 
 ```bash
 brew install shivammathur/php/php@8.0
 ```
 
-As many versions as you like can be installed withe the above command.
+As many versions as you like can be installed with the above command.
 
 Finally set the version we want as the default:
 
 ```bash
 brew link --overwrite --force php@8.0
+#check the version
+php -v
+```
+
+To change the version simple set the version to another installed version.
+
+For example:
+
+```bash
+brew link --overwrite --force php@7.4
 #check the version
 php -v
 ```

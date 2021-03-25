@@ -4,46 +4,67 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## PHP Extensions
 
-PHP extensions are installed using pecl.
+PHP extensions are installed using the PECL cli which is installed when we installed PHP.
+We have to install these extensions once for each version of PHP every time we update the installed PHP version.
 
-You can search for extensions
+We can search for specific extensions such as the redis extension shown below:
 
 ```bash
-pecl search pdf
+pecl search redis
 ```
 
-Install extensions
+The result looks like:
+
+```bash
+redis   5.3.4 (stable)  5.3.1 PHP extension for interfacing with Redis
+```
+
+We can Install extensions:
 
 ```bash
 pecl install redis
 pecl install xdebug
 ```
 
-Upgrade an extension
+We can upgrade an extension
 
 ```bash
 pecl uninstall redis
 pecl install redis
 ```
 
-> If having issues installing an extension, add the `--force` option to the `pecl install` command
+> If having issues installing or updating an extension, add the `--force` option to the `pecl install` command
 
 ```bash
-pecl install redis --force
+pecl install --force redis
 ```
 
-You can run pecl list to see which extensions are installed:
+You can run `pecl list` to see which extensions are installed:
 
 ```bash
 pecl list
 ```
 
-check if php lists it the extension
+The reult looks like:
+
+```bash
+Package Version State
+redis   5.3.1   stable
+xdebug  2.9.6   stable
+```
+
+We can check if php lists it the extension
+
+```bash
+php -m
+#or
+php -r "var_dump(extension_loaded('redis'));"
+```
+
+check the extension configuration settings:
 
 ```bash
 php -i | grep redis
-#or
-php -r "var_dump(extension_loaded('redis'));"
 ```
 
 If extensions aren't properly loaded, there are two easy fixes.
