@@ -38,7 +38,7 @@ MAIL_PORT=8003
 Step 3 - Startup the docker service
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 Step 4 - Navigate to the mail server dashboard

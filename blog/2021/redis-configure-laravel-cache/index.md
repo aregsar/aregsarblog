@@ -198,7 +198,7 @@ REDIS_PORT=8002
 Step 3 - Startup the docker service
 
 ```bash
-docker-compose up
+docker-compose up -d
 ```
 
 Step 4 - Use the cache service
@@ -273,3 +273,11 @@ Both the original and new redis stores are shown below:
 ```
 
 With this setup we could explicitly pass the string `redis2` to the cache helper or facade to use the redis store that uses the `cache2` connection to access the redis server.
+
+## Key takeaways
+
+The way the caches connect to your application in Laravel are through cache stores specified in the config/cache.php file.
+
+Each cache store has an underlying driver. If the driver for a cache store is `redis` then the cache store will have a underlying connection that specifies the connection parameters of the redis server it will connect to.
+
+This connection should be set to one of the available connections in the `redis` driver array within the config/database.php file.
