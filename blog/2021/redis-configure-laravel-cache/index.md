@@ -92,7 +92,7 @@ The `default` setting is used by the Laravel cache helper, facade and cache mana
 
 ### Step 4
 
-for the `default` setting in the `config/cache.php` file, update the default argument of the env() helper to `redis`.
+For the `default` setting in the `config/cache.php` file, update the default argument of the env() helper to `redis`.
 
 Before:
 
@@ -130,17 +130,19 @@ This is shown below:
     ]
 ```
 
-The driver setting refers to the `redis` driver section in the config/database.php file.
+The driver setting refers to the `redis` driver section in the `config/database.php` file.
 
-The connection setting refers tpo one of the available redis connections within the `redis` driver section in the config/database.php file.
+The connection setting refers to one of the available redis connections within the `redis` driver section in the `config/database.php` file.
 
-The following steps will verify that these driver and connection settings exist in the config/database.php and will slightly modify them.
+The following steps will verify that these driver and connection settings exist in the `config/database.php`.
+
+Also we will slightly modify these driver and connection settings to support redis clusters when in production.
 
 ### Step 5
 
-verify the redis driver setting in config/database.php
+Verify the redis driver setting in `config/database.php`
 
-There should be the `redis` setting at the root settings level in config/database.php snipped shown below.
+There should exist a `redis` setting at the root settings level in `config/database.php` snippet shown below. This is the `redis` driver referred to from the `redis` store in `config/cache.php`.
 
 ```php
 'redis' => [
@@ -178,22 +180,57 @@ There should be the `redis` setting at the root settings level in config/databas
     ],
 ```
 
-This is the actual driver that is selected by `driver` setting of the `redis` store in the config/cache.php file
+Within the `redis` driver setting array there should be two connections named `default` and `cache`.
 
-Within the `redis` setting array there should be a two connections `default` and `cache`.
+The `cache` connection is the actual connection that is referred to from the `redis` store in the `config/cache.php` file.
 
-The `cache` connection is the actual connection that is selected by the `connecton` setting of the `redis` store in the config/cache.php file.
+So we have verified that both the driver and connection that settings that we used in `config/cache.php` exist in `config/database.php`.
 
-> We can add additional connection settings in redis section of config/database.php as well as long as we give them their own unique name.
+> Note: We can add additional connection settings in `redis` section of `config/database.php` as long as we give them their own unique name. In fact for scalability reasons we can add and use separate redis connections, from the ones used by the Laravel cache, to be used by Laravel queues and Laravel sessuon
 
 ### Step 6
 
-Setting the redis driver connection to a local redis service
+In this step we will configure the `redis` driver `cache` connection in the `config/database.php` to point to a redis server docker service running in our local development environemnt.
 
-We need to make a change to the `cache` connection in config/database.php as shown below:
+Make changes to the `cache` and `default` connections of the `redis` driver in `config/database.php` as shown below:
+
+Before:
 
 ```php
 'redis' => [
+
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        'cache' => [
+            'url' => env('REDIS_URL'),//This setting is not used
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
+    ],
+```
+
+After:
+
+```php
+'redis' => [
+     'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+             //database set to 0 since only database 0 is supported in redis cluster
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'd:',
+        ],
+        ],
         'cache' => [
             'url' => env('REDIS_URL'),//This setting is not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -207,9 +244,13 @@ We need to make a change to the `cache` connection in config/database.php as sho
     ],
 ```
 
-We changed the database setting and added a prefix setting. All keys using this connection will automatically get a `c:` prefix.
+For the `cache` connection We changed the database setting and added a prefix setting. All keys using this connection will automatically get a `c:` prefix.
 
 > redis clusters do not support multiple databases so we are distinguishing this connection using the redis key prefix instead.
+
+We also made the same change to the `default` connection except we use a `d:` prefix for it to distinguish it from the `cache` connection.
+
+> As an aside, the `default` connection is used
 
 ### Step 7 -Setup the redis sever docker service
 
