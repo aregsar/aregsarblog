@@ -2,83 +2,113 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-## Cache driver and cache store confusion due to setting misnaming
+## Steps to setup a redis cache store for Laravel
 
-There is a misnomer in the cache config file regarding the default cache store env var causing confusion.
-The CACHE_DRIVER env setting needs to be renamed to CACHE_STORE
+#### Step 1
 
-### Original mis-named cache store configuration
+Open the `.env` file and rename the CACHE_DRIVER setting to CACHE_STORE to accurately reflect that it is selecting one of the available cache stores from the `stores` array in `config/cache.php`.
 
-The `CACHE_DRIVER` setting in `.env` file that is used in the `config/cache.php` file is mis-named.
+Before:
 
 ```ini
-# misnamed env var that selects the cache store (not the cache driver)
+#incorrectly named environment variable that selects the cache store
 CACHE_DRIVER=file
 ```
 
-The `CACHE_DRIVER` setting is misnamed since it is used to select a cache store, not a cache driver.
-
-Below I am showing a snippet of the cache stores section in the `config/cache.php` file to show the misnaming issue.
-I have annotated the settings to describe the issue.
-
-```php
-    //Default Cache Store used by laravel caching funcions
-    //Misnamed env var that selects the cache store (not cache driver)from the Cache Stores array below
-    'default' => env('CACHE_DRIVER', 'file'),
-    'stores' => [
-        //this is the 'file' cache store selected by the 'default' setting above when CACHE_DRIVER=file in .env file
-        'file' => [
-                'driver' => 'file', //this is the actual cache driver which is not what is being selected
-                'path' => storage_path('framework/cache/data'),
-            ],
-    ]
-```
-
-The `default` setting above uses the `CACHE_DRIVER` env variable to select a named cache store from the `stores` array.
-
-So in reality it is selecting a cache store not a cache driver which is confusing.
-
-Therefore the `CACHE_DRIVER` env setting needs to be renamed to `CACHE_STORE` to avoid confusion.
-
-### Correcting (re-nameing) the cache store configuration
-
-Open the `.env` file and rename the CACHE_DRIVER setting name to CACHE_STORE
+After:
 
 ```ini
 #correctly named environment variable that selects the cache store
 CACHE_STORE=file
 ```
 
-Open the config/cache.php file and change and rename CACHE_DRIVER to CACHE_STORE
+#### Step 2
+
+Open the `config/cache.php` file and rename the `CACHE_DRIVER` variable to `CACHE_STORE`.
+
+I am showing the relevant snippet from `config/cache.php` file below:
+
+Before:
+
+```php
+    //Default Cache Store used by laravel caching funcions
+    //Misnamed env var that selects the cache store (not cache driver)from the Cache Stores array below
+    'default' => env('CACHE_DRIVER', 'file'),
+    'stores' => [
+        //this is the 'file' cache store selected by the 'default' setting above when CACHE_DRIVER=file in .env file or by the second argument when no key is specified
+        'file' => [
+                'driver' => 'file', //this is the actual cache driver which is not what is being selected
+                'path' => storage_path('framework/cache/data'),
+            ],
+        'redis' => [
+                'driver' => 'redis', //the actual cache driver for the 'redis' store
+                'connection' => 'cache',//the redis connection setting as specified in the config/database.php file
+                'lock_connection' => 'default',
+            ],
+    ]
+```
+
+After:
 
 ```php
     //Default Cache Store used by laravel caching funcions
     //Selects the file cache store from the cache 'stores' array below using correctly named CACHE_STORE env setting
     'default' => env('CACHE_STORE', 'file'),
     'stores' => [
-        //the 'file' cache store that is selected by the 'default' setting above when CACHE_STORE=file in .env file
+        //this is the 'file' cache store selected by the 'default' setting above when CACHE_STORE=file in .env file or by the second argument when no key is specified
         'file' => [
                 'driver' => 'file', //the actual cache driver for the 'file' store
                 'path' => storage_path('framework/cache/data'),
             ],
+        'redis' => [
+                'driver' => 'redis', //the actual cache driver for the 'redis' store
+                'connection' => 'cache',//the redis connection setting as specified in the config/database.php file
+                'lock_connection' => 'default',
+            ],
     ]
 ```
 
-## Selecting the redis store as our default store
+### Step 3
 
-Now that we have properly renamed the CACHE_DRIVER env variable to CACHE_STORE we can change its value to select the redis cache store setting within the `stores` array
+Update the CACHE_STORE setting in the .env file
 
-Open the `.env` file and change the value to the `redis` store.
+Before:
 
 ```ini
+#correctly named environment variable that selects the cache store
+CACHE_STORE=file
+```
+
+After:
+
+```ini
+#correctly named environment variable that selects the cache store
 CACHE_STORE=redis
 ```
 
-Open the config/cache.php file and optionally change the second (default/fallback) parameter of the env() function to `redis`.
+### Step 4
 
-With these changes the the `default` cache store now selects the `redis` store.
+Update the `default` setting in config/cache.php to use the redis store
 
-The selected `redis` store in the `stores` section is now shown as well.
+Before:
+
+```php
+    //Default Cache Store used by laravel caching funcions
+    //Selects the file cache store from the cache 'stores' array below using correctly named CACHE_STORE env setting
+    'default' => env('CACHE_STORE', 'file'),
+```
+
+After:
+
+```php
+    //Default Cache Store used by laravel caching funcions
+    //Selects the cache redis store from the Cache Stores array below using correctly named CACHE_STORE setting
+    'default' => env('CACHE_STORE', 'redis'),
+```
+
+The default setting will be used by the laravel cache helper and facade and cache manager by default.
+
+Now that we updated the CACHE_STORE and the default second argument to `redis` lets look at the configuration in config/cache.php to see that now the `redis` store is the store that is selected from the `stores` array by the default setting:
 
 ```php
     //Default Cache Store used by laravel caching funcions
@@ -98,13 +128,19 @@ The selected `redis` store in the `stores` section is now shown as well.
     ]
 ```
 
-## The redis driver connection
+Within the `redis` store setting there is a driver and connection settings.
 
-I have shown below the `redis` driver section in the config/database.php file.
+The driver setting refers to the `redis` driver section in the config/database.php file.
 
-This is the actual driver that is selected by `driver` setting of the `redis` store in the config/cache.php file
+The connection setting refers tpo one of the available redis connections within the `redis` driver section in the config/database.php file.
 
-Within the `redis` driver we see two connection settings `default` and `cache`. The later is the one that is selected by the `connection` setting of the `redis` store in the config/cache.php file.
+The following steps will verify that these driver and connection settings exist in the config/database.php and will slightly modify them.
+
+### Step 5
+
+verify the redis driver setting in config/database.php
+
+There should be the `redis` setting at the root settings level in config/database.php snipped shown below.
 
 ```php
 'redis' => [
@@ -142,11 +178,19 @@ Within the `redis` driver we see two connection settings `default` and `cache`. 
     ],
 ```
 
-> We can add any number of redis connections here, named any way we want. We can then use those connections from any cache stores we add to other configuration files.
+This is the actual driver that is selected by `driver` setting of the `redis` store in the config/cache.php file
 
-## Setting the redis driver connection to a local redis service
+Within the `redis` setting array there should be a two connections `default` and `cache`.
 
-Step 1 we need to make a change to the `cache` connection in config/database.php as shown below:
+The `cache` connection is the actual connection that is selected by the `connecton` setting of the `redis` store in the config/cache.php file.
+
+> We can add additional connection settings in redis section of config/database.php as well as long as we give them their own unique name.
+
+### Step 6
+
+Setting the redis driver connection to a local redis service
+
+We need to make a change to the `cache` connection in config/database.php as shown below:
 
 ```php
 'redis' => [
@@ -167,7 +211,7 @@ We changed the database setting and added a prefix setting. All keys using this 
 
 > redis clusters do not support multiple databases so we are distinguishing this connection using the redis key prefix instead.
 
-Step 2 -Setup the redis sever docker service
+### Step 7 -Setup the redis sever docker service
 
 ```bash
 echo docker-compose.yml << EOL
@@ -185,7 +229,7 @@ EOL
 
 > If you already have a docker-compose.yml file in the project root then just add the redis service portion of the above yml code under the services section.
 
-Step 2- Open the project `.env` file and update the connection settings for the mailhog local mail service.
+### Step 8- Open the project `.env` file and update the connection settings for the mailhog local mail service.
 
 ```ini
 REDIS_HOST=127.0.0.1
@@ -195,13 +239,13 @@ REDIS_PORT=8002
 
 > docker-compose.yml also uses settings from the .env file
 
-Step 3 - Startup the docker service
+### Step 9 - Startup the docker service
 
 ```bash
 docker-compose up -d
 ```
 
-Step 4 - Use the cache service
+### Step 10 - Use the cache service
 
 In laravel when we use the `cache()` helper of the `Cache::` facade, they use the `default` cache store from config/cache.php which in turn uses the `cache` connection in the config/database.php as configured by.
 
@@ -215,7 +259,7 @@ docker-compose down
 
 We can create additional redis stores in the stores array in config/cache.php file and configure them in the same way as we configured the default `redis` cache store.
 
-We can then use these stores explicitly by name with the Laravel cache helper or facade api.
+We can then use these stores explicitly by name with the Laravel cache helper, facade or cache manager api.
 
 Here is an example:
 
@@ -224,6 +268,7 @@ In config/database.php add a `cache2` connection with a `c2` key prefix.
 Both the original and new cache connections are shown below:
 
 ```php
+
 'redis' => [
 
         'cache' => [
@@ -255,15 +300,17 @@ Both the original and new cache connections are shown below:
 
 Next in config/cache.php add a `redis2` store that uses the new `cache2` connection.
 
-Both the original and new redis stores are shown below:
+Both the default and new redis stores are shown below:
 
 ```php
+    'default' => env('CACHE_STORE', 'redis'),
     'stores' => [
         'redis' => [
                 'driver' => 'redis', //the actual cache driver for the 'redis' store
                 'connection' => 'cache',//the redis connection setting as specified in the config/database.php file
                 'lock_connection' => 'default',
             ],
+        //additional redis store that we can explicitly pass for example to the laravel cache facade
          'redis2' => [
                 'driver' => 'redis', //the actual cache driver for the 'redis' store
                 'connection' => 'cache2',//the new redis connection setting as specified in the config/database.php file
