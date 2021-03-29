@@ -6,7 +6,7 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 #### Step 1
 
-Open the `.env` file and rename the CACHE_DRIVER setting to CACHE_STORE to accurately reflect that it is selecting one of the available cache stores from the `stores` array in `config/cache.php`.
+Open the `.env` file and rename the `CACHE_DRIVER` setting to `CACHE_STORE` to accurately reflect that it is selecting one of the available cache stores from the `stores` array in `config/cache.php`.
 
 Before:
 
@@ -70,7 +70,7 @@ After:
 
 ### Step 3
 
-Update the CACHE_STORE setting in the .env file
+Update the `CACHE_STORE` setting in the .env file to `redis`.
 
 Before:
 
@@ -86,9 +86,13 @@ After:
 CACHE_STORE=redis
 ```
 
+The setting value is used by the `default` setting in `config/cache.php` file to select the `redis` store.
+
+The `default` setting is used by the Laravel cache helper, facade and cache manager by default.
+
 ### Step 4
 
-Update the `default` setting in config/cache.php to use the redis store
+for the `default` setting in the `config/cache.php` file, update the default argument of the env() helper to `redis`.
 
 Before:
 
@@ -106,19 +110,17 @@ After:
     'default' => env('CACHE_STORE', 'redis'),
 ```
 
-The default setting will be used by the laravel cache helper and facade and cache manager by default.
+Now that we updated this default argument to `redis` the `default` setting will select the `redis` store even if the `CACHE_STORE` setting is not provided in the .env file.
 
-Now that we updated the CACHE_STORE and the default second argument to `redis` lets look at the configuration in config/cache.php to see that now the `redis` store is the store that is selected from the `stores` array by the default setting:
+Within the `redis` store setting there is a driver and connection settings.
+
+This is shown below:
 
 ```php
     //Default Cache Store used by laravel caching funcions
     //Selects the cache redis store from the Cache Stores array below using correctly named CACHE_STORE setting
     'default' => env('CACHE_STORE', 'redis'),
     'stores' => [
-        'file' => [
-                'driver' => 'file',
-                'path' => storage_path('framework/cache/data'),
-            ],
         //the 'redis' cache store that is selected by the setting above when CACHE_STORE=redis in .env file
         'redis' => [
                 'driver' => 'redis', //the actual cache driver for the 'redis' store
@@ -127,8 +129,6 @@ Now that we updated the CACHE_STORE and the default second argument to `redis` l
             ],
     ]
 ```
-
-Within the `redis` store setting there is a driver and connection settings.
 
 The driver setting refers to the `redis` driver section in the config/database.php file.
 
