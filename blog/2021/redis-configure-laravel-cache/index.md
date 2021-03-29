@@ -250,7 +250,7 @@ For the `cache` connection We changed the database setting and added a prefix se
 
 We also made the same change to the `default` connection except we use a `d:` prefix for it to distinguish it from the `cache` connection.
 
-> As an aside, the `default` connection is used
+> As an aside, the `default` connection above is used by the Laravel `Redis` facade or Redis manager class by default without requiring the user to pass in the connection explicitly. On the other hand when we use the Laravel `Cache` facade/manager, the `redis` connection is used by the `cache` store that the `default` setting of the `Cache` Facade/manager refers to. Internally the `Cache` Facade/manager passes this connection to the Redis manager or Facade, which uses it instead of the `default` connection.
 
 ### Step 7 -Setup the redis sever docker service
 
@@ -288,7 +288,7 @@ docker-compose up -d
 
 ### Step 10 - Use the cache service
 
-In laravel when we use the `cache()` helper of the `Cache::` facade, they use the `default` cache store from config/cache.php which in turn uses the `cache` connection in the config/database.php as configured by.
+In laravel when we use the `cache()` helper of the `Cache::` facade, they use the `default` cache store from config/cache.php which in turn uses the `cache` connection in the config/database.php.
 
 When done you can shutdown the docker service
 
