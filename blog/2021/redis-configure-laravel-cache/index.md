@@ -8,6 +8,12 @@ In addition the steps include setting up a local docker Redis server for develop
 
 Finally there will be some explanations along the way of how configuration works under the hood with the Laravel Redis and Cache API.
 
+Prior to following the steps in this post make sure to have the php redis extension installed as detailed in the php redis installation section of the following post:
+
+[Installing PHP Extensions on MacOS](https://aregsar.com/blog/2021/installing-php-extensions-on-macos)
+
+Laravel requires the php redis extension, to be able to connect to Redis servers.
+
 ## Steps to setup a redis cache store for Laravel
 
 #### Step 1 - Renaming the Cache Driver setting in the .env file
