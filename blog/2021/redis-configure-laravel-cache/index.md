@@ -26,7 +26,7 @@ CACHE_STORE=file
 
 Open the `config/cache.php` file and rename the `CACHE_DRIVER` variable to `CACHE_STORE`.
 
-I am showing the relevant snippet from `config/cache.php` file below:
+The relevant snippet from `config/cache.php` file is shown below:
 
 Before:
 
@@ -88,8 +88,6 @@ CACHE_STORE=redis
 
 The setting value is used by the `default` setting in `config/cache.php` file to select the `redis` store.
 
-The `default` setting is used by the Laravel cache helper, facade and cache manager by default.
-
 ### Step 4
 
 For the `default` setting in the `config/cache.php` file, update the default argument of the env() helper to `redis`.
@@ -111,6 +109,8 @@ After:
 ```
 
 Now that we updated this default argument to `redis` the `default` setting will select the `redis` store even if the `CACHE_STORE` setting is not provided in the .env file.
+
+The cache store configured by the `default` setting is used by the Laravel cache helper, cache facade or cacheManager class by default.
 
 Within the `redis` store setting there is a driver and connection settings.
 
@@ -182,11 +182,11 @@ There should exist a `redis` setting at the root settings level in `config/datab
 
 Within the `redis` driver setting array there should be two connections named `default` and `cache`.
 
-The `cache` connection is the actual connection that is referred to from the `redis` store in the `config/cache.php` file.
+The `cache` connection is the connection that is referred to from the `redis` store in the `config/cache.php` file.
 
-So we have verified that both the driver and connection that settings that we used in `config/cache.php` exist in `config/database.php`.
+At this point we have verified that both the driver and connection that settings that we used in `config/cache.php` exist in `config/database.php`.
 
-> Note: We can add additional connection settings in `redis` section of `config/database.php` as long as we give them their own unique name. In fact for scalability reasons we can add and use separate redis connections, from the ones used by the Laravel cache, to be used by Laravel queues and Laravel sessuon
+> Note: We can add additional connection settings in `redis` section of `config/database.php` as long as we give them their own unique name. In fact for scalability reasons we can add and use separate redis connections, from the ones used by the Laravel cache, to be used by Laravel queues and Laravel session.
 
 ### Step 6
 
@@ -244,13 +244,13 @@ After:
     ],
 ```
 
-For the `cache` connection We changed the database setting and added a prefix setting. All keys using this connection will automatically get a `c:` prefix.
+For the `cache` connection we changed the database setting and added a prefix setting. All keys using this connection will automatically get a `c:` prefix.
 
-> redis clusters do not support multiple databases so we are distinguishing this connection using the redis key prefix instead.
+> redis clusters do not support multiple databases so we are automatically namespacing the redis keys using this connection using the redis key prefix instead.
 
 We also made the same change to the `default` connection except we use a `d:` prefix for it to distinguish it from the `cache` connection.
 
-> As an aside, the `default` connection above is used by the Laravel `Redis` facade or Redis manager class by default without requiring the user to pass in the connection explicitly. On the other hand when we use the Laravel `Cache` facade/manager, the `redis` connection is used by the `cache` store that the `default` setting of the `Cache` Facade/manager refers to. Internally the `Cache` Facade/manager passes this connection to the Redis manager or Facade, which uses it instead of the `default` connection.
+> As an aside, the `default` connection above is used by the Laravel `Redis` facade and its underlying `RedisManager` and `Redis` classes by default without requiring the user to pass in the connection explicitly. On the other hand the `redis` connection is used by the Laravel `Cache` facade and cache helper or their underlying CacheManager and Cache classes by default without requiring the user to pass in the connection explicitly.This is because the underlying CacheManager and Cache classes by default use the `default` store (from the config/cache.php file) which is configured to use the `redis` connection. Internally the underlying CacheManager and Cache classes pass this `redis` connection to the RedisManager or Redis classes, which uses it instead of their `default` connection. Generally think of the Redis Facade and RedisManager classes as the low level interface to redis that you can use in your laravel apps and think of the cache helper, Cache facade, CacheManager and Cache classes, when configured with a Redis cache store, as a higher level Redis caching interface that internally use the low level Redis classes to store cached values in Redis.
 
 ### Step 7 -Setup the redis sever docker service
 
@@ -270,15 +270,15 @@ EOL
 
 > If you already have a docker-compose.yml file in the project root then just add the redis service portion of the above yml code under the services section.
 
-### Step 8- Open the project `.env` file and update the connection settings for the mailhog local mail service.
+### Step 8- Open the project `.env` file and update the connection settings for the docker redis service.
 
 ```ini
 REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=radar
+REDIS_PASSWORD=123456
 REDIS_PORT=8002
 ```
 
-> docker-compose.yml also uses settings from the .env file
+> docker-compose.yml also can use the settings from the .env file
 
 ### Step 9 - Startup the docker service
 
@@ -288,7 +288,9 @@ docker-compose up -d
 
 ### Step 10 - Use the cache service
 
-In laravel when we use the `cache()` helper of the `Cache::` facade, they use the `default` cache store from config/cache.php which in turn uses the `cache` connection in the config/database.php.
+You should now be able to use the caching with Redis in your Laravel application.
+
+Try using the \Illuminate\Facades\Cache::ping() method to see if you can connect to Redis. Then try the various caching methods of the the cache facade and cache helper.
 
 When done you can shutdown the docker service
 
@@ -298,15 +300,15 @@ docker-compose down
 
 ## Creating and using non default redis cache stores
 
-We can create additional redis stores in the stores array in config/cache.php file and configure them in the same way as we configured the default `redis` cache store.
+We can create additional redis stores in the stores array in `config/cache.php` file and configure them in the same way as we configured the default `redis` cache store.
 
-We can then use these stores explicitly by name with the Laravel cache helper, facade or cache manager api.
+We can then use these stores by passing them in explicitly by name to the Laravel cache helper, cache facade, CacheManager and Cache class methods.
 
-Here is an example:
+Here is an example of configuring additional cache stores and cache connections:
 
-In config/database.php add a `cache2` connection with a `c2` key prefix.
+In `config/database.php` add a `cache2` connection with a `c2` key prefix.
 
-Both the original and new cache connections are shown below:
+Both the original `cache` connection and the new `cache2` connection are shown below:
 
 ```php
 
@@ -337,11 +339,11 @@ Both the original and new cache connections are shown below:
     ],
 ```
 
-> Note that both cache connections use the same cache server settings. We could if we needed for scalability add a different `REDIS_HOST_2` env setting to use a completely separate redis server in production.
+> Note that both cache connections use the same Redis server host settings. We could for scalability add a different `REDIS_HOST_2` env setting to use a completely separate Redis server in production.
 
-Next in config/cache.php add a `redis2` store that uses the new `cache2` connection.
+Next in `config/cache.php` add a `redis2` store that uses the new `cache2` connection.
 
-Both the default and new redis stores are shown below:
+Both the default `redis` store and the new `cache2` store are shown below:
 
 ```php
     'default' => env('CACHE_STORE', 'redis'),
@@ -360,7 +362,7 @@ Both the default and new redis stores are shown below:
     ]
 ```
 
-With this setup we could explicitly pass the string `redis2` to the cache helper or facade to use the redis store that uses the `cache2` connection to access the redis server.
+With this setup we could explicitly pass the string `redis2` to the cache helper or facade methods to use the redis store that uses the `cache2` connection to access the Redis server.
 
 ## Key takeaways
 
