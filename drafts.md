@@ -3,6 +3,9 @@
 April 1, 2021
 
 [Installing PHP on MacOS](https://aregsar.com/blog/2021/installing-php-on-macos)
+April 1, 2021
+
+[Installing PHP on MacOS](https://aregsar.com/blog/2021/installing-php-on-macos)
 
 April 1, 2021
 
