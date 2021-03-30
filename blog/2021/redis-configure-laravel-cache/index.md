@@ -2,9 +2,15 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+In this post I will detail the steps to take to configure the Laravel caching API to use a Redis server instead of the default file based caching that comes out of the box.
+
+In addition the steps include setting up a local docker Redis server for development and configuration modification for use with Redis cluster servers in production.
+
+Finally there will be some explanations along the way of how configuration works under the hood with the Laravel Redis and Cache API.
+
 ## Steps to setup a redis cache store for Laravel
 
-#### Step 1
+#### Step 1 - Renaming the Cache Driver setting in the .env file
 
 Open the `.env` file and rename the `CACHE_DRIVER` setting to `CACHE_STORE` to accurately reflect that it is selecting one of the available cache stores from the `stores` array in `config/cache.php`.
 
@@ -22,7 +28,7 @@ After:
 CACHE_STORE=file
 ```
 
-#### Step 2
+#### Step 2 - Renaming the Cache Driver setting in the cache.php file
 
 Open the `config/cache.php` file and rename the `CACHE_DRIVER` variable to `CACHE_STORE`.
 
@@ -68,7 +74,7 @@ After:
     ]
 ```
 
-### Step 3
+#### Step 3 - Updating the CACHE_STORE setting to use Redis
 
 Update the `CACHE_STORE` setting in the .env file to `redis`.
 
@@ -88,7 +94,7 @@ CACHE_STORE=redis
 
 The setting value is used by the `default` setting in `config/cache.php` file to select the `redis` store.
 
-### Step 4
+#### Step 4 - Updating the default argument of the env helper
 
 For the `default` setting in the `config/cache.php` file, update the default argument of the env() helper to `redis`.
 
@@ -138,7 +144,7 @@ The following steps will verify that these driver and connection settings exist 
 
 Also we will slightly modify these driver and connection settings to support redis clusters when in production.
 
-### Step 5
+#### Step 5 - Verify the redis connections in database.php
 
 Verify the redis driver setting in `config/database.php`
 
@@ -188,9 +194,9 @@ At this point we have verified that both the driver and connection that settings
 
 > Note: We can add additional connection settings in `redis` section of `config/database.php` as long as we give them their own unique name. In fact for scalability reasons we can add and use separate redis connections, from the ones used by the Laravel cache, to be used by Laravel queues and Laravel session.
 
-### Step 6
+#### Step 6 - Modify the redis connections in database.php
 
-In this step we will configure the `redis` driver `cache` connection in the `config/database.php` to point to a redis server docker service running in our local development environemnt.
+In this step we will configure the `redis` driver `cache` connection in the `config/database.php` to use unique prefixes instead of databases.
 
 Make changes to the `cache` and `default` connections of the `redis` driver in `config/database.php` as shown below:
 
@@ -252,7 +258,7 @@ We also made the same change to the `default` connection except we use a `d:` pr
 
 > As an aside, the `default` connection above is used by the Laravel `Redis` facade and its underlying `RedisManager` and `Redis` classes by default without requiring the user to pass in the connection explicitly. On the other hand the `redis` connection is used by the Laravel `Cache` facade and cache helper or their underlying CacheManager and Cache classes by default without requiring the user to pass in the connection explicitly.This is because the underlying CacheManager and Cache classes by default use the `default` store (from the config/cache.php file) which is configured to use the `redis` connection. Internally the underlying CacheManager and Cache classes pass this `redis` connection to the RedisManager or Redis classes, which uses it instead of their `default` connection. Generally think of the Redis Facade and RedisManager classes as the low level interface to redis that you can use in your laravel apps and think of the cache helper, Cache facade, CacheManager and Cache classes, when configured with a Redis cache store, as a higher level Redis caching interface that internally use the low level Redis classes to store cached values in Redis.
 
-### Step 7 -Setup the redis sever docker service
+#### Step 7 -Setup the Redis sever docker service
 
 ```bash
 echo docker-compose.yml << EOL
@@ -270,7 +276,9 @@ EOL
 
 > If you already have a docker-compose.yml file in the project root then just add the redis service portion of the above yml code under the services section.
 
-### Step 8- Open the project `.env` file and update the connection settings for the docker redis service.
+#### Step 8- Update the connection settings for the docker Redis service
+
+Open the project `.env` file and update the connection settings for the docker redis service.
 
 ```ini
 REDIS_HOST=127.0.0.1
@@ -286,7 +294,7 @@ REDIS_PORT=8002
 docker-compose up -d
 ```
 
-### Step 10 - Use the cache service
+#### Step 10 - Use the cache service
 
 You should now be able to use the caching with Redis in your Laravel application.
 
@@ -368,6 +376,8 @@ With this setup we could explicitly pass the string `redis2` to the cache helper
 
 The way the caches connect to your application in Laravel are through cache stores specified in the config/cache.php file.
 
-Each cache store has an underlying driver. If the driver for a cache store is `redis` then the cache store will have a underlying connection that specifies the connection parameters of the redis server it will connect to.
+Each cache store has an underlying driver.
 
-This connection should be set to one of the available connections in the `redis` driver array within the config/database.php file.
+If the driver for a cache store is configured as a `redis` driver then the cache store will have an underlying connection setting that refers to one of the available connections in the `redis` driver setting array within the config/database.php file.
+
+The redis connections in the config/database.php file specify the connection parameters of the Redis server that the Laravel cache API methods will connect to.
