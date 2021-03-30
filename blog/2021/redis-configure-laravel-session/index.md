@@ -109,7 +109,7 @@ After:
 SESSION_DRIVER=redis
 ```
 
-#### Step 4- Update the default settings of the session driver and connection
+#### Step 4 - Update the default settings of the session driver and connection
 
 Change the default parameter of the env() helper to the redis driver and session connection.
 Before:
@@ -130,12 +130,21 @@ After:
 
 Now if the SESSION_DRIVER and SESSION_CONNECTION are missing from the .env file the redis session connection will be selected.
 
-#### Step 5- Setting up a separate session store
+#### Step 5 - Setting up a separate session store
 
 As currently configured the Laravel session infrastructure will by default use a redis store named `redis` from the `stores` array of the cache.php file.
+
 It will then override the `connection` setting within that store with the `connection` setting in the session.php file. This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user.
 
 Also this redis store is typically configured to be used as a redis cache store so using it for the session seems a little hacky.
+
+> Note: I am not sure why the framework needs to override the session store connection since the store itself specifies a connection. My guess is it is because the framework by default is using the `redis` cache store which might be getting shared for caching functionality as well that might need to use a different connection.
+
+We can change the default behavior of the framework by explicitly selecting the redis store to use, using the `store` setting in the session.php file.
+
+We can choose to explitly select the `redis` cache store that is already selected by default by the framework.
+
+Or we can choose a separate cache store that we can add to the cache.php file.
 
 I like to create a separate redis store named `session` in the `stores` array of the cache.php file. This way even if someone removes the original `redis` store because it is unused, then the redis session will continue will work.
 
@@ -144,20 +153,41 @@ Open the cache.php file and add the `session` store:
 Before:
 
 ```php
-//
+
+    'stores' => [
+        //out of the box redis store
+        'redis' => [
+                'driver' => 'redis',
+                'connection' => 'cache',
+                'lock_connection' => 'default',
+            ],
+    ]
 ```
 
 After:
 
 ```php
-//
+    'stores' => [
+        //out of the box redis store
+        'redis' => [
+                'driver' => 'redis',
+                'connection' => 'cache',
+                'lock_connection' => 'default',
+            ],
+        //session redis store used by the framework SessionManager. The connection of this store will be overridden by the SessionManager with the connection specified in the config/session.php file
+        'session' => [
+            'driver' => 'redis', //the cache driver that refers to the redis driver in config/database.php
+            'connection' => 'session',//the  redis connection setting as specified in the config/database.php file
+            'lock_connection' => 'default',
+        ],
+    ]
 ```
 
-We can change the default behavior of the framework by explicitly select a redis store using the `store` setting in the session.php file. We can choose to explitly select the `redis` cache store that is alreadt selected by default by the framework or we can choose a separate cache store that we can add to the cache.php file.I will choose to use the `session` cache store that wer added.
+I will use the `session` cache store that we added above in the following step.
 
-> Note: I am not sure why the framework needs to ovverride the session store connection since the store can specify the connection. It probably is because it is using the `redis` cache store by default which may need to use a different cache store for the caching functionality.
+#### Step 6 - Configuring the session to explicitly use the session cache store
 
-Now open the .env file and add the `SESSION_STORE` setting
+Open the .env file and add the `SESSION_STORE` setting
 
 ```ini
 SESSION_STORE=session
