@@ -183,6 +183,10 @@ After:
     ]
 ```
 
+Note that we set the connection of the `session` cache store to the `session` connection that we added to `database.php`. However this is strictly unnecessary since it will be overridden by the `connection` setting in `session.php` file which also sets the value to the same`session` connection that we added to `database.php`.
+
+We could have just as easily assigned an empty or random string as the value of the `session` cache store connection in `cache.php`, but it is less confusing to set both connection settings to `session`.
+
 I will use the `session` cache store that we added above in the following step.
 
 #### Step 6 - Configuring the session to explicitly use the session cache store
@@ -209,7 +213,7 @@ After:
     'store' => env('SESSION_STORE', 'session'),
 ```
 
-Now we are telling the framework to ovrride the `session` cache store with the session connection setting in the session.php file.
+Now we are telling the framework to override the `session` cache store with the session connection setting in the session.php file.
 
 ## The session lifetime
 
