@@ -1,3 +1,4 @@
-theme: jekyll-theme-cayman
+#theme: jekyll-theme-cayman
+remote_theme: benc-uk/theme-msdark
 title: aregsar
 description: Areg Sarkissians Blog
