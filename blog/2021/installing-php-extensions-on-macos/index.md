@@ -118,11 +118,11 @@ php --ini
 The response is below:
 
 ```bash
-Configuration File (php.ini) Path: /usr/local/etc/php/7.4</hljs>
-Loaded Configuration File: /usr/local/etc/php/7.4/php.ini
-Scan for additional .ini files in: /usr/local/etc/php/7.4/conf.d
-Additional .ini files parsed: /usr/local/etc/php/7.4/conf.d/ext-opcache.ini,
-/usr/local/etc/php/7.4/conf.d/php-memory-limits.ini
+Configuration File (php.ini) Path: /usr/local/etc/php/8.0
+Loaded Configuration File:         /usr/local/etc/php/8.0/php.ini
+Scan for additional .ini files in: /usr/local/etc/php/8.0/conf.d
+Additional .ini files parsed:      /usr/local/etc/php/8.0/conf.d/ext-opcache.ini
+
 ```
 
 Open the php.ini file where you should see the installed extensions at the top of the file.
@@ -137,3 +137,60 @@ zend_extension="xdebug.so"
 Some extensions like xdebug are listed as zend extensions but most are standard extension.
 
 Sometimes the extensions are added into their own separate configuration file which is then included from the php.ini file. These additional files will usually be under the `conf.d` directory.
+
+## The pecl installation directory
+
+The directory where the php extensions are installed:
+
+```bash
+pecl config-get ext_dir
+```
+
+The result for php 8.0 installation is:
+
+```bash
+/usr/local/lib/php/pecl/20200930
+```
+
+The general form of the installation directory for each version of php is:
+
+```bash
+/usr/local/lib/php/pecl/<php_api_version>
+```
+
+The location is also specified by the extension_dir setting in the php.ini configuration file for each version of php.
+
+Make sure this setting exists and is uncommented if you run into issues having extensions recognized by php.
+
+Below is extension_dir setting in `/usr/local/etc/php/8.0/php.ini` configuration file for php 8.0.
+
+```ini
+extension_dir = /usr/local/lib/php/pecl/20200930
+```
+
+If we cd into the extensions directory we can see the two redis and xdebug extension files:
+
+```bash
+ls -l /usr/local/lib/php/pecl/20200930
+```
+
+The result:
+
+```bash
+redis.so
+xdebug.so
+```
+
+## xxx
+
+```bash
+# update the pecl repo
+pecl channel-update pecl.php.net
+# clear cached extensions
+pecl clear-cache
+
+pecl upgrade <extension-name>
+
+```
+
+https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis/
