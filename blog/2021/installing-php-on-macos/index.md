@@ -44,7 +44,7 @@ Run the brew command to upgrade php:
 brew upgrade php
 ```
 
-This will install the latest version of PHP in a new directory named with the new PHP version number and update the `php` symlink in `usr/local/bin` to point to this new PHP installation directory.
+This will install the latest version of PHP replacing the old installation.
 
 Show the installed php version:
 
@@ -218,11 +218,3 @@ The symlinks for php 8.0 installation are shown below:
 
 /usr/local/sbin/php-fpm -> /usr/local/Cellar/php/8.0.1_1/sbin/php-fpm
 ```
-
-## A note about the installation directory versioning
-
-If the latest version of PHP is v7.3, then running brew install php or brew install php@7.3 will result in the same installation directory. That is, the base directory would still be /usr/local/Cellar/php/7.3.5/.
-
-So both commands are effectively the same.
-
-However if the latest version is v7.3 and we install an older version of PHP, say for example brew install php@7.2, then the base installation directory will be /usr/local/Cellar/php@7.2/7.2.18/ which as you can see includes the @7.2 version and the PHP 7.2 release version number in the path.
