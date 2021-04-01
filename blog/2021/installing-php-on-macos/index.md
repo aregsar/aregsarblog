@@ -6,7 +6,7 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 > Instructions for installing Homebrew can be found [here](https://brew.sh)
 
-Before installing PHP we need to update brew itself.
+Before installing or upgrading PHP we need to update brew itself.
 
 ```bash
 brew update
@@ -16,7 +16,7 @@ brew update
 
 Ensure the paths `/usr/local/bin` and `/usr/local/sbin` are in the system path.
 
-> After the installation the path `/usr/local/bin` will hold the `php` symlink that points to the actual php installation directory for the version of php that is installed. Similarly, the path `/usr/local/sbin` hold the `php-fpm` php server symlink.
+> After the installation the path `/usr/local/bin` will hold the `php` symlink that points to the actual php installation directory for the version of php that is installed. Similarly, the path `/usr/local/sbin` will hold the `php-fpm` php application server symlink.
 
 Run the brew command to install php:
 
@@ -60,9 +60,9 @@ brew list | grep php
 
 ## Installing and switching between multiple versions of PHP
 
-Instead of the standard `brew install php` and `brew upgrade php` commands shown above, we can use the `shivammathur/php` brew tap to install multiple versions of PHP and switch between them:
+Instead of the standard `brew install php` and `brew upgrade php` commands shown above, we can use the `shivammathur/php` brew tap to install multiple versions of PHP and switch between them.
 
-[shivammathur/homebrew-php](https://github.com/shivammathur/homebrew-php) lists all the available PHP.
+The [shivammathur/homebrew-php](https://github.com/shivammathur/homebrew-php) page lists all the available PHP versions.
 
 First add the brew tap for the plugin:
 
@@ -76,7 +76,9 @@ Next install the desired version of PHP.
 brew install shivammathur/php/php@8.0
 ```
 
-As many versions as you like can be installed with the above command.
+The command above installs PHP version 8.0.
+
+Any number of versions can be installed using the same command.
 
 List all installed versions of PHP by running:
 
@@ -128,7 +130,7 @@ phpver 7.4
 phpver 8.0
 ```
 
-Another tool, [PHP Monitor](https://github.com/nicoverbruggen/phpmon), if you are using [Laravel Valet](https://github.com/laravel/valet) on MacOS allows you to switch versions straight from the MacOS menu bar.
+Another tool named [PHP Monitor](https://github.com/nicoverbruggen/phpmon), allows you to switch versions straight from the MacOS menu bar. However it only works if you are using [Laravel Valet](https://github.com/laravel/valet) running on MacOS.
 
 ## Installing PHP extensions for multiple installed PHP versions
 
@@ -138,6 +140,10 @@ We can do so by first by switching to the version that we want to install an ext
 
 Same goes for making changes to the configuration files.
 
+See [Installing PHP Extensions](https://aregsar.com/about) for details of installing php extensions using the pecl cli.
+
+The pecl cli is the php extension installer.
+
 ## Running a local PHP development Server
 
 We can run a PHP development server using the following command:
@@ -146,9 +152,11 @@ We can run a PHP development server using the following command:
 php serve -S locahost:8080
 ```
 
+Here we are running the server on post 8080.
+
 ## Getting information about PHP
 
-### Getting information about the installation
+### Getting information about the PHP installation
 
 Display the PHP info page in the console for the active PHP version:
 
@@ -162,13 +170,13 @@ Another way to get the same result is by executing php code inline:
 php -r "phpinfo();"
 ```
 
-Run the following to list the installed PHP extensions for the active PHP version:
+Run the following, to list the installed PHP extensions for the active PHP version:
 
 ```bash
 php -m
 ```
 
-### Getting the configuration file locations
+### Getting the PHP configuration file locations
 
 Get information on PHP configuration file directories for the active version of PHP.
 
@@ -193,11 +201,7 @@ The `php.ini` file contains the configuration for the active php installation. T
 
 ### PHP installation locations
 
-Executable symlinks and actual locations for php, php-fpm and pecl that are installed.
-
-The pecl cli is the php extension installer.
-
-Run the following commands to show the location of the symlinks:
+Run the following commands to show the location of the php, php-fpm and pecl symlinks:
 
 ```bash
 which php
@@ -215,4 +219,10 @@ The symlinks for php 8.0 installation are shown below:
 /usr/local/sbin/php-fpm -> /usr/local/Cellar/php/8.0.1_1/sbin/php-fpm
 ```
 
-> Note: If the latest version of PHP is v7.3, then running brew install php or brew install php@7.3 will result in the same installation directory. That is, the base directory would still be /usr/local/Cellar/php/7.3.5/. So both commands are effectively the same. However if the latest version is v7.3 and we install an older version of PHP, say for example brew install php@7.2, then the base installation directory will be /usr/local/Cellar/php@7.2/7.2.18/ which as you can see includes the @7.2 version and the PHP 7.2 release version number in the path.
+## A note about the installation directory versioning
+
+If the latest version of PHP is v7.3, then running brew install php or brew install php@7.3 will result in the same installation directory. That is, the base directory would still be /usr/local/Cellar/php/7.3.5/.
+
+So both commands are effectively the same.
+
+However if the latest version is v7.3 and we install an older version of PHP, say for example brew install php@7.2, then the base installation directory will be /usr/local/Cellar/php@7.2/7.2.18/ which as you can see includes the @7.2 version and the PHP 7.2 release version number in the path.
