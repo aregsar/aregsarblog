@@ -12,23 +12,31 @@ Before installing PHP we need to update brew itself.
 brew update
 ```
 
-## installing PHP for the first time
+## Installing PHP for the first time
+
+Ensure the paths `/usr/local/bin` and `/usr/local/sbin` are in the system path.
+
+> After the installation the path `/usr/local/bin` will hold the `php` symlink that points to the actual php installation directory for the version of php that is installed. Similarly, the path `/usr/local/sbin` hold the `php-fpm` php server symlink.
+
+Run the brew command to install php:
 
 ```bash
 brew install php
 ```
 
-Check the version:
+Check the installed php version:
 
 ```bash
 php -v
-#or
-php --version
 ```
 
-> Make sure the paths `/usr/local/bin` and `/usr/local/sbin` are in the system path. The path `/usr/local/bin` has the `php` symlink that points to the actual php installation directory for the version of php that is installed. The path `/usr/local/sbin` has the `php-fpm` php server symlink. I generally have `/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin` in my $PATH variable.
+Show location of the php cli symlink:
 
-You can show all installed versions of PHP by running:
+```bash
+which php
+```
+
+List all installed versions of PHP by running:
 
 ```bash
 brew list | grep php
@@ -36,19 +44,37 @@ brew list | grep php
 
 ## Upgrading to the latest version
 
+Run the brew command to upgrade php:
+
 ```bash
 brew upgrade php
-#check the version
+```
+
+This will install the latest version of PHP in a new directory named with the new PHP version number and update the `php` symlink in `usr/local/bin` to point to this new PHP installation directory.
+
+Check the installed php version:
+
+```bash
 php -v
 ```
 
-This will install the latest version of PHP and update the `php` symlink in `usr/local/bin` to point to this new PHP installation.
+Show location of the php cli symlink:
 
-## Installing and using multiple versions
+```bash
+which php
+```
 
-Instead of the normal `brew install php` and `brew upgrade php` commands we can use the `shivammathur/php` brew tap to install multiple versions of PHP and switch between them:
+List all installed versions of PHP by running:
 
-See the available version at [shivammathur/homebrew-php](https://github.com/shivammathur/homebrew-php)
+```bash
+brew list | grep php
+```
+
+## Installing and switching between multiple versions of PHP
+
+Instead of the standard `brew install php` and `brew upgrade php` commands we can use the `shivammathur/php` brew tap to install multiple versions of PHP and switch between them:
+
+[shivammathur/homebrew-php](https://github.com/shivammathur/homebrew-php) lists all the available PHP.
 
 First add the brew tap for the plugin:
 
@@ -56,7 +82,7 @@ First add the brew tap for the plugin:
 brew tap shivammathur/php
 ```
 
-Next install the desired version of PHP:
+Next install the desired version of PHP.
 
 ```bash
 brew install shivammathur/php/php@8.0
@@ -64,38 +90,45 @@ brew install shivammathur/php/php@8.0
 
 As many versions as you like can be installed with the above command.
 
-Finally set the version we want as the default:
+Now we can set the version we want as the active version:
 
 ```bash
-brew unlink php && brew link --overwrite --force php@8.0
-#check the version
-php -v
+brew link --overwrite --force php@8.0
+#brew unlink php && brew link --overwrite --force php@8.0
 ```
 
-To change the version simply switch the active php version to another installed version.
-
-For example:
+To change the active version simply use the same command to link to the version we want.
 
 ```bash
 brew link --overwrite --force php@7.4
-#check the version
-php -v
 ```
 
-A bash alias to switch versions:
+I have create a bash alias to switch between versions:
 
 ```bash
-#usage:
-#switch to version 8.0
-#phpver 8.0
-#swich to version 7.4
-#phpver 7.4
 phpver() {
-brew unlink php && brew link --force --overwrite php@$1
+    brew link --force --overwrite php@$1
 }
 ```
 
-> Note: Make sure you independently install PHP extensions for each active version of PHP. Same goes for changes to configuration files.
+Once we add the bash alias to our shell profile we can use it as shown:
+
+```bash
+#switch to version 7.4
+phpver 7.4
+#switch to version 8.0
+phpver 8.0
+```
+
+## Installing PHP extensions for multiple installed PHP versions
+
+We need to make sure that we install PHP extensions for each active version of PHP.
+
+We can do so by first making a specific version the active version using the brew link command.
+
+Then installing the extensions for that version.
+
+Same goes for changes to making changes to the configuration files.
 
 ## Getting information about PHP
 
@@ -107,13 +140,13 @@ Display the PHP info page in the console for the active PHP version:
 php -i
 ```
 
-Another way to get the same result is via:
+Another way to get the same result is by executing php code inline:
 
 ```bash
 php -r "phpinfo();"
 ```
 
-Run the following to only list the installed PHP extensions for the active PHP version:
+Run the following to list the installed PHP extensions for the active PHP version:
 
 ```bash
 php -m
