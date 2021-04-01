@@ -24,6 +24,15 @@ The result is shown below:
 redis   5.3.4 (stable)  5.3.1 PHP extension for interfacing with Redis
 ```
 
+## Preparing to install extensions
+
+```bash
+# update the pecl repo
+pecl channel-update pecl.php.net
+# clear cached extensions
+pecl clear-cache
+```
+
 ## Installing extensions
 
 We can Install extensions:
@@ -37,6 +46,12 @@ We can upgrade an extension by uninstalling and reinstalling the extension when 
 ```bash
 pecl uninstall redis
 pecl install redis
+```
+
+Alternatively we can use the upgrade command:
+
+```bash
+pecl upgrade <extension-name>
 ```
 
 If having issues installing or updating an extension, add the `--force` option to the `pecl install` command:
@@ -138,6 +153,8 @@ Some extensions like xdebug are listed as zend extensions but most are standard 
 
 Sometimes the extensions are added into their own separate configuration file which is then included from the php.ini file. These additional files will usually be under the `conf.d` directory.
 
+Finally you can make sure the extensions exist in the extensions installation directory and the installation directory is configured properly in the php.ini file for the php version the extension is added to by following instructions in the next section.
+
 ## The pecl installation directory
 
 The directory where the php extensions are installed:
@@ -180,17 +197,3 @@ The result:
 redis.so
 xdebug.so
 ```
-
-## xxx
-
-```bash
-# update the pecl repo
-pecl channel-update pecl.php.net
-# clear cached extensions
-pecl clear-cache
-
-pecl upgrade <extension-name>
-
-```
-
-https://aregsar.com/blog/2020/configure-laravel-to-use-php-redis/
