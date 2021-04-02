@@ -133,7 +133,7 @@ Removes installed packages that are no more required in composer.json (if the pa
 
 Checks the availability of the latest versions of your required packages
 
-Installs the latest versions of your packages, as restricted by the package version in the composer.json file, by downloading the package files into the vendor directory. (see section on package versioning scheme below).
+Installs the latest versions of your packages, as restricted by the package version in the composer.json file, by downloading the package files into the vendor directory. (see section on package versioning scheme below in the Composer.json structure section).
 
 Updates composer.lock to store the installed packages version by writing all of the packages and the exact versions of them that it downloaded to the composer.lock file, locking the project to those specific versions
 
@@ -164,10 +164,16 @@ Installs the versions of the packages specified in the composer.lock file
 ## Composer install Options for production builds
 
 ```bash
-composer install --no-dev --prefer-dist --optimize-autoloader --no-interation --no-scripts --no-progress
+composer install --no-dev --optimize-autoloader --no-interation --no-scripts --no-progress --prefer-dist
 ```
 
 > note --prefer-dist tries to install from packagist.org and falls back to git repository. Replace it with --prefer-source to try to install from the git repository then fallbask to packagist.org
+
+## Removing packages
+
+Simply remove the package from the composer.json file and re-run `composer install`.
+
+This will run `composer update` which will remove the package and its dependancies (if they are not required by another package) and will update the composer.lock file by removing the package and its dependancies from the file.
 
 ## displaying composer.lock file dependency tree
 
@@ -175,20 +181,33 @@ composer install --no-dev --prefer-dist --optimize-autoloader --no-interation --
 composer show -t
 ```
 
-## dumping the autoload configuration
+## dumping the autoload configuration in development
 
-Whenever we update the PSR-4 autoloader configuration in composer.json we need to make composer aware or the changes
-by dumping the autoloader configuration. This command updates the autoloader files under the vendor directory.
+Whenever we update the PSR-4 autoloader configuration in composer.json file we need to make composer aware of the changes
+by dumping the autoloader configuration. This command generates and\or updates the autoloader files under the vendor directory with the classmap.
 
 ```bash
 composer dump-autoload
 ```
 
+## dumping the autoload configuration in production
+
 To dump an optimized version of the autoloader for production we can use the -o or --optimize option
 
 ```bash
-composer dump-autoload -o
+#generate classmap file vendor/composer/autoload_psr4.php
+composer dump-autoload --optimize
 ```
+
+In production when we run `composer install` we can dump the autoload configuration at the same time using the -o or --optimize-autoloader option. No need to for a separate call to
+
+```bash
+# using =--optimize-autoloader with composer install will automatically call composer dump-autoload -o
+#it does so by setting "optimize-autoloader": true inside the config key of composer.json
+composer install --optimize-autoloader --no-dev --no-interation --no-scripts --no-progress --prefer-dist
+```
+
+> if project does not use dynamic classes than --classmap-authoritative optimizer option is better than --optimize-autoloader option
 
 ## PSR-4 autoloader configuration
 
@@ -208,42 +227,28 @@ The autoloader configuration in the composer.json file maps a class namespace st
 The class namespacing convention then follows the directory hierarchy starting from the mapped directory on down.
 For example the class `User` in the file app/user.php will map to the \App\User namespace and the class Database in the file app/configs/database.php file will map to \App\Config\Database namespace
 
-## Composer intall
+## The Composer.json structure
+
+require section is for loading packages
+
+semantic versioning: avoids breaking updates
+^2.6 == >=2.6.4 <3.0.0
+
+semantic versioning: any patch level that might introduce a breaking change
+~2.6 == >=2.6 <3.0
+
+autoloading section is for our PSR-4 classes and generates vendor/composer/autoload_psr4.php
+
+classmap is for loading classes in directories that are in a
+directory path outside the psr4 directory starting with the project root
+scans classmap specified files and direvctories for php classes
+classmap generates vendor/composer/autoload_classmap.php
+
+files is for loading files with global php functions
+
+repositories is for instructing composer to look for a package to install from the repo location first
 
 ````bash
-
-
-
-#call dump-autoload after adding the autoload section to composer.json
-#to generate vendor/composer/autoload_psr4.php
-#composer install --optimize-autoloader will also dump-autoload
-composer dump-autoload -o
-
-#both --optimize-autoloader and dump-autoload generate the classmap
-
-#production options
-composer install --no-dev --optimize-autoloader --no-interation --no-scripts --no-progress
-
-# using -o or --optimize-autoloader with composer install will automatically call composer dump-autoload -o
-
-#this installs packages and dump-autoloads
-
-#it does so by setting "optimize-autoloader": true inside the config key of composer.json
-composer install --optimize-autoloader --no-dev
-composer install -o --no-dev
-
-#this does not install anything. It just generates the classmap
-composer dump-autoload -o
-composer dump-autoload --optimize
-
-#if project does not use dynamic classes than this optimizer better
-#it does so by setting "classmap-authoritative": true inside the config key of composer.json
-composer install --classmap-authoitative --no-dev
-composer install -a --no-dev
-
-#this does not install anything. It just generates the classmap
-composer dump-autoload --classmap-authoritative
-composer dump-autoload -a
 
 ## The composer.json file
 
@@ -278,24 +283,7 @@ composer dump-autoload -a
 }
 ````
 
-semantic versioning: avoids breaking updates
-^2.6 == >=2.6.4 <3.0.0
-
-semantic versioning: any patch level that might introduce a breaking change
-~2.6 == >=2.6 <3.0
-
-require is for loading packages
-
-autoloading is for our PSR-4 classes and generates vendor/composer/autoload_psr4.php
-
-classmap is for loading classes in directories that are in a
-directory path outside the psr4 directory starting with the project root
-scans classmap specified files and direvctories for php classes
-classmap generates vendor/composer/autoload_classmap.php
-
-files is for loading files with global php functions
-
-## Using composer autoloader and namespaces
+## composer autoloader and PHP namespaces relationship
 
 //usage in code
 
@@ -322,52 +310,3 @@ class User{}
 namespace App\Helpers;
 class Time{}
 ````
-
-```php
-//app\Config\Storage.php
-<?php
-namespace App\Config;
-use App\User;
-use App\Helpers\Time;
-class Storage{}
-
-
-//index.php (root bootstrap file that autoloads all classes)
-require_once __DIR__ . '/../vendor/autoload.php';
-use App\User;
-use App\Config\Storage;
-$user = new User;
-$db = new Storage;
-```
-
-## Execute PHP as script file
-
-```bash
-cat phpinfo.php <<EOF
-#! /usr/bin/env php
-<?php
-//require_once __DIR__ . '/vendor/autoload.php';
-phpinfo();
-EOF
-chmod +x phpinfo.php
-#execute
-./phpinfo.php
-```
-
-## Creating the project
-
-```bash
-mkdir myproject && cd myproject
-mkdir app
-composer require xxx/guzzlehttp:^7.2
-#add the psr 4 autoload section "autoload": {"psr-4": {"App\\": "app/"}} to the
-#composer.json file
-composer install
-#or
-#composer dump-autoload
-echo "<?php\nrequire_once(__DIR__ . '/vendor/autoload.php');" > index.php
-#add files and directories under app directory
-
-#run the code
-php index.php
-```
