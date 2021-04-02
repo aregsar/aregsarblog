@@ -51,22 +51,22 @@ pecl install --force redis
 
 ## Upgrading the extension
 
-We can upgrade an extension by uninstalling and reinstalling the extension when a new version is out:
+We can upgrade an extension by useing the upgrade command:
+
+```bash
+pecl upgrade redis
+```
+
+Alternatively we can upgrade the extension by uninstalling and reinstalling the latest version of the extension:
 
 ```bash
 pecl uninstall redis
 pecl install redis
 ```
 
-Alternatively we can use the upgrade command:
-
-```bash
-pecl upgrade redis
-```
-
 ## Displaying installed extensions
 
-You can run `pecl list` to see which extensions are installed:
+The following command lists the extensions are installed:
 
 ```bash
 pecl list
@@ -86,17 +86,19 @@ We can check for a specific extension:
 pecl list | grep redis
 ```
 
-Now we will only see the redis extenssiom:
+The result:
 
 ```bash
 redis   5.3.1   stable
 ```
 
-## Checking if PHP recognizes extensions
-
-Even though PECL might list an extension as installed, php might not recognize it if it was not properly installed.
+## Checking if PHP recognizes installed extensions
 
 To make sure the extension is properly installed we need to also check if php can see the extension.
+
+Even though PECL might list an extension as having been installed, PHP might not recognize it if it was not properly installed.
+
+Sometimes an older version of the extension may be cached and not replaced after installation. Usually using the --force option with the pecl install command will solve the problem.
 
 We can list all php extensions:
 
@@ -104,19 +106,19 @@ We can list all php extensions:
 php -m
 ```
 
-Or we can check if php lists it a specific extension such as redis
+We can check for a specific extension such as redis
 
 ```bash
 php -m | grep redis
 ```
 
-Another way is to use raw php code to check for the extension:
+Another way to check for a specific extension is to use raw php code to check for the extension:
 
 ```bash
 php -r "var_dump(extension_loaded('redis'));"
 ```
 
-The following is yet another way to check the extension is installed while also displaying its configuration settings:
+The following command also checks if the extension is installed while also displaying all the configuration settings of the extension:
 
 ```bash
 php -i | grep redis
@@ -124,7 +126,7 @@ php -i | grep redis
 
 ## Troubleshooting extensions
 
-The following are sreps we can take to troubleshoot any extensions that are not listed by php or pecl after installation.
+The following are steps we can take to troubleshoot any extensions that are not listed by php or pecl after installation.
 
 First as mentioned above try using the force flag with the install command and run the command again:
 
@@ -134,7 +136,7 @@ pecl install --force redis
 
 After doing so check again for the extension with both pecl and php commands mentioned in previous sections.
 
-If the extension is still not recognized, make sure the extensions are added in the correct php.ini file.
+If the extension is still not recognized, make sure the extensions are added to the php.ini file for the active PHP version.
 
 You can run php --ini to see which configuration files are loaded:
 
@@ -164,13 +166,15 @@ Some extensions like xdebug are listed as zend extensions but most are standard 
 
 Sometimes the extensions are added into their own separate configuration file which is then included from the php.ini file. These additional files will usually be under the `conf.d` directory.
 
-Manually add them if they are not anywhere in the php.ini file or in separate files in the conf.d directory.
+If they are not anywhere in the php.ini file or in separate files in the conf.d directory then manually add them.
 
-Also make sure the installation directory is configured properly in the php.ini file for the php version the extension is added to by following instructions in the next section.
+Also make sure the extension installation directory setting is in the php.ini file by following instructions in the next section.
+
+It should point to the directory for the php version the extension is added to.
 
 ## The pecl installation directory
 
-The directory where the php extensions are installed:
+Show the directory where the php extensions are installed:
 
 ```bash
 pecl config-get ext_dir
@@ -188,17 +192,17 @@ The general form of the installation directory for each version of php is:
 /usr/local/lib/php/pecl/<php_api_version>
 ```
 
-The location is also specified by the extension_dir setting in the php.ini configuration file for each version of php.
+The location is also specified by the `extension_dir` setting in the php.ini configuration file for each version of php.
 
-Make sure this setting exists and is uncommented if you run into issues having extensions recognized by php.
+Make sure this setting exists and is uncommented, if you run into issues having extensions recognized by php.
 
-Below is extension_dir setting in `/usr/local/etc/php/8.0/php.ini` configuration file for php 8.0.
+Below is `extension_dir` setting in the `/usr/local/etc/php/8.0/php.ini` configuration file for php 8.0.
 
 ```ini
 extension_dir = /usr/local/lib/php/pecl/20200930
 ```
 
-If we cd into the extensions directory we can see the two redis and xdebug extension files:
+We should see the two redis and xdebug extension files in that directory, assuming both extensions were installed:
 
 ```bash
 ls -l /usr/local/lib/php/pecl/20200930
