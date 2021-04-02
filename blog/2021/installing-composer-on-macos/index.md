@@ -285,28 +285,31 @@ repositories is for instructing composer to look for a package to install from t
 
 ## composer autoloader and PHP namespaces relationship
 
-//usage in code
+In the index.php bootstrap file:
 
-require_once **DIR** . '/../vendor/autoload.php';
+```php
+require_once __DIR__ . '/../vendor/autoload.php';
+```
 
-#psr 4 directory structure and namespace mapping
+psr 4 directory structure and namespace mapping
+
 app\User.php => namespace App;
 app\Config\Storage.php => namespace App\Config;
 app\Helpers\Time.php => namespace App\Helpers;
 
-````
+in app\User.php
 
 ```php
-//User.php
-
 <?php
 namespace App;
 use App\Helpers\Time;
 class User{}
+```
 
+in app\Helpers\Time.php
 
-#app\Helpers\Time.php
+```php
 <?php
 namespace App\Helpers;
 class Time{}
-````
+```
