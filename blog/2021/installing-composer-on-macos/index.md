@@ -164,7 +164,7 @@ composer global update
 
 The global update uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
 
-The update command updates the composer.lock file based on manual changes to composer.json (added, removed or version modified packages in the require or require-dev sections). It also updates the package versions in composer.lock, if the package has an updated version in the package repository that satisfies the package version constraint specified in composer.json. It then installs into the vendor directory, the added or new version packages and removes the removed and old version packages based on the specific package versions in updated composer.lock file.
+> The update command updates the composer.lock file based on manual changes to composer.json (added, removed or version modified packages in the require or require-dev sections). It also updates the package versions in composer.lock, if the package has an updated version in the package repository that satisfies the package version constraint specified in composer.json. It then reconciles the differences between the currently installed packages in the vendor directory and their versions and any package or version changes in the composer.lock file and adds and removes packages in the vendor directory accordingly.
 
 ## installing packages
 
@@ -174,6 +174,8 @@ Run the install command to install the specific versions of packages specified i
 composer install
 ```
 
+Running the composer install command also generates the PHP autoload files specified the composer.json autoload section. Also any scripts in the scripts section of composer.json will be run.
+
 To install or reinstall packages globally use the global modifier.
 
 ```bash
@@ -182,7 +184,7 @@ composer global install
 
 The global install uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
 
-> The install command uses the
+> The install command installs the specific package versions from the composer.lock file into the vendor directory. It reconciles the differences between the currently installed packages in the vendor directory and their versions and any package or version changes in the composer.lock file and adds and removes packages in the vendor directory accordingly. The command will not run if the package.json file is out of sync with the package.lock, which happens when composer.json required package list manually updated. In this scenario it will display a warning message instructing the user to run `composer update`, which will update the composer.lock file and install the updated packages in the vendor directory. Running `composer install` afterward will only re-generate the autoload files, since the packages will have been installed by the `composer update` command.
 
 ## Composer install Options for production builds
 
@@ -190,13 +192,13 @@ The global install uses the composer.json and composer.lock and vendor directory
 composer install --no-dev --optimize-autoloader --no-interation --no-scripts --no-progress --prefer-dist
 ```
 
+The --no-dev option only installs non development dependancies in a production environment.
+
+The --optimize-autoloader generates optimized PHP autoload files.
+
+The --no-script option makes sure that the scripts in the scripts section of the composer.json file do not run.
+
 > note --prefer-dist tries to install from packagist.org and falls back to git repository. Replace it with --prefer-source to try to install from the git repository then fallbask to packagist.org
-
-## Removing packages
-
-Simply remove the package from the composer.json file and re-run `composer install`.
-
-This will run `composer update` which will remove the package and its dependancies (if they are not required by another package) and will update the composer.lock file by removing the package and its dependancies from the file.
 
 ## displaying composer.lock file dependency tree
 
@@ -206,8 +208,9 @@ composer show -t
 
 ## dumping the autoload configuration in development
 
-Whenever we update the PSR-4 autoloader configuration in composer.json file we need to make composer aware of the changes
-by dumping the autoloader configuration. This command generates and\or updates the autoloader files under the vendor directory with the classmap.
+Whenever we update the PSR-4 autoloader configuration in composer.json file we need to make composer aware of the changes.
+
+We can do this by dumping the autoloader configuration. The command generates and\or updates the autoload PHP files in the vendor directory. The autoload files contain a `classmap` mapping between PHP classes and their file location.
 
 ```bash
 composer dump-autoload
@@ -222,7 +225,7 @@ To dump an optimized version of the autoloader for production we can use the -o 
 composer dump-autoload --optimize
 ```
 
-In production when we run `composer install` we can dump the autoload configuration at the same time using the -o or --optimize-autoloader option. No need to for a separate call to
+As noted previously, in production when we run the `composer install` command we can dump the autoload configuration at the same time using the -o or --optimize-autoloader option. So there is no need to call the dump-autoload command.
 
 ```bash
 # using =--optimize-autoloader with composer install will automatically call composer dump-autoload -o
@@ -230,7 +233,7 @@ In production when we run `composer install` we can dump the autoload configurat
 composer install --optimize-autoloader --no-dev --no-interation --no-scripts --no-progress --prefer-dist
 ```
 
-> if project does not use dynamic classes than --classmap-authoritative optimizer option is better than --optimize-autoloader option
+> if project does not use dynamic classes than --classmap-authoritative optimizer option does a better optimization than --optimize-autoloader option
 
 ## PSR-4 autoloader configuration
 
