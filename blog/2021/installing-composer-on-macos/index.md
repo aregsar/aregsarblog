@@ -6,10 +6,9 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 The following steps are described at [Composer](https://getcomposer.org/download)
 
-1-Download the setup script
+Prior to installing make sure that `/usr/local/bin` is in your system $PATH variable.
 
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+1-Download the setup script
 
 ```bash
 php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -41,7 +40,7 @@ php -r "unlink('composer-setup.php');"
 composer --version
 ```
 
-> The composer script install should have created a `~/.composer` directory and added a `COMPOSER_HOME` environment variable with that path to your system PATH in your bash profile.
+> The composer script install should have created a `~/.composer` directory that holds the global package installations and added a `COMPOSER_HOME` environment variable with that path to your system $PATH in your bash profile.
 
 ## Installing composer the quick install way
 
@@ -54,7 +53,7 @@ mv composer.phar /usr/local/bin/composer
 
 ## Upgrading composer
 
-upgrade to new version
+Upgrade composer to the latest version:
 
 ```bash
 composer self-update
@@ -68,6 +67,8 @@ composer --version
 
 ## removing composer
 
+Just delete the composer files to remove composer.
+
 ```bash
 rm /usr/local/bin/composer
 rm -rf ~/.composer
@@ -75,23 +76,33 @@ rm -rf ~/.composer
 
 ## creating the initial composer.json file
 
+This will interactively create a new composer.json file:
+
 ```bash
 composer init
 ```
 
-This will interactively create a new composer.json file. If you don't create a composer.json file before requiring packages, then it when automatically be created for you when you require your first package.
+If you don't create a composer.json file before requiring packages, then it when the composer.json file automatically be created for you when you require your first package.
 
 ## requiring packages
+
+Install packages using the require command:
 
 ```bash
 #the latest version
 composer require vendor/package
+```
 
+This will add the package to the `require` section of the composer.json file and will install the latest version of the package.
+
+We can also specify an optional version number according to semantic versioning schema.
+
+```bash
 #specifying a version
 composer require vendor/package:<version>
 ```
 
-This will add the package to the composer.json and install the package into the vendor directory. If there is no existing composer.json file, it will be created.
+We can install multiple packages as well by separating them with a space.
 
 To add a package as a development dependency we can use the --dev option:
 
@@ -99,19 +110,45 @@ To add a package as a development dependency we can use the --dev option:
 composer require vendor/package --dev
 ```
 
-To add a package globally we can use the global subcommand:
+This will add the package to the `require-dev` section of the composer.json file.
+
+To add a package globally we can use the global modifier:
 
 ```bash
 composer global require vendor/package
 ```
 
-Example installing phpunit including the version as a dev dependency
+The global require uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
+
+Example installing phpunit including the version as a development dependency
 
 ```bash
 composer require phpunit/phpunit:^8 --dev
 ```
 
-> Note `composer require` command updates the composer.json file and installs the package in the vendor directory (creating the vendor directory if it does not exist) but does not update or create the composer.lock file.
+> Note `composer require` command updates the composer.json with the package and updates the composer.lock file based on the composer.json file changes, creating the files if they do not exist. Then it installs the package in the `vendor` directory based on the specific package version from the composer.lock file, creating the directory if it does not exist.
+
+## removing packages
+
+The remove command will remove and installed package
+
+```bash
+composer remove vendor/package
+```
+
+Add the global modifier to remove a globally installed package
+
+```bash
+composer global remove vendor/package
+```
+
+Multiple package names separated by a space character can be specified.
+
+To change the version of the package that is installed, run the require command with the new version.
+
+The global remove uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
+
+> The remove command removes the package from composer.json and updates the composer.lock file based on changes in the composer.json file. It then removes the package from the vendor directory.
 
 ## updating packages
 
@@ -125,41 +162,27 @@ To update global packages we can use the global subcommand which uses the compos
 composer global update
 ```
 
-These commands preform the following:
+The global update uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
 
-Reads composer.json
-
-Removes installed packages that are no more required in composer.json (if the package was removed from composer.json or its version was changed )
-
-Checks the availability of the latest versions of your required packages
-
-Installs the latest versions of your packages, as restricted by the package version in the composer.json file, by downloading the package files into the vendor directory. (see section on package versioning scheme below in the Composer.json structure section).
-
-Updates composer.lock to store the installed packages version by writing all of the packages and the exact versions of them that it downloaded to the composer.lock file, locking the project to those specific versions
+The update command updates the composer.lock file based on manual changes to composer.json (added, removed or version modified packages in the require or require-dev sections). It also updates the package versions in composer.lock, if the package has an updated version in the package repository that satisfies the package version constraint specified in composer.json. It then installs into the vendor directory, the added or new version packages and removes the removed and old version packages based on the specific package versions in updated composer.lock file.
 
 ## installing packages
 
-To install or reinstall packages using the composer.json file, run the following command:
+Run the install command to install the specific versions of packages specified in the composer.lock file into the vendor directory:
 
 ```bash
 composer install
 ```
 
-To install or reinstall packages globally using the global composer.json in the ~/.composer directory use the global subcommand:
+To install or reinstall packages globally use the global modifier.
 
 ```bash
 composer global install
 ```
 
-These command perform the following steps:
+The global install uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
 
-Checks if composer.lock file exists
-
-if it does not exist, runs the `composer update` command to create generate the composer.lock file as mentioned in previous section.
-
-Reads the composer.lock file
-
-Installs the versions of the packages specified in the composer.lock file
+> The install command uses the
 
 ## Composer install Options for production builds
 
