@@ -194,9 +194,9 @@ composer install --no-dev --optimize-autoloader --no-interation --no-scripts --n
 
 The --no-dev option only installs non development dependancies in a production environment.
 
-The --optimize-autoloader generates optimized PHP autoload files.
-
 The --no-script option makes sure that the scripts in the scripts section of the composer.json file do not run.
+
+The --optimize-autoloader generates optimized PHP autoload files.
 
 > note --prefer-dist tries to install from packagist.org and falls back to git repository. Replace it with --prefer-source to try to install from the git repository then fallbask to packagist.org
 
@@ -225,11 +225,9 @@ To dump an optimized version of the autoloader for production we can use the -o 
 composer dump-autoload --optimize
 ```
 
-As noted previously, in production when we run the `composer install` command we can dump the autoload configuration at the same time using the -o or --optimize-autoloader option. So there is no need to call the dump-autoload command.
+As previously noted, when we run the `composer install` command we can dump the autoload configuration at the same time. So production we can use the -o or --optimize-autoloader option when running composer install and there will be no need to also call the composer dump-autoload command.
 
 ```bash
-# using =--optimize-autoloader with composer install will automatically call composer dump-autoload -o
-#it does so by setting "optimize-autoloader": true inside the config key of composer.json
 composer install --optimize-autoloader --no-dev --no-interation --no-scripts --no-progress --prefer-dist
 ```
 
@@ -237,7 +235,9 @@ composer install --optimize-autoloader --no-dev --no-interation --no-scripts --n
 
 ## PSR-4 autoloader configuration
 
-The autoloader configuration in the composer.json file maps a class namespace starting from the root of the project where the composer.json file resides to a directory under the root.
+The autoloader configuration in the composer.json file maps a one or more class namespace names to a specific directory name under the root directory of the project. The namespace name on the left side of the colon is arbitrary and does not need to match the directory name on the right side.
+
+Here is an example that maps two namespaces:
 
 ```json
 {
@@ -248,10 +248,12 @@ The autoloader configuration in the composer.json file maps a class namespace st
 }
 ```
 
-> Note the root class namespace in the mapping uses a `\\` escape sequence
+> Note the class namespace in the mappings use a `\\` escape sequence.
 
-The class namespacing convention then follows the directory hierarchy starting from the mapped directory on down.
-For example the class `User` in the file app/user.php will map to the \App\User namespace and the class Database in the file app/configs/database.php file will map to \App\Config\Database namespace
+The PSR-4 class namespacing convention then follows the directory hierarchy under the PSR-4 mapping, starting from the PSR-4 mapped directory on down.
+
+Using the example above, The app directory in the root of the project will map to the `\App` namespace and a configs subdurectory of the app directiory will map to the `\App\Config` namespace. Therefore a
+a class `User` in the file app/user.php will have a fully qualified class name of `\App\User` and a class Database in a file app/configs/database.php file will have a fully qualified class name of `\App\Config\Database`.
 
 ## The Composer.json structure
 
@@ -317,7 +319,17 @@ In the index.php bootstrap file:
 require_once __DIR__ . '/../vendor/autoload.php';
 ```
 
-psr 4 directory structure and namespace mapping
+## psr 4 directory structure and namespace mapping
+
+assuming PSR-4 mapping in composer.json
+
+```json
+{
+  "PSR-4": {
+    "\\App": "/app"
+  }
+}
+```
 
 app\User.php => namespace App;
 app\Config\Storage.php => namespace App\Config;
@@ -339,3 +351,11 @@ in app\Helpers\Time.php
 namespace App\Helpers;
 class Time{}
 ```
+
+## key takeways
+
+Composer along with its configuration files composer.json and composer.lock is used to install and update packages used in PHP applications.
+But composer is also used to dump php autoload files based on PSR-4 mapping section in composer.json for your own code.
+Composer can also specfify classmapping for classes outside the PSR-4 directory mapping hiererchy and can also specify include files for files that define global functions.
+In addition it can also run installation scripts from a script section in composer.json.
+Finally you can specify repositories where composer can download packages from when developing and testing your own packages.
