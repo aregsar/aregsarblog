@@ -252,33 +252,18 @@ Here is an example that maps two namespaces:
 
 The PSR-4 class namespacing convention then follows the directory hierarchy under the PSR-4 mapping, starting from the PSR-4 mapped directory on down.
 
-Using the example above, The app directory in the root of the project will map to the `\App` namespace and a configs subdurectory of the app directiory will map to the `\App\Config` namespace. Therefore a
-a class `User` in the file app/user.php will have a fully qualified class name of `\App\User` and a class Database in a file app/configs/database.php file will have a fully qualified class name of `\App\Config\Database`.
+Using the example above, The `app` directory in the root of the project will map to the `\App` namespace and the `app/config` subdirectory will map to the `\App\Config` namespace. Therefore a
+a class named `User` in the file `app/user.php` will have a fully qualified class name of `\App\User` and a class named `Database` in the file `app/configs/database.php` will have a fully qualified class name of `\App\Config\Database`.
+
+Note that the fully qualified namespace names start with a backslash signifying the root namespace.
+
+You can always use the fully qualified namespace in your PSR-4 files. However when a PSR-4 namespace is declared within the file, then the code can reference other classes within that namespace and the hierarchy below it using relative class names. For example we might have a file `app/book.php` and a file `app/user.php` that both declare `namespace App`. Then we in `User` class can reference the the `Book` class without its fully qualified namespace and vice versa. Assuming `app/configs/database.php` declares `namespace App\Config` then it can be referenced from the either class as `Config\Database` which is qualified relative to the `App` namespace.
 
 ## The Composer.json structure
 
-require section is for loading packages
-
-semantic versioning: avoids breaking updates
-^2.6 == >=2.6.4 <3.0.0
-
-semantic versioning: any patch level that might introduce a breaking change
-~2.6 == >=2.6 <3.0
-
-autoloading section is for our PSR-4 classes and generates vendor/composer/autoload_psr4.php
-
-classmap is for loading classes in directories that are in a
-directory path outside the psr4 directory starting with the project root
-scans classmap specified files and direvctories for php classes
-classmap generates vendor/composer/autoload_classmap.php
-
-files is for loading files with global php functions
-
-repositories is for instructing composer to look for a package to install from the repo location first
-
 ````bash
 
-## The composer.json file
+To illustrate the main components of composer.json file, the composer.json schema below is taken from a Laravel project:
 
 ```json
 {
@@ -310,6 +295,28 @@ repositories is for instructing composer to look for a package to install from t
   }
 }
 ````
+
+require section is for loading packages. It also can specify the PHP version to use.
+The require-dev section is for loading packages only used for development. The --no-dev option for the install command in production will bypass loading those packages.
+
+The autoload section is for our PSR-4 classes and generates vendor/composer/autoload_psr4.php
+the autoload-dev section is for loading our PSR-4 classes that are onlu used for development. The --no-dev option for the install command in production will bypass generating an autoload file for those mapping.
+
+classmap section is for loading classes in directories that are in a directory path outside the psr4 directory and generates vendor/composer/autoload_classmap.php
+
+Composer, starting with the project root scans the specified classmap files and directories for php classes and requires them.
+
+files section is for loading files with global php functions
+
+repositories section is for instructing composer to look for a package to install from the repo location first
+
+## Package versioning in composer.json
+
+semantic versioning: avoids breaking updates
+^2.6 == >=2.6.4 <3.0.0
+
+semantic versioning: any patch level that might introduce a breaking change
+~2.6 == >=2.6 <3.0
 
 ## composer autoloader and PHP namespaces relationship
 
@@ -359,3 +366,7 @@ But composer is also used to dump php autoload files based on PSR-4 mapping sect
 Composer can also specfify classmapping for classes outside the PSR-4 directory mapping hiererchy and can also specify include files for files that define global functions.
 In addition it can also run installation scripts from a script section in composer.json.
 Finally you can specify repositories where composer can download packages from when developing and testing your own packages.
+
+```
+
+```
