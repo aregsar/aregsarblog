@@ -74,6 +74,39 @@ rm /usr/local/bin/composer
 rm -rf ~/.composer
 ```
 
+## Composer global packages home
+
+When you install composer a composer home directory is created where global packages (non project specific packages) can be installed.
+
+Run the following command to see the location location of the symlinks to global package executables:
+
+```bash
+composer global config bin-dir --absolute
+```
+
+The result on my machine is:
+
+```bash
+~/.composer/vendor/bin
+```
+
+Make sure to add this path to your system $PATH so that we can execute the commands from any directory
+
+Below are symlinks for two cli packages installed globally on my machine. They point to the vendor directory where the packages are installed:
+
+```bash
+~/.composer/vendor/bin/laravel -> ~/.composer/vendor/laravel/installer/bin/laravel
+~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
+```
+
+The global composer configuration file and vendor directory paths are in composer home directory.
+
+```bash
+~/.composer/composer.json
+~/.composer/composer.lock
+~/.composer/vendor/
+```
+
 ## creating the initial composer.json file
 
 This will interactively create a new composer.json file:
@@ -102,6 +135,8 @@ We can also specify an optional version number according to semantic versioning 
 composer require vendor/package:<version>
 ```
 
+To change the version of a package that is already installed, run the require command with the new version.
+
 We can install multiple packages as well by separating them with a space.
 
 To add a package as a development dependency we can use the --dev option:
@@ -126,7 +161,7 @@ Example installing phpunit including the version as a development dependency
 composer require phpunit/phpunit:^8 --dev
 ```
 
-> Note `composer require` command updates the composer.json with the package and updates the composer.lock file based on the composer.json file changes, creating the files if they do not exist. Then it installs the package in the `vendor` directory based on the specific package version from the composer.lock file, creating the directory if it does not exist.
+> The `composer require` command updates the composer.json with the package and updates the composer.lock file based on the composer.json file changes, creating the files if they do not exist. Then it installs the package in the `vendor` directory based on the specific package version from the composer.lock file, creating the directory if it does not exist.
 
 ## removing packages
 
@@ -144,8 +179,6 @@ composer global remove vendor/package
 
 Multiple package names separated by a space character can be specified.
 
-To change the version of the package that is installed, run the require command with the new version.
-
 The global remove uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
 
 > The remove command removes the package from composer.json and updates the composer.lock file based on changes in the composer.json file. It then removes the package from the vendor directory.
@@ -156,13 +189,33 @@ The global remove uses the composer.json and composer.lock and vendor directory 
 composer update
 ```
 
+We can update individual packages as well
+
+```bash
+composer update vendor/package
+```
+
+Multiple package names separated by a space character can be specified
+
 To update global packages we can use the global subcommand which uses the composer.json from our ~/.composer directory:
 
 ```bash
+#update all global packages
 composer global update
 ```
 
+```bash
+#update the individual global package
+composer global update vendor/package
+```
+
 The global update uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
+
+We can use the dry run flag to see the effects of the update before we actually run it
+
+```bash
+composer update --dry-run
+```
 
 > The update command updates the composer.lock file based on manual changes to composer.json (added, removed or version modified packages in the require or require-dev sections). It also updates the package versions in composer.lock, if the package has an updated version in the package repository that satisfies the package version constraint specified in composer.json. It then reconciles the differences between the currently installed packages in the vendor directory and their versions and any package or version changes in the composer.lock file and adds and removes packages in the vendor directory accordingly.
 
@@ -261,8 +314,6 @@ You can always use the fully qualified namespace in your PSR-4 files. However wh
 
 ## The Composer.json structure
 
-````bash
-
 To illustrate the main components of composer.json file, the composer.json schema below is taken from a Laravel project:
 
 ```json
@@ -294,13 +345,15 @@ To illustrate the main components of composer.json file, the composer.json schem
     "phpunit/phpunit": "^8"
   }
 }
-````
+```
 
 require section is for loading packages. It also can specify the PHP version to use.
-The require-dev section is for loading packages only used for development. The --no-dev option for the install command in production will bypass loading those packages.
+
+The require-dev section is for packages only used for development that are installed with the --dev option. The --no-dev option for the install command in production will bypass loading those packages.
 
 The autoload section is for our PSR-4 classes and generates vendor/composer/autoload_psr4.php
-the autoload-dev section is for loading our PSR-4 classes that are onlu used for development. The --no-dev option for the install command in production will bypass generating an autoload file for those mapping.
+
+the autoload-dev section is for loading our PSR-4 classes that are only used for development. The --no-dev option for the install command in production will bypass generating an autoload file for those mapping.
 
 classmap section is for loading classes in directories that are in a directory path outside the psr4 directory and generates vendor/composer/autoload_classmap.php
 
@@ -366,6 +419,10 @@ But composer is also used to dump php autoload files based on PSR-4 mapping sect
 Composer can also specfify classmapping for classes outside the PSR-4 directory mapping hiererchy and can also specify include files for files that define global functions.
 In addition it can also run installation scripts from a script section in composer.json.
 Finally you can specify repositories where composer can download packages from when developing and testing your own packages.
+
+```
+
+```
 
 ```
 
