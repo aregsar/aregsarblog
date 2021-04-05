@@ -237,7 +237,15 @@ composer global install
 
 The global install uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
 
-> The install command installs the specific package versions from the composer.lock file into the vendor directory. It reconciles the differences between the currently installed packages in the vendor directory and their versions and any package or version changes in the composer.lock file and adds and removes packages in the vendor directory accordingly. The command will not run if the package.json file is out of sync with the package.lock, which happens when composer.json required package list manually updated. In this scenario it will display a warning message instructing the user to run `composer update`, which will update the composer.lock file and install the updated packages in the vendor directory. Running `composer install` afterward will only re-generate the autoload files, since the packages will have been installed by the `composer update` command.
+> The install command installs the specific package versions from the composer.lock file into the vendor directory. It reconciles the differences between the currently installed packages in the vendor directory with any package or version changes in the composer.lock file and adds and removes packages in the vendor directory accordingly.
+
+The command will not run if the package.json file is out of sync with the package.lock, which happens when composer.json required package list manually updated. In this scenario it will display a warning message instructing the user to run `composer update`.
+
+Running `composer update` will update the composer.lock file based changes in composer.json and install the updated packages in the vendor directory. Running `composer install` right after running `composer update` will only re-generate the autoload files, since the packages will have already been installed by the `composer update` command.
+
+The only issue with running `composer update` to sync up composer.lock is that all the packages will get updated which we may not want. The composer.json can get out of sync with composer.lock if we manually update the packages in composer.json. If we only updated a few packages then we should only run the `composer update` command for those packages only. That way the remaining packages will not get updated.
+
+> Tip: to keep composer.json and composer.lock in sync, use the composer commands instead of manually changing packages in composer.json.
 
 ## Composer install Options for production builds
 
@@ -252,6 +260,18 @@ The --no-script option makes sure that the scripts in the scripts section of the
 The --optimize-autoloader generates optimized PHP autoload files.
 
 > note --prefer-dist tries to install from packagist.org and falls back to git repository. Replace it with --prefer-source to try to install from the git repository then fallbask to packagist.org
+
+## Updating installed package version strategy
+
+We saw earlier that we can use the `composer update` command to upgrade package to the latest version within their specified version roll forward strategy.
+
+> When no package version is specified in composer.json then the default strategy is to move to the latest version of the package.
+
+However sometimes we want to change the version strategy for the package or we want to downgrade or updgrade to a specific version.
+
+In that case we can remove the package using composer remove and then re-install the package using composer require with the specific package version that we want or with the new package version strategy.
+
+Another way is to manually update the package version in composer.json and then run the composer update command.
 
 ## displaying composer.lock file dependency tree
 
