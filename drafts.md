@@ -14,15 +14,15 @@ April 1, 2021
 
 April 1, 2021
 
-[Installing Laravel Valet on MacOS](https://aregsar.com/blog/2021/installing-laravel-valet-on-macos)
-
-April 1, 2021
-
 [Installing Laravel CLI on MacOS](https://aregsar.com/blog/2021/installing-laravel-cli-on-macos)
 
 April 1, 2021
 
-[MySQL Configure Laravel](https://aregsar.com/blog/2021/mysql-configure-laravel)
+[Installing Laravel Valet on MacOS](https://aregsar.com/blog/2021/installing-laravel-valet-on-macos)
+
+April 1, 2021
+
+[Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel)
 
 April 1, 2021
 
@@ -34,19 +34,13 @@ April 1, 2021
 
 April 1, 2021
 
+[MySQL Configure Laravel](https://aregsar.com/blog/2021/mysql-configure-laravel)
+
+April 1, 2021
+
 [Configure Laravel Local Mail Server](https://aregsar.com/blog/2021/configure-laravel-local-mail-server)
 
-April 1, 2021
-
-[XDebug Configure VSCode](https://aregsar.com/blog/2021/xdebug-configure-vscode)
-
-April 1, 2021
-
-[XDebug Configure PhpStorm](https://aregsar.com/blog/2021/xdebug-configure-phpstorm)
-
-April 1, 2021
-
-[Configure VSCode Keyboard Shortcuts](https://aregsar.com/blog/2021/configure-vscode-keyboard-shortcuts)
+Post for later
 
 April 1, 2021
 
@@ -54,11 +48,15 @@ April 1, 2021
 
 April 1, 2021
 
-[Configure PhpStorm Keyboard Shortcuts](https://aregsar.com/blog/2021/configure-phpstorm-keyboard-shortcuts)
+[XDebug Configure VSCode](https://aregsar.com/blog/2021/xdebug-configure-vscode)
 
 April 1, 2021
 
 [PHPUnit Configure PhpStorm](https://aregsar.com/blog/2021/phpunit-configure-phpstorm)
+
+April 1, 2021
+
+[XDebug Configure PhpStorm](https://aregsar.com/blog/2021/xdebug-configure-phpstorm)
 
 April 1, 2021
 
@@ -67,3 +65,11 @@ April 1, 2021
 April 1, 2021
 
 [ElasticSearch for Laravel Development](https://aregsar.com/blog/2021/elasticsearch-for-laravel-development)
+
+April 1, 2021
+
+[Configure VSCode Keyboard Shortcuts](https://aregsar.com/blog/2021/configure-vscode-keyboard-shortcuts)
+
+April 1, 2021
+
+[Configure PhpStorm Keyboard Shortcuts](https://aregsar.com/blog/2021/configure-phpstorm-keyboard-shortcuts)

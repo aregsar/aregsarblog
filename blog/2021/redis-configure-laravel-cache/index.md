@@ -264,6 +264,8 @@ We also made the same change to the `default` connection except we use a `d:` pr
 
 #### Step 7 - Setup the Redis sever docker service
 
+> Skip this step if you have already configured the redis docker service for other Laravel components.
+
 Create a docker-compose.yml file containing the redis docker service.
 
 ```bash
@@ -290,6 +292,8 @@ mkdir -p data/redis
 
 #### Step 8 - Set the connection settings for the docker Redis service
 
+> Skip this step if you have already configured the redis docker service for other Laravel components.
+
 Open the project `.env` file and set the connection settings for the docker redis service.
 
 ```ini
@@ -300,13 +304,13 @@ REDIS_PORT=8002
 
 The docker-compose.yml file we setup before will use the settings from the .env file.
 
-#### Step 9 - Startup the docker service
+#### Step 9 - Use the cache service
+
+Startup the docker service
 
 ```bash
 docker-compose up -d
 ```
-
-#### Step 10 - Use the cache service
 
 You should now be able to use caching with Redis in your Laravel application.
 
