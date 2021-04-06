@@ -175,19 +175,17 @@ The global remove command removes the package from the composer.json in the comp
 
 ## updating packages
 
-The composer update command resolves dependancies from packages specified in composer.json and updates a composer.lock file with specific versions of packages to install then calls `composer install` command to install the packages.
-
-It will create the composer.lock file if it does not exist.
+The composer update command resolves dependancies from packages specified in composer.json and updates the composer.lock file with specific versions of packages to install then calls `composer install` command to install the packages. It will create the composer.lock file if it does not exist.
 
 If there are changes in composer.json from the last version that created or updated the composer.lock file, then the update command will update the composer.lock file based on resolution of the changes in composer.json.
 
-If there are newer versions of packages that satisfy the package version constraint in composer.json then the update command will update the composer.lock file with the new package versions.
+Also if there are new package versions released that satisfy the version roll forward constraint of the package in composer.json then the update command will update the composer.lock file with the latest version of the package that satisfies the version constraint.
 
 ```bash
 composer update
 ```
 
-To update global packages we can use the global subcommand which uses the composer.json from our composer home directory to create or update global packages installed in the vendor directory in the composer home directory:
+To update global packages we can use the global subcommand which uses the composer.json from our composer home directory to create or update composer.json file in the composer home directory and then call composer global install to install global packages installed into the vendor directory in the composer home directory:
 
 ```bash
 #update all global packages
@@ -204,8 +202,7 @@ composer update --dry-run
 
 ## installing packages
 
-composer install downloads and installs packages from composer.lock file then calls composer dump-autoload
-composer dump-autoload generates autoload files then runs the scripts from composer.json
+composer dump-autoload generates autoload files PHP autoload files specified the composer.json autoload section, then runs the scripts from the scripts section of composer.json
 
 Run the install command to install the specific versions of packages specified in the composer.lock file into the vendor directory:
 
@@ -213,25 +210,17 @@ Run the install command to install the specific versions of packages specified i
 composer install
 ```
 
-Running the composer install command also generates the PHP autoload files specified the composer.json autoload section. Also any scripts in the scripts section of composer.json will be run.
+composer install downloads and installs the package versions specified in the composer.lock file into the vendor directory. If the vendor directory does not exist it will be created. It then calls composer dump-autoload to generate the PHP autoload files. If the --optimize-autoload option is specified or the optimize-autoload setting in composer.json is set to true, then it calls composer dump-autoload with the --optimize option.
 
-To install or reinstall packages globally use the global modifier.
+To install packages globally we can use the global modifier.
 
 ```bash
 composer global install
 ```
 
-The global install uses the composer.json and composer.lock and vendor directory in the ~/.composer directory.
+The global install uses the composer.lock in the composer home directory to install the package versions specified in the composer.lock file into the vendor directory of the composer home directory. If the vendor directory does not exist it will be created.
 
-> The install command installs the specific package versions from the composer.lock file into the vendor directory. It reconciles the differences between the currently installed packages in the vendor directory with any package or version changes in the composer.lock file and adds and removes packages in the vendor directory accordingly.
-
-The command will not run if the package.json file is out of sync with the package.lock, which happens when composer.json required package list manually updated. In this scenario it will display a warning message instructing the user to run `composer update`.
-
-Running `composer update` will update the composer.lock file based changes in composer.json and install the updated packages in the vendor directory. Running `composer install` right after running `composer update` will only re-generate the autoload files, since the packages will have already been installed by the `composer update` command.
-
-The only issue with running `composer update` to sync up composer.lock is that all the packages will get updated which we may not want. The composer.json can get out of sync with composer.lock if we manually update the packages in composer.json. If we only updated a few packages then we should only run the `composer update` command for those packages only. That way the remaining packages will not get updated.
-
-> Tip: to keep composer.json and composer.lock in sync, use the composer commands instead of manually changing packages in composer.json.
+The global install command also creates symlinks to executables within the installed packages, in the vendor/bin directory of the home directory.
 
 ## Composer install Options for production builds
 
@@ -249,15 +238,30 @@ The --optimize-autoloader generates optimized PHP autoload files.
 
 ## Updating installed package version strategy
 
-We saw earlier that we can use the `composer update` command to upgrade package to the latest version within their specified version roll forward strategy.
+We saw earlier that we can use the `composer update` command to upgrade package to the latest version within their specified version roll forward constraint.
 
-> When no package version is specified in composer.json then the default strategy is to move to the latest version of the package.
+> When no package version is specified in composer.json then the default constraint is to move to the latest version of the package (which is no constrain).
 
-However sometimes we want to change the version strategy for the package or we want to downgrade or updgrade to a specific version.
+However sometimes we want to change the version constraint for the package or we want to downgrade or upgrade to a specific version.
 
-In that case we can remove the package using composer remove and then re-install the package using composer require with the specific package version that we want or with the new package version strategy.
+In that case we can remove the package using composer remove and then re-install the package using composer require with the specific package version that we want or with the new package version constraint.
 
 Another way is to manually update the package version in composer.json and then run the composer update command.
+
+Sometime either method may fail due to version conflicts. How to overcome that is described in the next section.
+
+## Issues with version conflict when using composer update
+
+If there are package version conflict when running composer update or running composer require which runs composer update then the solution is to first delete the vendor directory and composer.lock file.
+
+```bash
+rm -rf vendor
+rm composer.lock
+```
+
+Then open the composer.json and add, remove or update package versions in the require and require-dev sections. Then either run composer update or composer require (if you want to add additional packages).
+
+This will run composer update which will then generate a new composer.lock file and call composer install which will create the vendor directory and add the new resolved package versions from the composer.lock file into the vendor directory.
 
 ## displaying composer.lock file dependency tree
 
