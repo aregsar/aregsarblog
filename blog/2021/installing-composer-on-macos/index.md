@@ -210,7 +210,7 @@ Run the install command to install the specific versions of packages specified i
 composer install
 ```
 
-composer install downloads and installs the package versions specified in the composer.lock file into the vendor directory. If the vendor directory does not exist it will be created. It then calls composer dump-autoload to generate the PHP autoload files. If the --optimize-autoload option is specified or the optimize-autoload setting in composer.json is set to true, then it calls composer dump-autoload with the --optimize option.
+composer install downloads and installs the package versions specified in the composer.lock file into the vendor directory. If the vendor directory does not exist it will be created. It then calls composer dump-autoload to generate the PHP autoload files. If the --optimize-autoload option is specified on the command line or the optimize-autoloader setting in composer.json is set to true, then it calls composer dump-autoload with the --optimize option.
 
 To install packages globally we can use the global modifier.
 
@@ -236,7 +236,7 @@ The --optimize-autoloader generates optimized PHP autoload files.
 
 > note --prefer-dist tries to install from packagist.org and falls back to git repository. Replace it with --prefer-source to try to install from the git repository then fallbask to packagist.org
 
-## Updating installed package version strategy
+## Updating installed package version constraint
 
 We saw earlier that we can use the `composer update` command to upgrade package to the latest version within their specified version roll forward constraint.
 
@@ -279,6 +279,22 @@ We can do this by dumping the autoloader configuration. The command generates an
 composer dump-autoload
 ```
 
+Specifying the --optimize or -o option will optimize the generated classmap.
+
+```bash
+composer dump-autoload --optimize
+```
+
+Instead of the command line option we can specify the optimization through setting in composer.json
+
+```json
+"config": {
+"optimize-autoloader": true,
+},
+```
+
+> Running compose install will call composer dump-autoload. Passing in --optimize-autoloader to composer install will call composer dump-autoload --optimize
+
 ## dumping the autoload configuration in production
 
 To dump an optimized version of the autoloader for production we can use the -o or --optimize option
@@ -288,7 +304,7 @@ To dump an optimized version of the autoloader for production we can use the -o 
 composer dump-autoload --optimize
 ```
 
-As previously noted, when we run the `composer install` command we can dump the autoload configuration at the same time. So production we can use the -o or --optimize-autoloader option when running composer install and there will be no need to also call the composer dump-autoload command.
+As previously noted, when we run the `composer install` command it will call composer dump-autoload to generate the autoload classmap after installing the packages. So in production we can use the -o or --optimize-autoloader option when running composer install to have composer dump-autoload be called with the --optimize option.
 
 ```bash
 composer install --optimize-autoloader --no-dev --no-interation --no-scripts --no-progress --prefer-dist
@@ -353,7 +369,29 @@ To illustrate the main components of composer.json file, the composer.json schem
   },
   "require-dev": {
     "phpunit/phpunit": "^8"
-  }
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+      "@php artisan package:discover --ansi"
+    ],
+    "post-root-package-install": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ],
+    "post-create-project-cmd": ["@php artisan key:generate --ansi"]
+  },
+  "extra": {
+    "laravel": {
+      "dont-discover": []
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
 ```
 
