@@ -175,7 +175,7 @@ The current version in composer.lock for my install is the exact version v8.36.2
 
 The installer always installs the latest release of the project scaffold.
 
-If you need a specific version of the project scaffold then you need to install it via composer specifying version:
+If you need a specific version of the project scaffold then you need to install it via composer and specify the version you need installed:
 
 ```bash
 composer create-project --prefer-dist laravel/laravel:^6 mynewapp
@@ -183,51 +183,55 @@ composer create-project --prefer-dist laravel/laravel:^6 mynewapp
 
 Omitting the version will install the exact same version that the Laravel installer installs.
 
-If you need to user a specific version of the Laravel framework package, you need to change the `laravel/framework` package version require d in composer.json manually and then running composer update or remove the package using composer remover `laravel/framework` and the requiring the specific package version using composer require `laravel/framework:8.2.0` for instance.
+Also, if you need to user a specific version of the Laravel framework package that the Laravel project requires in composer.json, you can manually change the `laravel/framework` package version in `composer.json` and then run `composer update`.
+
+Alternatively, instead of making a manual change, you can remove the package entry using `composer remove laravel/framework` and then requiring the specific package version using `composer require laravel/framework:8.2.0` for instance.
 
 ## Using the command line git and github options
 
-Create a new laravel project and then make a local git repo for it
+You can use the Laravel installer to create a new laravel project and then make a local git repo for it in a single command:
 
 ```bash
 laravel new mynewapp --git
 ```
 
-Create a new laravel project, make a local git repo for it and then create a private remote repositiory for it pushing up to a tracking master branch
+You can also make it create a private remote repository and push up the local master branch to a tracking master branch at Github by using the --github option instead of --git.
 
 ```bash
 laravel new example-app --github
-```
-
-The same as above but creats a public remote repo
-
-```bash
-laravel new example-app --github="--public"
-```
-
-Create the rempote repo for an organization
-
-```bash
-laravel new example-app --github --organization="myorg"
 ```
 
 The remote repo will be installed at:
 
 `https://github.com/<your-account>/mynewapp.com`
 
-The github option uses the github gh cli that you can install using Homebrew:
+The following is the same as above but creates a public repository instead:
+
+```bash
+laravel new example-app --github="--public"
+```
+
+Adding the --organization option allows you to create the remote repo under any of your Github organization:
+
+```bash
+laravel new example-app --github --organization="myorg"
+```
+
+The --github option uses the Github `gh` cli that you can install using Homebrew:
 
 ```bash
 brew install gh
 ```
 
-You need to authnticate with Github before creating the project
+You need to authenticate with Github with `gh` before running the installer command that uses the --github option:
 
 ```bash
 gh auth login -h github.com --web
 ```
 
-After creating the project you can view the remote repo
+The command will give you code in the terminal and launch the browser where you can paste in the code to authenticate:
+
+After creating the project you can view the remote repo in your default web browser:
 
 ```bash
 cd mynewapp
@@ -235,7 +239,9 @@ cd mynewapp
 gh repo view --web
 ```
 
-To logout of github after creating the project and viewing the remote repo:
+This command will launch and navigate your default browser to the repo URL.
+
+Logout of Github after creating the project and viewing the remote repo:
 
 ```bash
 echo "Y" | gh auth logout -h github.com
@@ -243,15 +249,15 @@ echo "Y" | gh auth logout -h github.com
 
 ## Jetstream options
 
-To install Laravel jetstream we can use the --jet option. This can be combined with the git options.
+To install Laravel jetstream we can use the --jet option. This can be combined with the git or github options from the last section.
 
-Also we can specify the UI stack that the jetstream project, livewire or inertia, should use so we dont have to specify it interactively
+Also we can specify the UI stack, livewire or inertia, that the jetstream project should use so we don't have to specify it interactively.
 
-Finally we can add the --teams option of Laravel jetstream to add team account functionality.
+Finally we can add the --teams option of Laravel jetstream to add team account functionality. If we don't specify --teams the installer will prompt us. The default choice is no teams functionality if we just hit the return key.
 
 Below are various combinations of these options:
 
-create a new Laravel jetstream project
+Create a new Laravel jetstream project and create a Github repo.
 
 ```bash
 laravel new mynewapp --jet --github
