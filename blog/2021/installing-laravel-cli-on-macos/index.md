@@ -16,15 +16,9 @@ Check the installer version:
 laravel --version
 ```
 
-The installer is installed globally in my MacBooks ~/.composer directory.
+The installer is installed globally in the composer home directory which on the Mac is at `~/.composer` directory.
 
-We can see it installed by dumping the content of the ~/.composer/composer.json file:
-
-```bash
-cat ~/.composer/composer.json
-```
-
-We can see the laravel/installer dependency along with its version.
+If we look inside the `~/.composer/composer.json` file we can see we can see the `laravel/installer` dependency along with its version.
 
 ```json
 {
@@ -35,15 +29,19 @@ We can see the laravel/installer dependency along with its version.
 }
 ```
 
-## Reinstalling laravel installer
+## Reinstalling the Laravel installer
 
-uninstall current installed version
+uninstall the current installed version
 
+```bash
 composer global remove laravel/installer
+```
 
-install the latest version of the installer
+Install the latest version of the installer
 
+```bash
 composer global require laravel/installer
+```
 
 Check the installer version:
 
@@ -51,9 +49,11 @@ Check the installer version:
 laravel --version
 ```
 
-## Reinstalling when running into package dependancy issues
+## Reinstall workaround when running into package dependency issues
 
-if issues removing and re installing
+If you have dependency conflict issues when trying to remove or install the installer you can try to reinstall all the global packages from scratch.
+
+First remove the vendor directory and composer.lock file from the composer home directory:
 
 ```bash
 cd ~/.composer
@@ -61,24 +61,29 @@ rm -rf vendor
 rm composer.lock
 ```
 
-remove laravel/installer entry from the composer.json file then run:
+Next remove the `laravel/installer` entry from the `composer.json` file then run:
 
 ```bash
 composer global update
 ```
 
-If still having issues take note of all packages installed in composer.json then delete composer.json
-and then for all the previously installed packages run:
+This should reinstall the installer.
+
+> If you have Laravel Valet installed, you may have to remove the `laravel/valet` entry from `composer.json` as well and then re-install it.
+
+If you are still having issues, take note of all packages installed in `composer.json` and install them again after deleting `composer.json`.
+
+To install all the previously installed packages after deleteing composer.json, run:
 
 ```bash
 composer global require vendor/package
 ```
 
-You can require multiple packages separated by a space character in single line or require them individually
+You can require all the packages in single line separated by a space character or require them all individually
 
 ## Using the Laravel installer
 
-Since the installer is installed globally we can run it from any directory
+Since the installer is installed globally we can run it from any directory.
 
 Display available project creation options:
 
@@ -93,17 +98,20 @@ cd path/to/my/laravel/projects
 laravel new mynewapp
 ```
 
-This will create a new Laravel project mynewapp directory
+This will create a new Laravel project directory named mynewapp.
 
-Note that as it starts installing it prints the version of the laravel/laravel package which is the laravel project scaffold that it is creating:
+Note that as it the installer starts installing, it prints the version of the `laravel/laravel` package that is being installed.
 
 ```bash
 Creating a "laravel/laravel" project at "./mynewapp"
 Installing laravel/laravel (v8.5.15)
 ```
 
-The laravel/laravel project requires the laravel/framework package which is the actual laravel framework.
-Once the project is created we can check the framework version using the artisan command:
+the `laravel/laravel` package is the Laravel project scaffold that contains the directory structure of the project being created.
+
+The `laravel/laravel` packages `composer.json` file requires the `laravel/framework package` which is the actual Laravel framework being installed.
+
+Once the project is created we can check the `laravel/framework` Laravel framework version using the artisan command:
 
 ```bash
 cd mynewapp
@@ -116,11 +124,15 @@ The result is:
 Laravel Framework 8.36.2
 ```
 
-we can also see the required Laravel Framework version and PHP version in the composer.json and composer.lock files:
+We can see that it has its own version number that is different form the `laravel/laravel` project scaffold.
+
+We can see the required Laravel Framework version and PHP version in the installed project's `composer.json` and `composer.lock` files:
 
 ```bash
 cat composer.json
 ```
+
+Snippet of the output showing the semantic framework version constraint:
 
 ```json
 {
@@ -134,6 +146,8 @@ cat composer.json
 ```bash
 cat composer.lock
 ```
+
+Snippet of the output showing the exact framework version:
 
 ```json
 {
@@ -155,7 +169,7 @@ cat composer.lock
 
 Notice in composer.json we the semantic version constraint ^8.12 is specified which allows for newer versions starting from 8.12.0 to less then 9.0.0 be upgraded to when generating the composer.lock file.
 
-We see that the current version upgrade in composer.lock for my install is the exact version v8.36.2
+The current version in composer.lock for my install is the exact version v8.36.2.
 
 ## The installed project scaffold version
 
