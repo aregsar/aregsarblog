@@ -288,9 +288,11 @@ composer dump-autoload --optimize
 Instead of the command line option we can specify the optimization through setting in composer.json
 
 ```json
-"config": {
-"optimize-autoloader": true,
-},
+{
+  "config": {
+    "optimize-autoloader": true
+  }
+}
 ```
 
 > Running compose install will call composer dump-autoload. Passing in --optimize-autoloader to composer install will call composer dump-autoload --optimize
@@ -411,13 +413,29 @@ files section is for loading files with global php functions
 
 repositories section is for instructing composer to look for a package to install from the repo location first
 
-## Package versioning in composer.json
+the config section contains the following settings:
 
-semantic versioning: avoids breaking updates
-^2.6 == >=2.6.4 <3.0.0
+The optimize-autoloader set to true makes composer dump-autoload optimize the autoload php classmap files
 
-semantic versioning: any patch level that might introduce a breaking change
-~2.6 == >=2.6 <3.0
+The preferred-install wet to "dist" attempts to download packages for packegist.org before falling back to the package repository
+
+## Package versioning version constraints
+
+Using semantic versioning the ^ allows both minor and patch versions to increment to future minor and patch releases starting with the specific minor and patch version specified
+
+^2 (2.0.0) is equivalent to version that is >=2.0.0 but <3.0.0
+
+^2.6 (2.6.0) is equivalent to version that is >=2.6.0 but <3.0.0
+
+^2.6.4 is equivalent to version that is >=2.6.4 but <3.0.0
+
+Using semantic versioning the ~ allows only patch version to increment to future patch releases starting with the patch version specified:
+
+~2 (2.0.0) is equivalent to version that is >=2.0.0 but <2.1.0
+
+~2.6 (2.6.0) is equivalent to version that is >=2.6.0 but <2.7.0
+
+~2.6.4 is equivalent to version that is >=2.6.4 but <2.7.0
 
 ## composer autoloader and PHP namespaces relationship
 
@@ -439,9 +457,15 @@ assuming PSR-4 mapping in composer.json
 }
 ```
 
+The classes in files in the directory hierarchy map accordingly:
+
 app\User.php => namespace App;
+
 app\Config\Storage.php => namespace App\Config;
+
 app\Helpers\Time.php => namespace App\Helpers;
+
+The namespace in the files matches the directory structure starting with the PSR-4 mapped namespace
 
 in app\User.php
 
@@ -460,18 +484,26 @@ namespace App\Helpers;
 class Time{}
 ```
 
-## key takeways
+in app\Config\Storage.php
 
-Composer along with its configuration files composer.json and composer.lock is used to install and update packages used in PHP applications.
-But composer is also used to dump php autoload files based on PSR-4 mapping section in composer.json for your own code.
-Composer can also specfify classmapping for classes outside the PSR-4 directory mapping hiererchy and can also specify include files for files that define global functions.
-In addition it can also run installation scripts from a script section in composer.json.
-Finally you can specify repositories where composer can download packages from when developing and testing your own packages.
-
+```php
+<?php
+namespace App\Config;
+use App\User;
+use App\Helpers\Time;
+class Storage{}
 ```
 
+Also note that the namespace references using the `use` keyword start from the PSR-4 mapped namespace and follow the directory hierarchy.
+
+Finally we have a bootstrap file named index.php that autoloads all classes by including the vendor/autoload.php file
+
+```php
+require_once __DIR__ . '/../vendor/autoload.php';
+use App\User;
+use App\Config\Storage;
+$user = new User;
+$db = new Storage;
 ```
 
-```
-
-```
+Again note that the namespace references using the `use` keyword start from the PSR-4 mapped namespace and follow the directory hierarchy.
