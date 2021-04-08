@@ -275,7 +275,7 @@ create a new Laravel jetstream project using the inertia UI stack
 laravel new mynewapp --jet --stack=inertia --github
 ```
 
-create a new Laravel jetstream project using the livewire UI stack and teams functionality
+bcreate a new Laravel jetstream project using the livewire UI stack and teams functionality
 
 ```bash
 laravel new mynewapp --jet --stack=livewire --teams --github
