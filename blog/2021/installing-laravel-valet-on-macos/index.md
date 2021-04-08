@@ -162,25 +162,6 @@ To unlink all projects within a parked directory enter the directory and use the
 cd ~/myprojects
 valet forget
 
-## Valet executable
-
-requiring valet globally installs the valet executable file at:
-
-~/.composer/vendor/laravel/valet/valet
-
-The installation also adds the symlinks:
-
-~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
-
-Usually we add ~/.composer/vendor/bin to our system $PATH variable to be able globally run executables symlinks that composer
-sets up in `~/.composer/vendor/bin`.
-
-However Valet installs a symlink in `/usr/local/bin` that points to the symlink in `~/.composer/vendor/bin`.
-
-/usr/local/bin/valet -> /Users/aregsarkissian/.composer/vendor/laravel/valet/valet
-
-So as long as we have `/usr/local/bin` in our system $PATH we will be able to at least run the valet command globally.
-
 ## Valet configuration files
 
 When we run the `valet install` command, valet creates the configiration directory `~/.config/valet/`
@@ -209,6 +190,37 @@ for a full list and descriptions see laravel valet documentation
 
 https://laravel.com/docs/8.x/valet
 
+## Valet executable
+
+requiring valet globally installs the valet executable file at:
+
+~/.composer/vendor/laravel/valet/valet
+
+The installation also adds the symlinks:
+
+~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
+
+Usually we add ~/.composer/vendor/bin to our system $PATH variable to be able globally run executables symlinks that composer
+sets up in `~/.composer/vendor/bin`.
+
+However Valet installs a symlink in `/usr/local/bin` that points to the symlink in `~/.composer/vendor/bin`.
+
+/usr/local/bin/valet -> /Users/aregsarkissian/.composer/vendor/laravel/valet/valet
+
+So as long as we have `/usr/local/bin` in our system $PATH we will be able to at least run the valet command globally.
+
+To see the location of the valet executable:
+
+```bash
+which valet
+```
+
+Which points to the composer symlink in my case since the `~/.composer/vendor/bin` in my $PATH proceeds the `/usr/local/bin` in $PATH.
+
+```bash
+/Users/aregsarkissian/.composer/vendor/bin/valet
+```
+
 ## How valet works
 
 the `valet install` command will use Homebrew to download and install Nginx and Dnsmasq servers and configure Valet to use them. Installing Nginx and Dnsmasq will add the nginx and dnsmasq services on your system and start them up.
@@ -221,3 +233,48 @@ brew install dnsmasq
 brew install nginx
 sudo brew services start dnsmasq
 sudo brew services start nginx
+
+## valet.conf
+
+~/.config/valet/valet.conf
+
+```nginx
+
+server {
+    listen 127.0.0.1:80 default_server;
+    root /;
+    charset utf-8;
+    client_max_body_size 128M;
+
+    location /41c270e4-5535-4daa-b23e-c269744c2f45/ {
+        internal;
+        alias /;
+        try_files $uri $uri/;
+    }
+
+    location / {
+        rewrite ^ "/Users/aregsarkissian/.composer/vendor/laravel/valet/server.php" last;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    access_log off;
+    error_log "/Users/aregsarkissian/.config/valet/Log/nginx-error.log";
+
+    error_page 404 "/Users/aregsarkissian/.composer/vendor/laravel/valet/server.php";
+
+    location ~ [^/]\.php(/|$) {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass "unix:/Users/aregsarkissian/.config/valet/valet.sock";
+        fastcgi_index "/Users/aregsarkissian/.composer/vendor/laravel/valet/server.php";
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME "/Users/aregsarkissian/.composer/vendor/laravel/valet/server.php";
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
