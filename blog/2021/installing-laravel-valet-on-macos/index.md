@@ -60,6 +60,18 @@ valet start
 
 Also repeat the same steps anytime you install a new PHP extension.
 
+Check that the `~/.config/valet/valet.sock` file exists.
+
+If you run into issues. Try running:
+
+```bash
+valet install
+
+valet use php
+
+valet restart
+```
+
 ## uninstalling and removing valet
 
 valet stop
