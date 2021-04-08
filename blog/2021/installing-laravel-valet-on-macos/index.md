@@ -28,9 +28,12 @@ valet start
 
 ## updating and reintstalling
 
+```bash
 valet stop
 
-valet uninstall --force
+#run this only if you have issues with valet installing
+#see notes below about possible side effects of this command
+#valet uninstall --force
 
 composer global update
 
@@ -43,8 +46,11 @@ valet trust
 valet use php
 
 valet start
+```
 
-Note `valet start` will also start the dnsmaq and nginx services
+The `valet start` command also starts the dnsmaq and nginx services
+
+> Note. It seems that the `valet uninstall` command removes the current php installation so PHP and possibly its extensions may need to be re-installed via homebrew and pecl again. Also seems like the valet uninstall effected my current nvm node setting where node and npm were not found. This was most likely due to the node path setting being modified during the valet uninstall. To resolve that I used the nvm use <nodeversion> command to reset the node path.
 
 ## Resetting valet to use a new php version
 
