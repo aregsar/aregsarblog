@@ -4,16 +4,21 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Prerequisites
 
-install homebrew
-install php (should install php-fpm)
-install composer
+Install Homebrew
 
-add /usr/local/bin to your system path
+Install PHP (should install php-fpm)
 
-Valet will install dnsmasq and nginx using brew
+Install Composer
+
+Add `/usr/local/bin to your` system path
+
+Valet will install `dnsmasq` and `nginx` using homebrew
 
 ## Installing and configuring valet
 
+To install Valet run the following commands:
+
+```bash
 composer global require laravel/valet
 
 valet --version
@@ -25,8 +30,9 @@ valet trust
 valet use php
 
 valet start
+```
 
-## updating and reintstalling
+## Updating and re-intstalling Valet
 
 ```bash
 valet stop
@@ -57,12 +63,16 @@ The `valet start` command also starts the dnsmaq and nginx services
 When we swich php versions, the php command point to the new php version.
 Just to be safe we may have to inform valet about this by doing the following:
 
+```bash
 valet stop
+
+rm ~/.config/valet/valet.sock
 
 #php now point to a different version of php
 valet use php
 
 valet start
+```
 
 Also repeat the same steps anytime you install a new PHP extension.
 
@@ -78,8 +88,11 @@ valet use php
 valet restart
 ```
 
-## uninstalling and removing valet
+[See this for valet.sock issue](https://stitcher.io/blog/php-8-upgrade-mac)
 
+## Uninstalling and removing valet
+
+```bash
 valet stop
 
 valet uninstall --force
@@ -89,12 +102,16 @@ composer global remove laravel/valet
 sudo rm -rf ~/.config/valet
 
 rm /usr/local/bin/valet
+```
 
 Additionally can stop and uninstall the valet installed dnsmasq and nginx services
+
+```bash
 sudo brew services stop nginx
 sudo brew services stop dnsmasq
 brew uninstall dnsmasq
 brew uninstall nginx
+```
 
 ## Issues with composer when running composer update
 
@@ -111,46 +128,54 @@ Then manually remove the valet package from composer.json and run:
 composer global require laravel/valet
 ```
 
-If you are unable to install due to composer errors, you may need to delet the composer.json and reinstall all the
-installed global packages including laravel valet.
+If you are unable to install due to composer errors, you may need to delete the composer.json and reinstall all the
+installed global packages including Laravel valet.
 
 See the composer post for handling version conflict error details
 
-## Starting, stoping and restarting
+## Starting, stoping and restarting valet
 
 Starting stoping and restarting valet also starts stops and restarts the dnsmasq and nginx services
 
+```bash
 valet start
 
 valet stop
 
 valet restart
+```
 
-## adding websites
+## Serving sites with valet
 
 linking all projects within a directory
 
+```bash
 cd ~/myprojects
 
 valet park
+```
 
 linking a single project
 
+```bash
 cd ~/myspecialprojects/myapp
 
 valet link
+```
 
 Each project will be served locally using the project name and .test domain
 
-http://<project_name>.test
+`http://<project_name>.test`
 
 The site will also respond to any subdomain
 
-http://<subdomain>.<project_name>.test
+`http://<subdomain>.<project_name>.test`
 
 we can show the linked sites
 
+```bash
 valet links
+```
 
 Also if we check the file `~/.config/valet/config.json` we will see that `~/myspecialprojects` directory is added to the paths property.
 
@@ -167,24 +192,29 @@ cat ~/.config/valet/config.json
 }
 ```
 
-## Removing websites
+## Removing linked sites
 
 We can remove individual sites within a parked directory by entering the project and using the unlink command:
 
+```bash
 cd ~/myprojects/myotherapp
 
 valet unlink
+```
 
 To unlink all projects within a parked directory enter the directory and use the forget command
 
+```bash
 cd ~/myprojects
+
 valet forget
+```
 
 ## Valet configuration files
 
-When we run the `valet install` command, valet creates the configiration directory `~/.config/valet/`
+When we run the `valet install` command, valet creates the configuration directory `~/.config/valet/`
 
-Important configuration files and directroies
+Important configuration files and directories
 
 The `~/.config/valet/config.json` file lists the directories that hosts the Laravel projects.
 
@@ -204,28 +234,33 @@ Here is a list of other notable configuration locations:
 ~/.config/valet/valet.sock
 ```
 
-for a full list and descriptions see laravel valet documentation
+for a full list and descriptions see Laravel valet documentation
 
-https://laravel.com/docs/8.x/valet
+[https://laravel.com/docs/8.x/valet](https://laravel.com/docs/8.x/valet)
 
 ## Valet executable
 
 requiring valet globally installs the valet executable file at:
 
+```bash
 ~/.composer/vendor/laravel/valet/valet
+```
 
 The installation also adds the symlinks:
 
+```bash
 ~/.composer/vendor/bin/valet -> ~/.composer/vendor/laravel/valet/valet
+```
 
-Usually we add ~/.composer/vendor/bin to our system $PATH variable to be able globally run executables symlinks that composer
-sets up in `~/.composer/vendor/bin`.
+Usually we add `~/.composer/vendor/bin` to our system `$PATH` variable to be able globally run executables symlinks that composer sets up in `~/.composer/vendor/bin`.
 
 However Valet installs a symlink in `/usr/local/bin` that points to the symlink in `~/.composer/vendor/bin`.
 
+```bash
 /usr/local/bin/valet -> /Users/aregsarkissian/.composer/vendor/laravel/valet/valet
+```
 
-So as long as we have `/usr/local/bin` in our system $PATH we will be able to at least run the valet command globally.
+So as long as we have `/usr/local/bin` in our system `$PATH` we will be able to at least run the valet command globally.
 
 To see the location of the valet executable:
 
@@ -233,7 +268,7 @@ To see the location of the valet executable:
 which valet
 ```
 
-Which points to the composer symlink in my case since the `~/.composer/vendor/bin` in my $PATH proceeds the `/usr/local/bin` in $PATH.
+Which points to the composer symlink in my case since the `~/.composer/vendor/bin` in my `$PATH` proceeds the `/usr/local/bin` in `$PATH`.
 
 ```bash
 /Users/aregsarkissian/.composer/vendor/bin/valet
@@ -247,14 +282,16 @@ run `brew list` to see if nginx and dnsmaq are installed
 
 we can manually install and start them if for some reason valet is unable to install them
 
+```bash
 brew install dnsmasq
 brew install nginx
 sudo brew services start dnsmasq
 sudo brew services start nginx
+```
 
-## valet.conf
+## The valet.conf file
 
-~/.config/valet/valet.conf
+Below is the content of the `~/.config/valet/valet.conf` file
 
 ```nginx
 
