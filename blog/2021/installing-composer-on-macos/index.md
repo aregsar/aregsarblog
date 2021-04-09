@@ -107,6 +107,48 @@ The global composer configuration file and vendor directory paths are in compose
 ~/.composer/vendor/
 ```
 
+## composer commands and the composer pipeline
+
+Composer has a set of commands for adding, removing, updating and installing packages and their dependancies.
+
+These commands can be executed as part of a pipeline to ultimately install or remove installed pakages.
+
+Composer also has a command for generating autoload classmap files for then classes in your application. This command runs at the end of the pipeline.
+
+Each command that is executed performs its task then calls the next command in the pipeline.
+
+Each command when executed generates an artifact that can be used by any of the commands after it in the pipeline.
+
+The left to right sequence of commands in the pipeline is shown below.
+
+The first command in the sequence can be either the `composer require` or the `composer remove` command.
+
+For composer require we have the sequence below:
+
+```bash
+composer require -> composer update -> composer install -> composer dump-autoload
+```
+
+And here is the sequence for composer remove:
+
+```bash
+composer remove -> composer update -> composer install -> composer dump-autoload
+```
+
+Below each command step of the pipeline starting from the left, is shown in a single line to detail the artifact created or updated by the command that will be used by the next command in the pipeline:
+
+```bash
+composer remove  (removes specified package from composer.json)
+composer require (adds package with version constraint to composer.json, creates composer.json if it not exist)
+composer update (uses composer.json to update composer.lock, creates composer.lock if it does not exists)
+composer install (uses composer.lock to download and install packages in the vendor directory, creates the vendor directory if it does not exist)
+composer dump-autoload (generates autoload classmap files from composer.json, then runs any scripts in composer.json scripts section)
+```
+
+We can start at any point in the pipeline, calling any of the commands in the flow to regenerate the artifact it is responsible as long as the artifact it depends on exists and is in sync with previously generated artifacts.
+
+Below composer commands are described in detail in its own section.
+
 ## creating the initial composer.json file
 
 This will interactively create a new composer.json file:
@@ -115,7 +157,7 @@ This will interactively create a new composer.json file:
 composer init
 ```
 
-If you don't create a composer.json file before requiring packages, then it when the composer.json file automatically be created for you when you require your first package.
+If you don't create a composer.json file before requiring packages, then the composer.json file will automatically be created for you when you require your first package.
 
 ## requiring packages
 
@@ -342,7 +384,7 @@ You can always use the fully qualified namespace in your PSR-4 files. However wh
 
 ## The Composer.json structure
 
-To illustrate the main components of composer.json file, the composer.json schema below is taken from a Laravel project:
+The composer.json schema below will illustrate components of a composer.json file:
 
 ```json
 {
@@ -382,6 +424,7 @@ To illustrate the main components of composer.json file, the composer.json schem
     ],
     "post-create-project-cmd": ["@php artisan key:generate --ansi"]
   },
+  "bin": ["valet"],
   "extra": {
     "laravel": {
       "dont-discover": []
@@ -412,6 +455,8 @@ Composer, starting with the project root scans the specified classmap files and 
 files section is for loading files with global php functions
 
 repositories section is for instructing composer to look for a package to install from the repo location first
+
+the bin section lists binary executables installed by the package in a vendor/bin directory
 
 the config section contains the following settings:
 
