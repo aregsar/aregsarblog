@@ -50,18 +50,30 @@ pecl install --force redis
 
 ## Configure the Redis driver
 
-Before:
+Below I show the before and after settings once we configure the redis driver.
+
+Before: (I have annotated the code to describe the settings)
 
 ```php
 'redis' => [
+
+        //this specifies the redis client used by Laravel
+        //By default REDIS_CLUSTER is not specified in the .env file so falls back to using the 'phpredis' value.
+        //the phpredis fallback value specified the php redis extension is used as the client so requires installing the redis php extension
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
+            //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
+            //falls back to the 'redis' value since by default the REDIS_CLUSTER setting is not specified in the .env file
+            //tells the framework to use the default clustering capability of a managed Redis server cluster.
             'cluster' => env('REDIS_CLUSTER', 'redis'),
+
+            //This setting adds a application specific prefix to the cache keys to distinguish between data from multiple apps using the same redis server
+            //if you have one redis server per app then remove this setting, no need to differentiate redis keys between apps
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
-        # default connection
+        # default connection - used by the Laravel framework default  Redis connection
         'default' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -70,13 +82,13 @@ Before:
             'database' => env('REDIS_DB', '0'),
         ],
 
-        # cache connection
+        # cache connection - used by the Laravel framework default Cache connection
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),#uses different database then 'default' connection
+            'database' => env('REDIS_CACHE_DB', '1'),//uses different database then 'default' connection
         ],
 ],
 ```
@@ -85,32 +97,32 @@ After:
 
 ```php
 'redis' => [
+        //always uses the php redis extension
         'client' => 'phpredis',
 
         'options' => [
-        //only impacts clustered redis
-        //tells the framework to use the default clustering capability of a managed Redis server cluster.
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-
-            //if you have one redis server per app then comment out, no need to differentiate redis keys between apps
-            //'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            //keep setting to be able to use Redis cluster in production if needed
+            'cluster' => 'redis',
+            //Removed prefix setting since using one Redis server per app
         ],
 
         'default' => [
-        'url' => env('REDIS_URL'),
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', '6379'),
-        'database' => `0`,
-        'prefix' => 'r:'
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => `0`,//redis cluster only supports one database per server
+            'prefix' => 'r:'//instead use prefix to distinguish between connections
+            //prefix not required if using one redis server/cluster host per connection
         ],
         'cache' => [
-        'url' => env('REDIS_URL'),
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', '6379'),
-        'database' => `0`,
-        'prefix' => 'c:'
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => `0`,//redis cluster only supports one database per server
+            'prefix' => 'c:'//instead use prefix to distinguish between connections
+            //prefix not required if using one redis server/cluster host per connection
         ],
 
 ],
