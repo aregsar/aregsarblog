@@ -73,18 +73,18 @@ Before: (I have annotated the code to describe the settings)
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
-        # default connection - used by the Laravel framework default  Redis connection
+        # default connection - used by the Laravel frameworks default Redis connection
         'default' => [
-            'url' => env('REDIS_URL'),
+            'url' => env('REDIS_URL'),//not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
         ],
 
-        # cache connection - used by the Laravel framework default Cache connection
+        # cache connection - used by the Laravel frameworks default Cache connection
         'cache' => [
-            'url' => env('REDIS_URL'),
+            'url' => env('REDIS_URL'),//not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
@@ -111,22 +111,33 @@ After:
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => `0`,//redis cluster only supports one database per server
-            'prefix' => 'r:'//instead use prefix to distinguish between connections
+            //instead use prefix to distinguish between connections
+            'database' => `0`,
+            //instead add prefix setting to distinguish between connections
             //prefix not required if using one redis server/cluster host per connection
+            'prefix' => 'r:'
+
         ],
         'cache' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
-            'database' => `0`,//redis cluster only supports one database per server
-            'prefix' => 'c:'//instead use prefix to distinguish between connections
+            //database set to 0 since only database 0 is supported in redis cluster
+            'database' => `0`,
+            //instead add prefix setting to distinguish between connections
             //prefix not required if using one redis server/cluster host per connection
+            'prefix' => 'c:'
         ],
 
 ],
 ```
+
+We have configured the `default` and `cache` connections to use unique prefixes instead of separate databases and removed the application specific prefix since we are going to use separate Redis servers per application.
+
+Redis clusters used in production do not support multiple databases so when the connection is used we are automatically namespacing the redis keys with the redis key prefix instead.
+
+> Note: We can add additional connection settings in the `redis` setting array of `config/database.php`, each with their own unique name. In fact for scalability reasons we can add and use redis connections separate from the one used by the Laravel Redis and Cache connections. These other connections can be used by Laravel queues and the Laravel session or used for other application specific purposes.
 
 ## Rename the Redis facade alias
 
@@ -150,6 +161,8 @@ Illuminate\Support\Facades\Redis::connection()->ping();
 \ZRedis::connection()->ping();
 
 ## Adding a non default connection
+
+As an aside, the `default` connection above is used by the Laravel `Redis` facade and its underlying `RedisManager` and `Redis` classes by default without requiring the user to pass in the connection explicitly.
 
 These is a connection named `cache` that is not a default connection that we could explicitly used. But since that connection is used as the default connection by the Laravel Cache, lets create a new connection and use it instead:
 

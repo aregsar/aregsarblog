@@ -164,7 +164,9 @@ After:
 
 Now that we updated this default argument to `redis` the `default` setting will select the `redis` store even if the `CACHE_STORE` setting is not provided in the .env file.
 
-The cache store configured by the `default` setting is used by the Laravel cache helper, Cache facade, CacheManager and Cache class methods by default without requiring and explicit cache store name to be passed in.
+The cache store configured by the `default` setting is used by the Laravel cache helper, Cache facade, CacheManager and Cache class methods by default without requiring and explicit cache store name to be passed in to the connection.
+
+### Step 7 - Verify the redis connections in database.php
 
 Within the `redis` store setting there is a driver and connection setting.
 
@@ -188,121 +190,30 @@ The driver setting refers to the `redis` driver section in the `config/database.
 
 The connection setting refers to one of the available redis connections within the `redis` driver section in the `config/database.php` file.
 
-The following steps will verify that these driver and connection settings exist in the `config/database.php`.
+Within the `redis` driver setting array in the `config/database.php` file, there should be a connections named `cache`.
 
-Also we will slightly modify these driver and connection settings to support redis clusters when in production.
+This `cache` connection is the connection that is referred to from the `redis` store in the `config/cache.php` file.
 
-### Step 7 - Verify the redis connections in database.php
-
-There should exist a `redis` setting at the root settings level in `config/database.php` snippet shown below. This is the `redis` driver referred to from the `redis` store in `config/cache.php`.
+The `redis` driver setting at the root settings level in `config/database.php` snippet along with its `cache` connection setting is shown below.
 
 ```php
 'redis' => [
-
-        //this specifies the redis client used by Laravel
-        //By default REDIS_CLUSTER is not specified in the .env file so falls back to using the 'phpredis' value.
-        //the 'phpredis' value requires installing the redis php extension (phpredis.so) extension using: pecl install redis.
-        'client' => env('REDIS_CLIENT', 'phpredis'),
-
-        'options' => [
-            //this setting is only effective when using a managed redis cluster. No impact if redis cluster is not used.
-            //falls back to the 'redis' value since by default the REDIS_CLUSTER setting is not specified in the .env file
-            'cluster' => env('REDIS_CLUSTER', 'redis'),
-            //This setting adds a application specific prefix to the cache keys to distinguish between data from multiple apps using the same redis server
-            //I have commented out the setting as I will use a different redis server per application
-            //'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
-        ],
-
-        'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-        ],
-
         'cache' => [
-            'url' => env('REDIS_URL'),//This setting is not used
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-        ],
-
-    ],
-```
-
-Within the `redis` driver setting array there should be two connections named `default` and `cache`.
-
-The `cache` connection is the connection that is referred to from the `redis` store in the `config/cache.php` file.
-
-At this point we have verified that both the driver and connection settings that we used in `config/cache.php` exist in `config/database.php`.
-
-> Note: We can add additional connection settings in the `redis` setting array of `config/database.php`, each with their own unique name. In fact for scalability reasons we can add and use redis connections separate from the one used by the Laravel redis cache store. These other connections can be used by Laravel queues and the Laravel session.
-
-### Step 8 - Modify the redis connections in database.php
-
-In this step we will configure the redis `cache` connection in the `config/database.php` to use unique prefixes instead of databases.
-
-Make changes to the `cache` and `default` connections of the `redis` driver in `config/database.php` as shown below:
-
-Before:
-
-```php
-'redis' => [
-
-        'default' => [
             'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_DB', '0'),
-        ],
-
-        'cache' => [
-            'url' => env('REDIS_URL'),//This setting is not used
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-            'database' => env('REDIS_CACHE_DB', '1'),
-    ],
-```
-
-After:
-
-```php
-'redis' => [
-     'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
-             //database set to 0 since only database 0 is supported in redis cluster
-            'database' => '0',
-            //redis key prefix for this connection
-            'prefix' => 'd:',
-        ],
-        ],
-        'cache' => [
-            'url' => env('REDIS_URL'),//This setting is not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', '6379'),
             //database set to 0 since only database 0 is supported in redis cluster
-            'database' => '0',
-            //redis key prefix for this connection
-            'prefix' => 'c:',
+            'database' => `0`,
+            //instead add prefix setting to distinguish between connections
+            //prefix not required if using one redis server/cluster host per connection
+            'prefix' => 'c:'
         ],
+
     ],
 ```
 
-In the `cache` connection setting we changed the database setting and added a prefix setting. All keys using this connection will automatically get a `c:` prefix.
-
-> Redis clusters used in production do not support multiple databases so when the connection is used we are automatically namespacing the redis keys with the redis key prefix instead.
-
-We also made the same change to the `default` connection except we use a `d:` prefix for it to distinguish it from the `cache` connection.
-
-> As an aside, the `default` connection above is used by the Laravel `Redis` facade and its underlying `RedisManager` and `Redis` classes by default without requiring the user to pass in the connection explicitly. On the other hand the `redis` connection is used by the Laravel `Cache` facade and cache helper or their underlying CacheManager and Cache classes by default without requiring the user to pass in the connection explicitly.This is because the underlying CacheManager and Cache classes by default use the `default` store (from the config/cache.php file) which is configured to use the `redis` connection. Internally the underlying CacheManager and Cache classes pass this `redis` connection to the RedisManager or Redis classes, which uses it instead of their `default` connection. Generally think of the Redis Facade and RedisManager classes as the low level interface to redis that you can use in your laravel apps and think of the cache helper, Cache facade, CacheManager and Cache classes, when configured with a Redis cache store, as a higher level Redis caching interface that internally uses the low level Redis classes to store cached values in Redis.
+> As an aside, the `cache` connection is used by the Laravel `Cache` facade and cache helper or their underlying CacheManager and Cache classes by default without requiring the user to pass in the connection explicitly.This is because the underlying CacheManager and Cache classes by default use the `default` store (from the config/cache.php file) which is configured to use the `redis` connection. Internally the underlying CacheManager and Cache classes pass this `redis` connection to the RedisManager or Redis classes, which uses it instead of their `default` connection(see configuring Redis post for explanation of the usage of the `default` connection). Generally think of the Redis Facade and RedisManager classes as the low level interface to redis that you can use in your laravel apps and think of the cache helper, Cache facade, CacheManager and Cache classes, when configured with a Redis cache store, as a higher level Redis caching interface that internally uses the low level Redis classes to store cached values in Redis.
 
 ### Step 9 - Use the cache service
 
