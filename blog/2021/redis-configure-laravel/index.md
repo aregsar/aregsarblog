@@ -4,9 +4,9 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I am going to show haow we configure redis for use in Laravel applications.
 
-## Setup
+## Setup a Redis sever docker service
 
-#### Step 7 - Setup the Redis sever docker service
+Lets first setup a Redis server using a Docker compose service, for local development that our application can connect to:
 
 Create a docker-compose.yml file containing the redis docker service.
 
@@ -24,9 +24,9 @@ version: "3.1"
 EOL
 ```
 
-If you already have a docker-compose.yml file in the project root then just add the redis service portion of the above yml code under the services section.
+If you already have a `docker-compose.yml` file in the project root then just add the redis service portion of the above yml code under the services section.
 
-Also create a directory in the Laravel project root to persist the redis data.
+We also need to create a directory in the Laravel project root to persist the redis data.
 
 ```bash
 mkdir -p data/redis
