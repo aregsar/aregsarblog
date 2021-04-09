@@ -188,7 +188,7 @@ cat ~/.config/valet/config.json
 ```json
 {
   "tld": "test",
-  "paths": ["/Users/aregsarkissian/dev"]
+  "paths": ["/Users/aregsarkissian/zdev/laravel"]
 }
 ```
 
@@ -288,6 +288,22 @@ brew install nginx
 sudo brew services start dnsmasq
 sudo brew services start nginx
 ```
+
+Valet is configured by default to route any `<project_name>.test` domain using dnsmasq DNS resolver to the local Nginx server.
+Dnsmasq resolves .test domains to the localhost, which the Nginx server is configured to listen on, while allowing other domains to be resolved to their IP address on the web.
+In its valet configuration file at `~/.config/valet/valet.conf`, Nginx uses the Laravel `project_name` in the domain to pass to `fastcgi_index /Users/aregsarkissian/.composer/vendor/laravel/valet/server.php` php file that uses the valet driver to serve the project by using php to execute the public/index.php file in the project, hence serving the project at that URL.
+
+The snippet below from `~/.composer/vendor/laravel/valet/server.php` shows how the php process `requires` the `index.php` file which is referenced as the $frontControllerPath in the script to execute the code in `index.php`:
+
+```php
+$frontControllerPath = $valetDriver->frontControllerPath(
+    $valetSitePath, $siteName, $uri
+);
+chdir(dirname($frontControllerPath));
+require $frontControllerPath;
+```
+
+Valet configures the project paths including the project name and the `.test` domain in ~/.config/valet/config.json.
 
 ## The valet.conf file
 
