@@ -18,6 +18,8 @@ Laravel requires the php redis extension, to be able to connect to Redis servers
 
 ### Step 1 - Setup the Redis sever docker service
 
+Refer to []() Step 1 to perform this step
+
 > Skip this step if you have already configured the redis docker service for other Laravel components.
 
 Create a docker-compose.yml file containing the redis docker service.
@@ -46,6 +48,8 @@ mkdir -p data/redis
 
 ### Step 2 - Set the connection settings for the docker Redis service
 
+Refer to []() Step 2 to perform this step
+
 > Skip this step if you have already configured the redis docker service for other Laravel components.
 
 Open the project `.env` file and set the connection settings for the docker redis service.
@@ -57,6 +61,10 @@ REDIS_PORT=8002
 ```
 
 The docker-compose.yml file we setup before will use the settings from the .env file.
+
+### Step 3 - Configure the Redis driver
+
+Refer to []() Step 3 to perform this step
 
 ### Step 3 - Renaming the Cache Driver setting in the .env file
 
@@ -168,7 +176,7 @@ At this point our `default` store setting selects the `redis` store that is usin
 
 How that all works will be described after the next section.
 
-### Step 9 - Use the cache service
+### Step 7 - Use the cache service
 
 Startup the docker service
 

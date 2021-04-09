@@ -4,7 +4,13 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I am going to show haow we configure redis for use in Laravel applications.
 
-## Setup a Redis sever docker service
+## Steps to configure
+
+## Installing the redis driver
+
+pecl install --force redis
+
+### Step 1 - Setup a Redis sever docker service
 
 Lets first setup a Redis server using a Docker compose service, for local development that our application can connect to:
 
@@ -32,7 +38,7 @@ We also need to create a directory in the Laravel project root to persist the re
 mkdir -p data/redis
 ```
 
-#### Step 8 - Set the connection settings for the docker Redis service
+### Step 2 - Set the connection settings for the docker Redis service
 
 Open the project `.env` file and set the connection settings for the docker redis service.
 
@@ -44,11 +50,7 @@ REDIS_PORT=8002
 
 The docker-compose.yml file we setup before will use the settings from the .env file.
 
-## Install the redis driver
-
-pecl install --force redis
-
-## Configure the Redis driver
+### Step 3 - Configure the Redis driver
 
 Below I show the before and after settings once we configure the redis driver.
 
