@@ -43,3 +43,135 @@ REDIS_PORT=8002
 ```
 
 The docker-compose.yml file we setup before will use the settings from the .env file.
+
+## Install the redis driver
+
+pecl install --force redis
+
+## Configure the Redis driver
+
+Before:
+
+```php
+'redis' => [
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        ],
+
+        # default connection
+        'default' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        # cache connection
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),#uses different database then 'default' connection
+        ],
+],
+```
+
+After:
+
+```php
+'redis' => [
+        'client' => 'phpredis',
+
+        'options' => [
+        //only impacts clustered redis
+        //tells the framework to use the default clustering capability of a managed Redis server cluster.
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+
+            //if you have one redis server per app then comment out, no need to differentiate redis keys between apps
+            //'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+        ],
+
+        'default' => [
+        'url' => env('REDIS_URL'),
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', '6379'),
+        'database' => `0`,
+        'prefix' => 'r:'
+        ],
+        'cache' => [
+        'url' => env('REDIS_URL'),
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', '6379'),
+        'database' => `0`,
+        'prefix' => 'c:'
+        ],
+
+],
+```
+
+## Rename the Redis facade alias
+
+From
+aliases' => [
+'Redis' => Illuminate\Support\Facades\Redis::class,
+]
+
+To
+aliases' => [
+'ZRedis' => Illuminate\Support\Facades\Redis::class,
+]
+
+## Test the connection
+
+Here also the default connection is used:
+
+Uses the `default` redis driver connection from config/database.php is used:
+Illuminate\Support\Facades\Redis::connection()->ping();
+
+\ZRedis::connection()->ping();
+
+## Adding a non default connection
+
+These is a connection named `cache` that is not a default connection that we could explicitly used. But since that connection is used as the default connection by the Laravel Cache, lets create a new connection and use it instead:
+
+in the config/database.php inside the `redis` driver section, add a new connection named `redis2`:
+
+```php
+'redis2' => [
+'url' => env('REDIS_URL'),
+'host' => env('REDIS_HOST', '127.0.0.1'),
+'password' => env('REDIS_PASSWORD', null),
+'port' => env('REDIS_PORT', '6379'),
+'database' => `0`,
+'prefix' => 'r2:'
+],
+```
+
+It will use the same redis host and port as the other connections,but we will give it its own prefix `r2`:
+
+Now we can explicitly use the `redis2` connection from config/database.php:
+
+Illuminate\Support\Facades\Redis::connection('redis2')->ping();
+
+\ZRedis::connection('redis2')->ping();
+
+## Redis cluser setttings
+
+In order to use a managed cluster you only need to add the line 'cluster' => env('REDIS_CLUSTER', 'redis') to the ‘options’ array in the 'redis' driver in config/database.php shown below:
+
+from
+'options' => [
+'cluster' => env('REDIS_CLUSTER', 'redis'),
+],
+
+to
+'options' => [
+'cluster' => 'redis',
+],
