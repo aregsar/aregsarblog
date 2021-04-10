@@ -105,16 +105,7 @@ After:
 
 Note that I have added a third connection named `session` that we will use for the session driver connection.
 
-### Step 6 - Add a SESSION_CONNECTION setting to the .env file
-
-Add a `SESSION_CONNECTION` setting to select the `session` connection we added in the previous section:
-
-```ini
-#choose the 'session' connection inside the 'redis' driver array in config/database.php
-SESSION_CONNECTION=session
-```
-
-### Step 7 - Update the SESSION_DRIVER setting in the .env file
+### Step 6 - Update the SESSION_DRIVER setting in the .env file
 
 Change the setting in the .env file to select the redis driver
 
@@ -129,6 +120,15 @@ After:
 ```ini
 #choose the 'redis' driver section in config/database.php
 SESSION_DRIVER=redis
+```
+
+### Step 7 - Add a SESSION_CONNECTION setting to the .env file
+
+Add a `SESSION_CONNECTION` setting to select the `session` connection we added in the previous section:
+
+```ini
+#choose the 'session' connection inside the 'redis' driver array in config/database.php
+SESSION_CONNECTION=session
 ```
 
 ### Step 8 - Update the default settings of the session driver and connection
@@ -212,7 +212,7 @@ Open the .env file and add the `SESSION_STORE` setting
 SESSION_STORE=session
 ```
 
-Also open the session.php and update the default parameter of the env() helper
+Also open the `config/session.php` file and update the default parameter of the `store` settings env() helper function.
 
 Before:
 
@@ -228,7 +228,9 @@ After:
     'store' => env('SESSION_STORE', 'session'),
 ```
 
-Now we are telling the framework to override the `session` cache store with the session connection setting in the session.php file.
+Now we are configuring the framework to use the `session` cache store instead of the (hard coded in the framework) `redis` store.
+
+The framework will now override the `session` cache store connection setting with the `session` connection that we configured in the `config/session.php` file in steps 7 and 8.
 
 ## The session lifetime
 
