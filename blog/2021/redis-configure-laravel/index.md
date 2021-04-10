@@ -117,7 +117,7 @@ After:
         'options' => [
             //keep setting to be able to use Redis cluster in production if needed
             'cluster' => 'redis',
-            //Removed prefix setting since using one Redis server per app
+            //Removed prefix setting since we are using one Redis server per app
         ],
 
         'default' => [
@@ -147,40 +147,57 @@ After:
 ],
 ```
 
+The `default` connection is used by default by the Laravel Redis API. and the `cache` connection is used by default (when configured as such) by the Laravel Caching API.
+
 We have configured the `default` and `cache` connections to use unique prefixes instead of separate databases and removed the application specific prefix since we are going to use separate Redis servers per application.
 
 Redis clusters used in production do not support multiple databases so when the connection is used we are automatically namespacing the redis keys with the redis key prefix instead.
 
 > Note: We can add additional connection settings in the `redis` setting array of `config/database.php`, each with their own unique name. In fact for scalability reasons we can add and use redis connections separate from the one used by the Laravel Redis and Cache connections. These other connections can be used by Laravel queues and the Laravel session or used for other application specific purposes.
 
-## Rename the Redis facade alias
+### Step 5 - Rename the Redis facade alias
 
-From
+The redis PHP extension that we added in step one uses a class named `Redis` that conflicts with the laravel facade alias name.
+
+Therefore we need to change the alias name in the `application.php` file aliases array.
+
+I am changing the name from `Redis` to `ZRedis` below:
+
+From:
+
+```php
 aliases' => [
 'Redis' => Illuminate\Support\Facades\Redis::class,
 ]
+```
 
-To
+To:
+
+```php
 aliases' => [
 'ZRedis' => Illuminate\Support\Facades\Redis::class,
 ]
+```
 
 ## Test the connection
 
-Here also the default connection is used:
+From within your application or a Tinker session try the following:
 
-Uses the `default` redis driver connection from config/database.php is used:
+```php
 Illuminate\Support\Facades\Redis::connection()->ping();
 
 \ZRedis::connection()->ping();
+```
+
+Here the default redis connection is used to test connection to the Redis server.
 
 ## Adding a non default connection
 
-As an aside, the `default` connection above is used by the Laravel `Redis` facade and its underlying `RedisManager` and `Redis` classes by default without requiring the user to pass in the connection explicitly.
+The `default` connection is used by the Laravel `Redis` facade and its underlying `RedisManager` and `Redis` classes by default without requiring the user to pass in the connection explicitly.
 
-These is a connection named `cache` that is not a default connection that we could explicitly used. But since that connection is used as the default connection by the Laravel Cache, lets create a new connection and use it instead:
+These is a connection named `cache` that is not the default connection that we could explicitly use. However since that connection is used as the default connection of the Laravel Cache (when configured as such), we will create a new connection and use that instead:
 
-in the config/database.php inside the `redis` driver section, add a new connection named `redis2`:
+In the config/database.php inside the `redis` driver section, add a new connection named `redis2`:
 
 ```php
 'redis2' => [
@@ -193,24 +210,16 @@ in the config/database.php inside the `redis` driver section, add a new connecti
 ],
 ```
 
-It will use the same redis host and port as the other connections,but we will give it its own prefix `r2`:
+This connection usea the same redis host and port as the other connections, but we will give it its own prefix `r2`.
 
-Now we can explicitly use the `redis2` connection from config/database.php:
+If we wanted to scale our connections we could have added and assigned a different REDIS_HOST_2 setting to connect to an entirely separate Redis server.
 
+Now we can explicitly use the `redis2` connection:
+
+```php
 Illuminate\Support\Facades\Redis::connection('redis2')->ping();
 
 \ZRedis::connection('redis2')->ping();
+```
 
-## Redis cluser setttings
-
-In order to use a managed cluster you only need to add the line 'cluster' => env('REDIS_CLUSTER', 'redis') to the ‘options’ array in the 'redis' driver in config/database.php shown below:
-
-from
-'options' => [
-'cluster' => env('REDIS_CLUSTER', 'redis'),
-],
-
-to
-'options' => [
-'cluster' => 'redis',
-],
+Note that we are explicitly passing in the connection name to the connection method to override the default connection.

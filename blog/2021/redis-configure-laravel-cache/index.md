@@ -138,9 +138,11 @@ After:
 
 Now that we updated this default argument to `redis` the `default` setting will select the `redis` store even if the `CACHE_STORE` setting is not provided in the .env file.
 
-At this point our `default` store setting selects the `redis` store that is using a connection named `cache` to connect to the Redis server when we use Laravels API.
+At this point our `default` store setting selects the `redis` store that is using a redis driver connection named `cache` to connect to the Redis server when we use Laravels API.
 
-How that all works will be described after the next section.
+The `cache` connection is configured in the redis driver settings in the config/database.php file which was configured in step 4.
+
+How that all works will be described in the next to last section of this article.
 
 ### Step 9 - Use the cache service
 
