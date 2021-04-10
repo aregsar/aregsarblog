@@ -155,21 +155,15 @@ With these defaults, even if the `SESSION_DRIVER` and `SESSION_CONNECTION` are m
 
 ### Step 9 - Setting up a separate session store
 
-As currently configured the Laravel session infrastructure will by default use a redis store named `redis` from the `stores` array of the cache.php file.
+As currently configured the Laravel session infrastructure will by default use a redis store named `redis` from the `stores` array of the `config/cache.php` file. This `redis` store is typically configured to be used as a redis cache store, hence it is typically configured to use the `cache` connection from `config/database.php`.
 
-It will then override the `connection` setting within that store with the `connection` setting in the `config/session.php` file. This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user.
+It will then override the `connection` setting within that store with the `connection` setting in the `config/session.php` file. This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user. By default the framework overrides the connection by a hard coded `cache` connection, which the `redis` store is already configured to use when using redis for caching.
 
-Also this redis store is typically configured to be used as a redis cache store so using it for the session seems a little hacky.
+The effect of all this is that the session and the cache end up sharing the same redis `cache` connection.
 
-> Note: I am not sure why the framework needs to override the session store connection since the store itself specifies a connection. My guess is it is because the framework by default is using the `redis` cache store which might be getting shared for caching functionality as well that might need to use a different connection.
+However we can change the default behavior of the framework by explicitly selecting a different redis store to use by using the `store` configuration setting in the `config/session.php` file. This separate store can be configured to use the spearate session connection that we added to `config/database.php` for use by the Laravel session.
 
-We can change the default behavior of the framework by explicitly selecting the redis store to use, using the `store` setting in the session.php file.
-
-We can choose to explitly select the `redis` cache store that is already selected by default by the framework.
-
-Or we can choose a separate cache store that we can add to the cache.php file.
-
-I like to create a separate redis store named `session` in the `stores` array of the cache.php file. This way even if someone removes the original `redis` store because it is unused, then the redis session will continue will work.
+So let us create a separate redis store named `session` in the `stores` array of the `config/cache.php` file.
 
 Open the cache.php file and add the `session` store:
 
@@ -197,7 +191,7 @@ After:
                 'connection' => 'cache',
                 'lock_connection' => 'default',
             ],
-        //session redis store used by the framework SessionManager. The connection of this store will be overridden by the SessionManager with the connection specified in the config/session.php file
+        //added session redis store used by the framework SessionManager. The connection of this store will be overridden by the SessionManager with the connection specified in the config/session.php file
         'session' => [
             'driver' => 'redis', //the cache driver that refers to the redis driver in config/database.php
             'connection' => 'session',//the  redis connection setting as specified in the config/database.php file
@@ -206,13 +200,11 @@ After:
     ]
 ```
 
-Note that we set the connection of the `session` cache store to the `session` connection that we added to `database.php`. However this is strictly unnecessary since it will be overridden by the `connection` setting in `session.php` file which also sets the value to the same`session` connection that we added to `database.php`.
-
-We could have just as easily assigned an empty or random string as the value of the `session` cache store connection in `cache.php`, but it is less confusing to set both connection settings to `session`.
-
-I will use the `session` cache store that we added above in the following step.
+Note that we set the connection of the `session` cache store to the `session` connection that we added to `database.php`. However this is strictly unnecessary since it will be overridden by the `connection` setting in `session.php` file which also has the value of `session`.
 
 ### Step 10 - Configuring the session to explicitly use the session cache store
+
+In this steop we will use the `session` cache store that we added in the previous step.
 
 Open the .env file and add the `SESSION_STORE` setting
 
