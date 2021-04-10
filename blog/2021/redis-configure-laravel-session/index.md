@@ -155,11 +155,13 @@ With these defaults, even if the `SESSION_DRIVER` and `SESSION_CONNECTION` are m
 
 ### Step 9 - Setting up a separate session store
 
-As currently configured the Laravel session infrastructure will by default use a redis store named `redis` from the `stores` array of the `config/cache.php` file. This `redis` store is typically configured to be used as a redis cache store, hence it is typically configured to use the `cache` connection from `config/database.php`.
+As currently configured the Laravel session infrastructure will by default uses a redis store named `redis` (hard coded by the Laravel framework) from the `stores` array of the `config/cache.php` file. This `redis` store is typically configured to be used as a redis cache store, hence it is typically configured to use the `cache` connection from `config/database.php`.
 
-It will then override the `connection` setting within that store with the `connection` setting in the `config/session.php` file. This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user. By default the framework overrides the connection by a hard coded `cache` connection, which the `redis` store is already configured to use when using redis for caching.
+It will then override the `connection` setting within that store with the `connection` setting in the `config/session.php` file.
 
-The effect of all this is that the session and the cache end up sharing the same redis `cache` connection.
+The effect of all this is that the session and the cache end up sharing the same `redis` store but with the session overriding the connection of this store.
+
+This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user.
 
 However we can change the default behavior of the framework by explicitly selecting a different redis store to use by using the `store` configuration setting in the `config/session.php` file. This separate store can be configured to use the spearate session connection that we added to `config/database.php` for use by the Laravel session.
 
@@ -259,3 +261,49 @@ The following .env file settings are related to the session cookie.
 Together the driver, connection and cache store specify all that is needed to use a redis server as session store.
 Setting the driver to `redis` specifies the `redis` driver specified in the config/database.php file.
 Setting the connection `session` specifies the `session` connection within the `redis` driver in the config/database.php file.
+
+## Appendix
+
+This appendix shows the Laravel framework version 8 code that hard codes the `redis` store from the config/cache.php nd overrides the selected store connection using the `connection` setting value in config/session.php
+
+[SessionManager.php](https://github.com/laravel/framework/blob/8.x/src/Illuminate/Session/SessionManager.php)
+
+```php
+
+class SessionManager extends Manager
+{
+
+
+    protected function createRedisDriver()
+    {
+        //passes in the hard coded parameter `redis` as the store
+        $handler = $this->createCacheHandler('redis');
+
+        //gets the cache store from the handler
+        //sets the connecton of the store to the `session.connection` configuration
+        //thereby overriding the origially configured connection of the store
+        $handler->getCache()->getStore()->setConnection(
+            $this->config->get('session.connection')
+        );
+
+        return $this->buildSession($handler);
+    }
+
+    protected function createCacheHandler($driver)
+    {
+        //The $driver is actually a store. So it is a misnomer here.
+
+        //uses the hard coded store parameter unless we explicily define the
+        //`session.store` which is actually the store setting in the config/session.php file
+        $store = $this->config->get('session.store') ?: $driver;
+
+        return new CacheBasedSessionHandler(
+            //assuming we have not configured the session.store
+            //gets the cache configuration from the container
+            //clones the default `redis` store from the cache configuration and sets the clone into the handler it is returning
+            clone $this->container->make('cache')->store($store),
+            $this->config->get('session.lifetime')
+        );
+    }
+}
+```
