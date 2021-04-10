@@ -4,7 +4,7 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 In this post I am going to show haow we configure redis for use in Laravel applications.
 
-## Steps to configure
+## Steps to configure Laravel to use Redis
 
 ## Step 1 - Installing the redis driver
 

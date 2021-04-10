@@ -2,59 +2,25 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-## Configuring the session
+## Steps to configure Laravel to use Redis for Session storage
 
-### Step 1 - Setup the Redis sever docker service
+### Step 1 - Install the Laravel Redis driver
 
 Refer to step 1 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
-> Skip this step if you have already configured the redis docker service for other Laravel components.
+### Step 2 - Setup the Redis sever docker service
 
-Create a docker-compose.yml file containing the redis docker service.
+Refer to step 1 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
-```bash
-echo docker-compose.yml << EOL
-version: "3.1"
-  redis:
-    image: redis:alpine
-    container_name: redis
-    command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
-    volumes:
-      - ./data/redis:/data
-    ports:
-      - "${REDIS_PORT}:6379"
-EOL
-```
-
-If you already have a docker-compose.yml file in the project root then just add the redis service portion of the above yml code under the services section.
-
-Also create a directory in the Laravel project root to persist the redis data.
-
-```bash
-mkdir -p data/redis
-```
-
-### Step 2 - Set the connection settings for the docker Redis service
+### Step 3 - Set the connection settings for the docker Redis service
 
 Refer to step 2 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
-> Skip this step if you have already configured the redis docker service for other Laravel components.
+### Step 4 - Configure the Redis driver settings
 
-Open the project `.env` file and set the connection settings for the docker redis service.
+Refer to step 4 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
-```ini
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=123456
-REDIS_PORT=8002
-```
-
-The docker-compose.yml file we setup before will use the settings from the .env file.
-
-### Step 3 - Configure the Redis driver
-
-Refer to step 3 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
-
-### Step 4 - adding a redis connection for the session to database.php
+### Step 5 - adding a redis connection for the session to database.php
 
 Based on the last step we know that there are two existing connections out of the box in the database.php file the `default` connection used by the Laravel Redis API by default and the `cache` connection used by the Laravel Cache API by default (when the default cache store is configured to use the `redis` store that uses this `cache` connection).
 
@@ -64,7 +30,7 @@ This way if we need to scale out our application we can configure this connectio
 
 Below I am showing the database.php file snippet showing the connections within the redis driver connections array before and after adding the redis connection for use by the session.
 
-Although note that the before settings contain the configuration changes that were made in the [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) post.
+Although note that the before settings contain the configuration changes that were made in step 4.
 
 Before:
 
@@ -136,7 +102,7 @@ After:
 
 Note that I have added a third connection named `session`.
 
-### Step 5 - Add a SESSION_CONNECTION setting to the .env file
+### Step 6 - Add a SESSION_CONNECTION setting to the .env file
 
 Add a SESSION_CONNECTION to select the 'session' connection we added in the previous section
 
@@ -145,7 +111,7 @@ Add a SESSION_CONNECTION to select the 'session' connection we added in the prev
 SESSION_CONNECTION=session
 ```
 
-### Step 6 - Update the SESSION_DRIVER setting in the .env file
+### Step 7 - Update the SESSION_DRIVER setting in the .env file
 
 Change the setting in the .env file to select the redis driver
 
@@ -162,7 +128,7 @@ After:
 SESSION_DRIVER=redis
 ```
 
-### Step 7 - Update the default settings of the session driver and connection
+### Step 8 - Update the default settings of the session driver and connection
 
 Change the default parameter of the env() helper to the redis driver and session connection.
 Before:
@@ -183,7 +149,7 @@ After:
 
 Now if the SESSION_DRIVER and SESSION_CONNECTION are missing from the .env file the redis session connection will be selected.
 
-### Step 8 - Setting up a separate session store
+### Step 9 - Setting up a separate session store
 
 As currently configured the Laravel session infrastructure will by default use a redis store named `redis` from the `stores` array of the cache.php file.
 
@@ -242,7 +208,7 @@ We could have just as easily assigned an empty or random string as the value of 
 
 I will use the `session` cache store that we added above in the following step.
 
-### Step 9 - Configuring the session to explicitly use the session cache store
+### Step 10 - Configuring the session to explicitly use the session cache store
 
 Open the .env file and add the `SESSION_STORE` setting
 

@@ -14,7 +14,13 @@ Prior to following the steps in this post make sure to have the php redis extens
 
 Laravel requires the php redis extension, to be able to connect to Redis servers.
 
-## Steps to setup a redis cache store for Laravel
+## Steps to configure Laravel to use Redis for Caching
+
+The steps in the following sections will first configure a redis service using docker and redis driver and driver connections to connect to the docker redis service.
+
+Then we will configure the Laravel cache configuration to use the redis cache store as its default cache store, instead of using files which is the out of the box default.
+
+The configured default cache store will be configured to use the connection that was configured in the first steps.
 
 ### Step 1 - Install the Laravel Redis driver
 
@@ -96,7 +102,7 @@ After:
     ]
 ```
 
-### Step 7 - Updating the CACHE_STORE setting to use Redis
+### Step 7 - Updating the CACHE_STORE setting to use the redis store
 
 Update the `CACHE_STORE` setting in the .env file to `redis`.
 
