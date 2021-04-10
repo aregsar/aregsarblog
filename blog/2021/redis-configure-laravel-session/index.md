@@ -22,15 +22,17 @@ Refer to step 4 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis
 
 ### Step 5 - adding a redis connection for the session to database.php
 
-Based on the last step we know that there are two existing connections out of the box in the database.php file the `default` connection used by the Laravel Redis API by default and the `cache` connection used by the Laravel Cache API by default (when the default cache store is configured to use the `redis` store that uses this `cache` connection).
+Based on the last step we know that there are two existing connections out of the box in the `config/database.php` file.
 
-While we can configure the session to use one of these two existing redis connections in the database.php file, it is better to create a separate connection just for the session.
+One is the `default` connection used by the Laravel Redis API by default and the other is the `cache` connection used by the Laravel Cache API by default (since the `default` cache store is configured to use the `redis` store that uses this `cache` connection).
 
-This way if we need to scale out our application we can configure this connection to use it own separate Redis server.
+While we can configure the session to use one of these two existing redis driver connections from the `config/database.php` file, it is better to create a separate connection just for the session.
 
-Below I am showing the database.php file snippet showing the connections within the redis driver connections array before and after adding the redis connection for use by the session.
+This way if we need to scale out our application we can configure this connection to use its own separate Redis server.
 
-Although note that the before settings contain the configuration changes that were made in step 4.
+Below I am showing the `config/database.php` file snippet showing the connections within the redis driver connections array before and after adding the connection for use by the session.
+
+Note that the before settings contain the configuration changes that were made in step 4.
 
 Before:
 
@@ -86,6 +88,7 @@ After:
             //redis key prefix for this connection
             'prefix' => 'c:',
         ],
+        //we added this connection specifically for use as the redis session connection
          'session' => [
             'url' => env('REDIS_URL'),//This setting is not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -100,11 +103,11 @@ After:
     ],
 ```
 
-Note that I have added a third connection named `session`.
+Note that I have added a third connection named `session` that we will use for the session driver connection.
 
 ### Step 6 - Add a SESSION_CONNECTION setting to the .env file
 
-Add a SESSION_CONNECTION to select the 'session' connection we added in the previous section
+Add a `SESSION_CONNECTION` setting to select the `session` connection we added in the previous section:
 
 ```ini
 #choose the 'session' connection inside the 'redis' driver array in config/database.php
@@ -130,7 +133,8 @@ SESSION_DRIVER=redis
 
 ### Step 8 - Update the default settings of the session driver and connection
 
-Change the default parameter of the env() helper to the redis driver and session connection.
+Change the default parameter of the `driver` and `connection` env() helper functions to `redis` driver and `session` connection respectively.
+
 Before:
 
 ```php
@@ -147,13 +151,13 @@ After:
     'connection' => env('SESSION_CONNECTION', 'session'),
 ```
 
-Now if the SESSION_DRIVER and SESSION_CONNECTION are missing from the .env file the redis session connection will be selected.
+With these defaults, even if the `SESSION_DRIVER` and `SESSION_CONNECTION` are missing from the .env file the redis session connection will be selected.
 
 ### Step 9 - Setting up a separate session store
 
 As currently configured the Laravel session infrastructure will by default use a redis store named `redis` from the `stores` array of the cache.php file.
 
-It will then override the `connection` setting within that store with the `connection` setting in the session.php file. This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user.
+It will then override the `connection` setting within that store with the `connection` setting in the `config/session.php` file. This behavior is hard coded in the framework SessionHandler and is opaque and confusing to a user.
 
 Also this redis store is typically configured to be used as a redis cache store so using it for the session seems a little hacky.
 
