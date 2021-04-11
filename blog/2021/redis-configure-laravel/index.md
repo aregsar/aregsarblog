@@ -6,7 +6,7 @@ In this post I am going to show haow we configure redis for use in Laravel appli
 
 ## Steps to configure Laravel to use Redis
 
-## Step 1 - Installing the redis driver
+### Step 1 - Installing the redis driver
 
 First thing we need to do is to make sure we have the redis php extension installed.
 

@@ -2,6 +2,51 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+## Installing the redis driver
+
+### Step 2 - Setup a Redis sever docker service
+
+Lets first setup a Redis server using a Docker compose service, for local development that our application can connect to:
+
+Create a docker-compose.yml file containing the redis docker service.
+
+```bash
+echo docker-compose.yml << EOL
+version: "3.1"
+services:
+    redis:
+        image: redis:alpine
+        container_name: redis
+        command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+        volumes:
+        - ./data/redis:/data
+        ports:
+        - "${REDIS_PORT}:6379"
+EOL
+```
+
+If you already have a `docker-compose.yml` file in the project root then just add the redis service portion of the above yml code under the services section.
+
+We also need to create a directory in the Laravel project root to persist the redis data.
+
+```bash
+mkdir -p data/redis
+```
+
+### Step 3 - Set the connection settings for the docker Redis service
+
+Open the project `.env` file and set the connection settings for the docker redis service.
+
+```ini
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=123456
+REDIS_PORT=8002
+```
+
+The docker-compose.yml file we setup before will use the settings from the .env file.
+
+## XXXXXXX
+
 This tutorial shows how to quickly setup a mailhog docker service for local email delivery testing in your Laravel project.
 
 The only prerequisite is to have docker installed.
