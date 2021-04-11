@@ -62,17 +62,17 @@ The docker-compose.yml file we setup before will use the settings from the .env 
 
 Connect to the mysql server using a database management tool and create a database named the same as the DB_DATABASE setting value.
 
-## The MySQL connection configuration
+## The MySQL default connection configuration
 
-The default database driver configuration is already configured to use mysql as a fallback and uses the DB_CONNECTION that was set to mysql in the previous section.
+The default database driver configuration is already configured to use mysql as a fallback and uses the `DB_CONNECTION` that was set to mysql in the previous section.
 
-This is declared at the root level in then config/database.php file
+Here is the default connection declared at the root level in then `config/database.php` file
 
 ```php
 'default' => env('DB_CONNECTION', 'mysql'),
 ```
 
-The default connection setting selects the `mysql` connection which is declared in the connections array at the root level in the config/database.php file shown below:
+The default connection setting selects the `mysql` connection which is declared in the connections array at the root level in the `config/database.php` file shown below:
 
 ```php
     'connections' => [
@@ -101,9 +101,11 @@ The default connection setting selects the `mysql` connection which is declared 
 
 We dont need any additional configuration to connect to the default mysql configuration.
 
-## Adding additional MySQL configurations
+## Adding additional MySQL connections
 
 We can add additional database connections in the `connections` array.
+
+These connections can be used as non default connections by explicitly pass in the name of a non default connection name to the Laravel Eloquent and Query Builder APIs.
 
 Below I show a new connection I added named mysql2:
 
@@ -137,3 +139,31 @@ The only change I made to this connection is I am using a DB_DATABASE_2 .env fil
 This will make this connection use the same mysql server that is running as a docker service but use a different database.
 
 If you want to use the connection to connect to a separate server, then you would need to add another mysql docker service mapped to a different port on your host machine. Then add a separate DB_PORT_2 parameter to connect to the this mapped port.
+
+## Connecting to MySQL using non default connections
+
+Instead of using the default database connection, you can explicitly pass in the name of a non default connection to the Laravel Schema, Eloquent and Query Builder APIs.
+
+Below I have listed some examples of using the connection from the previous step to connect to the database that are from [laravel-multiple-database-connections](https://fideloper.com/laravel-multiple-database-connections) article by
+
+```php
+//use in migrations
+Schema::connection('mysql2')->create('some_table', function($table)
+{
+    $table->increments('id'):
+});
+
+//use with schemabuilder
+$users = DB::connection('mysql2')->select(...);
+
+//set and use on a eloquent model
+someModel = new SomeModel;
+$someModel->setConnection('mysql2');
+$something = $someModel->find(1);
+
+//configure a eloquent model to override the default connection
+class SomeModel extends Eloquent
+{
+    protected $connection = 'mysql2';
+}
+```
