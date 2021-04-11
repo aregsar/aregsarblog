@@ -27,14 +27,15 @@ Create a docker-compose.yml file containing the redis docker service.
 ```bash
 echo docker-compose.yml << EOL
 version: "3.1"
-  redis:
-    image: redis:alpine
-    container_name: redis
-    command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
-    volumes:
-      - ./data/redis:/data
-    ports:
-      - "${REDIS_PORT}:6379"
+services:
+    redis:
+        image: redis:alpine
+        container_name: redis
+        command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD}"
+        volumes:
+        - ./data/redis:/data
+        ports:
+        - "${REDIS_PORT}:6379"
 EOL
 ```
 

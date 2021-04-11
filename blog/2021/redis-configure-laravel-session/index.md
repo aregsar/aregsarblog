@@ -272,8 +272,6 @@ This appendix shows the Laravel framework version 8 code that hard codes the `re
 
 class SessionManager extends Manager
 {
-
-
     protected function createRedisDriver()
     {
         //passes in the hard coded parameter `redis` as the store
@@ -291,16 +289,18 @@ class SessionManager extends Manager
 
     protected function createCacheHandler($driver)
     {
-        //The $driver is actually a store. So it is a misnomer here.
+        //The $driver is actually a store. So it is a misnamed.
 
-        //uses the hard coded store parameter unless we explicily define the
-        //`session.store` which is actually the store setting in the config/session.php file
+        // unless we explicily define the
+        //`session.store` (which is the store setting in the config/session.php file)
+        //$store is set to  the hard coded 'redis' parameter passed in via $driver
         $store = $this->config->get('session.store') ?: $driver;
 
         return new CacheBasedSessionHandler(
-            //assuming we have not configured the session.store
-            //gets the cache configuration from the container
-            //clones the default `redis` store from the cache configuration and sets the clone into the handler it is returning
+            //gets the cache from the container
+            //assuming we have not configured the session.store,
+            //sets the cache store to the 'redis' store
+            //clones the cache and sets the clone into the handler it is returning
             clone $this->container->make('cache')->store($store),
             $this->config->get('session.lifetime')
         );
