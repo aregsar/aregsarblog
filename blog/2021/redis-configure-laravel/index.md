@@ -2,13 +2,17 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-In this post I am going to show haow we configure redis for use in Laravel applications.
+In this post we will configure Laravel to use a Redis server running in a local docker container.
 
 ## Steps to configure Laravel to use Redis
 
+To start, go to the root of your Laravel project then follow steps below:
+
 ### Step 1 - Installing the redis driver
 
-First thing we need to do is to make sure we have the redis php extension installed.
+Laravel requires the php redis extension, to be able to connect to Redis servers.
+
+So the first thing we need to do is to make sure we have the redis php extension installed.
 
 ```bash
 pecl install --force redis
@@ -16,7 +20,7 @@ pecl install --force redis
 
 You will have to install this extension once for each version of PHP that you use.
 
-For full details on using PECL to install PHP extensions see []()
+For full details on using PECL to install PHP extensions see: [Installing PHP Extensions on MacOS](https://aregsar.com/blog/2021/installing-php-extensions-on-macos)
 
 ### Step 2 - Setup a Redis sever docker service
 

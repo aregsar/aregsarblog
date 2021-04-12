@@ -2,13 +2,13 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-## Configuring Laravel to use a local mail server
-
 This post will detail how to setup a mailhog email server docker service for local email delivery testing in your Laravel project.
 
-The mailhog server will also expose an http endpoint that shows a dashboard where you can view and manage emails sent to the mailhog server.
+The mailhog server will also expose an http endpoint that shows a dashboard where you can view and manage emails sent to the mailhog server
 
-To start go to the root of your Laravel project. Then follow steps below:
+## Steps to configure Laravel to use a local mail server
+
+To start, go to the root of your Laravel project then follow steps below:
 
 ### Step 1 - Setup a Redis sever docker service
 

@@ -4,6 +4,10 @@ January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
 ## Steps to configure Laravel to use MySQL
 
+In this post we will configure Laravel to use a MySQL server running in a local docker container.
+
+To start, go to the root of your Laravel project then follow steps below:
+
 ### Step 1 - Setup a MySQL sever docker service
 
 Lets first setup a MySQL server using a Docker compose service, for local development that our application can connect to:

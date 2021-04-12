@@ -2,25 +2,13 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
-In this post I will detail the steps to take to configure the Laravel caching API to use a Redis server instead of the default file based caching that comes out of the box.
+In this post I will detail the steps to take to configure the Laravel caching API to use a Redis server running in a local docker for caching data development.
 
-In addition the steps include setting up a local docker Redis server for development and configuration modification for use with Redis cluster servers in production.
+Out of the box Laravel use file based caching by default.
 
-Finally there will be some explanations along the way of how configuration works under the hood with the Laravel Redis and Cache API.
+## Steps to configure Laravel to use Redis for caching
 
-Prior to following the steps in this post make sure to have the php redis extension installed as detailed in the php redis installation section of the following post:
-
-[Installing PHP Extensions on MacOS](https://aregsar.com/blog/2021/installing-php-extensions-on-macos)
-
-Laravel requires the php redis extension, to be able to connect to Redis servers.
-
-## Steps to configure Laravel to use Redis for Caching
-
-The steps in the following sections will first configure a redis service using docker and redis driver and driver connections to connect to the docker redis service.
-
-Then we will configure the Laravel cache configuration to use the redis cache store as its default cache store, instead of using files which is the out of the box default.
-
-The configured default cache store will be configured to use the connection that was configured in the first steps.
+To start, go to the root of your Laravel project then follow steps below:
 
 ### Step 1 - Install the Laravel Redis driver
 
