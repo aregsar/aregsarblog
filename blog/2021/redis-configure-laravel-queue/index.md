@@ -94,7 +94,7 @@ After:
             //redis key prefix for this connection
             'prefix' => 'c:',
         ],
-        //we added this connection specifically for use as the redis session connection
+        //we added this connection specifically for use as the redis queue connection
          'queue' => [
             'url' => env('REDIS_URL'),//This setting is not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -170,6 +170,62 @@ After:
     ],
 ```
 
+### Stop X - use the redis queue
+
+## Anatomy of queue connections
+
+I have annotated the configurations so you can see how the overall connection settings work together to establish a connection from the application to the Redis server used as the queue.
+
+```ini
+#set to default connection in config/queue.php
+QUEUE_CONNECTION=redis
+```
+
+config/queue.php
+
+```php
+//set 'redis' from QUEUE_CONNECTION in .env
+//so selects the 'redis' connection from  'connections' array below
+ 'default' => env('QUEUE_CONNECTION', 'sync'),
+ 'connections' => [
+        'sync' => [
+            'driver' => 'sync',
+        ],
+        //the 'redis' connection selected by the 'default' setting above
+        'redis' => [
+            //the driver is set to 'redis' that refers to the 'redis' driver in config/database.php
+            'driver' => 'redis',
+            //connection refers to the 'queue' connection of the 'redis' driver in config/database.php
+            'connection' => 'queue',
+            //name of the queue we are accessing. Set to 'default' to represent a default queue
+            //the value is used as the redis key prefix to distinquish between queues for all queue connections that use the same redis connection from config/database.php
+            'queue' => 'default',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+    ],
+```
+
+In config/database.php
+
+```php
+
+//the redis driver that is referenced by the 'driver'=>'redis'setting of queue connections in config/queue.php.
+'redis' => [
+    //the redis connection named 'queue' that is referenced by the queue connection named 'redis' in the config/queue.php file
+    'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'q:',
+        ],
+    ],
+```
+
 ## How the default queue connection works
 
 The Laravel queue api by default uses the `default` connection setting declared at the root level in config/queue.php to select one of the many connections declared in the `connections` array also declared at the root of the file.
@@ -185,3 +241,116 @@ The `redis` queue connection itself specifies a `connection` setting that should
 ## Additional no default queue connections
 
 By default the Laravel queue methods use the default queue connection. However we can add more redis queue connections in queue.php file that can be explicitly passed by name to the Laravel queue methods to select a different queue to use to dispatch a job, instead of the default one.
+
+Lets add a new queue connection:
+
+```php
+ 'connections' => [
+        'sync' => [
+            'driver' => 'sync',
+        ],
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'queue',
+            'queue' => 'default',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+         'redis2' => [
+            'driver' => 'redis',
+            'connection' => 'queue',
+            'queue' => 'default',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+
+    ],
+```
+
+As you can see we added a `redis2` connection that has all the same settings of the `redis` connnection.
+
+Now we can explicitly pass the name to the Laravel Queue facade like so: `Queue::connection('redis2')->dispatch($job);`.
+
+Since both connections use the same settings,this will write to the same redis server using then same redis key prefix of `default`. Remember that the queue name `default` becomes the redis key prefix.
+
+The Laravel methods will allow you to ovveride the queue name (the redis prefix) to write to different redis queues. But we can explicitlt set a different name to the `queue` setting of the `redis2` connection so we only need to specify the connection name:
+
+We can change the name to sparate out the two queues:
+
+```php
+ 'connections' => [
+
+         'redis2' => [
+            'driver' => 'redis',
+            'connection' => 'queue',
+            'queue' => 'default2',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+    ],
+```
+
+Now the connection will use a `default2` as the prefix.
+
+## Using separate Redis connections
+
+In the previous section we created a new queue connection in queue.php that uses the same redis connection from database.php.
+
+If we wanted to scale out our queues so that each queue connection uses its individual redis connection all we need is to add a new redis commections and point one of the queue connections to this new redis connection
+
+First lets add a queue2 connction to database.php.
+
+```php
+ 'redis' => [
+    'queue' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'q:',
+        ],
+    'queue2' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST_2', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => '0',
+            //redis key prefix for this connection
+            'prefix' => 'q:',
+        ],
+    ],
+```
+
+Note that the queue2 connection also uses a REDIS_HOST_2 otherwise both connections would point to the same server which would defeat the purpose of scaling out.
+
+The `q`: prefix allows us to distingush between keys on the same Redis server that may have been written by the redis cache or session, if the server is also used for those purposes.
+
+Now we can refer to queue2 redis connection from the redis2 queue connection
+
+```php
+ 'connections' => [
+         'redis2' => [
+            'driver' => 'redis',
+            'connection' => 'queue',
+            'queue' => 'default',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+         'redis2' => [
+            'driver' => 'redis',
+            'connection' => 'queue2',
+            'queue' => 'default',
+            'retry_after' => 90,
+            'block_for' => null,
+            'after_commit' => false,
+        ],
+    ],
+```
+
+Note that I am using the queue name setting of 'queue' => 'default' for both queue connections. Since we are using two separate redis connections there will be no conflict between the queue names.
