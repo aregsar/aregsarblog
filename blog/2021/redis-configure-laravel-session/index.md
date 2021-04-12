@@ -254,15 +254,54 @@ SESSION_LIFETIME=120
 
 ## The session cookie settings
 
-Even though we have not configures the application to use cookie sessions for storing our session data, The session itself uses cookies to persist the session across requests.
+Even though we have not configures the application to use cookie sessions for storing our session data, The session itself uses cookies to persist the session id across requests.
 
-The following .env file settings are related to the session cookie.
+The following `config/session.php` file settings are related to the session cookie.
 
-```ini
+```php
 
-
+         //the name of the session cookie
+        'cookie' => env('SESSION_COOKIE',Str::slug(env('APP_NAME', 'laravel'), '_').'_session',
+        //session does not expire when browser tab is closed
+        'expire_on_close' => false,
+        //cookie domain is not specified
+         'domain' => env('SESSION_DOMAIN', null),
+         //cookie path starts from root
+        'path' => '/',
+        //send cookies over HTTPS
+         'secure' => env('SESSION_SECURE_COOKIE'),
+         //sedn cookies over HTTP protocol only
+         'http_only' => true,
+         //security policy
+         'same_site' => 'lax',
 
 ```
+
+To make sure we always use secure cookies in production change from
+
+```php
+ 'secure' => env('SESSION_SECURE_COOKIE'),
+```
+
+To
+
+```php
+ 'secure' => env('SESSION_SECURE_COOKIE', true),
+```
+
+And Add the following in .env
+
+change
+
+```ini
+SESSION_SECURE_COOKIE=false
+```
+
+This way even if we forget to include SESSION_SECURE_COOKIE in production .env file we will be protected.
+
+Also if we serve multiple domains and want to limit the session cookie only to one of them we can add SESSION_DOMAIN to our production .env file and set its value to the domain name.
+
+Finally we can add SESSION_COOKIE to the .env file if we want to set a custom cookie name.
 
 ## Takeaway
 
