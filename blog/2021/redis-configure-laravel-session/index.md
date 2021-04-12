@@ -28,7 +28,7 @@ Refer to step 2 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis
 
 Refer to step 4 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
-### Step 5 - adding a redis connection for the session to database.php
+### Step 5 - adding a redis connection for the session
 
 Based on the last step we know that there are two existing connections out of the box in the `config/database.php` file.
 
