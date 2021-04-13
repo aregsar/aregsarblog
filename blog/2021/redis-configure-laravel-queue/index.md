@@ -128,7 +128,7 @@ QUEUE_CONNECTION=redis
 
 Configured this way, the `QUEUE_CONNECTION` will select the `redis` queue connection declared in the `connections` array in the `config/queue.php` file shown in the next step.
 
-### Step 7 - Modify the configuration in config/queue.php
+### Step 7 - Modify the queue configuration
 
 Configure the Laravel queue connection in `config/queue.php` to use the redis driver `queue` connection that we added to `config/database.php` in step 5.
 
@@ -142,6 +142,7 @@ Before:
         ],
         'redis' => [
             'driver' => 'redis',
+            //uses the outof the box 'default' redis driver connection from config/database.php
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
@@ -155,14 +156,21 @@ Before:
 After:
 
 ```php
+ //this is the default queue connection that refers to the 'redis' queue connection in the `connections` array below
+ //becuase we configured QUEUE_CONNECTION=redis
  'default' => env('QUEUE_CONNECTION', 'sync'),
  'connections' => [
         'sync' => [
             'driver' => 'sync',
         ],
+        //this is the out of the box queue connection named redis
         'redis' => [
             'driver' => 'redis',
+            //This is the redis driver connection we added to config/database.php
             'connection' => 'queue',
+            //This queue connection also has a default implicit queue name that is named 'default'.
+            //It can be overriden by explicitly passing a queue name using the Laravel queue API.
+            //the value is appended as a key prefix to the key for the item placed in the queue
             'queue' => 'default',
             'retry_after' => 90,
             'block_for' => null,
@@ -171,7 +179,7 @@ After:
     ],
 ```
 
-### Stop X - use the redis queue
+### Step 8 - Use the redis queue
 
 ## Anatomy of queue connections
 
@@ -239,7 +247,7 @@ The `redis` queue connection itself specifies a `connection` setting that should
 
 > If the connection descriptions become confusing, think of the connections in the connections array of queue.php as high level queue connections that the Laravel application can use. And think of the redis connections in the database.php file as low level connections to the Redis server that can be used by the high level queue connections by connecting to the low level connection using the queue connections internal connection setting.
 
-## Additional no default queue connections
+## Additional non default queue connections
 
 By default the Laravel queue methods use the default queue connection. However we can add more redis queue connections in queue.php file that can be explicitly passed by name to the Laravel queue methods to select a different queue to use to dispatch a job, instead of the default one.
 
@@ -355,3 +363,40 @@ Now we can refer to queue2 redis connection from the redis2 queue connection
 ```
 
 Note that I am using the queue name setting of 'queue' => 'default' for both queue connections. Since we are using two separate redis connections there will be no conflict between the queue names.
+
+## Using the queue
+
+Examples of using the queue with the Queue facade and with Job classes
+
+1-Using the default queue connection 'redis' with its default queue 'default'
+Queue::push(new InvoiceEmail($order));
+PodcastJob::dispatch($podcast);
+
+2-Overriding the the default queue connection's 'default' queue
+
+//push on the 'email' queue instead of the default 'default' queue
+Queue::pushOn('email', new InvoiceEmail($order));
+PodcastJob::dispatch($podcast)->onQueue('email');
+
+Note: the overriding queue name can be passed in on the fly. We don't need to have a queue named 'email' defined anywhere.
+
+3-Overriding the default queue connection with the 'redis2' connection
+//the connection in this context refers to the queue connection from config/queue.php (not the underlying redis connection in config/database.php)
+
+//use the redis2 connection
+$connection = Queue::connection('redis2')->push(new InvoiceEmail($order));
+PodcastJob::dispatch($podcast)->onConnection('redis2');
+
+4-Overriding the defaut queue connection with 'redis2' and overriding the default queue of the 'redis2' connection
+$connection = Queue::connection('redis2')->pushOn('email', new InvoiceEmail($order));
+PodcastJob::dispatch($podcast)->onConnection('redis2')->onQueue('podcasts');
+
+Explicit overriding in Job class:
+class WelcomeEmailJob implements App\Jobs\ShouldQueue
+{
+//The queue connection that should handle the job.
+//this refers to the queue connection from config/queue.php (not the underlying redis connection in config/database.php)
+public $connection = 'redis2';
+}
+
+php artisan queue:work --tries=3
