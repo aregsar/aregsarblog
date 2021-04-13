@@ -47,8 +47,13 @@ If you already have a `docker-compose.yml` file in the project root then just ad
 
 We also need to create a directory in the Laravel project root to persist the redis data.
 
+If a directory named `data` does not exist in the root of the project, run the following:
+
 ```bash
-mkdir -p data/redis
+# make sure git ignores the data directory
+echo '/data' >> .gitignore
+mkdir data
+#mkdir -p data/mysql
 ```
 
 ### Step 3 - Set the connection settings for the docker Redis service
@@ -189,12 +194,23 @@ aliases' => [
 From within your application or a Tinker session try the following:
 
 ```php
+php artisan tinker
+//use the facade
+//test the 'default' connection
 Illuminate\Support\Facades\Redis::connection()->ping();
+//test the 'default' connection passing it explicitly
+Illuminate\Support\Facades\Redis::connection("default")->ping();
+//test the 'cache' connection
+Illuminate\Support\Facades\Redis::connection("cache")->ping();
 
+//use the facade alias
+//test the 'default' connection
 \ZRedis::connection()->ping();
+//test the 'default' connection passing it explicitly
+\ZRedis::connection("default")->ping();
+//test the 'cache' connection
+\ZRedis::connection("cache")->ping();
 ```
-
-Here the default redis connection is used to test connection to the Redis server.
 
 ## Adding a non default connection
 

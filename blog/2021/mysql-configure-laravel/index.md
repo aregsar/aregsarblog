@@ -39,13 +39,16 @@ If you already have a `docker-compose.yml` file in the project root then just ad
 
 We also need to create a directory in the Laravel project root to persist the mysql data.
 
+If a directory named `data` does not exist in the root of the project, run the following:
+
 ```bash
-mkdir -p data/mysql
+# make sure git ignores the data directory
+echo '/data' >> .gitignore
+mkdir data
+#mkdir -p data/mysql
 ```
 
 The ./data/mysql volume will be created within the Laravel project directory that contains the docket-compose.yml file when we run the docker-compose up -d command.
-
-So add the ./data directory to your .gitignore file
 
 ### Step 2 - Set the connection settings for the docker MySQL service
 
@@ -144,6 +147,16 @@ This will make this connection use the same mysql server that is running as a do
 
 If you want to use the connection to connect to a separate server, then you would need to add another mysql docker service mapped to a different port on your host machine. Then add a separate DB_PORT_2 parameter to connect to the this mapped port.
 
+## Testing the connection
+
+```php
+php artisan tinker
+//use the default connection
+DB::connection()->getPdo();
+//use the connection explicitly
+DB::connection("mysql")->getPdo();
+```
+
 ## Connecting to MySQL using non default connections
 
 Instead of using the default database connection, you can explicitly pass in the name of a non default connection to the Laravel Schema, Eloquent and Query Builder APIs.
@@ -151,17 +164,20 @@ Instead of using the default database connection, you can explicitly pass in the
 Below I have listed some examples of using the connection from the previous step to connect to the database that are from [laravel-multiple-database-connections](https://fideloper.com/laravel-multiple-database-connections) article by
 
 ```php
+//test the non default connection
+DB::connection("mysql2")->getPdo();
+
+//use with schemabuilder
+$users = DB::connection('mysql2')->select(...);
+
 //use in migrations
 Schema::connection('mysql2')->create('some_table', function($table)
 {
     $table->increments('id'):
 });
 
-//use with schemabuilder
-$users = DB::connection('mysql2')->select(...);
-
 //set and use on a eloquent model
-someModel = new SomeModel;
+$someModel = new SomeModel;
 $someModel->setConnection('mysql2');
 $something = $someModel->find(1);
 
