@@ -371,7 +371,45 @@ class WelcomeEmailJob implements App\Jobs\ShouldQueue
 public $connection = 'redis2';
 }
 
+## Running workers to process queued jobs
+
+We can use the artisan queue:work command to run a single daemon process called a worker to retrieve job items from the queue and process them by calling the handle method of the job.
+
+```bash
+php artisan queue:work
+```
+
+Each time we call this command a new daemon process is run to process queue items. So calling it once will run a single worker and calling it twice will run to workers.
+
+By default the worker will process use the default queue connection and use the default queue name of that connection.
+
+Here is an example of running a worker process that uses the non default redis2 connection and also overrides the `default2` queue name with the queue name `emails`
+
+```bash
+php artisan queue:work --connection=redis2 --queueName=emails
+```
+
+We can tell each worker we run, how many times it can retry processing a queued job if the job fails:
+
+```bash
 php artisan queue:work --tries=3
+```
+
+In development we can use queue:listen instead of queue:work.
+
+```bash
+php artisan queue:listen
+```
+
+When we use queue:listen, the worker process recycles the code after each queue item it processes, so that any code changes we make are picked up the next time it processes an item.
+
+The queue:work run worker on the underhand remains in memory for efficiancy in production environments so we would need to reload it after every code change using the command below:
+
+```bash
+php artisan queue:reload
+```
+
+In production we can launch multiple instances of a worker by using a program called supervidored. This program has a configiration file where you can set the number of worker processes and the queue:work command.
 
 ## How the default queue connection works
 
