@@ -16,29 +16,29 @@ Refer to step 1 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis
 
 ### Step 2 - Setup the Redis sever docker service
 
-Refer to step 1 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
+Refer to step 2 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
 ### Step 3 - Set the connection settings for the docker Redis service
 
-Refer to step 2 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
+Refer to step 3 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
 ### Step 4 - Configure the Redis driver settings
 
 Refer to step 4 in [Redis Configure Laravel](https://aregsar.com/blog/2021/redis-configure-laravel) to perform this step
 
-### Step 5 - adding a redis connection for the session
+### Step 5 - Add a redis driver connection
 
 Based on the last step we know that there are two existing connections out of the box in the `config/database.php` file.
 
-One is the `default` connection used by the Laravel Redis API by default and the other is the `cache` connection used by the Laravel Cache API by default (since the `default` cache store is configured to use the `redis` store that uses this `cache` connection).
+One is the `default` connection used by the Laravel Redis API by default. The other is the `cache` connection used by the Laravel Cache API by default (since the `default` cache store is configured to use the `redis` store that uses this `cache` connection).
 
-While we can configure the queue to use one of these two existing redis driver connections from the `config/database.php` file, it is better to create a separate connection just for the queue.
+While we can configure the Laravel Queue APIto use one of these two existing redis driver connections from the `config/database.php` file, it is better to create a separate redis driver connection just for the queue.
 
 This way if we need to scale out our application we can configure this connection to use its own separate Redis server.
 
-Below I am showing the `config/database.php` file snippet showing the connections within the redis driver connections array before and after adding the connection for use by the queue.
+Below I am showing the `config/database.php` file snippet that shows the connections within the `redis` driver connections array, before and after adding the new redis connection named `queue`.
 
-Note that the before settings contain the configuration changes that were made in step 4.
+Note that the before settings already contain the configuration changes that were made in step 4.
 
 Before:
 
@@ -83,7 +83,6 @@ After:
             //redis key prefix for this connection
             'prefix' => 'd:',
         ],
-
         'cache' => [
             'url' => env('REDIS_URL'),//This setting is not used
             'host' => env('REDIS_HOST', '127.0.0.1'),
@@ -109,9 +108,13 @@ After:
     ],
 ```
 
-Note that I have added a third connection named `queue` that we will use for the session driver connection.
+Note that I have added a third redis driver connection named `queue` that will be the connection used by the Laravel queue connection.
 
-### Step 6 - Configure the default queue connection to use redis
+Don't confuse the redis driver connection we added in the `config/database.php` file with the queue connection in the `config/queue.php` file that will use the redis driver connection.
+
+The following steps detail the queue connection configuration.
+
+### Step 6 - Configure the default queue connection
 
 ```ini
 QUEUE_CONNECTION=sync
@@ -123,13 +126,11 @@ After:
 QUEUE_CONNECTION=redis
 ```
 
-Now the QUEUE_CONNECTION will select the `redis` queue connection declared in the `connections` array in the config/queue.php file shown in the next step.
+Configured this way, the `QUEUE_CONNECTION` will select the `redis` queue connection declared in the `connections` array in the `config/queue.php` file shown in the next step.
 
 ### Step 7 - Modify the configuration in config/queue.php
 
-Configure the Laravel queue connection in `config/queue.php` to use the queue connection of the Redis server that we added to `config/database.php`.
-
-We will also make a slight change by removing the unused REDIS_QUEUE variable used to and hard code the queue name to the fallback value.
+Configure the Laravel queue connection in `config/queue.php` to use the redis driver `queue` connection that we added to `config/database.php` in step 5.
 
 Before:
 
