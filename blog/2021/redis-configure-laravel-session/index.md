@@ -2,6 +2,8 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+This post is part of the [Get Started with Production Ready Laravel](https://aregsar.com/blog/2021/get-started-with-production-ready-laravel) series of posts.
+
 In this post we will configure Laravel to use a Redis server running in a local docker container to store and retrieve session data.
 
 Out of the box the Laravel session is configured to use files.
@@ -241,6 +243,22 @@ After:
 Now we are configuring the framework to use the `session` cache store instead of the (hard coded in the framework) `redis` store.
 
 The framework will now override the `session` cache store connection setting with the `session` connection that we configured in the `config/session.php` file in steps 7 and 8.
+
+### Step 11 use the session
+
+Start a Laravel project use the session methods during a web request.
+
+```php
+Session::put('key', 'value');
+$value = Session::get('key');
+$haskey = Session::has('key')
+Session::forget('key');
+
+var_dump(session());
+
+//regenerate session id
+session()->regenerate();
+```
 
 ## The session lifetime
 

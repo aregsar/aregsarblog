@@ -2,6 +2,8 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+This post is part of the [Get Started with Production Ready Laravel](https://aregsar.com/blog/2021/get-started-with-production-ready-laravel) series of posts.
+
 In this post I will detail the steps to take to configure the Laravel caching API to use a Redis server running in a local docker for caching data development.
 
 Out of the box Laravel use file based caching by default.
@@ -148,7 +150,27 @@ docker-compose up -d
 
 You should now be able to use caching with Redis in your Laravel application.
 
-Try using the \Illuminate\Facades\Cache::set() method to see if you can connect to Redis. Then try the various caching methods of the the cache facade and cache helper.
+Start tinker:
+
+```bash
+php artisan tinker
+```
+
+Try the various caching methods of the the cache facade.
+
+```php
+//use default cache store from config/cache.php
+Cache::put('key', 'value');
+$value = Cache::get('key');
+$hasKey = Cache::has('key');
+Cache::forget('key');
+
+//explicitly use the 'redis' store from config/cache.php
+Cache::store('redis')->put('key', 'value');
+$value = Cache::store('file')->get('foo');
+$hasKey = Cache::store('redis')->has('key');
+Cache::store('redis')->forget('key');
+```
 
 When done you can shutdown the docker service
 

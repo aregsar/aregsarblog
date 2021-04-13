@@ -2,6 +2,8 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+This post is part of the [Get Started with Production Ready Laravel](https://aregsar.com/blog/2021/get-started-with-production-ready-laravel) series of posts.
+
 ## Prerequisites
 
 Install Homebrew

@@ -2,6 +2,8 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+This post is part of the [Get Started with Production Ready Laravel](https://aregsar.com/blog/2021/get-started-with-production-ready-laravel) series of posts.
+
 In this post we will configure Laravel to use a Redis server running in a local docker container to queue jobs for background workers.
 
 Out of the box the Laravel queue is configured to use synchronous mode which handles queued jobs inline as part of each web request.
@@ -342,19 +344,25 @@ In the next section I will show how to connect to the default queue and explicit
 
 Examples of using the queue with the Queue facade and with Job classes
 
+Start Tinker:
+
+```bash
+php artisan tinker
+```
+
 1-Using the default queue connection `redis` with its default queue `default`
 
 ```php
-Queue::push(new InvoiceEmail($order));
-InvoiceJob::dispatch(new InvoiceEmail($order));
+Queue::push(new EmailInvoiceJob(new Invoice()));
+EmailInvoiceJob::dispatch(new Invoice());
 ```
 
 2-Overriding the `redis` default queue connection's `default` queue using a queue named `emails`
 
 ```php
 //push on the 'email' queue instead of the default 'default' queue
-Queue::pushOn('emails', new InvoiceEmail($order));
-InvoiceJob::dispatch(new InvoiceEmail($order))->onQueue('emails');
+Queue::pushOn('emails', new EmailInvoiceJob(new Invoice()));
+EmailInvoiceJob::dispatch(new Invoice())->onQueue('emails');
 ```
 
 Note: the overriding queue name can be passed in on the fly. We don't need to have a queue named 'email' defined anywhere.
@@ -364,15 +372,42 @@ Note: the overriding queue name can be passed in on the fly. We don't need to ha
 
 ```php
 //use the redis2 connection
-Queue::connection('redis2')->push(new InvoiceEmail($order));
-InvoiceJob::dispatch(new InvoiceEmail($order))->onConnection('redis2');
+Queue::connection('redis2')->push(new EmailInvoiceJob(new Invoice()));
+EmailInvoiceJob::dispatch(new Invoice())->onConnection('redis2');
 ```
 
 4-Overriding the default queue connection with `redis2` queue connection and also overriding the default queue of the `redis2` connection at the same time with the `emails` queue name.
 
 ```php
-Queue::connection('redis2')->pushOn('emails', new InvoiceEmail($order));
-InvoiceJob::dispatch(new InvoiceEmail($order))->onConnection('redis2')->onQueue('emails');
+Queue::connection('redis2')->pushOn('emails', new EmailInvoiceJob(new Invoice()));
+EmailInvoiceJob::dispatch(new Invoice())->onConnection('redis2')->onQueue('emails');
+```
+
+## Setting the queue connection and queue name to use in Job classes
+
+Instead of calling onConnection we can configure the job class to specify a non default queue connection from config/queue.php:
+
+```php
+//derive a job class
+class EmailInvoiceJob implements App\Jobs\ShouldQueue
+{
+    //Set the queue connection to use
+    public $connection = 'redis2';
+
+    public __constructor($invoice)
+    {
+        //set a non default queue name if desired
+        onQueue('emails')
+    }
+}
+```
+
+Now use the job as if it is queued to default connection and queue
+
+```php
+//push using overriden values
+Queue::push(new EmailInvoiceJob(new Invoice()));
+EmailInvoiceJob::dispatch(new Invoice());
 ```
 
 ## Running workers to process queued jobs

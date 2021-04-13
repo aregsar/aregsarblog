@@ -16,7 +16,7 @@ In future posts in the series we will cover provisioning infrastructure and depl
 
 Note: The posts describe setting up a local PHP installation and Laravel Valet to serve your project in development. The remaining services used by your application to run locally, will be running in a docker environment.
 
-If you do not want to or unable to install PHP, Composer, Valet and the Laravel CLI on your system then you can use Laravel sail that sets up those components and the all the other services in docker.
+If you do not want to or unable to install PHP, Composer, Valet and the Laravel CLI on your system, you can use Laravel sail instead. Laravel sail sets up everything as dcoker services so you can develop your code on docker. The one downside is that the filesystem access may be less perfomant.
 
 ## Environment setup
 

@@ -2,6 +2,8 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+This post is part of the [Get Started with Production Ready Laravel](https://aregsar.com/blog/2021/get-started-with-production-ready-laravel) series of posts.
+
 ## Steps to configure Laravel to use MySQL
 
 In this post we will configure Laravel to use a MySQL server running in a local docker container.
@@ -149,8 +151,11 @@ If you want to use the connection to connect to a separate server, then you woul
 
 ## Testing the connection
 
-```php
+```bash
 php artisan tinker
+```
+
+```php
 //use the default connection
 DB::connection()->getPdo();
 //use the connection explicitly

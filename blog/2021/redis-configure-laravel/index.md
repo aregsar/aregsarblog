@@ -2,6 +2,8 @@
 
 January 1, 2021 by [Areg Sarkissian](https://aregsar.com/about)
 
+This post is part of the [Get Started with Production Ready Laravel](https://aregsar.com/blog/2021/get-started-with-production-ready-laravel) series of posts.
+
 In this post we will configure Laravel to use a Redis server running in a local docker container.
 
 ## Steps to configure Laravel to use Redis
@@ -193,8 +195,11 @@ aliases' => [
 
 From within your application or a Tinker session try the following:
 
-```php
+```bash
 php artisan tinker
+```
+
+```php
 //use the facade
 //test the 'default' connection
 Illuminate\Support\Facades\Redis::connection()->ping();
